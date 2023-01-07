@@ -71,7 +71,7 @@ public class ShipRenderer extends BaseRenderer {
 		mShipTextureEnemy = resourceManager.textureManager().loadTexture("TEXTURE_VEHICLE_02", "res/textures/textureShip.png", entityGroupID());
 		mShipEngineGlow = resourceManager.textureManager().loadTexture("TEXTURE_ENGINE_GLOW", "res/textures/textureTrail.png", entityGroupID());
 
-		mShipSpritesheet = resourceManager.spriteSheetManager().getSpriteSheet("SPRITESHEET_SHIPS", ConstantsGame.GAME_RESOURCE_GROUP_ID);
+		mShipSpritesheet = resourceManager.spriteSheetManager().getSpriteSheet("SPRITESHEET_PROPS", ConstantsGame.GAME_RESOURCE_GROUP_ID);
 
 //		mTrailRenderer.loadResources(resourceManager);
 	}
@@ -135,15 +135,12 @@ public class ShipRenderer extends BaseRenderer {
 
 	private void drawShipComponents(LintfordCore core, Ship ship, SpriteBatch spriteBatch) {
 		{// MainBody
-			final var lSourceX = 32.f * ship.tiltLevel;
-			final var lSourceY = ship.tiltAmount > 0.f ? 32.f : 0.f;
-			final var lSourceW = 32.f;
-			final var lSourceH = ship.tiltAmount > 0.f ? -32.f : 32.f;
-
 			final var lDestW = 32;
-			final var lDestH = 32;
+			final var lDestH = 16;
 
 			final var lScale = 1.f;
+			
+			ship.body().vy *= 0.997f;
 
 			var lTexture = mShipTextureEnemy;
 			if (ship.isPlayerControlled)
@@ -155,7 +152,9 @@ public class ShipRenderer extends BaseRenderer {
 			final var shipPosY = lBody.y;
 			final var shipPosRot = lBody.angle;
 
-			spriteBatch.drawAroundCenter(lTexture, lSourceX, lSourceY + 32, lSourceW, -lSourceH, shipPosX, shipPosY, lDestW, lDestH, -0.01f, shipPosRot, 0f, 0f, lScale, ColorConstants.WHITE);
+			final var lSpriteFrame = mShipSpritesheet.getSpriteFrame("HARVESTER");
+			
+			spriteBatch.drawAroundCenter(mShipSpritesheet, lSpriteFrame, shipPosX, shipPosY, lDestW, lDestH, shipPosRot, 0f, 0f, lScale, ColorConstants.WHITE);
 		}
 	}
 

@@ -2,8 +2,10 @@ package lintfordpickle.harvest;
 
 import lintfordpickle.harvest.screens.MainMenu;
 import lintfordpickle.harvest.screens.MenuBackgroundScreen;
+import lintfordpickle.harvest.screens.game.GameScreen;
 import net.lintford.library.GameInfo;
 import net.lintford.library.core.debug.Debug.DebugLogLevel;
+import net.lintford.library.screenmanager.screens.LoadingScreen;
 
 public class GameWindow extends BaseHarvestApp {
 
@@ -80,9 +82,16 @@ public class GameWindow extends BaseHarvestApp {
 	protected void onInitializeApp() {
 		super.onInitializeApp();
 
+		if (ConstantsGame.SKIP_MAIN_MENU_ON_STARTUP) {
+			mScreenManager.addScreen(new GameScreen(screenManager(), true));
+
+			mScreenManager.initialize();
+			return;
+		}
+
 		mScreenManager.addScreen(new MenuBackgroundScreen(mScreenManager));
 		mScreenManager.addScreen(new MainMenu(mScreenManager));
-		mScreenManager.initialize();
+
 	}
 
 }

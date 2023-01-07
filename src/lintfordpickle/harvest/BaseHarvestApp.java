@@ -16,6 +16,7 @@ import net.lintford.library.screenmanager.ScreenManager;
 import net.lintford.library.screenmanager.toast.ToastManager;
 
 public abstract class BaseHarvestApp extends LintfordCore {
+
 	// ---------------------------------------------
 	// Variables
 	// ---------------------------------------------

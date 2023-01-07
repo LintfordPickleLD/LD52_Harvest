@@ -1,0 +1,31 @@
+{
+  "spriteSheetName": "SPRITESHEET_PROPS",
+  "textureName": "TEXTURE_PROPS",
+  "spriteFrames": [
+    {
+      "name": "HARVESTER_BIG",
+      "x": 0,
+      "y": 18,
+      "w": 64,
+      "h": 32,
+      "pivotX": 0,
+      "pivotY": 0,
+      "scaleX": 1.0,
+      "scaleY": 1.0,
+      "anchorPoints": []
+    },
+    {
+      "name": "HARVESTER",
+      "x": 0,
+      "y": 0,
+      "w": 32,
+      "h": 16,
+      "pivotX": 0,
+      "pivotY": 0,
+      "scaleX": 1.0,
+      "scaleY": 1.0,
+      "anchorPoints": []
+    }
+  ],
+  "animationFramesMap": {}
+}

@@ -14,7 +14,6 @@ import lintfordpickle.harvest.data.players.PlayerGameContainer;
 import lintfordpickle.harvest.data.players.PlayerManager;
 import lintfordpickle.harvest.renderers.ShipRenderer;
 import lintfordpickle.harvest.screens.PauseScreen;
-import net.lintford.library.ConstantsPhysics;
 import net.lintford.library.controllers.core.ControllerManager;
 import net.lintford.library.core.LintfordCore;
 import net.lintford.library.core.ResourceManager;
@@ -27,6 +26,7 @@ import net.lintford.library.core.graphics.rendertarget.RTCamera;
 import net.lintford.library.core.graphics.rendertarget.RenderTarget;
 import net.lintford.library.screenmanager.ScreenManager;
 import net.lintford.library.screenmanager.screens.BaseGameScreen;
+import net.lintford.library.screenmanager.screens.LoadingScreen;
 
 public class GameScreen extends BaseGameScreen {
 
@@ -210,6 +210,11 @@ public class GameScreen extends BaseGameScreen {
 		super.handleInput(core);
 
 		if (core.input().keyboard().isKeyDownTimed(GLFW.GLFW_KEY_ESCAPE)) {
+			if (ConstantsGame.ESCAPE_RESTART_MAIN_SCENE) {
+				final var lLoadingScreen = new LoadingScreen(screenManager(), true, new GameScreen(screenManager(), true));
+				screenManager().createLoadingScreen(new LoadingScreen(screenManager(), true, lLoadingScreen));
+				return;
+			}
 			screenManager().addScreen(new PauseScreen(screenManager()));
 			return;
 		}
@@ -222,7 +227,8 @@ public class GameScreen extends BaseGameScreen {
 
 		world.stepWorld((float) core.gameTime().elapsedTimeMilli() * 0.001f, NUM_PHYSICS_ITERATIONS);
 
-		wrapBodies(core);
+		if (ConstantsGame.WRAP_OBJECTS_AROUND_SCREEN_EDGE)
+			wrapBodies(core);
 
 	}
 
@@ -292,7 +298,7 @@ public class GameScreen extends BaseGameScreen {
 
 	@Override
 	protected void loadRendererResources(ResourceManager resourceManager) {
-
+		mShipRenderer.loadResources(resourceManager);
 	}
 
 	// ---------------------------------------------
@@ -302,8 +308,8 @@ public class GameScreen extends BaseGameScreen {
 	private void wrapBodies(LintfordCore core) {
 		final var lCamAABB = core.HUD().boundingRectangle();
 
-		final var lUnitsToPixels = ConstantsPhysics.UnitsToPixels();
-		final var lPixelsToUnits = ConstantsPhysics.PixelsToUnits();
+		final var lUnitsToPixels = 1.f; // ConstantsPhysics.UnitsToPixels();
+		final var lPixelsToUnits = 1.f; // ConstantsPhysics.PixelsToUnits();
 
 		final var lBodiesList = world.bodies();
 
