@@ -25,6 +25,30 @@
       "scaleX": 1.0,
       "scaleY": 1.0,
       "anchorPoints": []
+    },
+    {
+      "name": "TEXTUREENGINEFLARE",
+      "x": 34,
+      "y": 0,
+      "w": 16,
+      "h": 16,
+      "pivotX": 0,
+      "pivotY": 0,
+      "scaleX": 1.0,
+      "scaleY": 1.0,
+      "anchorPoints": []
+    },
+    {
+      "name": "TEXTUREENGINEGLOW",
+      "x": 52,
+      "y": 0,
+      "w": 6,
+      "h": 6,
+      "pivotX": 0,
+      "pivotY": 0,
+      "scaleX": 1.0,
+      "scaleY": 1.0,
+      "anchorPoints": []
     }
   ],
   "animationFramesMap": {}

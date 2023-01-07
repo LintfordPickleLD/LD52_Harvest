@@ -1,4 +1,4 @@
-package lintfordpickle.harvest.data;
+package lintfordpickle.harvest.data.ships;
 
 import java.util.ArrayList;
 import java.util.List;

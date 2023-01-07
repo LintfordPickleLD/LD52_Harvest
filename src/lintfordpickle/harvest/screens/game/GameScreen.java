@@ -7,12 +7,16 @@ import org.lwjgl.glfw.GLFW;
 import org.lwjgl.opengl.GL11;
 
 import lintfordpickle.harvest.ConstantsGame;
-import lintfordpickle.harvest.contrllers.ShipController;
-import lintfordpickle.harvest.data.Ship;
-import lintfordpickle.harvest.data.ShipManager;
+import lintfordpickle.harvest.controllers.CameraShipChaseController;
+import lintfordpickle.harvest.controllers.SceneController;
+import lintfordpickle.harvest.controllers.ShipController;
+import lintfordpickle.harvest.data.backgrounds.SceneManager;
 import lintfordpickle.harvest.data.players.PlayerGameContainer;
 import lintfordpickle.harvest.data.players.PlayerManager;
+import lintfordpickle.harvest.data.ships.Ship;
+import lintfordpickle.harvest.data.ships.ShipManager;
 import lintfordpickle.harvest.renderers.PhysicsDebugRenderer;
+import lintfordpickle.harvest.renderers.SceneRenderer;
 import lintfordpickle.harvest.renderers.ShipRenderer;
 import lintfordpickle.harvest.screens.PauseScreen;
 import net.lintford.library.ConstantsPhysics;
@@ -151,13 +155,17 @@ public class GameScreen extends BaseGameScreen {
 
 	// Data
 	private ShipManager mShipManager;
+	private SceneManager mSceneManager;
 
 	// Controllers
+	private CameraShipChaseController mCameraShipChaseController;
 	private ShipController mShipController;
+	private SceneController mSceneController;
 
 	// Renderers
 	private PhysicsDebugRenderer mPhysicsRenderer;
 	private ShipRenderer mShipRenderer;
+	private SceneRenderer mSceneRenderer;
 
 	// ---------------------------------------------
 	// Constructors
@@ -166,7 +174,7 @@ public class GameScreen extends BaseGameScreen {
 	public GameScreen(ScreenManager screenManager, boolean showHelp) {
 		super(screenManager);
 
-		ConstantsPhysics.setPhysicsWorldConstants(10.f);
+		ConstantsPhysics.setPhysicsWorldConstants(64.f);
 
 		final var lPlayerManager = new PlayerManager();
 		lPlayerManager.addPlayer();
@@ -183,6 +191,7 @@ public class GameScreen extends BaseGameScreen {
 	public void initialize() {
 
 		mShipManager = new ShipManager();
+		mSceneManager = new SceneManager();
 
 		final var lPlayerShip = new Ship(GridEntity.getNewEntityUid());
 		lPlayerShip.isPlayerControlled = true;
@@ -195,7 +204,7 @@ public class GameScreen extends BaseGameScreen {
 		world.initialize();
 
 		createStaticWorld();
-		
+
 		super.initialize();
 	}
 
@@ -207,22 +216,22 @@ public class GameScreen extends BaseGameScreen {
 
 		final var lBoundingBox = mScreenManager.core().HUD().boundingRectangle();
 
-		final var lGroundBox = RigidBody.createPolygonBody((lBoundingBox.width() * .95f) * ConstantsPhysics.PixelsToUnits(), 2.07f, 1.f, .5f, .6f, .4f, true);
+		final var lGroundBox = RigidBody.createPolygonBody((lBoundingBox.width() * .95f) * ConstantsPhysics.PixelsToUnits(), .5f, 1.f, .5f, .6f, .4f, true);
 		lGroundBox.moveTo(0.f, (lBoundingBox.height() * .4f) * ConstantsPhysics.PixelsToUnits());
 
-		final var lLedge0 = RigidBody.createPolygonBody(200.f * lPixelsToUnits, 20.f * lPixelsToUnits, 1.f, .5f, staticFriction, dynamicFriction, true);
+		final var lLedge0 = RigidBody.createPolygonBody(100.f * lPixelsToUnits, 10.f * lPixelsToUnits, 1.f, .5f, staticFriction, dynamicFriction, true);
 		lLedge0.angle((float) Math.toRadians(-25.f));
-		lLedge0.moveTo(180.f * lPixelsToUnits, 0.f * lPixelsToUnits);
+		lLedge0.moveTo(90.f * lPixelsToUnits, 0.f * lPixelsToUnits);
 
-		final var lLedge1 = RigidBody.createPolygonBody(400.f * lPixelsToUnits, 20.f * lPixelsToUnits, 1.f, .5f, staticFriction, dynamicFriction, true);
+		final var lLedge1 = RigidBody.createPolygonBody(200.f * lPixelsToUnits, 20.f * lPixelsToUnits, 1.f, .5f, staticFriction, dynamicFriction, true);
 		lLedge1.angle((float) Math.toRadians(25.f));
-		lLedge1.moveTo(-220.f * lPixelsToUnits, -100.f * lPixelsToUnits);
+		lLedge1.moveTo(-110.f * lPixelsToUnits, -50.f * lPixelsToUnits);
 
 		world.addBody(lGroundBox);
 		world.addBody(lLedge0);
 		world.addBody(lLedge1);
 	}
-	
+
 	@Override
 	public void loadResources(ResourceManager resourceManager) {
 		mPlayerViewports.loadResource(resourceManager);
@@ -259,11 +268,11 @@ public class GameScreen extends BaseGameScreen {
 			lPlayerBody.vy = 0.f;
 			lPlayerBody.x = 0.f;
 			lPlayerBody.y = 0.f;
-			
+
 			lPlayerBody.torque = 0.f;
 			lPlayerBody.angularVelocity = 0.f;
 			lPlayerBody.angle = 0.f;
-			
+
 		}
 	}
 
@@ -322,18 +331,23 @@ public class GameScreen extends BaseGameScreen {
 
 	@Override
 	protected void createControllers(ControllerManager controllerManager) {
+		mCameraShipChaseController = new CameraShipChaseController(controllerManager, mGameCamera, mShipManager.playerShip(), entityGroupUid());
 
+		mSceneController = new SceneController(controllerManager, mSceneManager, entityGroupUid());
 		mShipController = new ShipController(controllerManager, mShipManager, entityGroupUid());
 
 	}
 
 	@Override
 	protected void initializeControllers(LintfordCore core) {
+		mCameraShipChaseController.initialize(core);
+		mSceneController.initialize(core);
 		mShipController.initialize(core);
 	}
 
 	@Override
 	protected void createRenderers(LintfordCore core) {
+		mSceneRenderer = new SceneRenderer(mRendererManager, entityGroupUid());
 		mPhysicsRenderer = new PhysicsDebugRenderer(mRendererManager, world, entityGroupUid());
 		mShipRenderer = new ShipRenderer(mRendererManager, entityGroupUid());
 	}
@@ -342,10 +356,12 @@ public class GameScreen extends BaseGameScreen {
 	protected void initializeRenderers(LintfordCore core) {
 		mShipRenderer.initialize(core);
 		mPhysicsRenderer.initialize(core);
+		mSceneRenderer.initialize(core);
 	}
 
 	@Override
 	protected void loadRendererResources(ResourceManager resourceManager) {
+		mSceneRenderer.loadResources(resourceManager);
 		mShipRenderer.loadResources(resourceManager);
 		mPhysicsRenderer.loadResources(resourceManager);
 	}

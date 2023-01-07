@@ -2,7 +2,7 @@ package lintfordpickle.harvest.renderers;
 
 import org.lwjgl.opengl.GL11;
 
-import lintfordpickle.harvest.data.Ship;
+import lintfordpickle.harvest.data.ships.Ship;
 import net.lintford.library.ConstantsPhysics;
 import net.lintford.library.core.LintfordCore;
 import net.lintford.library.core.collisions.PhysicsWorld;

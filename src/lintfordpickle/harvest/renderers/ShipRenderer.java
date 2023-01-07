@@ -3,8 +3,9 @@ package lintfordpickle.harvest.renderers;
 import org.lwjgl.opengl.GL11;
 
 import lintfordpickle.harvest.ConstantsGame;
-import lintfordpickle.harvest.contrllers.ShipController;
-import lintfordpickle.harvest.data.Ship;
+import lintfordpickle.harvest.controllers.ShipController;
+import lintfordpickle.harvest.data.ships.Ship;
+import lintfordpickle.harvest.renderers.trails.TrailBatchRenderer;
 import net.lintford.library.ConstantsPhysics;
 import net.lintford.library.core.LintfordCore;
 import net.lintford.library.core.ResourceManager;
@@ -13,6 +14,7 @@ import net.lintford.library.core.graphics.ColorConstants;
 import net.lintford.library.core.graphics.batching.SpriteBatch;
 import net.lintford.library.core.graphics.sprites.spritesheet.SpriteSheetDefinition;
 import net.lintford.library.core.graphics.textures.Texture;
+import net.lintford.library.core.maths.Vector2f;
 import net.lintford.library.renderers.BaseRenderer;
 import net.lintford.library.renderers.RendererManager;
 
@@ -36,7 +38,7 @@ public class ShipRenderer extends BaseRenderer {
 
 	private SpriteSheetDefinition mShipSpritesheet;
 
-	// private TrailBatchRenderer mTrailRenderer;
+	private TrailBatchRenderer mTrailRenderer;
 
 	// ---------------------------------------------
 	// Properties
@@ -55,7 +57,7 @@ public class ShipRenderer extends BaseRenderer {
 	public ShipRenderer(RendererManager rendererManager, int entityGroupID) {
 		super(rendererManager, RENDERER_NAME, entityGroupID);
 
-		// mTrailRenderer = new TrailBatchRenderer();
+		mTrailRenderer = new TrailBatchRenderer();
 	}
 
 	// ---------------------------------------------
@@ -77,43 +79,22 @@ public class ShipRenderer extends BaseRenderer {
 
 		mShipSpritesheet = resourceManager.spriteSheetManager().getSpriteSheet("SPRITESHEET_PROPS", ConstantsGame.GAME_RESOURCE_GROUP_ID);
 
-//		mTrailRenderer.loadResources(resourceManager);
+		mTrailRenderer.loadResources(resourceManager);
 	}
 
 	@Override
 	public void unloadResources() {
 		super.unloadResources();
 
-//		mTrailRenderer.unloadResources();
+		mTrailRenderer.unloadResources();
 	}
 
 	@Override
 	public void draw(LintfordCore core) {
 		final var lShipManager = mShipController.shipManager();
 		final var lPlayerShip = lShipManager.playerShip();
+
 		drawShip(core, lPlayerShip);
-
-		final var lListOfOpponents = lShipManager.ships();
-		final int lNumOfOpponents = lListOfOpponents.size();
-
-		for (int i = 0; i < lNumOfOpponents; i++) {
-			final var lOpponentShip = lListOfOpponents.get(i);
-			// drawShip(core, lOpponentShip);
-		}
-
-		// ---
-
-//		mTrailRenderer.update(core);
-//		mTrailRenderer.begin(core.gameCamera());
-//
-//		for (int i = 0; i < lNumOfOpponents; i++) {
-//			final var lOpponentShip = lListOfOpponents.get(i);
-//			final var lTrailComponent = lOpponentShip.mTrailRendererComponent;
-//			mTrailRenderer.draw(mShipEngineGlow, lTrailComponent.vertices(), lTrailComponent.vertexCount());
-//		}
-//
-//		mTrailRenderer.end();
-
 	}
 
 	// ---------------------------------------------
@@ -129,7 +110,20 @@ public class ShipRenderer extends BaseRenderer {
 		lSpritebatch.begin(core.gameCamera());
 
 		drawShipComponents(core, ship, lSpritebatch);
-		drawShipEngines(core, ship, lSpritebatch);
+
+		drawShipEngines(core, lSpritebatch, ship, ship.rearEngine);
+		drawShipEngines(core, lSpritebatch, ship, ship.frontEngine);
+
+		mTrailRenderer.update(core);
+		mTrailRenderer.begin(core.gameCamera());
+
+		final var lTrailComponentF = ship.mFrontTrailRendererComponent;
+		mTrailRenderer.draw(mShipEngineGlow, lTrailComponentF.vertices(), lTrailComponentF.vertexCount());
+
+		final var lTrailComponentR = ship.mRearTrailRendererComponent;
+		mTrailRenderer.draw(mShipEngineGlow, lTrailComponentR.vertices(), lTrailComponentR.vertexCount());
+
+		mTrailRenderer.end();
 
 		lSpritebatch.end();
 
@@ -142,18 +136,13 @@ public class ShipRenderer extends BaseRenderer {
 	private void drawShipComponents(LintfordCore core, Ship ship, SpriteBatch spriteBatch) {
 		{// MainBody
 			final var lUnitsToPixels = ConstantsPhysics.UnitsToPixels();
-			final var lPixelsToUnits = ConstantsPhysics.PixelsToUnits();
 
-			final var lDestW = 32;
-			final var lDestH = 16;
+			final var lDestW = 64;
+			final var lDestH = 32;
 
 			final var lScale = 1.f;
 
 			ship.body().vy *= 0.997f;
-
-			var lTexture = mShipTextureEnemy;
-			if (ship.isPlayerControlled)
-				lTexture = mShipTexturePlayer;
 
 			final var lBody = ship.body();
 
@@ -163,57 +152,45 @@ public class ShipRenderer extends BaseRenderer {
 
 			final var lSpriteFrame = mShipSpritesheet.getSpriteFrame("HARVESTER");
 
-//			spriteBatch.drawAroundCenter(mShipSpritesheet, lSpriteFrame, shipPosX, shipPosY, lDestW, lDestH, shipPosRot, 0f, 0f, lScale, ColorConstants.WHITE);
+			spriteBatch.drawAroundCenter(mShipSpritesheet, lSpriteFrame, shipPosX, shipPosY, lDestW, lDestH, shipPosRot, 0f, 0f, lScale, ColorConstants.WHITE);
 		}
 	}
 
-	private void drawShipEngines(LintfordCore core, Ship ship, SpriteBatch spriteBatch) {
+	private void drawShipEngines(LintfordCore core, SpriteBatch spriteBatch, Ship ship, Vector2f enginePostion) {
 		// Engine Glow
 		final var lBody = ship.body();
 
-		final var shipPosX = lBody.x;
-		final var shipPosY = lBody.y;
-		final var shipRot = lBody.angle;
-
-		final var c = (float) Math.cos(shipRot);
-		final var s = (float) Math.sin(shipRot);
-
-		final var engineOffsetX = -15;
-		final var engineOffsetY = 0;
-
-		final var xx = engineOffsetX;
-		final var yy = engineOffsetY;
-
-		final var engineX = xx * c - yy * s;
-		final var engineY = yy * c + xx * s;
-
 		final var lUnitsToPixels = ConstantsPhysics.UnitsToPixels();
 
+		final var shipPosX = enginePostion.x * lUnitsToPixels;
+		final var shipPosY = enginePostion.y * lUnitsToPixels;
+		final var shipRot = lBody.angle;
+
 		GL11.glPointSize(3.f);
-		Debug.debugManager().drawers().drawPointImmediate(core.HUD(), ship.rearEngine.x * lUnitsToPixels, ship.rearEngine.y * lUnitsToPixels);
-		Debug.debugManager().drawers().drawPointImmediate(core.HUD(), ship.frontEngine.x * lUnitsToPixels, ship.frontEngine.y * lUnitsToPixels);
+		Debug.debugManager().drawers().drawPointImmediate(core.HUD(), shipPosX, shipPosY);
 
 		// ----
 
-//		final var r = ship.mEngineColorR * 2f;
-//		final var g = ship.mEngineColorG * 2f;
-//		final var b = ship.mEngineColorB * 2f;
-//		final var engineColor = ColorConstants.getColor(r, g, b, 0.75f);
-//
-//		final float lPulse = 1.0f + (float) Math.cos(core.gameTime().totalTimeMilli()) * 2.f;
-//
-//		final float lShipSpeed = ship.speed;
-//		final float lSpeedSizeMod = 1.0f + lShipSpeed * 0.02f + lPulse;
-//
-//		spriteBatch.drawAroundCenter(mShipSpritesheet, mShipSpritesheet.getSpriteFrame(0), shipPosX + engineX, shipPosY + engineY, 4 + lSpeedSizeMod, 4 + lSpeedSizeMod, shipRot, 0, 0, -0.01f, engineColor);
-//		spriteBatch.drawAroundCenter(mShipSpritesheet, mShipSpritesheet.getSpriteFrame(0), shipPosX + engineX, shipPosY + engineY, 4 + lSpeedSizeMod * .25f, 4 + lSpeedSizeMod * .25f, shipRot, 0, 0, -0.01f, ColorConstants.WHITE);
-//
-//		// horizontal flare
-//		spriteBatch.drawAroundCenter(mShipSpritesheet, mShipSpritesheet.getSpriteFrame(0), shipPosX + engineX, shipPosY + engineY, 4 * lSpeedSizeMod, 2, 0, 0, 0, -0.01f, engineColor);
-//		spriteBatch.drawAroundCenter(mShipSpritesheet, mShipSpritesheet.getSpriteFrame(0), shipPosX + engineX, shipPosY + engineY, 4 * lSpeedSizeMod * .5f, 2, 0, 0, 0, -0.01f, ColorConstants.WHITE);
-//
-//		final var lFlareAlpha = ColorConstants.getColor(r, g, b, .25f);
-//		spriteBatch.drawAroundCenter(mShipSpritesheet, mShipSpritesheet.getSpriteFrame(0), shipPosX + engineX, shipPosY + engineY, 4 * lSpeedSizeMod * 2.f, 2, shipRot + (float) core.gameTime().totalTimeSeconds() * 0.1f, 0, 0, -0.01f, lFlareAlpha);
+		final var r = ship.engineColorR * 2f;
+		final var g = ship.engineColorG * 2f;
+		final var b = ship.engineColorB * 2f;
+		final var engineColor = ColorConstants.getColor(r, g, b, 0.75f);
+
+		final float lPulse = 1.0f + (float) Math.cos(core.gameTime().totalTimeMilli()) * 2.f;
+
+		final float lShipSpeed = (float) Math.abs(lBody.vx * lBody.vx + lBody.vy * lBody.vy) * 20.f;
+		final float lSpeedSizeMod = 2.0f + lShipSpeed * .002f + lPulse;
+
+		final var lSpriteFrameFlare = mShipSpritesheet.getSpriteFrame("TEXTUREENGINEGLOW");
+		spriteBatch.drawAroundCenter(mShipSpritesheet, lSpriteFrameFlare, shipPosX, shipPosY, 4 + lSpeedSizeMod, 4 + lSpeedSizeMod, shipRot, 0, 0, -0.01f, engineColor);
+		spriteBatch.drawAroundCenter(mShipSpritesheet, lSpriteFrameFlare, shipPosX, shipPosY, 4 + lSpeedSizeMod * .25f, 4 + lSpeedSizeMod * .25f, shipRot, 0, 0, -0.01f, ColorConstants.WHITE);
+
+		// horizontal flare
+		spriteBatch.drawAroundCenter(mShipSpritesheet, lSpriteFrameFlare, shipPosX, shipPosY, 4 * lSpeedSizeMod, 2, 0, 0, 0, -0.01f, engineColor);
+		spriteBatch.drawAroundCenter(mShipSpritesheet, lSpriteFrameFlare, shipPosX, shipPosY, 4 * lSpeedSizeMod * .5f, 2, 0, 0, 0, -0.01f, ColorConstants.WHITE);
+
+		final var lFlareAlpha = ColorConstants.getColor(r, g, b, .75f);
+		spriteBatch.drawAroundCenter(mShipSpritesheet, lSpriteFrameFlare, shipPosX, shipPosY, 4 * lSpeedSizeMod * 2.f, 2, shipRot + (float) core.gameTime().totalTimeSeconds() * 0.1f, 0, 0, -0.01f, lFlareAlpha);
 
 	}
 

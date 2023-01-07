@@ -1,14 +1,12 @@
-package lintfordpickle.harvest.contrllers;
+package lintfordpickle.harvest.controllers;
 
 import org.lwjgl.glfw.GLFW;
 
-import lintfordpickle.harvest.data.Ship;
-import lintfordpickle.harvest.data.ShipManager;
+import lintfordpickle.harvest.data.ships.Ship;
+import lintfordpickle.harvest.data.ships.ShipManager;
 import net.lintford.library.controllers.BaseController;
 import net.lintford.library.controllers.core.ControllerManager;
 import net.lintford.library.core.LintfordCore;
-import net.lintford.library.core.geometry.partitioning.GridEntity;
-import net.lintford.library.core.geometry.partitioning.SpatialHashGrid;
 import net.lintford.library.core.maths.Vector2f;
 
 public class ShipController extends BaseController {
@@ -114,8 +112,8 @@ public class ShipController extends BaseController {
 		final var body = ship.body();
 		final var lShipInput = ship.inputs;
 
-		final float lThrustUpForce = 2000.f;
-		final float lAngularTorque = 500.f;
+		final float lThrustUpForce = 150.f;
+		final float lAngularTorque = 100.f;
 
 		if (lShipInput.isUpThrottle) {
 			final float lAngle = body.angle;
@@ -135,48 +133,41 @@ public class ShipController extends BaseController {
 
 			final float dot = Vector2f.dot(upX, upY, shipUpx, shipUpY);
 
-			final float controlAmt = (lAngularTorque * dot);
-			final float correctAmt = (lAngularTorque * (1.f - dot));
+			final float lShipRelUpForceX = shipUpx * lThrustUpForce * body.invMass();
+			final float lShipRelUpForceY = shipUpY * lThrustUpForce * body.invMass();
 
+			final float lThrottleControler = .4f;
 			if (lShipInput.isLeftThrottle) {
-				ship.body().torque -= controlAmt * body.invInertia();
+				final float engineX = ship.frontEngine.x;
+				final float engineY = ship.frontEngine.y;
+
+				body.addForceAtPoint(lShipRelUpForceX * lThrottleControler, lShipRelUpForceY * lThrottleControler, engineX, engineY);
 			}
 
 			if (lShipInput.isRightThrottle) {
-				ship.body().torque += controlAmt * body.invInertia();
-			}
+				final float engineX = ship.rearEngine.x;
+				final float engineY = ship.rearEngine.y;
 
-			if (!lShipInput.isLeftThrottle && !lShipInput.isRightThrottle && dot > 0.0f) {
-				if (body.angle != 0) {
-					if (body.angle < .0f) {
-						ship.body().torque += correctAmt * body.invInertia();
-					} else {
-						ship.body().torque -= correctAmt * body.invInertia();
-					}
-				}
+				body.addForceAtPoint(lShipRelUpForceX * lThrottleControler, lShipRelUpForceY * lThrottleControler, engineX, engineY);
 			}
+			
+			if (!lShipInput.isLeftThrottle && !lShipInput.isRightThrottle) {
+				body.angularVelocity *= 0.8f;	
+			}
+			
+
+//			if (!lShipInput.isLeftThrottle && !lShipInput.isRightThrottle && dot > 0.0f) {
+//				if (body.angle != 0) {
+//
+//					final float correctAmt = (lAngularTorque * (1.f - dot)) * .3f;
+//					if (body.angle < .0f) {
+//						ship.body().torque += correctAmt * body.invInertia();
+//					} else {
+//						ship.body().torque -= correctAmt * body.invInertia();
+//					}
+//				}
+//			}
 		}
-	}
-
-	private void updateShipOnGrid(LintfordCore core, SpatialHashGrid<GridEntity> grid, Ship ship) {
-		grid.updateEntity(ship);
-	}
-
-	private void updateEngineTrails(LintfordCore core, Ship ship) {
-		final float c = (float) Math.cos(ship.body().angle);
-		final float s = (float) Math.sin(ship.body().angle);
-
-		float engineOffsetX = -15;
-		float engineOffsetY = 0;
-
-		float xx = engineOffsetX;
-		float yy = engineOffsetY;
-
-		final float engineX = xx * c - yy * s;
-		final float engineY = yy * c + xx * s;
-
-//		ship.mTrailRendererComponent.color(ship.mEngineColorR, ship.mEngineColorG, ship.mEngineColorB, .5f);
-//		ship.mTrailRendererComponent.updateTrail(core, ship.body().x + engineX, ship.body().y + engineY, ship.body().angle);
 	}
 
 	// DAMAGE ---------------------------------------------

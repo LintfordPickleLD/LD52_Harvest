@@ -1,5 +1,7 @@
-package lintfordpickle.harvest.data;
+package lintfordpickle.harvest.data.ships;
 
+import lintfordpickle.harvest.data.CollisionTypes;
+import lintfordpickle.harvest.renderers.trails.TrailRendererComponent;
 import net.lintford.library.ConstantsPhysics;
 import net.lintford.library.core.LintfordCore;
 import net.lintford.library.core.collisions.RigidBody;
@@ -22,9 +24,18 @@ public class Ship extends RigidBodyEntity {
 	public float tiltAmount;
 	public boolean isPlayerControlled;
 
+	public float velocityMagnitude;
+
 	public final ShipInput inputs = new ShipInput();
 	public final Vector2f rearEngine = new Vector2f();
 	public final Vector2f frontEngine = new Vector2f();
+
+	public float engineColorR = 0.11f;
+	public float engineColorG = 0.2f;
+	public float engineColorB = 0.74f;
+
+	public final TrailRendererComponent mRearTrailRendererComponent = new TrailRendererComponent();
+	public final TrailRendererComponent mFrontTrailRendererComponent = new TrailRendererComponent();
 
 	// ---------------------------------------------
 	// Constructor
@@ -35,8 +46,10 @@ public class Ship extends RigidBodyEntity {
 
 		final var lPixelsToUnits = ConstantsPhysics.PixelsToUnits();
 
+		final float lDensity = 2.f;
+
 		// these are in meters
-		body = RigidBody.createPolygonBody(32.f * lPixelsToUnits, 16.f * lPixelsToUnits, 4.f, .1f, .8f, .5f, false);
+		body = RigidBody.createPolygonBody(64.f * lPixelsToUnits, 32.f * lPixelsToUnits, lDensity, .1f, .8f, .5f, false);
 
 	}
 
@@ -47,8 +60,8 @@ public class Ship extends RigidBodyEntity {
 		final float s = (float) Math.sin(body.angle);
 		final float c = (float) Math.cos(body.angle);
 
-		final float axleLengthHalf = 12f * lPixelsToUnits;
-		final float axleHeightHalf = 8f * lPixelsToUnits;
+		final float axleLengthHalf = 24f * lPixelsToUnits;
+		final float axleHeightHalf = 16f * lPixelsToUnits;
 
 		final float lRearX = -axleLengthHalf * c - axleHeightHalf * s;
 		final float lRearY = -axleLengthHalf * s + axleHeightHalf * c;
@@ -59,6 +72,24 @@ public class Ship extends RigidBodyEntity {
 		rearEngine.set(body.x + lRearX, body.y + lRearY);
 		frontEngine.set(body.x + lFrontX, body.y + lFrontY);
 
+		updateEngineTrails(core);
+
+		velocityMagnitude = body.vx * body.vx + body.vy * body.vy;
+	}
+
+	private void updateEngineTrails(LintfordCore core) {
+
+		final var lUnitsToPixels = ConstantsPhysics.UnitsToPixels();
+		final float rearWorldX = rearEngine.x * lUnitsToPixels;
+		final float rearWorldY = rearEngine.y * lUnitsToPixels;
+		final float frontWorldX = frontEngine.x * lUnitsToPixels;
+		final float frontWorldY = frontEngine.y * lUnitsToPixels;
+
+		mFrontTrailRendererComponent.color(engineColorR, engineColorG, engineColorB, .5f);
+		mFrontTrailRendererComponent.updateTrail(core, rearWorldX, rearWorldY, body().angle);
+
+		mRearTrailRendererComponent.color(engineColorR, engineColorG, engineColorB, .5f);
+		mRearTrailRendererComponent.updateTrail(core, frontWorldX, frontWorldY, body().angle);
 	}
 
 }

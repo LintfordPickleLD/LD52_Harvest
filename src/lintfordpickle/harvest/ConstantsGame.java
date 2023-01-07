@@ -15,14 +15,16 @@ public class ConstantsGame {
 
 	public static final float ASPECT_RATIO = 16.f / 9.f;
 
-	public static final int GAME_CANVAS_WIDTH = (int) 960;
-	public static final int GAME_CANVAS_HEIGHT = (int) 540;
+	public static final int GAME_CANVAS_WIDTH = 960;
+	public static final int GAME_CANVAS_HEIGHT = 540;
 
 	public static final int GAME_RESOURCE_GROUP_ID = BaseEntity.getEntityNumber();
 
 	// ---------------------------------------------
 	// Game
 	// ---------------------------------------------
+
+	public static final boolean LOCK_ZOOM_TO_ONE = true;
 
 	// ---------------------------------------------
 	// Debug

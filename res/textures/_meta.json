@@ -20,6 +20,13 @@
 			"filterIndex":1,
 			"wrapSIndex":1,
 			"wrapTIndex":1
+		},
+		{
+			"textureName":"TEXTURE_SCENE",
+			"filepath":"res/textures/textureScene.png",
+			"filterIndex":1,
+			"wrapSIndex":1,
+			"wrapTIndex":1
 		}
 	]
 }

@@ -5,7 +5,6 @@ import lintfordpickle.harvest.screens.MenuBackgroundScreen;
 import lintfordpickle.harvest.screens.game.GameScreen;
 import net.lintford.library.GameInfo;
 import net.lintford.library.core.debug.Debug.DebugLogLevel;
-import net.lintford.library.screenmanager.screens.LoadingScreen;
 
 public class GameWindow extends BaseHarvestApp {
 

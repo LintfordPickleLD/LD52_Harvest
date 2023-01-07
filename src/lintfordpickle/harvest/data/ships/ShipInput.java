@@ -1,4 +1,4 @@
-package lintfordpickle.harvest.data;
+package lintfordpickle.harvest.data.ships;
 
 public class ShipInput {
 
