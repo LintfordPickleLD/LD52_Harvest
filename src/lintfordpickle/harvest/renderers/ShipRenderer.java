@@ -1,10 +1,14 @@
 package lintfordpickle.harvest.renderers;
 
+import org.lwjgl.opengl.GL11;
+
 import lintfordpickle.harvest.ConstantsGame;
 import lintfordpickle.harvest.contrllers.ShipController;
 import lintfordpickle.harvest.data.Ship;
+import net.lintford.library.ConstantsPhysics;
 import net.lintford.library.core.LintfordCore;
 import net.lintford.library.core.ResourceManager;
+import net.lintford.library.core.debug.Debug;
 import net.lintford.library.core.graphics.ColorConstants;
 import net.lintford.library.core.graphics.batching.SpriteBatch;
 import net.lintford.library.core.graphics.sprites.spritesheet.SpriteSheetDefinition;
@@ -94,7 +98,7 @@ public class ShipRenderer extends BaseRenderer {
 
 		for (int i = 0; i < lNumOfOpponents; i++) {
 			final var lOpponentShip = lListOfOpponents.get(i);
-			drawShip(core, lOpponentShip);
+			// drawShip(core, lOpponentShip);
 		}
 
 		// ---
@@ -133,13 +137,18 @@ public class ShipRenderer extends BaseRenderer {
 		drawShipDebugInfo(core, ship);
 	}
 
+	// ---------------------------------------------
+
 	private void drawShipComponents(LintfordCore core, Ship ship, SpriteBatch spriteBatch) {
 		{// MainBody
+			final var lUnitsToPixels = ConstantsPhysics.UnitsToPixels();
+			final var lPixelsToUnits = ConstantsPhysics.PixelsToUnits();
+
 			final var lDestW = 32;
 			final var lDestH = 16;
 
 			final var lScale = 1.f;
-			
+
 			ship.body().vy *= 0.997f;
 
 			var lTexture = mShipTextureEnemy;
@@ -148,13 +157,13 @@ public class ShipRenderer extends BaseRenderer {
 
 			final var lBody = ship.body();
 
-			final var shipPosX = lBody.x;
-			final var shipPosY = lBody.y;
+			final var shipPosX = lBody.x * lUnitsToPixels;
+			final var shipPosY = lBody.y * lUnitsToPixels;
 			final var shipPosRot = lBody.angle;
 
 			final var lSpriteFrame = mShipSpritesheet.getSpriteFrame("HARVESTER");
-			
-			spriteBatch.drawAroundCenter(mShipSpritesheet, lSpriteFrame, shipPosX, shipPosY, lDestW, lDestH, shipPosRot, 0f, 0f, lScale, ColorConstants.WHITE);
+
+//			spriteBatch.drawAroundCenter(mShipSpritesheet, lSpriteFrame, shipPosX, shipPosY, lDestW, lDestH, shipPosRot, 0f, 0f, lScale, ColorConstants.WHITE);
 		}
 	}
 
@@ -177,6 +186,12 @@ public class ShipRenderer extends BaseRenderer {
 
 		final var engineX = xx * c - yy * s;
 		final var engineY = yy * c + xx * s;
+
+		final var lUnitsToPixels = ConstantsPhysics.UnitsToPixels();
+
+		GL11.glPointSize(3.f);
+		Debug.debugManager().drawers().drawPointImmediate(core.HUD(), ship.rearEngine.x * lUnitsToPixels, ship.rearEngine.y * lUnitsToPixels);
+		Debug.debugManager().drawers().drawPointImmediate(core.HUD(), ship.frontEngine.x * lUnitsToPixels, ship.frontEngine.y * lUnitsToPixels);
 
 		// ----
 
@@ -250,14 +265,21 @@ public class ShipRenderer extends BaseRenderer {
 		if (ship.isPlayerControlled) {
 			final var lBody = ship.body();
 
-			final var shipPosX = lBody.x;
-			final var shipPosY = lBody.y;
-
 			final var lFontUnit = rendererManager().uiTextFont();
 			final var lBoundingBox = core.HUD().boundingRectangle();
 
-			final var shipX = String.format(java.util.Locale.US, "%.1f", shipPosX);
-			final var shipY = String.format(java.util.Locale.US, "%.1f", shipPosY);
+			final var shipAX = String.format(java.util.Locale.US, "%.1f", lBody.accX);
+			final var shipAY = String.format(java.util.Locale.US, "%.1f", lBody.accY);
+
+			final var shipVX = String.format(java.util.Locale.US, "%.1f", lBody.vx);
+			final var shipVY = String.format(java.util.Locale.US, "%.1f", lBody.vy);
+
+			final var shipX = String.format(java.util.Locale.US, "%.1f", lBody.x);
+			final var shipY = String.format(java.util.Locale.US, "%.1f", lBody.y);
+
+			final var shipTorque = String.format(java.util.Locale.US, "%.1f", lBody.torque);
+			final var shipAV = String.format(java.util.Locale.US, "%.1f", lBody.angularVelocity);
+			final var shipR = String.format(java.util.Locale.US, "%.3f", lBody.angle);
 
 			final var lFontScale = 1.0f;
 			final var lLineHeight = 18.f;
@@ -265,7 +287,15 @@ public class ShipRenderer extends BaseRenderer {
 			float yPos = lBoundingBox.top() + 5.f - 20.f;
 
 			lFontUnit.begin(core.HUD());
+			lFontUnit.drawText("force: " + shipAX + "," + shipAY, lBoundingBox.left() + 5.f, yPos += lLineHeight, -0.01f, lFontScale);
+			lFontUnit.drawText("velocity: " + shipVX + "," + shipVY, lBoundingBox.left() + 5.f, yPos += lLineHeight, -0.01f, lFontScale);
 			lFontUnit.drawText("position: " + shipX + "," + shipY, lBoundingBox.left() + 5.f, yPos += lLineHeight, -0.01f, lFontScale);
+
+			lFontUnit.drawText(" ", lBoundingBox.left() + 5.f, yPos += lLineHeight, -0.01f, lFontScale);
+
+			lFontUnit.drawText("torque: " + shipTorque, lBoundingBox.left() + 5.f, yPos += lLineHeight, -0.01f, lFontScale);
+			lFontUnit.drawText("angular: " + shipAV, lBoundingBox.left() + 5.f, yPos += lLineHeight, -0.01f, lFontScale);
+			lFontUnit.drawText("angle: " + shipR, lBoundingBox.left() + 5.f, yPos += lLineHeight, -0.01f, lFontScale);
 			lFontUnit.end();
 		}
 	}

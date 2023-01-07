@@ -12,13 +12,16 @@ import lintfordpickle.harvest.data.Ship;
 import lintfordpickle.harvest.data.ShipManager;
 import lintfordpickle.harvest.data.players.PlayerGameContainer;
 import lintfordpickle.harvest.data.players.PlayerManager;
+import lintfordpickle.harvest.renderers.PhysicsDebugRenderer;
 import lintfordpickle.harvest.renderers.ShipRenderer;
 import lintfordpickle.harvest.screens.PauseScreen;
+import net.lintford.library.ConstantsPhysics;
 import net.lintford.library.controllers.core.ControllerManager;
 import net.lintford.library.core.LintfordCore;
 import net.lintford.library.core.ResourceManager;
 import net.lintford.library.core.camera.ICamera;
 import net.lintford.library.core.collisions.PhysicsWorld;
+import net.lintford.library.core.collisions.RigidBody;
 import net.lintford.library.core.collisions.resolvers.CollisionResolverRotationAndFriction;
 import net.lintford.library.core.debug.Debug;
 import net.lintford.library.core.geometry.partitioning.GridEntity;
@@ -153,6 +156,7 @@ public class GameScreen extends BaseGameScreen {
 	private ShipController mShipController;
 
 	// Renderers
+	private PhysicsDebugRenderer mPhysicsRenderer;
 	private ShipRenderer mShipRenderer;
 
 	// ---------------------------------------------
@@ -161,6 +165,8 @@ public class GameScreen extends BaseGameScreen {
 
 	public GameScreen(ScreenManager screenManager, boolean showHelp) {
 		super(screenManager);
+
+		ConstantsPhysics.setPhysicsWorldConstants(10.f);
 
 		final var lPlayerManager = new PlayerManager();
 		lPlayerManager.addPlayer();
@@ -188,9 +194,35 @@ public class GameScreen extends BaseGameScreen {
 		world.addBody(lPlayerShip.body());
 		world.initialize();
 
+		createStaticWorld();
+		
 		super.initialize();
 	}
 
+	private void createStaticWorld() {
+		final float lPixelsToUnits = ConstantsPhysics.PixelsToUnits();
+
+		final float staticFriction = 0.8f;
+		final float dynamicFriction = 0.5f;
+
+		final var lBoundingBox = mScreenManager.core().HUD().boundingRectangle();
+
+		final var lGroundBox = RigidBody.createPolygonBody((lBoundingBox.width() * .95f) * ConstantsPhysics.PixelsToUnits(), 2.07f, 1.f, .5f, .6f, .4f, true);
+		lGroundBox.moveTo(0.f, (lBoundingBox.height() * .4f) * ConstantsPhysics.PixelsToUnits());
+
+		final var lLedge0 = RigidBody.createPolygonBody(200.f * lPixelsToUnits, 20.f * lPixelsToUnits, 1.f, .5f, staticFriction, dynamicFriction, true);
+		lLedge0.angle((float) Math.toRadians(-25.f));
+		lLedge0.moveTo(180.f * lPixelsToUnits, 0.f * lPixelsToUnits);
+
+		final var lLedge1 = RigidBody.createPolygonBody(400.f * lPixelsToUnits, 20.f * lPixelsToUnits, 1.f, .5f, staticFriction, dynamicFriction, true);
+		lLedge1.angle((float) Math.toRadians(25.f));
+		lLedge1.moveTo(-220.f * lPixelsToUnits, -100.f * lPixelsToUnits);
+
+		world.addBody(lGroundBox);
+		world.addBody(lLedge0);
+		world.addBody(lLedge1);
+	}
+	
 	@Override
 	public void loadResources(ResourceManager resourceManager) {
 		mPlayerViewports.loadResource(resourceManager);
@@ -219,6 +251,20 @@ public class GameScreen extends BaseGameScreen {
 			return;
 		}
 
+		if (core.input().keyboard().isKeyDownTimed(GLFW.GLFW_KEY_R)) {
+			final var lPlayerBody = mShipManager.playerShip().body();
+
+			lPlayerBody.angularVelocity = 0.f;
+			lPlayerBody.vx = 0.f;
+			lPlayerBody.vy = 0.f;
+			lPlayerBody.x = 0.f;
+			lPlayerBody.y = 0.f;
+			
+			lPlayerBody.torque = 0.f;
+			lPlayerBody.angularVelocity = 0.f;
+			lPlayerBody.angle = 0.f;
+			
+		}
 	}
 
 	@Override
@@ -288,17 +334,20 @@ public class GameScreen extends BaseGameScreen {
 
 	@Override
 	protected void createRenderers(LintfordCore core) {
+		mPhysicsRenderer = new PhysicsDebugRenderer(mRendererManager, world, entityGroupUid());
 		mShipRenderer = new ShipRenderer(mRendererManager, entityGroupUid());
 	}
 
 	@Override
 	protected void initializeRenderers(LintfordCore core) {
 		mShipRenderer.initialize(core);
+		mPhysicsRenderer.initialize(core);
 	}
 
 	@Override
 	protected void loadRendererResources(ResourceManager resourceManager) {
 		mShipRenderer.loadResources(resourceManager);
+		mPhysicsRenderer.loadResources(resourceManager);
 	}
 
 	// ---------------------------------------------
@@ -308,10 +357,12 @@ public class GameScreen extends BaseGameScreen {
 	private void wrapBodies(LintfordCore core) {
 		final var lCamAABB = core.HUD().boundingRectangle();
 
-		final var lUnitsToPixels = 1.f; // ConstantsPhysics.UnitsToPixels();
-		final var lPixelsToUnits = 1.f; // ConstantsPhysics.PixelsToUnits();
+		final var lUnitsToPixels = ConstantsPhysics.UnitsToPixels();
+		final var lPixelsToUnits = ConstantsPhysics.PixelsToUnits();
 
 		final var lBodiesList = world.bodies();
+
+		final float lPaddingPx = 50.f * lPixelsToUnits;
 
 		for (int i = 0; i < world.numBodies(); i++) {
 			final var lBody = lBodiesList.get(i);
@@ -323,7 +374,17 @@ public class GameScreen extends BaseGameScreen {
 			final var h = lAABB.height() * lUnitsToPixels;
 
 			if (lCamAABB.intersectsAA(x, y, w, h) == false) {
-				lBody.moveTo(lBody.x, lCamAABB.top() * lPixelsToUnits);
+				if (lBody.x * lUnitsToPixels < lCamAABB.left() - lPaddingPx)
+					lBody.x = lCamAABB.right() * lPixelsToUnits;
+
+				if (lBody.x * lUnitsToPixels > lCamAABB.right() + lPaddingPx)
+					lBody.x = lCamAABB.left() * lPixelsToUnits;
+
+				if (lBody.y * lUnitsToPixels > lCamAABB.bottom() + lPaddingPx)
+					lBody.y = lCamAABB.top() * lPixelsToUnits;
+
+				if (lBody.y * lUnitsToPixels < lCamAABB.top() - lPaddingPx)
+					lBody.y = lCamAABB.bottom() * lPixelsToUnits;
 			}
 		}
 	}

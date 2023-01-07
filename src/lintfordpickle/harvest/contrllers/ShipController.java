@@ -1,5 +1,7 @@
 package lintfordpickle.harvest.contrllers;
 
+import org.lwjgl.glfw.GLFW;
+
 import lintfordpickle.harvest.data.Ship;
 import lintfordpickle.harvest.data.ShipManager;
 import net.lintford.library.controllers.BaseController;
@@ -7,6 +9,7 @@ import net.lintford.library.controllers.core.ControllerManager;
 import net.lintford.library.core.LintfordCore;
 import net.lintford.library.core.geometry.partitioning.GridEntity;
 import net.lintford.library.core.geometry.partitioning.SpatialHashGrid;
+import net.lintford.library.core.maths.Vector2f;
 
 public class ShipController extends BaseController {
 
@@ -73,14 +76,11 @@ public class ShipController extends BaseController {
 	@Override
 	public boolean handleInput(LintfordCore core) {
 		final var lPlayerShip = mShipManager.playerShip();
+		final var lKeyboard = core.input().keyboard();
 
-//		lPlayerShip.shipInput.isTurningLeft = core.input().keyboard().isKeyDown(GLFW.GLFW_KEY_LEFT);
-//		lPlayerShip.shipInput.isTurningRight = core.input().keyboard().isKeyDown(GLFW.GLFW_KEY_RIGHT);
-//		lPlayerShip.shipInput.isGas = core.input().keyboard().isKeyDown(GLFW.GLFW_KEY_UP);
-//		lPlayerShip.shipInput.isBrake = core.input().keyboard().isKeyDown(GLFW.GLFW_KEY_DOWN);
-//		lPlayerShip.shipInput.isHandBrake = core.input().keyboard().isKeyDown(GLFW.GLFW_KEY_SPACE);
-//
-//		lPlayerShip.shipInput.isShootCannon = core.input().keyboard().isKeyDown(GLFW.GLFW_KEY_RIGHT_CONTROL);
+		lPlayerShip.inputs.isLeftThrottle = lKeyboard.isKeyDown(GLFW.GLFW_KEY_LEFT) || lKeyboard.isKeyDown(GLFW.GLFW_KEY_A);
+		lPlayerShip.inputs.isRightThrottle = lKeyboard.isKeyDown(GLFW.GLFW_KEY_RIGHT) || lKeyboard.isKeyDown(GLFW.GLFW_KEY_D);
+		lPlayerShip.inputs.isUpThrottle = lKeyboard.isKeyDown(GLFW.GLFW_KEY_UP) || lKeyboard.isKeyDown(GLFW.GLFW_KEY_W);
 
 		return super.handleInput(core);
 	}
@@ -88,6 +88,11 @@ public class ShipController extends BaseController {
 	@Override
 	public void update(LintfordCore core) {
 		super.update(core);
+
+		final var lPlayerShip = mShipManager.playerShip();
+		updateShip(core, lPlayerShip);
+
+		// ----
 
 		final var lShipList = mShipManager.ships();
 		final var lNumShips = lShipList.size();
@@ -104,8 +109,53 @@ public class ShipController extends BaseController {
 	// ---------------------------------------------
 
 	private void updateShip(LintfordCore core, Ship ship) {
-		final float lDelta = (float) core.gameTime().elapsedTimeMilli() * 0.001f;
+		ship.update(core);
 
+		final var body = ship.body();
+		final var lShipInput = ship.inputs;
+
+		final float lThrustUpForce = 2000.f;
+		final float lAngularTorque = 500.f;
+
+		if (lShipInput.isUpThrottle) {
+			final float lAngle = body.angle;
+			final float upX = (float) Math.cos(lAngle);
+			final float upY = (float) Math.sin(lAngle);
+
+			ship.body().accX += -upY * -lThrustUpForce * body.invMass();
+			ship.body().accY += upX * -lThrustUpForce * body.invMass();
+		}
+
+		{ // apply a self-righting force
+			final float upX = 0.f;
+			final float upY = -1.f;
+			final float lAngle = body.angle - (float) Math.toRadians(90.f);
+			final float shipUpx = (float) Math.cos(lAngle);
+			final float shipUpY = (float) Math.sin(lAngle);
+
+			final float dot = Vector2f.dot(upX, upY, shipUpx, shipUpY);
+
+			final float controlAmt = (lAngularTorque * dot);
+			final float correctAmt = (lAngularTorque * (1.f - dot));
+
+			if (lShipInput.isLeftThrottle) {
+				ship.body().torque -= controlAmt * body.invInertia();
+			}
+
+			if (lShipInput.isRightThrottle) {
+				ship.body().torque += controlAmt * body.invInertia();
+			}
+
+			if (!lShipInput.isLeftThrottle && !lShipInput.isRightThrottle && dot > 0.0f) {
+				if (body.angle != 0) {
+					if (body.angle < .0f) {
+						ship.body().torque += correctAmt * body.invInertia();
+					} else {
+						ship.body().torque -= correctAmt * body.invInertia();
+					}
+				}
+			}
+		}
 	}
 
 	private void updateShipOnGrid(LintfordCore core, SpatialHashGrid<GridEntity> grid, Ship ship) {
