@@ -1,8 +1,5 @@
 package lintfordpickle.harvest.screens.game;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import org.lwjgl.glfw.GLFW;
 import org.lwjgl.opengl.GL11;
 
@@ -11,7 +8,6 @@ import lintfordpickle.harvest.controllers.CameraShipChaseController;
 import lintfordpickle.harvest.controllers.SceneController;
 import lintfordpickle.harvest.controllers.ShipController;
 import lintfordpickle.harvest.data.backgrounds.SceneManager;
-import lintfordpickle.harvest.data.players.PlayerGameContainer;
 import lintfordpickle.harvest.data.players.PlayerManager;
 import lintfordpickle.harvest.data.ships.Ship;
 import lintfordpickle.harvest.data.ships.ShipManager;
@@ -29,7 +25,6 @@ import net.lintford.library.core.collisions.RigidBody;
 import net.lintford.library.core.collisions.resolvers.CollisionResolverRotationAndFriction;
 import net.lintford.library.core.debug.Debug;
 import net.lintford.library.core.geometry.partitioning.GridEntity;
-import net.lintford.library.core.graphics.rendertarget.RTCamera;
 import net.lintford.library.core.graphics.rendertarget.RenderTarget;
 import net.lintford.library.screenmanager.ScreenManager;
 import net.lintford.library.screenmanager.screens.BaseGameScreen;
@@ -43,113 +38,11 @@ public class GameScreen extends BaseGameScreen {
 
 	public static final int NUM_PHYSICS_ITERATIONS = 7;
 
-	public class PlayerViewports {
-
-		// ---------------------------------------------
-		// Variables
-		// ---------------------------------------------
-
-		public PlayerManager mPlayerManager;
-		private List<PlayerGameContainer> mPlayerContainers = new ArrayList<>();
-
-		// ---------------------------------------------
-		// Properties
-		// ---------------------------------------------
-
-		public List<PlayerGameContainer> playerContainers() {
-			return mPlayerContainers;
-		}
-
-		// ---------------------------------------------
-		// Constructor
-		// ---------------------------------------------
-
-		public PlayerViewports(PlayerManager playerManager) {
-			mPlayerManager = playerManager;
-		}
-
-		// ---------------------------------------------
-		// Methods
-		// ---------------------------------------------
-
-		public void initialize(LintfordCore core) {
-			final float lHalfWidth = ConstantsGame.GAME_CANVAS_WIDTH / 2.f;
-			final float lHalfHeight = ConstantsGame.GAME_CANVAS_HEIGHT / 2.f;
-			int numPlayers = 1;
-
-			switch (numPlayers) {
-			default:
-			case 1:
-				mPlayerManager.playerSessions()[0].gameContainer().viewport().set(0, 0, lHalfWidth * 2, lHalfHeight * 2);
-
-				mPlayerContainers.add(mPlayerManager.playerSessions()[0].gameContainer());
-				break;
-
-			case 2:
-				// TODO: Options for split-screen orientation (2-players)
-				// Assume vertical
-				mPlayerManager.playerSessions()[0].gameContainer().viewport().set(-lHalfWidth * .5f, 0, lHalfWidth, lHalfHeight * 2);
-				mPlayerManager.playerSessions()[1].gameContainer().viewport().set(lHalfWidth * .5f, 0, lHalfWidth, lHalfHeight * 2);
-
-				mPlayerContainers.add(mPlayerManager.playerSessions()[0].gameContainer());
-				mPlayerContainers.add(mPlayerManager.playerSessions()[1].gameContainer());
-				break;
-
-			case 3:
-				mPlayerManager.playerSessions()[0].gameContainer().viewport().set(-lHalfWidth * .5f, -lHalfHeight * .5f, lHalfWidth, lHalfHeight);
-				mPlayerManager.playerSessions()[1].gameContainer().viewport().set(lHalfWidth * .5f, -lHalfHeight * .5f, lHalfWidth, lHalfHeight);
-				mPlayerManager.playerSessions()[2].gameContainer().viewport().set(-lHalfWidth * .5f, lHalfHeight * .5f, lHalfWidth, lHalfHeight);
-
-				mPlayerContainers.add(mPlayerManager.playerSessions()[0].gameContainer());
-				mPlayerContainers.add(mPlayerManager.playerSessions()[1].gameContainer());
-				mPlayerContainers.add(mPlayerManager.playerSessions()[2].gameContainer());
-				break;
-
-			case 4:
-				mPlayerManager.playerSessions()[0].gameContainer().viewport().set(-lHalfWidth * .5f, -lHalfHeight * .5f, lHalfWidth, lHalfHeight);
-				mPlayerManager.playerSessions()[1].gameContainer().viewport().set(lHalfWidth * .5f, -lHalfHeight * .5f, lHalfWidth, lHalfHeight);
-				mPlayerManager.playerSessions()[2].gameContainer().viewport().set(-lHalfWidth * .5f, lHalfHeight * .5f, lHalfWidth, lHalfHeight);
-				mPlayerManager.playerSessions()[3].gameContainer().viewport().set(lHalfWidth * .5f, lHalfHeight * .5f, lHalfWidth, lHalfHeight);
-
-				mPlayerContainers.add(mPlayerManager.playerSessions()[0].gameContainer());
-				mPlayerContainers.add(mPlayerManager.playerSessions()[1].gameContainer());
-				mPlayerContainers.add(mPlayerManager.playerSessions()[2].gameContainer());
-				mPlayerContainers.add(mPlayerManager.playerSessions()[3].gameContainer());
-				break;
-			}
-		}
-
-		public void loadResource(ResourceManager resourceManager) {
-			final var lDisplaySettings = resourceManager.config().display();
-			final var lCanvasWidth = lDisplaySettings.gameResolutionWidth();
-			final var lCanvasHeight = lDisplaySettings.gameResolutionHeight();
-
-			final var lNumPlayerContainers = mPlayerContainers.size();
-			for (int i = 0; i < lNumPlayerContainers; i++) {
-				final var lContainer = mPlayerContainers.get(i);
-
-				final var lRenderTarget = mRendererManager.createRenderTarget("Game Canvas P" + i, lCanvasWidth, lCanvasHeight, 1, GL11.GL_NEAREST, false);
-				final var lRTCamera = new RTCamera(lCanvasWidth, lCanvasHeight);
-
-				lContainer.init(lRTCamera, lRenderTarget);
-			}
-		}
-
-		public void unloadResources() {
-			final int lNumPlayerContainers = mPlayerContainers.size();
-			for (int i = 0; i < lNumPlayerContainers; i++) {
-				final var lContainer = mPlayerContainers.get(i);
-				mRendererManager.unloadRenderTarget(lContainer.renderTarget());
-				lContainer.reset();
-			}
-		}
-	}
-
 	// ---------------------------------------------
 	// Variables
 	// ---------------------------------------------
 
-	private PlayerViewports mPlayerViewports;
+	private RenderTarget mRenderTarget;
 
 	private PhysicsWorld world;
 
@@ -178,9 +71,6 @@ public class GameScreen extends BaseGameScreen {
 
 		final var lPlayerManager = new PlayerManager();
 		lPlayerManager.addPlayer();
-
-		mPlayerViewports = new PlayerViewports(lPlayerManager);
-		mPlayerViewports.initialize(screenManager.core());
 	}
 
 	// ---------------------------------------------
@@ -203,12 +93,12 @@ public class GameScreen extends BaseGameScreen {
 		world.addBody(lPlayerShip.body());
 		world.initialize();
 
-		createStaticWorld();
+		createWorldCollidables();
 
 		super.initialize();
 	}
 
-	private void createStaticWorld() {
+	private void createStaticTestWorld() {
 		final float lPixelsToUnits = ConstantsPhysics.PixelsToUnits();
 
 		final float staticFriction = 0.8f;
@@ -232,16 +122,87 @@ public class GameScreen extends BaseGameScreen {
 		world.addBody(lLedge1);
 	}
 
+	private void createWorldCollidables() {
+		createStaticPolygon(602, 1312, 128, 128, 0);
+		createStaticPolygon(448, 1392, 154, 48, 0);
+		createStaticPolygon(1358, 928, 130, 124, 0);
+		createStaticPolygon(1698, 1168, 128, 270, 0);
+		createStaticPolygon(1954, 1232, 48, 206, 0);
+		createStaticPolygon(1696, 1438, 352, 40, 0);
+		createStaticPolygon(1184, 640, 130, 192, 0);
+		createStaticPolygon(1150, 768, 130, 284, 0);
+		createStaticPolygon(1150, 1052, 338, 22, 0);
+		createStaticPolygon(864, 576, 128, 658, 0);
+		createStaticPolygon(320, 224, 128, 1146, 0);
+
+		createStaticPolygon(320, 224, 128, 1146, 0);
+		createStaticPolygon(384, 160, 64, 64, 0);
+		createStaticPolygon(298, 224, 22, 288, 0);
+		createStaticPolygon(448, 512, 20, 128, 0);
+		createStaticPolygon(448, 512, 20, 128, 0);
+		createStaticPolygon(300, 640, 20, 64, 0);
+		createStaticPolygon(448, 768, 288, 32, 0);
+		createStaticPolygon(300, 800, 20, 96, 0);
+		createStaticPolygon(300, 960, 20, 160, 0);
+		createStaticPolygon(448, 1088, 20, 96, 0);
+		createStaticPolygon(0, 1248, 128, 192, 0);
+		createStaticPolygon(128, 1370, 320, 70, 0);
+		createStaticPolygon(640, 968, 224, 24, 0);
+		createStaticPolygon(864, 358, 128, 58, 0);
+		createStaticPolygon(892, 416, 100, 160, 0);
+		createStaticPolygon(992, 512, 18, 64, 0);
+		createStaticPolygon(992, 512, 18, 64, 0);
+		createStaticPolygon(864, 1234, 352, 8, 0);
+		createStaticPolygon(1344, 1234, 144, 8, 0);
+		createStaticPolygon(1934, 1032, 100, 12, 0);
+		createStaticPolygon(1826, 622, 104, 9, 0);
+
+		createStaticPolygon(930, 1438, 607, 40, 0);
+		createStaticPolygon(1440, 1328, 80, 110, 0);
+		createStaticPolygon(1440, 1234, 32, 94, 0);
+		createStaticPolygon(1696, 622, 130, 466, 0);
+		createStaticPolygon(1696, 542, 32, 80, 0);
+
+		// walls
+		createStaticPolygon(0, 0, 14, 2048, 0);
+		createStaticPolygon(2034, 0, 14, 2048, 0);
+		createStaticPolygon(0, 0, 2048, 14, 0);
+		createStaticPolygon(0, 1996, 2048, 52, 0);
+
+		// Platforms
+		createStaticPolygon(529, 1863, 159, 23, 0);
+		createStaticPolygon(1472, 1869, 158, 23, 0);
+	}
+
+	private void createStaticPolygon(float x, float y, float w, float h, float r) {
+		final float worldXOffset = -1024;
+		final float worldYOffset = -1024;
+
+		final float lPxToUts = ConstantsPhysics.PixelsToUnits();
+
+		final float staticFriction = 0.8f;
+		final float dynamicFriction = 0.5f;
+
+		final var lPolygon = RigidBody.createPolygonBody(w * lPxToUts, h * lPxToUts, 1.f, staticFriction, dynamicFriction, .4f, true);
+		lPolygon.moveTo((worldXOffset + x + w / 2) * lPxToUts, (worldYOffset + y + h / 2) * lPxToUts);
+
+		world.addBody(lPolygon);
+	}
+
 	@Override
 	public void loadResources(ResourceManager resourceManager) {
-		mPlayerViewports.loadResource(resourceManager);
-
 		super.loadResources(resourceManager);
+
+		final var lDisplaySettings = resourceManager.config().display();
+		final var lCanvasWidth = lDisplaySettings.gameResolutionWidth();
+		final var lCanvasHeight = lDisplaySettings.gameResolutionHeight();
+
+		mRenderTarget = mRendererManager.createRenderTarget("RT_MAIN", lCanvasWidth, lCanvasHeight, 1.f, GL11.GL_NEAREST, false);
 	}
 
 	@Override
 	public void unloadResources() {
-		mPlayerViewports.unloadResources();
+		mRendererManager.unloadRenderTarget(mRenderTarget);
 
 		super.unloadResources();
 	}
@@ -272,7 +233,6 @@ public class GameScreen extends BaseGameScreen {
 			lPlayerBody.torque = 0.f;
 			lPlayerBody.angularVelocity = 0.f;
 			lPlayerBody.angle = 0.f;
-
 		}
 	}
 
@@ -284,45 +244,28 @@ public class GameScreen extends BaseGameScreen {
 
 		if (ConstantsGame.WRAP_OBJECTS_AROUND_SCREEN_EDGE)
 			wrapBodies(core);
-
 	}
 
 	@Override
 	public void draw(LintfordCore core) {
 		final var lGameCam = mGameCamera; // orig
 
-		final var lViewports = mPlayerViewports.playerContainers();
-		final int lNumViewports = lViewports.size();
-		for (int i = 0; i < lNumViewports; i++) {
-			final var lPlayerContainer = lViewports.get(i);
-			drawPlayerViewport(core, lPlayerContainer.renderTarget(), lPlayerContainer.playerCamera());
-		}
-
-		GL11.glClearColor(0.06f, 0.18f, 0.11f, 1.0f);
-		GL11.glClear(GL11.GL_COLOR_BUFFER_BIT | GL11.GL_DEPTH_BUFFER_BIT);
-
-		// restore core
-		core.setActiveGameCamera(lGameCam);
-		core.config().display().reapplyGlViewport();
-
-		for (int i = 0; i < lNumViewports; i++) {
-			final var lPlayerContainer = lViewports.get(i);
-			Debug.debugManager().drawers().drawRenderTargetImmediate(core, lPlayerContainer.viewport(), -0.001f, lPlayerContainer.renderTarget());
-		}
-	}
-
-	private void drawPlayerViewport(LintfordCore core, RenderTarget target, ICamera camera) {
-		target.bind();
-
-		core.setActiveGameCamera(camera);
-		mGameCamera.setPosition(camera.getPosition().x, camera.getPosition().y);
+		mRenderTarget.bind();
 
 		GL11.glClearColor(0.06f, 0.18f, 0.31f, 1.0f);
 		GL11.glClear(GL11.GL_COLOR_BUFFER_BIT | GL11.GL_DEPTH_BUFFER_BIT);
 
 		super.draw(core);
 
-		target.unbind();
+		mRenderTarget.unbind();
+
+		GL11.glClearColor(0.06f, 0.18f, 0.11f, 1.0f);
+		GL11.glClear(GL11.GL_COLOR_BUFFER_BIT | GL11.GL_DEPTH_BUFFER_BIT);
+
+		core.setActiveGameCamera(lGameCam);
+		core.config().display().reapplyGlViewport();
+
+		Debug.debugManager().drawers().drawRenderTargetImmediate(core, 0, 0, 960, 540, -0.001f, mRenderTarget);
 	}
 
 	// ---------------------------------------------

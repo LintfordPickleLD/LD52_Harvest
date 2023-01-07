@@ -112,8 +112,8 @@ public class ShipController extends BaseController {
 		final var body = ship.body();
 		final var lShipInput = ship.inputs;
 
-		final float lThrustUpForce = 150.f;
-		final float lAngularTorque = 100.f;
+		final float lThrustUpForce = 100.f;
+		final float lAngularTorque = 70.f;
 
 		if (lShipInput.isUpThrottle) {
 			final float lAngle = body.angle;
@@ -133,8 +133,8 @@ public class ShipController extends BaseController {
 
 			final float dot = Vector2f.dot(upX, upY, shipUpx, shipUpY);
 
-			final float lShipRelUpForceX = shipUpx * lThrustUpForce * body.invMass();
-			final float lShipRelUpForceY = shipUpY * lThrustUpForce * body.invMass();
+			final float lShipRelUpForceX = shipUpx * lThrustUpForce * body.invMass() * (dot * dot);
+			final float lShipRelUpForceY = shipUpY * lThrustUpForce * body.invMass() * (dot * dot);
 
 			final float lThrottleControler = .4f;
 			if (lShipInput.isLeftThrottle) {
@@ -150,23 +150,22 @@ public class ShipController extends BaseController {
 
 				body.addForceAtPoint(lShipRelUpForceX * lThrottleControler, lShipRelUpForceY * lThrottleControler, engineX, engineY);
 			}
-			
-			if (!lShipInput.isLeftThrottle && !lShipInput.isRightThrottle) {
-				body.angularVelocity *= 0.8f;	
-			}
-			
 
-//			if (!lShipInput.isLeftThrottle && !lShipInput.isRightThrottle && dot > 0.0f) {
-//				if (body.angle != 0) {
-//
-//					final float correctAmt = (lAngularTorque * (1.f - dot)) * .3f;
-//					if (body.angle < .0f) {
-//						ship.body().torque += correctAmt * body.invInertia();
-//					} else {
-//						ship.body().torque -= correctAmt * body.invInertia();
-//					}
-//				}
-//			}
+			if (!lShipInput.isLeftThrottle && !lShipInput.isRightThrottle) {
+				body.angularVelocity *= 0.8f;
+			}
+
+			if (!lShipInput.isLeftThrottle && !lShipInput.isRightThrottle && dot > 0.0f) {
+				if (body.angle != 0) {
+
+					final float correctAmt = (lAngularTorque * (1.f - dot)) * 5f;
+					if (body.angle < .0f) {
+						ship.body().torque += correctAmt * body.invInertia();
+					} else {
+						ship.body().torque -= correctAmt * body.invInertia();
+					}
+				}
+			}
 		}
 	}
 

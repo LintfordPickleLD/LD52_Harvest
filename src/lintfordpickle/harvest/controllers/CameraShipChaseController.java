@@ -161,9 +161,9 @@ public class CameraShipChaseController extends BaseController {
 		mMass = 100.f;
 
 		updatewWorldPositions(core);
-		updateWorldZoomFactor(core);
+		// updateWorldZoomFactor(core);
 
-		float elapsed = (float) core.gameTime().elapsedTimeMilli() * 0.001f;
+		float elapsed = (float) core.gameTime().elapsedTimeMilli() * 0.01f;
 
 		// Calculate spring force
 		float stretchX = mPosition.x - mDesiredPosition.x;
@@ -221,7 +221,7 @@ public class CameraShipChaseController extends BaseController {
 
 		mZoomVelocity = MathHelper.clamp(mZoomVelocity, -0.025f, 0.025f);
 		mZoomFactor = MathHelper.clamp(mZoomFactor, lZoomOutLimit, lZoomInLimit);
-		mGameCamera.setZoomFactor(1);
+		mGameCamera.setZoomFactor(mZoomFactor);
 
 		mZoomVelocity *= 0.0987f;
 	}

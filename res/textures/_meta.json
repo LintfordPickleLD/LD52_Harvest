@@ -22,8 +22,29 @@
 			"wrapTIndex":1
 		},
 		{
-			"textureName":"TEXTURE_SCENE",
-			"filepath":"res/textures/textureScene.png",
+			"textureName":"TEXTURE_SCENE_SKY",
+			"filepath":"res/textures/scene/textureSceneSky.png",
+			"filterIndex":1,
+			"wrapSIndex":1,
+			"wrapTIndex":1
+		},
+		{
+			"textureName":"TEXTURE_SCENE_BACKGROUND_FAR",
+			"filepath":"res/textures/scene/textureSceneBackgroundFar.png",
+			"filterIndex":1,
+			"wrapSIndex":1,
+			"wrapTIndex":1
+		},
+		{
+			"textureName":"TEXTURE_SCENE_BACKGROUND_MID",
+			"filepath":"res/textures/scene/textureSceneBackgroundMid.png",
+			"filterIndex":1,
+			"wrapSIndex":1,
+			"wrapTIndex":1
+		},
+		{
+			"textureName":"TEXTURE_SCENE_COLLIDABLE",
+			"filepath":"res/textures/scene/textureSceneCollidables.png",
 			"filterIndex":1,
 			"wrapSIndex":1,
 			"wrapTIndex":1

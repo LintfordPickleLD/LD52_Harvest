@@ -6,7 +6,6 @@ import lintfordpickle.harvest.data.backgrounds.SceneLayer;
 import net.lintford.library.core.LintfordCore;
 import net.lintford.library.core.ResourceManager;
 import net.lintford.library.core.graphics.ColorConstants;
-import net.lintford.library.core.graphics.sprites.spritesheet.SpriteSheetDefinition;
 import net.lintford.library.renderers.BaseRenderer;
 import net.lintford.library.renderers.RendererManager;
 
@@ -23,8 +22,6 @@ public class SceneRenderer extends BaseRenderer {
 	// ---------------------------------------------
 
 	private SceneController mSceneController;
-
-	private SpriteSheetDefinition mSceneSpritesheet;
 
 	// ---------------------------------------------
 	// Properties
@@ -57,7 +54,13 @@ public class SceneRenderer extends BaseRenderer {
 	public void loadResources(ResourceManager resourceManager) {
 		super.loadResources(resourceManager);
 
-		mSceneSpritesheet = resourceManager.spriteSheetManager().getSpriteSheet("SPRITESHEET_SCENE", ConstantsGame.GAME_RESOURCE_GROUP_ID);
+		final var lSceneManager = mSceneController.sceneManager();
+		final var lLayers = lSceneManager.layers();
+		final var lNumLayers = lLayers.size();
+		for (int i = 0; i < lNumLayers; i++) {
+			final var lLayer = lLayers.get(i);
+			lLayer.texture = resourceManager.textureManager().getTexture(lLayer.textureName, ConstantsGame.GAME_RESOURCE_GROUP_ID);
+		}
 	}
 
 	@Override
@@ -84,23 +87,25 @@ public class SceneRenderer extends BaseRenderer {
 		if (sceneLayer == null)
 			return;
 
-		final var lSpriteFrame = mSceneSpritesheet.getSpriteFrame(sceneLayer.spriteName);
-		if (lSpriteFrame == null)
+		final var lTexture = sceneLayer.texture;
+		if (lTexture == null)
 			return;
-
-		final var lTexture = mSceneSpritesheet.texture();
 
 		final var lTextureBatch = mRendererManager.uiTextureBatch();
 		lTextureBatch.begin(core.gameCamera());
 
-		final float lDstW = 960 * 2;
-		final float lDstH = 540 * 2;
-		
+		final int srcX = 0;
+		final int srcY = 0;
+		final int srcW = 1024;
+		final int srcH = 1024;
+
+		final float lDstW = 1024 * 2.f;
+		final float lDstH = 1024 * 2.f;
+
 		final float lDstX = -lDstW / 2.f;
 		final float lDstY = -lDstH / 2.f;
-		
 
-		lTextureBatch.draw(lTexture, lSpriteFrame, lDstX, lDstY, lDstW, lDstH, -0.01f, ColorConstants.WHITE);
+		lTextureBatch.draw(lTexture, srcX, srcY, srcW, srcH, lDstX, lDstY, lDstW, lDstH, -0.01f, ColorConstants.WHITE);
 
 		lTextureBatch.end();
 	}

@@ -33,21 +33,26 @@ public class SceneManager {
 
 	public void loadScenes() {
 		final var lBackgroundOutsideLayer = new SceneLayer();
-		final var backgroundInsideLayer = new SceneLayer();
-		final var backgroundCollidableLayer = new SceneLayer();
+		final var lBackgroundBackgroundFarLayer = new SceneLayer();
+		final var lBackgroundBackgroundMidLayer = new SceneLayer();
+		final var lBackgroundCollidableLayer = new SceneLayer();
 
-		lBackgroundOutsideLayer.spritesheetName = "SPRITESHEET_SCENE";
-		lBackgroundOutsideLayer.spriteName = "BACKGROUNDSKY";
+		lBackgroundOutsideLayer.textureName = "TEXTURE_SCENE_SKY";
+		lBackgroundOutsideLayer.translation_speed = 1.f;
 
-		backgroundInsideLayer.spritesheetName = "SPRITESHEET_SCENE";
-		backgroundInsideLayer.spriteName = "BACKGROUNDSCENE";
+		lBackgroundBackgroundFarLayer.textureName = "TEXTURE_SCENE_BACKGROUND_FAR";
+		lBackgroundBackgroundFarLayer.translation_speed = 1.f;
 
-		backgroundCollidableLayer.spritesheetName = "SPRITESHEET_SCENE";
-		backgroundCollidableLayer.spriteName = "BACKGROUNDCOLLIDABLES";
+		lBackgroundBackgroundMidLayer.textureName = "TEXTURE_SCENE_BACKGROUND_MID";
+		lBackgroundBackgroundMidLayer.translation_speed = 1.f;
+
+		lBackgroundCollidableLayer.textureName = "TEXTURE_SCENE_COLLIDABLE";
+		lBackgroundCollidableLayer.translation_speed = 1.f;
 
 		layers.add(lBackgroundOutsideLayer);
-		layers.add(backgroundInsideLayer);
-		layers.add(backgroundCollidableLayer);
+		layers.add(lBackgroundBackgroundFarLayer);
+		layers.add(lBackgroundBackgroundMidLayer);
+		layers.add(lBackgroundCollidableLayer);
 	}
 
 }

@@ -1,7 +1,5 @@
 package lintfordpickle.harvest.renderers;
 
-import org.lwjgl.opengl.GL11;
-
 import lintfordpickle.harvest.ConstantsGame;
 import lintfordpickle.harvest.controllers.ShipController;
 import lintfordpickle.harvest.data.ships.Ship;
@@ -9,11 +7,9 @@ import lintfordpickle.harvest.renderers.trails.TrailBatchRenderer;
 import net.lintford.library.ConstantsPhysics;
 import net.lintford.library.core.LintfordCore;
 import net.lintford.library.core.ResourceManager;
-import net.lintford.library.core.debug.Debug;
 import net.lintford.library.core.graphics.ColorConstants;
 import net.lintford.library.core.graphics.batching.SpriteBatch;
 import net.lintford.library.core.graphics.sprites.spritesheet.SpriteSheetDefinition;
-import net.lintford.library.core.graphics.textures.Texture;
 import net.lintford.library.core.maths.Vector2f;
 import net.lintford.library.renderers.BaseRenderer;
 import net.lintford.library.renderers.RendererManager;
@@ -31,10 +27,6 @@ public class ShipRenderer extends BaseRenderer {
 	// ---------------------------------------------
 
 	private ShipController mShipController;
-
-	private Texture mShipTexturePlayer;
-	private Texture mShipTextureEnemy;
-	private Texture mShipEngineGlow;
 
 	private SpriteSheetDefinition mShipSpritesheet;
 
@@ -73,10 +65,6 @@ public class ShipRenderer extends BaseRenderer {
 	public void loadResources(ResourceManager resourceManager) {
 		super.loadResources(resourceManager);
 
-		mShipTexturePlayer = resourceManager.textureManager().loadTexture("TEXTURE_VEHICLE_01", "res/textures/textureShip.png", entityGroupID());
-		mShipTextureEnemy = resourceManager.textureManager().loadTexture("TEXTURE_VEHICLE_02", "res/textures/textureShip.png", entityGroupID());
-		mShipEngineGlow = resourceManager.textureManager().loadTexture("TEXTURE_ENGINE_GLOW", "res/textures/textureTrail.png", entityGroupID());
-
 		mShipSpritesheet = resourceManager.spriteSheetManager().getSpriteSheet("SPRITESHEET_PROPS", ConstantsGame.GAME_RESOURCE_GROUP_ID);
 
 		mTrailRenderer.loadResources(resourceManager);
@@ -114,17 +102,6 @@ public class ShipRenderer extends BaseRenderer {
 		drawShipEngines(core, lSpritebatch, ship, ship.rearEngine);
 		drawShipEngines(core, lSpritebatch, ship, ship.frontEngine);
 
-		mTrailRenderer.update(core);
-		mTrailRenderer.begin(core.gameCamera());
-
-		final var lTrailComponentF = ship.mFrontTrailRendererComponent;
-		mTrailRenderer.draw(mShipEngineGlow, lTrailComponentF.vertices(), lTrailComponentF.vertexCount());
-
-		final var lTrailComponentR = ship.mRearTrailRendererComponent;
-		mTrailRenderer.draw(mShipEngineGlow, lTrailComponentR.vertices(), lTrailComponentR.vertexCount());
-
-		mTrailRenderer.end();
-
 		lSpritebatch.end();
 
 		drawShipDebugVectors(core, ship);
@@ -136,21 +113,17 @@ public class ShipRenderer extends BaseRenderer {
 	private void drawShipComponents(LintfordCore core, Ship ship, SpriteBatch spriteBatch) {
 		{// MainBody
 			final var lUnitsToPixels = ConstantsPhysics.UnitsToPixels();
-
-			final var lDestW = 64;
-			final var lDestH = 32;
+			final var lSpriteFrame = mShipSpritesheet.getSpriteFrame("HARVESTER");
 
 			final var lScale = 1.f;
-
-			ship.body().vy *= 0.997f;
+			final var lDestW = lSpriteFrame.width() * 2;
+			final var lDestH = lSpriteFrame.height() * 2;
 
 			final var lBody = ship.body();
 
 			final var shipPosX = lBody.x * lUnitsToPixels;
 			final var shipPosY = lBody.y * lUnitsToPixels;
 			final var shipPosRot = lBody.angle;
-
-			final var lSpriteFrame = mShipSpritesheet.getSpriteFrame("HARVESTER");
 
 			spriteBatch.drawAroundCenter(mShipSpritesheet, lSpriteFrame, shipPosX, shipPosY, lDestW, lDestH, shipPosRot, 0f, 0f, lScale, ColorConstants.WHITE);
 		}
@@ -165,11 +138,6 @@ public class ShipRenderer extends BaseRenderer {
 		final var shipPosX = enginePostion.x * lUnitsToPixels;
 		final var shipPosY = enginePostion.y * lUnitsToPixels;
 		final var shipRot = lBody.angle;
-
-		GL11.glPointSize(3.f);
-		Debug.debugManager().drawers().drawPointImmediate(core.HUD(), shipPosX, shipPosY);
-
-		// ----
 
 		final var r = ship.engineColorR * 2f;
 		final var g = ship.engineColorG * 2f;
