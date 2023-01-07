@@ -1,0 +1,1 @@
+aseprite -b --ignore-empty <absolute path to aseprite file> --save-as "D:\dev\java\ludumdare\51\raw\spritesheets\<filename>\{layer}\{tag} 00.png"
