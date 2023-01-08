@@ -17,7 +17,6 @@ public class GameStateController extends BaseController {
 	// Variables
 	// ---------------------------------------------
 
-	private ShipController mShipController;
 	private GameState mGameState;
 
 	// ---------------------------------------------
@@ -43,18 +42,12 @@ public class GameStateController extends BaseController {
 	// ---------------------------------------------
 
 	@Override
-	public void initialize(LintfordCore core) {
-		super.initialize(core);
-
-		final var lControllerManager = core.controllerManager();
-
-		mShipController = (ShipController) lControllerManager.getControllerByNameRequired(ShipController.CONTROLLER_NAME, entityGroupUid());
-
-	}
-
-	@Override
 	public void update(LintfordCore core) {
 		super.update(core);
+
+		if (mGameState.gameDeathTimerMs > 0.f) {
+			mGameState.gameDeathTimerMs -= core.gameTime().elapsedTimeMilli();
+		}
 
 	}
 
@@ -63,15 +56,15 @@ public class GameStateController extends BaseController {
 	// ---------------------------------------------
 
 	public boolean hasPlayerLostThroughTime() {
-		return false;
+		return mGameState.gameDeathTimerMs <= 0.f;
 	}
 
 	public boolean hasPlayerLostThroughLives() {
-		return false;
+		return mGameState.lives <= 0;
 	}
 
-	public void addPoints(int amt) {
-		mGameState.points += amt;
+	public void addFoodDelivered(int amt) {
+		mGameState.foodDelivered += amt;
 	}
 
 }

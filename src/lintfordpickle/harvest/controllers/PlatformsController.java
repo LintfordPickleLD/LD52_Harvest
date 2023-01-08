@@ -103,7 +103,6 @@ public class PlatformsController extends BaseController {
 		if (platform.intersectsAA(lShipX, lShipY, lShipW, lShipH)) {
 			// only register if ships comes to halt
 			if (Math.abs(ship.velocityMagnitude) < 0.01) {
-				System.out.println("Platform Activated bozo!");
 				return true;
 			}
 		}
@@ -143,7 +142,7 @@ public class PlatformsController extends BaseController {
 
 		// normal
 		if (platform.isRefillingStock) {
-			platform.stockValueF += 0.1f * core.gameTime().elapsedTimeMilli() * 0.001f;
+			platform.stockValueF += 0.05f * core.gameTime().elapsedTimeMilli() * 0.001f;
 			if (platform.stockValueF >= 1.f) {
 				platform.stockValueF = 1.f;
 
@@ -194,7 +193,7 @@ public class PlatformsController extends BaseController {
 
 		// normal
 		if (platform.isRefillingStock) {
-			platform.stockValueF += 0.1f * core.gameTime().elapsedTimeMilli() * 0.001f;
+			platform.stockValueF += 0.12f * core.gameTime().elapsedTimeMilli() * 0.001f;
 			if (platform.stockValueF >= 1.f) {
 				platform.stockValueF = 0.f;
 				platform.stockValueI = 1;
@@ -204,7 +203,6 @@ public class PlatformsController extends BaseController {
 				platform.isStockFull = true;
 			}
 		}
-
 	}
 
 	private void updateWarehousePlatform(LintfordCore core, Platform platform) {
@@ -215,7 +213,7 @@ public class PlatformsController extends BaseController {
 		if (lIsPlayerAtPlatform && lShip.cargo.wheatAmt > 0) {
 			final int lNumWheat = lShip.cargo.wheatAmt;
 			for (int i = 0; i < lNumWheat; i++) {
-				mGameStateController.addPoints(50);
+				mGameStateController.addFoodDelivered(1);
 
 				lShip.cargo.freeSpace++;
 				lShip.cargo.wheatAmt--;

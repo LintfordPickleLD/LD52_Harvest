@@ -1,16 +1,21 @@
 package lintfordpickle.harvest.data.game;
 
+import lintfordpickle.harvest.ConstantsGame;
+
 public class GameState {
 
 	public int lives;
-	public float gameDeathTimerSeconds; // death on 0
-	public int points;
+	public float gameDeathTimerMs; // death on 0
+	public int foodDelivered;
+
+	public boolean isGameRunning;
 
 	public void startNewGame() {
 		lives = 3;
-		points = 0;
+		foodDelivered = 0;
 
-		gameDeathTimerSeconds = 60 * 4;
+		gameDeathTimerMs = ConstantsGame.TOTAL_GAME_TIME_AT_START;
+		isGameRunning = true;
 	}
 
 }

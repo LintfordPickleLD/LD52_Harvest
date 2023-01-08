@@ -90,7 +90,6 @@ public class GameWindow extends BaseHarvestApp {
 
 		mScreenManager.addScreen(new MenuBackgroundScreen(mScreenManager));
 		mScreenManager.addScreen(new MainMenu(mScreenManager));
-
+		mScreenManager.initialize();
 	}
-
 }

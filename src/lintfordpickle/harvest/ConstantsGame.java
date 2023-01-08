@@ -26,6 +26,8 @@ public class ConstantsGame {
 
 	public static final boolean LOCK_ZOOM_TO_ONE = true;
 
+	public static final float TOTAL_GAME_TIME_AT_START = 60 * 4 * 1000;
+
 	// ---------------------------------------------
 	// Debug
 	// ---------------------------------------------
@@ -37,6 +39,5 @@ public class ConstantsGame {
 
 	public static final boolean WRAP_OBJECTS_AROUND_SCREEN_EDGE = false;
 	public static final boolean SKIP_MAIN_MENU_ON_STARTUP = true;
-	public static final boolean ESCAPE_RESTART_MAIN_SCENE = true;
-
+	public static final boolean ESCAPE_RESTART_MAIN_SCENE = false;
 }

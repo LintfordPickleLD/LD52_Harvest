@@ -86,16 +86,21 @@ public class HudRenderer extends BaseRenderer {
 	public void draw(LintfordCore core) {
 		final var lHudBoundingBox = core.HUD().boundingRectangle();
 
+		final var lFontUnit = mRendererManager.uiTextFont();
 		final var lSpriteBatch = mRendererManager.uiSpriteBatch();
 
 		lSpriteBatch.begin(core.HUD());
 //		lSpriteBatch.draw(mHudSpritesheet, mHudSpritesheet.getSpriteFrame("TEXTURE_HIDE_LAYER"), 0, 0, 32, 32, -0.01f, ColorConstants.WHITE);
 		lSpriteBatch.end();
 
-	}
+		final var lTimeRemaining = mGameStateController.gameState().gameDeathTimerMs / 1000.f;
+		final var lTimeFormatted = String.format(java.util.Locale.US, "%.1f", lTimeRemaining);
 
-	// ---------------------------------------------
-	// Methods
-	// ---------------------------------------------
+		lFontUnit.begin(core.HUD());
+		lFontUnit.drawText("Time Until food runs out: " + lTimeFormatted, lHudBoundingBox.left() + 5.f, lHudBoundingBox.top() + 5.0f, -0.01f, 1.f);
+		lFontUnit.drawText("Food Delivered: " + mGameStateController.gameState().foodDelivered, lHudBoundingBox.left() + 5.f, lHudBoundingBox.top() + 25.0f, -0.01f, 1.f);
+		lFontUnit.end();
+
+	}
 
 }

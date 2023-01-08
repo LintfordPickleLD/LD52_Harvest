@@ -23,6 +23,7 @@ import lintfordpickle.harvest.renderers.debug.PhysicsDebugRenderer;
 import lintfordpickle.harvest.renderers.hud.HudRenderer;
 import lintfordpickle.harvest.renderers.scene.SceneAdWallRenderer;
 import lintfordpickle.harvest.renderers.scene.SceneRenderer;
+import lintfordpickle.harvest.screens.FinishedScreen;
 import lintfordpickle.harvest.screens.PauseScreen;
 import net.lintford.library.ConstantsPhysics;
 import net.lintford.library.controllers.core.ControllerManager;
@@ -96,6 +97,8 @@ public class GameScreen extends BaseGameScreen {
 	public void initialize() {
 
 		mGameState = new GameState();
+		mGameState.startNewGame();
+
 		mShipManager = new ShipManager();
 		mSceneManager = new SceneManager();
 		mPlatformManager = new PlatformManager();
@@ -268,6 +271,10 @@ public class GameScreen extends BaseGameScreen {
 			return;
 		}
 
+		if (core.input().keyboard().isKeyDownTimed(GLFW.GLFW_KEY_G)) {
+			screenManager().toastManager().addMessage("Hey BOZO!", "Got a job for you", 2000);
+		}
+
 		if (core.input().keyboard().isKeyDownTimed(GLFW.GLFW_KEY_R)) {
 			final var lPlayerBody = mShipManager.playerShip().body();
 
@@ -285,6 +292,19 @@ public class GameScreen extends BaseGameScreen {
 	@Override
 	public void update(LintfordCore core, boolean otherScreenHasFocus, boolean coveredByOtherScreen) {
 		super.update(core, otherScreenHasFocus, coveredByOtherScreen);
+
+		if (otherScreenHasFocus)
+			return;
+
+		if (mGameStateController.hasPlayerLostThroughLives() && mGameStateController.gameState().isGameRunning) {
+			mGameStateController.gameState().isGameRunning = false;
+			screenManager().addScreen(new FinishedScreen(mScreenManager, true, mGameState.foodDelivered));
+		}
+
+		if (mGameStateController.hasPlayerLostThroughTime() && mGameStateController.gameState().isGameRunning) {
+			mGameStateController.gameState().isGameRunning = false;
+			screenManager().addScreen(new FinishedScreen(mScreenManager, false, mGameState.foodDelivered));
+		}
 
 		world.stepWorld((float) core.gameTime().elapsedTimeMilli() * 0.001f, NUM_PHYSICS_ITERATIONS);
 	}
