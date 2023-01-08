@@ -10,6 +10,29 @@ import net.lintford.library.core.maths.Vector2f;
 
 public class Ship extends RigidBodyEntity {
 
+	public class Cargo {
+
+		// ---------------------------------------------
+		// Variables
+		// ---------------------------------------------
+
+		private final int totalSpace = 2;
+		public int freeSpace;
+
+		public int waterAmt;
+		public int wheatAmt;
+
+		// ---------------------------------------------
+		// Constructor
+		// ---------------------------------------------
+
+		public Cargo() {
+			freeSpace = totalSpace;
+			waterAmt = 0;
+			wheatAmt = 0;
+		}
+	}
+
 	// ---------------------------------------------
 	// Constants
 	// ---------------------------------------------
@@ -36,6 +59,8 @@ public class Ship extends RigidBodyEntity {
 
 	public final TrailRendererComponent mRearTrailRendererComponent = new TrailRendererComponent();
 	public final TrailRendererComponent mFrontTrailRendererComponent = new TrailRendererComponent();
+
+	public final Cargo cargo = new Cargo();
 
 	// ---------------------------------------------
 	// Constructor

@@ -8,6 +8,13 @@ public class Platform extends Rectangle {
 
 	public PlatformType platformType = PlatformType.Farm;
 
-	public float refillTimer;
+	public boolean refilPrerequisteFulfilled; // water for farm
+	public float timeUntilRefillStarts;
+
+	public boolean isRefillingStock;
+	public boolean isStockFull;
+
+	public int stockValueI;
+	public float stockValueF;
 
 }

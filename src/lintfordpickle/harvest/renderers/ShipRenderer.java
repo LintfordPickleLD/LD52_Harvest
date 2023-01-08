@@ -241,6 +241,12 @@ public class ShipRenderer extends BaseRenderer {
 			lFontUnit.drawText("torque: " + shipTorque, lBoundingBox.left() + 5.f, yPos += lLineHeight, -0.01f, lFontScale);
 			lFontUnit.drawText("angular: " + shipAV, lBoundingBox.left() + 5.f, yPos += lLineHeight, -0.01f, lFontScale);
 			lFontUnit.drawText("angle: " + shipR, lBoundingBox.left() + 5.f, yPos += lLineHeight, -0.01f, lFontScale);
+
+			lFontUnit.drawText(" ", lBoundingBox.left() + 5.f, yPos += lLineHeight, -0.01f, lFontScale);
+
+			lFontUnit.drawText("free space: " + ship.cargo.freeSpace, lBoundingBox.left() + 5.f, yPos += lLineHeight, -0.01f, lFontScale);
+			lFontUnit.drawText("water: " + ship.cargo.waterAmt, lBoundingBox.left() + 5.f, yPos += lLineHeight, -0.01f, lFontScale);
+			lFontUnit.drawText("wheat: " + ship.cargo.wheatAmt, lBoundingBox.left() + 5.f, yPos += lLineHeight, -0.01f, lFontScale);
 			lFontUnit.end();
 		}
 	}

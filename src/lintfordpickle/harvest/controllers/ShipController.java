@@ -133,39 +133,41 @@ public class ShipController extends BaseController {
 
 			final float dot = Vector2f.dot(upX, upY, shipUpx, shipUpY);
 
-			final float lShipRelUpForceX = shipUpx * lThrustUpForce * body.invMass() * (dot * dot);
-			final float lShipRelUpForceY = shipUpY * lThrustUpForce * body.invMass() * (dot * dot);
+			final float lShipRelUpForceX = shipUpx * lThrustUpForce * body.invMass();// * (dot * dot);
+			final float lShipRelUpForceY = shipUpY * lThrustUpForce * body.invMass();// * (dot * dot);
 
 			final float lThrottleControler = .4f;
 			if (lShipInput.isLeftThrottle) {
 				final float engineX = ship.frontEngine.x;
 				final float engineY = ship.frontEngine.y;
 
-				body.addForceAtPoint(lShipRelUpForceX * lThrottleControler, lShipRelUpForceY * lThrottleControler, engineX, engineY);
+				// body.addForceAtPoint(lShipRelUpForceX * lThrottleControler * 3.f, lShipRelUpForceY * lThrottleControler * 3.f, engineX, engineY);
+				body.torque -= 3.f * body.invInertia();
 			}
 
 			if (lShipInput.isRightThrottle) {
 				final float engineX = ship.rearEngine.x;
 				final float engineY = ship.rearEngine.y;
 
-				body.addForceAtPoint(lShipRelUpForceX * lThrottleControler, lShipRelUpForceY * lThrottleControler, engineX, engineY);
+				// body.addForceAtPoint(lShipRelUpForceX * lThrottleControler * 3.f, lShipRelUpForceY * lThrottleControler * 3.f, engineX, engineY);
+				body.torque += 3.f * body.invInertia();
 			}
 
 			if (!lShipInput.isLeftThrottle && !lShipInput.isRightThrottle) {
 				body.angularVelocity *= 0.8f;
 			}
 
-			if (!lShipInput.isLeftThrottle && !lShipInput.isRightThrottle && dot > 0.0f) {
-				if (body.angle != 0) {
-
-					final float correctAmt = (lAngularTorque * (1.f - dot)) * 5f;
-					if (body.angle < .0f) {
-						ship.body().torque += correctAmt * body.invInertia();
-					} else {
-						ship.body().torque -= correctAmt * body.invInertia();
-					}
-				}
-			}
+//			if (!lShipInput.isLeftThrottle && !lShipInput.isRightThrottle && dot > 0.0f) {
+//				if (body.angle != 0) {
+//
+//					final float correctAmt = (lAngularTorque * (1.f - dot)) * 5f;
+//					if (body.angle < .0f) {
+//						ship.body().torque += correctAmt * body.invInertia();
+//					} else {
+//						ship.body().torque -= correctAmt * body.invInertia();
+//					}
+//				}
+//			}
 		}
 	}
 

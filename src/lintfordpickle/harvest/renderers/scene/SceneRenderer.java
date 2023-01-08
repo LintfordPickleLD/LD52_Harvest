@@ -1,4 +1,4 @@
-package lintfordpickle.harvest.renderers;
+package lintfordpickle.harvest.renderers.scene;
 
 import lintfordpickle.harvest.ConstantsGame;
 import lintfordpickle.harvest.controllers.SceneController;

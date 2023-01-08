@@ -5,7 +5,7 @@
     {
       "name": "TEXTUREWHEATEMPTY",
       "x": 0,
-      "y": 18,
+      "y": 36,
       "w": 80,
       "h": 24,
       "pivotX": 0,
@@ -17,7 +17,7 @@
     {
       "name": "TEXTUREWHEATFULL",
       "x": 82,
-      "y": 18,
+      "y": 36,
       "w": 80,
       "h": 24,
       "pivotX": 0,
@@ -29,7 +29,7 @@
     {
       "name": "TEXTUREWHEATHALF",
       "x": 164,
-      "y": 18,
+      "y": 36,
       "w": 80,
       "h": 24,
       "pivotX": 0,
@@ -63,8 +63,20 @@
       "anchorPoints": []
     },
     {
+      "name": "TEXTURELIGHTGLOW",
+      "x": 0,
+      "y": 18,
+      "w": 16,
+      "h": 16,
+      "pivotX": 0,
+      "pivotY": 0,
+      "scaleX": 1.0,
+      "scaleY": 1.0,
+      "anchorPoints": []
+    },
+    {
       "name": "WHITE",
-      "x": 246,
+      "x": 18,
       "y": 18,
       "w": 16,
       "h": 16,

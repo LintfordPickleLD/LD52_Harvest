@@ -1,4 +1,4 @@
-package lintfordpickle.harvest.renderers;
+package lintfordpickle.harvest.renderers.scene;
 
 import org.lwjgl.glfw.GLFW;
 import org.lwjgl.opengl.GL20;
@@ -160,7 +160,7 @@ public class SceneAdWallRenderer extends BaseRenderer {
 		final var srcW = mAdWallTexture.getTextureWidth();
 		final var srcH = mAdWallTexture.getTextureHeight();
 
-		final var lWhiteWithAlpha = ColorConstants.getWhiteWithAlpha(.5f);
+		final var lWhiteWithAlpha = ColorConstants.getWhiteWithAlpha(1.5f);
 		lTextureBatch.draw(mAdWallTexture, srcX, srcY, srcW, srcH, adWall, -0.01f, lWhiteWithAlpha);
 
 		lTextureBatch.end();

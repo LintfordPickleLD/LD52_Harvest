@@ -5,20 +5,24 @@ import org.lwjgl.opengl.GL11;
 
 import lintfordpickle.harvest.ConstantsGame;
 import lintfordpickle.harvest.controllers.CameraShipChaseController;
+import lintfordpickle.harvest.controllers.GameStateController;
 import lintfordpickle.harvest.controllers.PlatformsController;
 import lintfordpickle.harvest.controllers.SceneController;
 import lintfordpickle.harvest.controllers.ShipController;
+import lintfordpickle.harvest.data.game.GameState;
 import lintfordpickle.harvest.data.platforms.Platform;
 import lintfordpickle.harvest.data.platforms.PlatformManager;
+import lintfordpickle.harvest.data.platforms.PlatformType;
 import lintfordpickle.harvest.data.players.PlayerManager;
 import lintfordpickle.harvest.data.scene.backgrounds.SceneManager;
 import lintfordpickle.harvest.data.ships.Ship;
 import lintfordpickle.harvest.data.ships.ShipManager;
-import lintfordpickle.harvest.renderers.PhysicsDebugRenderer;
 import lintfordpickle.harvest.renderers.PlatformsRenderer;
-import lintfordpickle.harvest.renderers.SceneAdWallRenderer;
-import lintfordpickle.harvest.renderers.SceneRenderer;
 import lintfordpickle.harvest.renderers.ShipRenderer;
+import lintfordpickle.harvest.renderers.debug.PhysicsDebugRenderer;
+import lintfordpickle.harvest.renderers.hud.HudRenderer;
+import lintfordpickle.harvest.renderers.scene.SceneAdWallRenderer;
+import lintfordpickle.harvest.renderers.scene.SceneRenderer;
 import lintfordpickle.harvest.screens.PauseScreen;
 import net.lintford.library.ConstantsPhysics;
 import net.lintford.library.controllers.core.ControllerManager;
@@ -51,6 +55,7 @@ public class GameScreen extends BaseGameScreen {
 	private PhysicsWorld world;
 
 	// Data
+	private GameState mGameState;
 	private ShipManager mShipManager;
 	private SceneManager mSceneManager;
 	private PlatformManager mPlatformManager;
@@ -60,6 +65,7 @@ public class GameScreen extends BaseGameScreen {
 	private ShipController mShipController;
 	private SceneController mSceneController;
 	private PlatformsController mPlatformsController;
+	private GameStateController mGameStateController;
 
 	// Renderers
 	private PhysicsDebugRenderer mPhysicsRenderer;
@@ -67,6 +73,7 @@ public class GameScreen extends BaseGameScreen {
 	private SceneRenderer mSceneRenderer;
 	private SceneAdWallRenderer mSceneAdWallRenderer;
 	private PlatformsRenderer mPlatformsRenderer;
+	private HudRenderer mHudRenderer;
 
 	// ---------------------------------------------
 	// Constructors
@@ -88,12 +95,15 @@ public class GameScreen extends BaseGameScreen {
 	@Override
 	public void initialize() {
 
+		mGameState = new GameState();
 		mShipManager = new ShipManager();
 		mSceneManager = new SceneManager();
 		mPlatformManager = new PlatformManager();
 
 		final var lPlayerShip = new Ship(GridEntity.getNewEntityUid());
 		lPlayerShip.isPlayerControlled = true;
+		lPlayerShip.body().moveTo(-1.2f, 13.1f);
+
 		mShipManager.playerShip(lPlayerShip);
 
 		world = new PhysicsWorld(0.0f, 9.87f);
@@ -106,6 +116,7 @@ public class GameScreen extends BaseGameScreen {
 		createWorldPlatforms();
 
 		super.initialize();
+		mGameCamera.setPosition(ConstantsPhysics.toPixels(-1.2f), ConstantsPhysics.toPixels(13.1f));
 	}
 
 	private void createWorldCollidables() {
@@ -148,6 +159,13 @@ public class GameScreen extends BaseGameScreen {
 		createStaticPolygon(1934, 1032, 100, 12, 0);
 		createStaticPolygon(1826, 622, 104, 9, 0);
 
+		// Start platform
+		createStaticPolygon(844, 1888, 203, 108, 0);
+		createStaticPolygon(844, 1866, 31, 22, 0);
+		createStaticPolygon(1344, 1844, 65, 152, 0);
+		createStaticPolygon(1248, 1924, 65, 72, 0);
+		createStaticPolygon(1120, 1972, 113, 24, 0);
+
 		createStaticPolygon(930, 1438, 607, 40, 0);
 		createStaticPolygon(1440, 1328, 80, 110, 0);
 		createStaticPolygon(1440, 1234, 32, 94, 0);
@@ -166,15 +184,15 @@ public class GameScreen extends BaseGameScreen {
 	}
 
 	private void createWorldPlatforms() {
-		createPlatform(1748, 572, 160, 48); // warehouse
+		createPlatform(1748, 572, 160, 48, PlatformType.Warehouse);
 
-		createPlatform(852, 318, 160, 48); // farm
-		createPlatform(586, 1271, 160, 48); // farm
-		createPlatform(142, 1319, 160, 48); // farm
-		createPlatform(1343, 877, 160, 48); // farm
+		createPlatform(852, 318, 160, 48, PlatformType.Farm);
+		createPlatform(586, 1271, 160, 48, PlatformType.Farm);
+		createPlatform(142, 1319, 160, 48, PlatformType.Farm);
+		createPlatform(1343, 877, 160, 48, PlatformType.Farm);
 
-		createPlatform(529, 1813, 160, 48); // water
-		createPlatform(1470, 1820, 160, 48); // water
+		createPlatform(529, 1813, 160, 48, PlatformType.Water);
+		createPlatform(1470, 1820, 160, 48, PlatformType.Water);
 	}
 
 	private void createStaticPolygon(float x, float y, float w, float h, float r) {
@@ -192,13 +210,27 @@ public class GameScreen extends BaseGameScreen {
 		world.addBody(lPolygon);
 	}
 
-	private void createPlatform(float x, float y, float w, float h) {
+	private void createPlatform(float x, float y, float w, float h, PlatformType type) {
 		final float worldXOffset = -1024;
 		final float worldYOffset = -1024;
 
 		final var lNewPlatform = new Platform();
 		lNewPlatform.set(worldXOffset + x, worldYOffset + y, w, h);
+		lNewPlatform.platformType = type;
+
 		mPlatformManager.addPlatform(lNewPlatform);
+
+		switch (type) {
+		case Farm:
+			lNewPlatform.stockValueI = 0;
+			lNewPlatform.stockValueF = 0.f;
+			break;
+		case Water:
+			lNewPlatform.stockValueF = 1.f;
+			break;
+		default: // warehouse
+			break;
+		}
 	}
 
 	@Override
@@ -284,7 +316,7 @@ public class GameScreen extends BaseGameScreen {
 	@Override
 	protected void createControllers(ControllerManager controllerManager) {
 		mCameraShipChaseController = new CameraShipChaseController(controllerManager, mGameCamera, mShipManager.playerShip(), entityGroupUid());
-
+		mGameStateController = new GameStateController(controllerManager, mGameState, entityGroupUid());
 		mSceneController = new SceneController(controllerManager, mSceneManager, entityGroupUid());
 		mShipController = new ShipController(controllerManager, mShipManager, entityGroupUid());
 		mPlatformsController = new PlatformsController(controllerManager, mPlatformManager, entityGroupUid());
@@ -297,24 +329,27 @@ public class GameScreen extends BaseGameScreen {
 		mSceneController.initialize(core);
 		mShipController.initialize(core);
 		mPlatformsController.initialize(core);
+		mGameStateController.initialize(core);
 	}
 
 	@Override
 	protected void createRenderers(LintfordCore core) {
 		mSceneRenderer = new SceneRenderer(mRendererManager, entityGroupUid());
-		mPhysicsRenderer = new PhysicsDebugRenderer(mRendererManager, world, entityGroupUid());
+//		mPhysicsRenderer = new PhysicsDebugRenderer(mRendererManager, world, entityGroupUid());
 		mShipRenderer = new ShipRenderer(mRendererManager, entityGroupUid());
 		mSceneAdWallRenderer = new SceneAdWallRenderer(mRendererManager, entityGroupUid());
 		mPlatformsRenderer = new PlatformsRenderer(mRendererManager, entityGroupUid());
+		mHudRenderer = new HudRenderer(mRendererManager, entityGroupUid());
 	}
 
 	@Override
 	protected void initializeRenderers(LintfordCore core) {
 		mShipRenderer.initialize(core);
-		mPhysicsRenderer.initialize(core);
+//		mPhysicsRenderer.initialize(core);
 		mSceneRenderer.initialize(core);
 		mSceneAdWallRenderer.initialize(core);
 		mPlatformsRenderer.initialize(core);
+		mHudRenderer.initialize(core);
 	}
 
 	@Override
@@ -322,8 +357,9 @@ public class GameScreen extends BaseGameScreen {
 		mSceneRenderer.loadResources(resourceManager);
 		mShipRenderer.loadResources(resourceManager);
 		mSceneAdWallRenderer.loadResources(resourceManager);
-		mPhysicsRenderer.loadResources(resourceManager);
+//		mPhysicsRenderer.loadResources(resourceManager);
 		mPlatformsRenderer.loadResources(resourceManager);
+		mHudRenderer.loadResources(resourceManager);
 	}
 
 }

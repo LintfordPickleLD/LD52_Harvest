@@ -1,14 +1,14 @@
 {
   "outputDataFilename": "D:\\dev\\java\\ludumdare\\52 - Harvest\\projects\\LD52_Harvest\\res\\spritesheets\\spritesheetHud.json",
-  "outputNameDataFilename": "D:\\dev\\ludumdare\\52 - Harvest\\projects\\LD52_Harvest\\src\\lintfordpickle\\razor\\data\\textures\\HudTextureNames.java",
-  "outputImageFilename": "D:\\dev\\ludumdare\\52 - Harvest\\projects\\LD52_Harvest\\res\\textures\\textureHud.png",
-  "workingDirectory": "D:\\dev\\ludumdare\\52 - Harvest\\projects\\LD52_Harvest\\raw\\spritesheets\\core",
+  "outputNameDataFilename": "D:\\dev\\java\\ludumdare\\52 - Harvest\\projects\\LD52_Harvest\\src\\lintfordpickle\\harvest\\data\\textures\\HudTextureNames.java",
+  "outputImageFilename": "D:\\dev\\java\\ludumdare\\52 - Harvest\\projects\\LD52_Harvest\\res\\textures\\textureHud.png",
+  "workingDirectory": "D:\\dev\\java\\ludumdare\\52 - Harvest\\projects\\LD52_Harvest\\raw\\spritesheets\\hud",
   "spriteSheetName": "SPRITESHEET_HUD",
   "textureName": "TEXTURE_HUD",
-  "dataPackageName": "lintfordpickle.razor.data.textures",
+  "dataPackageName": "lintfordpickle.harvest.data.textures",
   "exportDataFile": true,
   "exportTextureFile": true,
-  "exportNamesFile": true,
+  "exportNamesFile": false,
   "sortMode": "Area",
   "borderPadding": 0,
   "shapeOutlines": false,
@@ -23,7 +23,7 @@
   "forcePoTTextures": true,
   "autoSizeTexture": false,
   "itemFilenames": [
-    "D:\\dev\\ludumdare\\52 - Harvest\\projects\\LD52_Harvest\\raw\\spritesheets\\hud\\*.*"
+    "D:\\dev\\java\\ludumdare\\52 - Harvest\\projects\\LD52_Harvest\\raw\\spritesheets\\hud\\*.*"
   ],
   "animationItems": {}
 }

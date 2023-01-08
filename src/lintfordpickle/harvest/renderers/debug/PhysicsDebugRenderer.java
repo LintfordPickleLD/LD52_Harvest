@@ -1,4 +1,4 @@
-package lintfordpickle.harvest.renderers;
+package lintfordpickle.harvest.renderers.debug;
 
 import org.lwjgl.opengl.GL11;
 
