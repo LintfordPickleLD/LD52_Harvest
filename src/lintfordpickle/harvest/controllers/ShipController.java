@@ -7,7 +7,6 @@ import lintfordpickle.harvest.data.ships.ShipManager;
 import net.lintford.library.controllers.BaseController;
 import net.lintford.library.controllers.core.ControllerManager;
 import net.lintford.library.core.LintfordCore;
-import net.lintford.library.core.maths.Vector2f;
 
 public class ShipController extends BaseController {
 
@@ -113,7 +112,7 @@ public class ShipController extends BaseController {
 		final var lShipInput = ship.inputs;
 
 		final float lThrustUpForce = 100.f;
-		final float lAngularTorque = 70.f;
+		final float lAngularTorque = 3.f;
 
 		if (lShipInput.isUpThrottle) {
 			final float lAngle = body.angle;
@@ -124,50 +123,18 @@ public class ShipController extends BaseController {
 			ship.body().accY += upX * -lThrustUpForce * body.invMass();
 		}
 
-		{ // apply a self-righting force
-			final float upX = 0.f;
-			final float upY = -1.f;
-			final float lAngle = body.angle - (float) Math.toRadians(90.f);
-			final float shipUpx = (float) Math.cos(lAngle);
-			final float shipUpY = (float) Math.sin(lAngle);
-
-			final float dot = Vector2f.dot(upX, upY, shipUpx, shipUpY);
-
-			final float lShipRelUpForceX = shipUpx * lThrustUpForce * body.invMass();// * (dot * dot);
-			final float lShipRelUpForceY = shipUpY * lThrustUpForce * body.invMass();// * (dot * dot);
-
-			final float lThrottleControler = .4f;
+		{
 			if (lShipInput.isLeftThrottle) {
-				final float engineX = ship.frontEngine.x;
-				final float engineY = ship.frontEngine.y;
-
-				// body.addForceAtPoint(lShipRelUpForceX * lThrottleControler * 3.f, lShipRelUpForceY * lThrottleControler * 3.f, engineX, engineY);
-				body.torque -= 3.f * body.invInertia();
+				body.torque -= lAngularTorque * body.invInertia();
 			}
 
 			if (lShipInput.isRightThrottle) {
-				final float engineX = ship.rearEngine.x;
-				final float engineY = ship.rearEngine.y;
-
-				// body.addForceAtPoint(lShipRelUpForceX * lThrottleControler * 3.f, lShipRelUpForceY * lThrottleControler * 3.f, engineX, engineY);
-				body.torque += 3.f * body.invInertia();
+				body.torque += lAngularTorque * body.invInertia();
 			}
 
-			if (!lShipInput.isLeftThrottle && !lShipInput.isRightThrottle) {
+			if (!lShipInput.isLeftThrottle && !lShipInput.isRightThrottle)
 				body.angularVelocity *= 0.8f;
-			}
 
-//			if (!lShipInput.isLeftThrottle && !lShipInput.isRightThrottle && dot > 0.0f) {
-//				if (body.angle != 0) {
-//
-//					final float correctAmt = (lAngularTorque * (1.f - dot)) * 5f;
-//					if (body.angle < .0f) {
-//						ship.body().torque += correctAmt * body.invInertia();
-//					} else {
-//						ship.body().torque -= correctAmt * body.invInertia();
-//					}
-//				}
-//			}
 		}
 	}
 

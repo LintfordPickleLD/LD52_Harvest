@@ -122,10 +122,6 @@ public class SceneAdWallRenderer extends BaseRenderer {
 
 	@Override
 	public boolean handleInput(LintfordCore core) {
-		if (core.input().keyboard().isKeyDownTimed(GLFW.GLFW_KEY_R)) {
-			mAdWallShader.recompile();
-		}
-
 		return super.handleInput(core);
 	}
 

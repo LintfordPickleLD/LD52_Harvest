@@ -120,6 +120,8 @@ public class GameScreen extends BaseGameScreen {
 	}
 
 	private void createWorldCollidables() {
+		createStaticPolygon(1696, 479, 18, 63, 0);
+		createStaticPolygon(1679, 576, 17, 65, 0);
 		createStaticPolygon(602, 1312, 128, 128, 0);
 		createStaticPolygon(448, 1392, 154, 48, 0);
 		createStaticPolygon(1358, 928, 130, 124, 0);
@@ -335,7 +337,7 @@ public class GameScreen extends BaseGameScreen {
 	@Override
 	protected void createRenderers(LintfordCore core) {
 		mSceneRenderer = new SceneRenderer(mRendererManager, entityGroupUid());
-//		mPhysicsRenderer = new PhysicsDebugRenderer(mRendererManager, world, entityGroupUid());
+		mPhysicsRenderer = new PhysicsDebugRenderer(mRendererManager, world, entityGroupUid());
 		mShipRenderer = new ShipRenderer(mRendererManager, entityGroupUid());
 		mSceneAdWallRenderer = new SceneAdWallRenderer(mRendererManager, entityGroupUid());
 		mPlatformsRenderer = new PlatformsRenderer(mRendererManager, entityGroupUid());
@@ -345,7 +347,7 @@ public class GameScreen extends BaseGameScreen {
 	@Override
 	protected void initializeRenderers(LintfordCore core) {
 		mShipRenderer.initialize(core);
-//		mPhysicsRenderer.initialize(core);
+		mPhysicsRenderer.initialize(core);
 		mSceneRenderer.initialize(core);
 		mSceneAdWallRenderer.initialize(core);
 		mPlatformsRenderer.initialize(core);
@@ -357,7 +359,7 @@ public class GameScreen extends BaseGameScreen {
 		mSceneRenderer.loadResources(resourceManager);
 		mShipRenderer.loadResources(resourceManager);
 		mSceneAdWallRenderer.loadResources(resourceManager);
-//		mPhysicsRenderer.loadResources(resourceManager);
+		mPhysicsRenderer.loadResources(resourceManager);
 		mPlatformsRenderer.loadResources(resourceManager);
 		mHudRenderer.loadResources(resourceManager);
 	}

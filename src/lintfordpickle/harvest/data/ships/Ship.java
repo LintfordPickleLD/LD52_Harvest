@@ -13,10 +13,15 @@ public class Ship extends RigidBodyEntity {
 	public class Cargo {
 
 		// ---------------------------------------------
+		// Constants
+		// ---------------------------------------------
+
+		public static final int TOTAL_CARGO_SPACE = 3;
+
+		// ---------------------------------------------
 		// Variables
 		// ---------------------------------------------
 
-		private final int totalSpace = 2;
 		public int freeSpace;
 
 		public int waterAmt;
@@ -27,7 +32,7 @@ public class Ship extends RigidBodyEntity {
 		// ---------------------------------------------
 
 		public Cargo() {
-			freeSpace = totalSpace;
+			freeSpace = TOTAL_CARGO_SPACE;
 			waterAmt = 0;
 			wheatAmt = 0;
 		}

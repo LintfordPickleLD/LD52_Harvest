@@ -52,18 +52,6 @@
     },
     {
       "name": "TEXTUREENGINEFLARE",
-      "x": 34,
-      "y": 0,
-      "w": 16,
-      "h": 16,
-      "pivotX": 0,
-      "pivotY": 0,
-      "scaleX": 1.0,
-      "scaleY": 1.0,
-      "anchorPoints": []
-    },
-    {
-      "name": "TEXTURELIGHTGLOW",
       "x": 0,
       "y": 18,
       "w": 16,
@@ -75,7 +63,7 @@
       "anchorPoints": []
     },
     {
-      "name": "WHITE",
+      "name": "TEXTURELIGHTGLOW",
       "x": 18,
       "y": 18,
       "w": 16,
@@ -87,11 +75,47 @@
       "anchorPoints": []
     },
     {
+      "name": "WHITE",
+      "x": 36,
+      "y": 18,
+      "w": 16,
+      "h": 16,
+      "pivotX": 0,
+      "pivotY": 0,
+      "scaleX": 1.0,
+      "scaleY": 1.0,
+      "anchorPoints": []
+    },
+    {
       "name": "TEXTUREENGINEGLOW",
-      "x": 52,
+      "x": 48,
       "y": 0,
       "w": 6,
       "h": 6,
+      "pivotX": 0,
+      "pivotY": 0,
+      "scaleX": 1.0,
+      "scaleY": 1.0,
+      "anchorPoints": []
+    },
+    {
+      "name": "TEXTURECARGOWATER",
+      "x": 34,
+      "y": 0,
+      "w": 5,
+      "h": 7,
+      "pivotX": 0,
+      "pivotY": 0,
+      "scaleX": 1.0,
+      "scaleY": 1.0,
+      "anchorPoints": []
+    },
+    {
+      "name": "TEXTURECARGOWHEAT",
+      "x": 41,
+      "y": 0,
+      "w": 5,
+      "h": 7,
       "pivotX": 0,
       "pivotY": 0,
       "scaleX": 1.0,
