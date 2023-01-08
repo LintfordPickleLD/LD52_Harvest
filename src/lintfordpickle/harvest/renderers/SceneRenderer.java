@@ -2,7 +2,7 @@ package lintfordpickle.harvest.renderers;
 
 import lintfordpickle.harvest.ConstantsGame;
 import lintfordpickle.harvest.controllers.SceneController;
-import lintfordpickle.harvest.data.backgrounds.SceneLayer;
+import lintfordpickle.harvest.data.scene.backgrounds.SceneLayer;
 import net.lintford.library.core.LintfordCore;
 import net.lintford.library.core.ResourceManager;
 import net.lintford.library.core.graphics.ColorConstants;

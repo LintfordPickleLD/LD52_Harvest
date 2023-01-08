@@ -67,7 +67,7 @@ public class ShipController extends BaseController {
 	}
 
 	@Override
-	public void unload() {
+	public void unloadController() {
 
 	}
 

@@ -1,4 +1,4 @@
-package lintfordpickle.harvest.data.backgrounds;
+package lintfordpickle.harvest.data.scene.backgrounds;
 
 import net.lintford.library.core.graphics.textures.Texture;
 

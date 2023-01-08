@@ -1,1 +1,2 @@
-aseprite -b --ignore-empty <absolute path to aseprite file> --save-as "D:\dev\java\ludumdare\51\raw\spritesheets\<filename>\{layer}\{tag} 00.png"
+aseprite -b --ignore-empty "D:\dev\java\ludumdare\52 - Harvest\projects\LD52_Harvest\raw\aseprite\scene.aseprite" --save-as "D:\dev\java\ludumdare\52 - Harvest\projects\LD52_Harvest\raw\textures\scene\{layer} 00.png"
+aseprite -b --ignore-empty "D:\dev\java\ludumdare\52 - Harvest\projects\LD52_Harvest\raw\aseprite\scene.aseprite" --save-as "D:\dev\java\ludumdare\52 - Harvest\projects\LD52_Harvest\res\textures\scene\{layer}.png"

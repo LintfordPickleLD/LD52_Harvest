@@ -48,6 +48,13 @@
 			"filterIndex":1,
 			"wrapSIndex":1,
 			"wrapTIndex":1
+		},
+		{
+			"textureName":"TEXTURE_ADWALL",
+			"filepath":"res/textures/textureAdWall.png",
+			"filterIndex":1,
+			"wrapSIndex":1,
+			"wrapTIndex":1
 		}
 	]
 }

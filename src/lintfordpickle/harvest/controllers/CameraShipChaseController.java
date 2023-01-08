@@ -107,7 +107,7 @@ public class CameraShipChaseController extends BaseController {
 	}
 
 	@Override
-	public void unload() {
+	public void unloadController() {
 
 	}
 
