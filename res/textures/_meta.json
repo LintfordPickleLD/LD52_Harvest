@@ -50,8 +50,15 @@
 			"wrapTIndex":1
 		},
 		{
-			"textureName":"TEXTURE_ADWALL",
-			"filepath":"res/textures/textureAdWall.png",
+			"textureName":"TEXTURE_ADWALL_VERT",
+			"filepath":"res/textures/textureVerticalAdWall.png",
+			"filterIndex":1,
+			"wrapSIndex":1,
+			"wrapTIndex":1
+		},
+		{
+			"textureName":"TEXTURE_ADWALL_HORIZONTAL",
+			"filepath":"res/textures/textureHorizontalAdWall.png",
 			"filterIndex":1,
 			"wrapSIndex":1,
 			"wrapTIndex":1

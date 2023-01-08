@@ -1,6 +1,5 @@
 package lintfordpickle.harvest.renderers.scene;
 
-import org.lwjgl.glfw.GLFW;
 import org.lwjgl.opengl.GL20;
 
 import lintfordpickle.harvest.ConstantsGame;
@@ -10,7 +9,6 @@ import net.lintford.library.core.LintfordCore;
 import net.lintford.library.core.ResourceManager;
 import net.lintford.library.core.graphics.ColorConstants;
 import net.lintford.library.core.graphics.shaders.ShaderMVP_PCT;
-import net.lintford.library.core.graphics.textures.Texture;
 import net.lintford.library.renderers.BaseRenderer;
 import net.lintford.library.renderers.RendererManager;
 
@@ -72,7 +70,6 @@ public class SceneAdWallRenderer extends BaseRenderer {
 	// ---------------------------------------------
 
 	private SceneController mSceneController;
-	private Texture mAdWallTexture;
 	private AdWallShader mAdWallShader;
 
 	// ---------------------------------------------
@@ -108,8 +105,6 @@ public class SceneAdWallRenderer extends BaseRenderer {
 	public void loadResources(ResourceManager resourceManager) {
 		super.loadResources(resourceManager);
 
-		mAdWallTexture = resourceManager.textureManager().getTexture("TEXTURE_ADWALL", ConstantsGame.GAME_RESOURCE_GROUP_ID);
-
 		mAdWallShader.loadResources(resourceManager);
 	}
 
@@ -134,8 +129,10 @@ public class SceneAdWallRenderer extends BaseRenderer {
 
 	@Override
 	public void draw(LintfordCore core) {
-		final var lAdWall = mSceneController.adWall();
-		drawAdWall(core, lAdWall);
+		final var horAds = mSceneController.horizontalAdWall();
+
+		// drawAdWall(core, horAds);
+		drawAdWall(core, mSceneController.verticalAdWall());
 	}
 
 	// ---------------------------------------------
@@ -146,18 +143,21 @@ public class SceneAdWallRenderer extends BaseRenderer {
 		if (adWall == null)
 			return;
 
-		adWall.set(-1028 + 1027, -1028, 60 * 2, 710 * 2);
-
 		final var lTextureBatch = mRendererManager.uiTextureBatch();
+
+		final var lTexture = core.resources().textureManager().getTexture(adWall.adWallTextureName, ConstantsGame.GAME_RESOURCE_GROUP_ID);
+		if (lTexture == null)
+			return;
+
 		lTextureBatch.begin(core.gameCamera(), mAdWallShader);
 
 		final var srcX = 0.f;
-		final var srcY = 0.f;//(float) core.gameTime().totalTimeMilli() * .005f;
-		final var srcW = mAdWallTexture.getTextureWidth();
-		final var srcH = mAdWallTexture.getTextureHeight();
+		final var srcY = 0.f;// (float) core.gameTime().totalTimeMilli() * .005f;
+		final var srcW = lTexture.getTextureWidth();
+		final var srcH = lTexture.getTextureHeight();
 
 		final var lWhiteWithAlpha = ColorConstants.getWhiteWithAlpha(1.5f);
-		lTextureBatch.draw(mAdWallTexture, srcX, srcY, srcW, srcH, adWall, -0.01f, lWhiteWithAlpha);
+		lTextureBatch.draw(lTexture, srcX, srcY, srcW, srcH, adWall, -0.01f, lWhiteWithAlpha);
 
 		lTextureBatch.end();
 	}

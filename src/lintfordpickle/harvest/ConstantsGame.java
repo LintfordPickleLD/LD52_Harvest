@@ -32,6 +32,8 @@ public class ConstantsGame {
 
 	public static final boolean IS_DEBUG_MODE = true;
 	public static final boolean CAMERA_DEBUG_MODE = true;
+	public static final boolean PHYICS_DEBUG_MODE = false;
+	public static final boolean SHIP_DEBUG_MODE = false;
 
 	public static final boolean WRAP_OBJECTS_AROUND_SCREEN_EDGE = false;
 	public static final boolean SKIP_MAIN_MENU_ON_STARTUP = true;

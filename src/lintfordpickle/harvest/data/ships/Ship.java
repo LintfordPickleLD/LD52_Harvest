@@ -6,6 +6,8 @@ import net.lintford.library.ConstantsPhysics;
 import net.lintford.library.core.LintfordCore;
 import net.lintford.library.core.collisions.RigidBody;
 import net.lintford.library.core.collisions.RigidBodyEntity;
+import net.lintford.library.core.graphics.sprites.SpriteDefinition;
+import net.lintford.library.core.graphics.sprites.SpriteInstance;
 import net.lintford.library.core.maths.Vector2f;
 
 public class Ship extends RigidBodyEntity {
@@ -67,6 +69,9 @@ public class Ship extends RigidBodyEntity {
 
 	public final Cargo cargo = new Cargo();
 
+	public SpriteInstance leftEngineSprite;
+	public SpriteInstance rightEngineSprite;
+
 	// ---------------------------------------------
 	// Constructor
 	// ---------------------------------------------
@@ -91,13 +96,16 @@ public class Ship extends RigidBodyEntity {
 		final float c = (float) Math.cos(body.angle);
 
 		final float axleLengthHalf = 24f * lPixelsToUnits;
-		final float axleHeightHalf = 16f * lPixelsToUnits;
+		final float leftThrottleAmt = (inputs.isRightThrottle || inputs.isUpThrottle) ? 1.f : 0.f;
+		final float rightThrottleAmt = (inputs.isLeftThrottle || inputs.isUpThrottle) ? 1.f : 0.f;
+		final float axleHeightHalfL = (16f * leftThrottleAmt) * lPixelsToUnits;
+		final float axleHeightHalfR = (16f * rightThrottleAmt) * lPixelsToUnits;
 
-		final float lRearX = -axleLengthHalf * c - axleHeightHalf * s;
-		final float lRearY = -axleLengthHalf * s + axleHeightHalf * c;
+		final float lRearX = -axleLengthHalf * c - axleHeightHalfL * s;
+		final float lRearY = -axleLengthHalf * s + axleHeightHalfL * c;
 
-		final float lFrontX = axleLengthHalf * c - axleHeightHalf * s;
-		final float lFrontY = axleLengthHalf * s + axleHeightHalf * c;
+		final float lFrontX = axleLengthHalf * c - axleHeightHalfR * s;
+		final float lFrontY = axleLengthHalf * s + axleHeightHalfR * c;
 
 		rearEngine.set(body.x + lRearX, body.y + lRearY);
 		frontEngine.set(body.x + lFrontX, body.y + lFrontY);

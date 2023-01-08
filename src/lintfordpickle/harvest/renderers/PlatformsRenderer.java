@@ -6,7 +6,7 @@ import lintfordpickle.harvest.data.platforms.Platform;
 import net.lintford.library.core.LintfordCore;
 import net.lintford.library.core.ResourceManager;
 import net.lintford.library.core.graphics.ColorConstants;
-import net.lintford.library.core.graphics.sprites.SpriteFrame;
+import net.lintford.library.core.graphics.sprites.SpriteInstance;
 import net.lintford.library.core.graphics.sprites.spritesheet.SpriteSheetDefinition;
 import net.lintford.library.renderers.BaseRenderer;
 import net.lintford.library.renderers.RendererManager;
@@ -100,11 +100,16 @@ public class PlatformsRenderer extends BaseRenderer {
 
 		final var lSpriteFrame = getPlatformSpriteFrame(platform);
 
+		if (lSpriteFrame == null)
+			return;
+
+		lSpriteFrame.update(core);
+
 		final var lSpriteBatch = mRendererManager.uiSpriteBatch();
 		lSpriteBatch.begin(core.gameCamera());
 
 		final var lWhiteWithAlpha = ColorConstants.getColor(0.95f, 0.12f, 0.03f, 0.6f);
-		lSpriteBatch.draw(mPlatformsSpritesheet, lSpriteFrame, platform, -0.01f, lWhiteWithAlpha);
+		lSpriteBatch.draw(mPlatformsSpritesheet, lSpriteFrame, platform, -0.01f, ColorConstants.WHITE);
 
 		if (platform.isStockFull) {
 			lSpriteBatch.draw(mPlatformsSpritesheet, mPlatformsSpritesheet.getSpriteFrame("TEXTURELIGHTGLOW"), platform.x(), platform.y(), 8, 8, -0.01f, ColorConstants.GREEN);
@@ -118,8 +123,76 @@ public class PlatformsRenderer extends BaseRenderer {
 		lSpriteBatch.end();
 	}
 
-	private SpriteFrame getPlatformSpriteFrame(Platform platform) {
-		// TODO: Pick the correct spriteframe based on platform type and state
-		return mPlatformsSpritesheet.getSpriteFrame("WHITE");
+	private SpriteInstance getPlatformSpriteFrame(Platform platform) {
+		final String FARM_FULL_NAME = "textureWheatFull";
+		final String FARM_HALF_NAME = "TEXTUREWHEATHALF";
+		final String FARM_EMPTY_NAME = "TEXTUREWHEATEMPTY";
+
+		final String WATER_FULL_NAME = "TEXTUREWATERFULL";
+		final String WATER_EMPTY_NAME = "TEXTUREWATEREMPTY";
+
+		final String WAREHOUSE_NAME = "TEXTUREWAREHOUSE";
+
+		switch (platform.platformType) {
+		case Farm:
+			if (platform.isStockFull) {
+				if (platform.sprite != null) {
+					if (platform.spriteName != null && platform.spriteName.equals(FARM_FULL_NAME))
+						return platform.sprite;
+				}
+
+				platform.spriteName = FARM_FULL_NAME;
+				platform.sprite = mPlatformsSpritesheet.getSpriteInstance(FARM_FULL_NAME);
+				return platform.sprite;
+			}
+
+			if (platform.isRefillingStock) {
+				if (platform.sprite != null) {
+					if (platform.spriteName != null && platform.spriteName.equals(FARM_HALF_NAME))
+						return platform.sprite;
+				}
+
+				platform.spriteName = FARM_HALF_NAME;
+				platform.sprite = mPlatformsSpritesheet.getSpriteInstance(FARM_HALF_NAME);
+				return platform.sprite;
+			}
+
+			if (platform.sprite != null) {
+				if (platform.spriteName != null && platform.spriteName.equals(FARM_EMPTY_NAME))
+					return platform.sprite;
+			}
+
+			platform.spriteName = FARM_EMPTY_NAME;
+			platform.sprite = mPlatformsSpritesheet.getSpriteInstance(FARM_EMPTY_NAME);
+			return platform.sprite;
+
+		case Water:
+			if (platform.isStockFull) {
+				if (platform.sprite != null) {
+					if (platform.spriteName != null && platform.spriteName.equals(WATER_FULL_NAME))
+						return platform.sprite;
+
+					platform.spriteName = WATER_FULL_NAME;
+					platform.sprite = mPlatformsSpritesheet.getSpriteInstance(WATER_FULL_NAME);
+					return platform.sprite;
+				}
+			}
+
+			if (platform.spriteName != null && platform.spriteName.equals(WATER_EMPTY_NAME))
+				return platform.sprite;
+
+			platform.spriteName = WATER_EMPTY_NAME;
+			platform.sprite = mPlatformsSpritesheet.getSpriteInstance(WATER_EMPTY_NAME);
+			return platform.sprite;
+
+		default: // warehouse
+			if (platform.spriteName != null && platform.spriteName.equals(WAREHOUSE_NAME))
+				return platform.sprite;
+
+			platform.spriteName = WAREHOUSE_NAME;
+			platform.sprite = mPlatformsSpritesheet.getSpriteInstance(WAREHOUSE_NAME);
+			return platform.sprite;
+		}
+
 	}
 }

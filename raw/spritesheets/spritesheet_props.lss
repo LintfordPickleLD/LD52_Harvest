@@ -16,14 +16,46 @@
   "trim": false,
   "allowRotations": false,
   "spritePadding": 2,
-  "textureWidthMax": 512,
-  "textureWidthActual": 512,
-  "textureHeightMax": 512,
-  "textureHeightActual": 512,
+  "textureWidthMax": 256,
+  "textureWidthActual": 256,
+  "textureHeightMax": 256,
+  "textureHeightActual": 256,
   "forcePoTTextures": true,
   "autoSizeTexture": false,
   "itemFilenames": [
     "D:\\dev\\java\\ludumdare\\52 - Harvest\\projects\\LD52_Harvest\\raw\\spritesheets\\props\\*.*"
   ],
-  "animationItems": {}
+  "animationItems": {
+    "engineLeft": {
+      "loopAnimation": true,
+      "frameDuration": 100,
+      "animationSprites": [
+        "ENGINE_LEFT1",
+        "ENGINE_LEFT2",
+        "ENGINE_LEFT3",
+        "ENGINE_LEFT4",
+        "ENGINE_LEFT5"
+      ]
+    },
+    "engineRight": {
+      "loopAnimation": true,
+      "frameDuration": 100,
+      "animationSprites": [
+        "ENGINE_RIGHT1",
+        "ENGINE_RIGHT2",
+        "ENGINE_RIGHT3",
+        "ENGINE_RIGHT4",
+        "ENGINE_RIGHT5"
+      ]
+    },
+    "textureWheatFull": {
+      "loopAnimation": true,
+      "frameDuration": 120,
+      "animationSprites": [
+        "TEXTUREWHEATFULL1",
+        "TEXTUREWHEATFULL2",
+        "TEXTUREWHEATFULL3"
+      ]
+    }
+  }
 }

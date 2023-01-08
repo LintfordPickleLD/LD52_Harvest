@@ -186,12 +186,13 @@ public class GameScreen extends BaseGameScreen {
 	}
 
 	private void createWorldPlatforms() {
-		createPlatform(1748, 572, 160, 48, PlatformType.Warehouse);
+		createPlatform(1748, 574, 160, 48, PlatformType.Warehouse);
 
 		createPlatform(852, 318, 160, 48, PlatformType.Farm);
 		createPlatform(586, 1271, 160, 48, PlatformType.Farm);
 		createPlatform(142, 1319, 160, 48, PlatformType.Farm);
 		createPlatform(1343, 877, 160, 48, PlatformType.Farm);
+		createPlatform(-32, 1200, 160, 48, PlatformType.Farm);
 
 		createPlatform(529, 1813, 160, 48, PlatformType.Water);
 		createPlatform(1470, 1820, 160, 48, PlatformType.Water);
@@ -270,11 +271,10 @@ public class GameScreen extends BaseGameScreen {
 		if (core.input().keyboard().isKeyDownTimed(GLFW.GLFW_KEY_R)) {
 			final var lPlayerBody = mShipManager.playerShip().body();
 
-			lPlayerBody.angularVelocity = 0.f;
 			lPlayerBody.vx = 0.f;
 			lPlayerBody.vy = 0.f;
-			lPlayerBody.x = 0.f;
-			lPlayerBody.y = 0.f;
+//			lPlayerBody.x = 0.f;
+//			lPlayerBody.y = 0.f;
 
 			lPlayerBody.torque = 0.f;
 			lPlayerBody.angularVelocity = 0.f;
@@ -337,7 +337,8 @@ public class GameScreen extends BaseGameScreen {
 	@Override
 	protected void createRenderers(LintfordCore core) {
 		mSceneRenderer = new SceneRenderer(mRendererManager, entityGroupUid());
-		mPhysicsRenderer = new PhysicsDebugRenderer(mRendererManager, world, entityGroupUid());
+		if (ConstantsGame.PHYICS_DEBUG_MODE)
+			mPhysicsRenderer = new PhysicsDebugRenderer(mRendererManager, world, entityGroupUid());
 		mShipRenderer = new ShipRenderer(mRendererManager, entityGroupUid());
 		mSceneAdWallRenderer = new SceneAdWallRenderer(mRendererManager, entityGroupUid());
 		mPlatformsRenderer = new PlatformsRenderer(mRendererManager, entityGroupUid());
@@ -347,7 +348,8 @@ public class GameScreen extends BaseGameScreen {
 	@Override
 	protected void initializeRenderers(LintfordCore core) {
 		mShipRenderer.initialize(core);
-		mPhysicsRenderer.initialize(core);
+		if (ConstantsGame.PHYICS_DEBUG_MODE)
+			mPhysicsRenderer.initialize(core);
 		mSceneRenderer.initialize(core);
 		mSceneAdWallRenderer.initialize(core);
 		mPlatformsRenderer.initialize(core);
@@ -359,7 +361,8 @@ public class GameScreen extends BaseGameScreen {
 		mSceneRenderer.loadResources(resourceManager);
 		mShipRenderer.loadResources(resourceManager);
 		mSceneAdWallRenderer.loadResources(resourceManager);
-		mPhysicsRenderer.loadResources(resourceManager);
+		if (ConstantsGame.PHYICS_DEBUG_MODE)
+			mPhysicsRenderer.loadResources(resourceManager);
 		mPlatformsRenderer.loadResources(resourceManager);
 		mHudRenderer.loadResources(resourceManager);
 	}

@@ -89,7 +89,7 @@ public class HudRenderer extends BaseRenderer {
 		final var lSpriteBatch = mRendererManager.uiSpriteBatch();
 
 		lSpriteBatch.begin(core.HUD());
-		lSpriteBatch.draw(mHudSpritesheet, mHudSpritesheet.getSpriteFrame("TEXTURE_HIDE_LAYER"), 0, 0, 32, 32, -0.01f, ColorConstants.WHITE);
+//		lSpriteBatch.draw(mHudSpritesheet, mHudSpritesheet.getSpriteFrame("TEXTURE_HIDE_LAYER"), 0, 0, 32, 32, -0.01f, ColorConstants.WHITE);
 		lSpriteBatch.end();
 
 	}

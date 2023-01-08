@@ -3,7 +3,7 @@
   "textureName": "TEXTURE_PROPS",
   "spriteFrames": [
     {
-      "name": "TEXTUREWHEATEMPTY",
+      "name": "TEXTUREWAREHOUSE",
       "x": 0,
       "y": 36,
       "w": 80,
@@ -15,7 +15,7 @@
       "anchorPoints": []
     },
     {
-      "name": "TEXTUREWHEATFULL",
+      "name": "TEXTUREWATEREMPTY",
       "x": 82,
       "y": 36,
       "w": 80,
@@ -27,7 +27,7 @@
       "anchorPoints": []
     },
     {
-      "name": "TEXTUREWHEATHALF",
+      "name": "TEXTUREWATERFULL",
       "x": 164,
       "y": 36,
       "w": 80,
@@ -39,10 +39,190 @@
       "anchorPoints": []
     },
     {
-      "name": "HARVESTER",
+      "name": "TEXTUREWHEATEMPTY",
       "x": 0,
+      "y": 62,
+      "w": 80,
+      "h": 24,
+      "pivotX": 0,
+      "pivotY": 0,
+      "scaleX": 1.0,
+      "scaleY": 1.0,
+      "anchorPoints": []
+    },
+    {
+      "name": "TEXTUREWHEATFULL1",
+      "x": 82,
+      "y": 62,
+      "w": 80,
+      "h": 24,
+      "pivotX": 0,
+      "pivotY": 0,
+      "scaleX": 1.0,
+      "scaleY": 1.0,
+      "anchorPoints": []
+    },
+    {
+      "name": "TEXTUREWHEATFULL2",
+      "x": 164,
+      "y": 62,
+      "w": 80,
+      "h": 24,
+      "pivotX": 0,
+      "pivotY": 0,
+      "scaleX": 1.0,
+      "scaleY": 1.0,
+      "anchorPoints": []
+    },
+    {
+      "name": "TEXTUREWHEATFULL3",
+      "x": 0,
+      "y": 88,
+      "w": 80,
+      "h": 24,
+      "pivotX": 0,
+      "pivotY": 0,
+      "scaleX": 1.0,
+      "scaleY": 1.0,
+      "anchorPoints": []
+    },
+    {
+      "name": "TEXTUREWHEATHALF",
+      "x": 82,
+      "y": 88,
+      "w": 80,
+      "h": 24,
+      "pivotX": 0,
+      "pivotY": 0,
+      "scaleX": 1.0,
+      "scaleY": 1.0,
+      "anchorPoints": []
+    },
+    {
+      "name": "HARVESTER",
+      "x": 180,
       "y": 0,
       "w": 32,
+      "h": 16,
+      "pivotX": 0,
+      "pivotY": 0,
+      "scaleX": 1.0,
+      "scaleY": 1.0,
+      "anchorPoints": []
+    },
+    {
+      "name": "ENGINE_LEFT1",
+      "x": 0,
+      "y": 0,
+      "w": 16,
+      "h": 16,
+      "pivotX": 0,
+      "pivotY": 0,
+      "scaleX": 1.0,
+      "scaleY": 1.0,
+      "anchorPoints": []
+    },
+    {
+      "name": "ENGINE_LEFT2",
+      "x": 18,
+      "y": 0,
+      "w": 16,
+      "h": 16,
+      "pivotX": 0,
+      "pivotY": 0,
+      "scaleX": 1.0,
+      "scaleY": 1.0,
+      "anchorPoints": []
+    },
+    {
+      "name": "ENGINE_LEFT3",
+      "x": 36,
+      "y": 0,
+      "w": 16,
+      "h": 16,
+      "pivotX": 0,
+      "pivotY": 0,
+      "scaleX": 1.0,
+      "scaleY": 1.0,
+      "anchorPoints": []
+    },
+    {
+      "name": "ENGINE_LEFT4",
+      "x": 54,
+      "y": 0,
+      "w": 16,
+      "h": 16,
+      "pivotX": 0,
+      "pivotY": 0,
+      "scaleX": 1.0,
+      "scaleY": 1.0,
+      "anchorPoints": []
+    },
+    {
+      "name": "ENGINE_LEFT5",
+      "x": 72,
+      "y": 0,
+      "w": 16,
+      "h": 16,
+      "pivotX": 0,
+      "pivotY": 0,
+      "scaleX": 1.0,
+      "scaleY": 1.0,
+      "anchorPoints": []
+    },
+    {
+      "name": "ENGINE_RIGHT1",
+      "x": 90,
+      "y": 0,
+      "w": 16,
+      "h": 16,
+      "pivotX": 0,
+      "pivotY": 0,
+      "scaleX": 1.0,
+      "scaleY": 1.0,
+      "anchorPoints": []
+    },
+    {
+      "name": "ENGINE_RIGHT2",
+      "x": 108,
+      "y": 0,
+      "w": 16,
+      "h": 16,
+      "pivotX": 0,
+      "pivotY": 0,
+      "scaleX": 1.0,
+      "scaleY": 1.0,
+      "anchorPoints": []
+    },
+    {
+      "name": "ENGINE_RIGHT3",
+      "x": 126,
+      "y": 0,
+      "w": 16,
+      "h": 16,
+      "pivotX": 0,
+      "pivotY": 0,
+      "scaleX": 1.0,
+      "scaleY": 1.0,
+      "anchorPoints": []
+    },
+    {
+      "name": "ENGINE_RIGHT4",
+      "x": 144,
+      "y": 0,
+      "w": 16,
+      "h": 16,
+      "pivotX": 0,
+      "pivotY": 0,
+      "scaleX": 1.0,
+      "scaleY": 1.0,
+      "anchorPoints": []
+    },
+    {
+      "name": "ENGINE_RIGHT5",
+      "x": 162,
+      "y": 0,
+      "w": 16,
       "h": 16,
       "pivotX": 0,
       "pivotY": 0,
@@ -87,20 +267,8 @@
       "anchorPoints": []
     },
     {
-      "name": "TEXTUREENGINEGLOW",
-      "x": 48,
-      "y": 0,
-      "w": 6,
-      "h": 6,
-      "pivotX": 0,
-      "pivotY": 0,
-      "scaleX": 1.0,
-      "scaleY": 1.0,
-      "anchorPoints": []
-    },
-    {
       "name": "TEXTURECARGOWATER",
-      "x": 34,
+      "x": 214,
       "y": 0,
       "w": 5,
       "h": 7,
@@ -112,7 +280,7 @@
     },
     {
       "name": "TEXTURECARGOWHEAT",
-      "x": 41,
+      "x": 221,
       "y": 0,
       "w": 5,
       "h": 7,
@@ -121,7 +289,57 @@
       "scaleX": 1.0,
       "scaleY": 1.0,
       "anchorPoints": []
+    },
+    {
+      "name": "TEXTUREENGINEGLOW",
+      "x": 228,
+      "y": 0,
+      "w": 4,
+      "h": 2,
+      "pivotX": 0,
+      "pivotY": 0,
+      "scaleX": 1.0,
+      "scaleY": 1.0,
+      "anchorPoints": []
     }
   ],
-  "animationFramesMap": {}
+  "animationFramesMap": {
+    "engineLeft": {
+      "animationName": "engineLeft",
+      "loopAnimation": true,
+      "frameDuration": 100,
+      "minimumViableRuntime": 0,
+      "animationSpriteIndices": [
+        9,
+        10,
+        11,
+        12,
+        13
+      ]
+    },
+    "engineRight": {
+      "animationName": "engineRight",
+      "loopAnimation": true,
+      "frameDuration": 100,
+      "minimumViableRuntime": 0,
+      "animationSpriteIndices": [
+        14,
+        15,
+        16,
+        17,
+        18
+      ]
+    },
+    "textureWheatFull": {
+      "animationName": "textureWheatFull",
+      "loopAnimation": true,
+      "frameDuration": 120,
+      "minimumViableRuntime": 0,
+      "animationSpriteIndices": [
+        4,
+        5,
+        6
+      ]
+    }
+  }
 }

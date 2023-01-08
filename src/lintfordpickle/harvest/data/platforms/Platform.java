@@ -1,6 +1,7 @@
 package lintfordpickle.harvest.data.platforms;
 
 import net.lintford.library.core.geometry.Rectangle;
+import net.lintford.library.core.graphics.sprites.SpriteInstance;
 
 public class Platform extends Rectangle {
 
@@ -16,5 +17,8 @@ public class Platform extends Rectangle {
 
 	public int stockValueI;
 	public float stockValueF;
+	
+	public String spriteName;
+	public SpriteInstance sprite;
 
 }

@@ -19,14 +19,19 @@ public class SceneController extends BaseController {
 
 	private SceneManager mSceneManager;
 
-	private AdWall mAdWall;
+	private AdWall mVerticalAdWall;
+	private AdWall mHorizontalAdWall;
 
 	// ---------------------------------------------
 	// Properties
 	// ---------------------------------------------
 
-	public AdWall adWall() {
-		return mAdWall;
+	public AdWall verticalAdWall() {
+		return mVerticalAdWall;
+	}
+
+	public AdWall horizontalAdWall() {
+		return mHorizontalAdWall;
 	}
 
 	public SceneManager sceneManager() {
@@ -42,8 +47,13 @@ public class SceneController extends BaseController {
 
 		mSceneManager = sceneManager;
 
-		mAdWall = new AdWall();
-		mAdWall.set(1028 - 512, 0 - 512, 97 * 2, 1408 * 2);
+		mVerticalAdWall = new AdWall();
+		mVerticalAdWall.set(-1028 + 1027, -1028 + 0, 60 * 2, 710 * 2);
+		mVerticalAdWall.adWallTextureName = "TEXTURE_ADWALL_VERT";
+
+		mHorizontalAdWall = new AdWall();
+		mHorizontalAdWall.set(-1028 + 480, -1028 + 430, 402, 137);
+		mHorizontalAdWall.adWallTextureName = "TEXTURE_ADWALL_HORIZONTAL";
 	}
 
 	// ---------------------------------------------

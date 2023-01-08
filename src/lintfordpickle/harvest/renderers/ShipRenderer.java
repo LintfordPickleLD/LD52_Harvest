@@ -99,15 +99,16 @@ public class ShipRenderer extends BaseRenderer {
 
 		lSpritebatch.begin(core.gameCamera());
 
-		drawShipEngines(core, lSpritebatch, ship, ship.rearEngine);
-		drawShipEngines(core, lSpritebatch, ship, ship.frontEngine);
+		drawShipEngines(core, lSpritebatch, ship, ship.rearEngine, true);
+		drawShipEngines(core, lSpritebatch, ship, ship.frontEngine, false);
 		drawShipCargo(core, lSpritebatch, ship);
 
 		drawShipComponents(core, ship, lSpritebatch);
 
 		lSpritebatch.end();
 
-		drawShipDebugInfo(core, ship);
+		if (ConstantsGame.SHIP_DEBUG_MODE)
+			drawShipDebugInfo(core, ship);
 	}
 
 	// ---------------------------------------------
@@ -131,15 +132,32 @@ public class ShipRenderer extends BaseRenderer {
 		}
 	}
 
-	private void drawShipEngines(LintfordCore core, SpriteBatch spriteBatch, Ship ship, Vector2f enginePostion) {
+	private void drawShipEngines(LintfordCore core, SpriteBatch spriteBatch, Ship ship, Vector2f enginePostion, boolean leftEngine) {
 		// Engine Glow
 		final var lBody = ship.body();
+
+		if (leftEngine) {
+			if (ship.leftEngineSprite == null) {
+				ship.leftEngineSprite = mShipSpritesheet.getSpriteInstance("engineLeft");
+			}
+		} else {
+			if (ship.rightEngineSprite == null) {
+				ship.rightEngineSprite = mShipSpritesheet.getSpriteInstance("engineRight");
+			}
+		}
 
 		final var lUnitsToPixels = ConstantsPhysics.UnitsToPixels();
 
 		final var shipPosX = enginePostion.x * lUnitsToPixels;
 		final var shipPosY = enginePostion.y * lUnitsToPixels;
 		final var shipRot = lBody.angle;
+
+		if (ship.leftEngineSprite != null) {
+			ship.leftEngineSprite.update(core);
+
+			final var lWhiteWithAlpha = ColorConstants.getWhiteWithAlpha(0.8f);
+			spriteBatch.drawAroundCenter(mShipSpritesheet, ship.leftEngineSprite.currentSpriteFrame(), shipPosX, shipPosY, 16.f * 2, 16.f * 2, shipRot, 0, 0, -0.01f, lWhiteWithAlpha);
+		}
 
 		final var r = ship.engineColorR * 2f;
 		final var g = ship.engineColorG * 2f;
@@ -149,19 +167,21 @@ public class ShipRenderer extends BaseRenderer {
 		final float lPulse = 1.0f + (float) Math.cos(core.gameTime().totalTimeMilli()) * 2.f;
 
 		final float lShipSpeed = (float) Math.abs(lBody.vx * lBody.vx + lBody.vy * lBody.vy) * 20.f;
-		final float lSpeedSizeMod = 2.0f + lShipSpeed * .002f + lPulse;
+		final float lSpeedSizeMod = 2.0f + lShipSpeed * .02f + lPulse;
 
 		final var lSpriteFrameFlare = mShipSpritesheet.getSpriteFrame("TEXTUREENGINEGLOW");
-		spriteBatch.drawAroundCenter(mShipSpritesheet, lSpriteFrameFlare, shipPosX, shipPosY, 4 + lSpeedSizeMod, 4 + lSpeedSizeMod, shipRot, 0, 0, -0.01f, engineColor);
-		spriteBatch.drawAroundCenter(mShipSpritesheet, lSpriteFrameFlare, shipPosX, shipPosY, 4 + lSpeedSizeMod * .25f, 4 + lSpeedSizeMod * .25f, shipRot, 0, 0, -0.01f, ColorConstants.WHITE);
 
-		// horizontal flare
-		spriteBatch.drawAroundCenter(mShipSpritesheet, lSpriteFrameFlare, shipPosX, shipPosY, 4 * lSpeedSizeMod, 2, 0, 0, 0, -0.01f, engineColor);
-		spriteBatch.drawAroundCenter(mShipSpritesheet, lSpriteFrameFlare, shipPosX, shipPosY, 4 * lSpeedSizeMod * .5f, 2, 0, 0, 0, -0.01f, ColorConstants.WHITE);
-
-		final var lFlareAlpha = ColorConstants.getColor(r, g, b, .75f);
-		spriteBatch.drawAroundCenter(mShipSpritesheet, lSpriteFrameFlare, shipPosX, shipPosY, 4 * lSpeedSizeMod * 2.f, 2, shipRot + (float) core.gameTime().totalTimeSeconds() * 0.1f, 0, 0, -0.01f, lFlareAlpha);
-
+		if (leftEngine) {
+			if (ship.inputs.isLeftThrottle || ship.inputs.isUpThrottle) {
+				spriteBatch.drawAroundCenter(mShipSpritesheet, lSpriteFrameFlare, shipPosX, shipPosY, 4 * lSpeedSizeMod, 2, 0, 0, 0, -0.01f, engineColor);
+				spriteBatch.drawAroundCenter(mShipSpritesheet, lSpriteFrameFlare, shipPosX, shipPosY, 4 * lSpeedSizeMod * .5f, 2, 0, 0, 0, -0.01f, ColorConstants.WHITE);
+			}
+		} else {
+			if (ship.inputs.isRightThrottle || ship.inputs.isUpThrottle) {
+				spriteBatch.drawAroundCenter(mShipSpritesheet, lSpriteFrameFlare, shipPosX, shipPosY, 4 * lSpeedSizeMod, 2, 0, 0, 0, -0.01f, engineColor);
+				spriteBatch.drawAroundCenter(mShipSpritesheet, lSpriteFrameFlare, shipPosX, shipPosY, 4 * lSpeedSizeMod * .5f, 2, 0, 0, 0, -0.01f, ColorConstants.WHITE);
+			}
+		}
 	}
 
 	private void drawShipCargo(LintfordCore core, SpriteBatch spriteBatch, Ship ship) {
