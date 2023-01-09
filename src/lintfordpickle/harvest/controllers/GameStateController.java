@@ -63,8 +63,17 @@ public class GameStateController extends BaseController {
 		return mGameState.lives <= 0;
 	}
 
+	public boolean isPlayerDead() {
+		return mGameState.isPlayerDead;
+	}
+
+	public void setPlayerDied() {
+		mGameState.isPlayerDead = true;
+	}
+
 	public void addFoodDelivered(int amt) {
 		mGameState.foodDelivered += amt;
+		mGameState.gameDeathTimerMs += 30000; // 30 seconds
 	}
 
 }

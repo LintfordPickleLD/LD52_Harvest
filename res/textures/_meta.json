@@ -62,6 +62,13 @@
 			"filterIndex":1,
 			"wrapSIndex":1,
 			"wrapTIndex":1
+		},
+		{
+			"textureName":"HELP_OVERLAY",
+			"filepath":"res/textures/textureHelpOverlay.png",
+			"filterIndex":1,
+			"wrapSIndex":1,
+			"wrapTIndex":1
 		}
 	]
 }

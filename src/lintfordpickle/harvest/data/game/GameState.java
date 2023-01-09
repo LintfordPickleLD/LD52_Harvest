@@ -4,6 +4,7 @@ import lintfordpickle.harvest.ConstantsGame;
 
 public class GameState {
 
+	public boolean isPlayerDead;
 	public int lives;
 	public float gameDeathTimerMs; // death on 0
 	public int foodDelivered;
@@ -16,6 +17,7 @@ public class GameState {
 
 		gameDeathTimerMs = ConstantsGame.TOTAL_GAME_TIME_AT_START;
 		isGameRunning = true;
+		isPlayerDead = false;
 	}
 
 }

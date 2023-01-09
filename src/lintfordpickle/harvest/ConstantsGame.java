@@ -8,10 +8,10 @@ public class ConstantsGame {
 	// Setup
 	// ---------------------------------------------
 
-	public static final String FOOTER_TEXT = "Created by LintfordPickle";
+	public static final String FOOTER_TEXT = "LintfordPickle LD#52 - Harvester 008";
 
-	public static final String APPLICATION_NAME = "Harvest008";
-	public static final String WINDOW_TITLE = "LD#52 - Harvest008";
+	public static final String APPLICATION_NAME = "Harvester 008";
+	public static final String WINDOW_TITLE = "LD#52 - Harvester 008";
 
 	public static final float ASPECT_RATIO = 16.f / 9.f;
 
@@ -38,6 +38,6 @@ public class ConstantsGame {
 	public static final boolean SHIP_DEBUG_MODE = false;
 
 	public static final boolean WRAP_OBJECTS_AROUND_SCREEN_EDGE = false;
-	public static final boolean SKIP_MAIN_MENU_ON_STARTUP = true;
+	public static final boolean SKIP_MAIN_MENU_ON_STARTUP = false;
 	public static final boolean ESCAPE_RESTART_MAIN_SCENE = false;
 }

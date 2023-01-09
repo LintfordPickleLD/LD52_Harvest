@@ -1,6 +1,7 @@
 package lintfordpickle.harvest.screens;
 
 import lintfordpickle.harvest.screens.game.GameScreen;
+import net.lintford.library.core.LintfordCore;
 import net.lintford.library.screenmanager.MenuEntry;
 import net.lintford.library.screenmanager.MenuScreen;
 import net.lintford.library.screenmanager.ScreenManager;
@@ -57,6 +58,14 @@ public class MainMenu extends MenuScreen {
 	// Core-Methods
 	// ---------------------------------------------
 
+	@Override
+	public void draw(LintfordCore core) {
+		super.draw(core);
+		
+		
+		mPaddingTopNormalized = 300f;
+	}
+	
 	@Override
 	protected void handleOnClick() {
 		switch (mClickAction.consume()) {

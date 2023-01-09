@@ -157,10 +157,6 @@ public class PlatformsController extends BaseController {
 		final var lShip = getPlayerShip();
 		final var lIsPlayerAtPlatform = isPlayerShipAtPlatform(core, platform, lShip);
 
-		if (lIsPlayerAtPlatform) {
-			System.out.println("");
-		}
-
 		// stock full
 		if (platform.isStockFull) {
 			if (lIsPlayerAtPlatform && lShip.cargo.freeSpace > 0) {

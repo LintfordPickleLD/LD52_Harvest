@@ -8,7 +8,6 @@ import net.lintford.library.controllers.BaseController;
 import net.lintford.library.controllers.core.ControllerManager;
 import net.lintford.library.core.LintfordCore;
 import net.lintford.library.core.camera.ICamera;
-import net.lintford.library.core.maths.MathHelper;
 import net.lintford.library.core.maths.Vector2f;
 
 public class CameraShipChaseController extends BaseController {
@@ -151,6 +150,7 @@ public class CameraShipChaseController extends BaseController {
 
 		if (mTrackedEntity != null) {
 			updateSpring(pCore);
+
 			mGameCamera.setPosition(mPosition.x, mPosition.y);
 		}
 	}
@@ -161,12 +161,11 @@ public class CameraShipChaseController extends BaseController {
 		mMass = 100.f;
 
 		updatewWorldPositions(core);
-		// updateWorldZoomFactor(core);
 
 		float elapsed = (float) core.gameTime().elapsedTimeMilli() * 0.01f;
 
 		// Calculate spring force
-		float stretchX = mPosition.x - mDesiredPosition.x;
+		float stretchX = Math.max(mPosition.x - mDesiredPosition.x, -1024 + 960 / 2);
 		float stretchY = mPosition.y - mDesiredPosition.y;
 
 		float forceX = -mStiffness * stretchX - mDamping * mVelocity.x;
@@ -195,35 +194,9 @@ public class CameraShipChaseController extends BaseController {
 		final float lPixelToUnits = ConstantsPhysics.UnitsToPixels();
 
 		float lSpeedMod = mTrackedEntity.velocityMagnitude * 0.15f;
+
 		mDesiredPosition.x = lBody.x * lPixelToUnits + mLookAhead.x * lSpeedMod;
 		mDesiredPosition.y = lBody.y * lPixelToUnits + mLookAhead.y * lSpeedMod;
-	}
-
-	private void updateWorldZoomFactor(LintfordCore core) {
-		final float lZoomOutLimit = 0.8f;
-		final float lZoomInLimit = 1.5f;
-		final float lDefaultZoom = lZoomInLimit;
-
-		float lEntitySpeed = mTrackedEntity.velocityMagnitude;
-		if (Math.abs(lEntitySpeed) < 0.001f)
-			lEntitySpeed = 0.f;
-		float lTargetZoom = lDefaultZoom - lEntitySpeed;
-		lTargetZoom = MathHelper.clamp(lTargetZoom, lZoomOutLimit, lZoomInLimit);
-
-		final float lVelStepSize = 0.175f;
-
-		if (lTargetZoom > mZoomFactor)
-			mZoomVelocity += lVelStepSize;
-		else
-			mZoomVelocity -= lVelStepSize;
-
-		mZoomFactor += mZoomVelocity * core.gameTime().elapsedTimeMilli() * 0.001f;
-
-		mZoomVelocity = MathHelper.clamp(mZoomVelocity, -0.025f, 0.025f);
-		mZoomFactor = MathHelper.clamp(mZoomFactor, lZoomOutLimit, lZoomInLimit);
-		mGameCamera.setZoomFactor(mZoomFactor);
-
-		mZoomVelocity *= 0.0987f;
 	}
 
 	// ---------------------------------------------

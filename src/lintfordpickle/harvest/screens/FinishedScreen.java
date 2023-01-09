@@ -53,6 +53,10 @@ public class FinishedScreen extends MenuScreen {
 		mShowBackgroundScreens = true;
 	}
 
+	// ---------------------------------------------
+	// Core-Methods
+	// ---------------------------------------------
+
 	@Override
 	protected void handleOnClick() {
 		switch (mClickAction.consume()) {
@@ -81,11 +85,17 @@ public class FinishedScreen extends MenuScreen {
 		lTitleFont.drawText(lHeaderText, -lHeaderTextWidth / 2, -200, -0.01f, 1.f);
 		lTitleFont.end();
 
-		final var lGameOverText = "Before you were decommised, you were able to provide the city with addition food";
-		final var lTextWidth = lFont.getStringWidth(lGameOverText);
+		final var lGameOverText0 = "You totaled your ship!";
+		final var lTextWidth0 = lFont.getStringWidth(lGameOverText0);
 
 		lFont.begin(core.HUD());
-		lFont.drawText(lGameOverText, -lTextWidth / 2, -100, -0.01f, 1.f);
+		lFont.drawText(lGameOverText0, -lTextWidth0 / 2, -100, -0.01f, 1.f);
+
+		final var lGameOverText1 = "You were able to provide the city with " + foodAmountDelivered + "tn addition food";
+		final var lTextWidth1 = lFont.getStringWidth(lGameOverText1);
+
+		lFont.begin(core.HUD());
+		lFont.drawText(lGameOverText1, -lTextWidth1 / 2, -80, -0.01f, 1.f);
 		lFont.end();
 
 		mPaddingTopNormalized = 250.f;

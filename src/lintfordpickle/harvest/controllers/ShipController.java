@@ -4,9 +4,11 @@ import org.lwjgl.glfw.GLFW;
 
 import lintfordpickle.harvest.data.ships.Ship;
 import lintfordpickle.harvest.data.ships.ShipManager;
+import lintfordpickle.harvest.data.ships.ShipPhysicsData;
 import net.lintford.library.controllers.BaseController;
 import net.lintford.library.controllers.core.ControllerManager;
 import net.lintford.library.core.LintfordCore;
+import net.lintford.library.core.maths.Vector2f;
 
 public class ShipController extends BaseController {
 
@@ -16,12 +18,16 @@ public class ShipController extends BaseController {
 
 	public static final String CONTROLLER_NAME = "Ship Controller";
 
+	public static final int DAMAGE_TOP_THREASHOLD = 2;
+	public static final int DAMAGE_BOTTOM_THREASHOLD = 5;
+
 	protected static final int MAX_SHIELDS_COMPONENTS = 40;
 
 	// ---------------------------------------------
 	// Variables
 	// ---------------------------------------------
 
+	private GameStateController mGameStateController;
 	private ShipManager mShipManager;
 
 	// ---------------------------------------------
@@ -62,6 +68,7 @@ public class ShipController extends BaseController {
 		super.initialize(core);
 
 		final var lControllerManager = core.controllerManager();
+		mGameStateController = (GameStateController) lControllerManager.getControllerByNameRequired(GameStateController.CONTROLLER_NAME, entityGroupUid());
 
 	}
 
@@ -89,16 +96,10 @@ public class ShipController extends BaseController {
 		final var lPlayerShip = mShipManager.playerShip();
 		updateShip(core, lPlayerShip);
 
-		// ----
-
-		final var lShipList = mShipManager.ships();
-		final var lNumShips = lShipList.size();
-
-		for (int i = 0; i < lNumShips; i++) {
-			final var lShip = lShipList.get(i);
-
-			updateShip(core, lShip);
+		if (lPlayerShip.isDead()) {
+			mGameStateController.setPlayerDied();
 		}
+
 	}
 
 	// ---------------------------------------------
@@ -136,6 +137,33 @@ public class ShipController extends BaseController {
 				body.angularVelocity *= 0.8f;
 
 		}
+
+		final var lShipUserData = (ShipPhysicsData) ship.body().userData();
+		if (lShipUserData.lastCollisionHandled == false) {
+
+			final float lAdjustedAngle = ship.body().angle + (float) Math.toRadians(-90.f);
+			final float upX = (float) Math.cos(lAdjustedAngle);
+			final float upY = (float) Math.sin(lAdjustedAngle);
+
+			final float dot = Vector2f.dot(upX, upY, lShipUserData.lastCollisionNormalX, lShipUserData.lastCollisionNormalY);
+
+			if (dot >= 0) { // top end of ship
+				final int mag = (int) Math.sqrt(lShipUserData.lastCollisionMagnitude2);
+				if (mag > DAMAGE_TOP_THREASHOLD) {
+					ship.applyDamage(mag*mag);
+				}
+			} else {
+				final int mag = (int) Math.sqrt(lShipUserData.lastCollisionMagnitude2);
+				if (mag > DAMAGE_BOTTOM_THREASHOLD) {
+					ship.applyDamage(mag);
+				}
+			}
+
+			lShipUserData.lastCollisionHandled = true;
+			lShipUserData.lastCollisionMagnitude2 = 0.f;
+
+		}
+
 	}
 
 	// DAMAGE ---------------------------------------------

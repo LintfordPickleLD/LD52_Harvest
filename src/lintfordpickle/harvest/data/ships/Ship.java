@@ -6,7 +6,6 @@ import net.lintford.library.ConstantsPhysics;
 import net.lintford.library.core.LintfordCore;
 import net.lintford.library.core.collisions.RigidBody;
 import net.lintford.library.core.collisions.RigidBodyEntity;
-import net.lintford.library.core.graphics.sprites.SpriteDefinition;
 import net.lintford.library.core.graphics.sprites.SpriteInstance;
 import net.lintford.library.core.maths.Vector2f;
 
@@ -68,9 +67,19 @@ public class Ship extends RigidBodyEntity {
 	public final TrailRendererComponent mFrontTrailRendererComponent = new TrailRendererComponent();
 
 	public final Cargo cargo = new Cargo();
+	public final int maxHealth = 100;
+	public int health;
 
 	public SpriteInstance leftEngineSprite;
 	public SpriteInstance rightEngineSprite;
+
+	// ---------------------------------------------
+	// Properties
+	// ---------------------------------------------
+
+	public boolean isDead() {
+		return health <= 0;
+	}
 
 	// ---------------------------------------------
 	// Constructor
@@ -85,8 +94,14 @@ public class Ship extends RigidBodyEntity {
 
 		// these are in meters
 		body = RigidBody.createPolygonBody(64.f * lPixelsToUnits, 32.f * lPixelsToUnits, lDensity, .1f, .8f, .5f, false);
+		body.userData(new ShipPhysicsData());
 
+		health = maxHealth;
 	}
+
+	// ---------------------------------------------
+	// Methods
+	// ---------------------------------------------
 
 	public void update(LintfordCore core) {
 
@@ -128,6 +143,10 @@ public class Ship extends RigidBodyEntity {
 
 		mRearTrailRendererComponent.color(engineColorR, engineColorG, engineColorB, .5f);
 		mRearTrailRendererComponent.updateTrail(core, frontWorldX, frontWorldY, body().angle);
+	}
+
+	public void applyDamage(int amt) {
+		health -= amt;
 	}
 
 }

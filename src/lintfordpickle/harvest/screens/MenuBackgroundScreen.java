@@ -40,7 +40,7 @@ public class MenuBackgroundScreen extends Screen {
 
 		mBackgroundTexture = resourceManager.textureManager().loadTexture("TEXTURE_MENU_BACKGROUND", "res/textures/textureMenuBackground.png", entityGroupUid());
 
-		mGameTitleFont = resourceManager.fontManager().getFontUnit("FONT_NULSCHOCK_22");
+		mGameTitleFont = resourceManager.fontManager().getFontUnit("FONT_NULSCHOCK_11");
 	}
 
 	@Override

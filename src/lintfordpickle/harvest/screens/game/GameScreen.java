@@ -9,6 +9,7 @@ import lintfordpickle.harvest.controllers.GameStateController;
 import lintfordpickle.harvest.controllers.PlatformsController;
 import lintfordpickle.harvest.controllers.SceneController;
 import lintfordpickle.harvest.controllers.ShipController;
+import lintfordpickle.harvest.data.CollisionHandler;
 import lintfordpickle.harvest.data.game.GameState;
 import lintfordpickle.harvest.data.platforms.Platform;
 import lintfordpickle.harvest.data.platforms.PlatformManager;
@@ -34,7 +35,9 @@ import net.lintford.library.core.collisions.RigidBody;
 import net.lintford.library.core.collisions.resolvers.CollisionResolverRotationAndFriction;
 import net.lintford.library.core.debug.Debug;
 import net.lintford.library.core.geometry.partitioning.GridEntity;
+import net.lintford.library.core.graphics.ColorConstants;
 import net.lintford.library.core.graphics.rendertarget.RenderTarget;
+import net.lintford.library.core.graphics.textures.Texture;
 import net.lintford.library.screenmanager.ScreenManager;
 import net.lintford.library.screenmanager.screens.BaseGameScreen;
 import net.lintford.library.screenmanager.screens.LoadingScreen;
@@ -54,6 +57,7 @@ public class GameScreen extends BaseGameScreen {
 	private RenderTarget mRenderTarget;
 
 	private PhysicsWorld world;
+	private CollisionHandler mCollisionHandler;
 
 	// Data
 	private GameState mGameState;
@@ -76,6 +80,9 @@ public class GameScreen extends BaseGameScreen {
 	private PlatformsRenderer mPlatformsRenderer;
 	private HudRenderer mHudRenderer;
 
+	private Texture mHelpTexture;
+	private boolean mShowHelpScreen;
+
 	// ---------------------------------------------
 	// Constructors
 	// ---------------------------------------------
@@ -83,6 +90,7 @@ public class GameScreen extends BaseGameScreen {
 	public GameScreen(ScreenManager screenManager, boolean showHelp) {
 		super(screenManager);
 
+		mShowHelpScreen = showHelp;
 		ConstantsPhysics.setPhysicsWorldConstants(64.f);
 
 		final var lPlayerManager = new PlayerManager();
@@ -109,10 +117,13 @@ public class GameScreen extends BaseGameScreen {
 
 		mShipManager.playerShip(lPlayerShip);
 
+		mCollisionHandler = new CollisionHandler();
+
 		world = new PhysicsWorld(0.0f, 9.87f);
 		world.setContactResolver(new CollisionResolverRotationAndFriction());
 
 		world.addBody(lPlayerShip.body());
+		world.collisionCallback(mCollisionHandler);
 		world.initialize();
 
 		createWorldCollidables();
@@ -247,6 +258,8 @@ public class GameScreen extends BaseGameScreen {
 		final var lCanvasWidth = lDisplaySettings.gameResolutionWidth();
 		final var lCanvasHeight = lDisplaySettings.gameResolutionHeight();
 
+		mHelpTexture = resourceManager.textureManager().getTexture("HELP_OVERLAY", ConstantsGame.GAME_RESOURCE_GROUP_ID);
+
 		mRenderTarget = mRendererManager.createRenderTarget("RT_MAIN", lCanvasWidth, lCanvasHeight, 1.f, GL11.GL_NEAREST, false);
 	}
 
@@ -271,11 +284,11 @@ public class GameScreen extends BaseGameScreen {
 			return;
 		}
 
-		if (core.input().keyboard().isKeyDownTimed(GLFW.GLFW_KEY_G)) {
-			screenManager().toastManager().addMessage("Hey BOZO!", "Got a job for you", 2000);
+		if (core.input().keyboard().isKeyDownTimed(GLFW.GLFW_KEY_H)) {
+			mShowHelpScreen = !mShowHelpScreen;
 		}
 
-		if (core.input().keyboard().isKeyDownTimed(GLFW.GLFW_KEY_R)) {
+		if (core.input().keyboard().isKeyDownTimed(GLFW.GLFW_KEY_SPACE)) {
 			final var lPlayerBody = mShipManager.playerShip().body();
 
 			lPlayerBody.vx = 0.f;
@@ -293,17 +306,21 @@ public class GameScreen extends BaseGameScreen {
 	public void update(LintfordCore core, boolean otherScreenHasFocus, boolean coveredByOtherScreen) {
 		super.update(core, otherScreenHasFocus, coveredByOtherScreen);
 
-		if (otherScreenHasFocus)
-			return;
+		if (otherScreenHasFocus == false) {
+			if (mGameStateController.isPlayerDead() && mGameStateController.gameState().isGameRunning) {
+				mGameStateController.gameState().isGameRunning = false;
+				screenManager().addScreen(new FinishedScreen(mScreenManager, true, mGameState.foodDelivered));
+			}
 
-		if (mGameStateController.hasPlayerLostThroughLives() && mGameStateController.gameState().isGameRunning) {
-			mGameStateController.gameState().isGameRunning = false;
-			screenManager().addScreen(new FinishedScreen(mScreenManager, true, mGameState.foodDelivered));
-		}
+			if (mGameStateController.hasPlayerLostThroughLives() && mGameStateController.gameState().isGameRunning) {
+				mGameStateController.gameState().isGameRunning = false;
+				screenManager().addScreen(new FinishedScreen(mScreenManager, true, mGameState.foodDelivered));
+			}
 
-		if (mGameStateController.hasPlayerLostThroughTime() && mGameStateController.gameState().isGameRunning) {
-			mGameStateController.gameState().isGameRunning = false;
-			screenManager().addScreen(new FinishedScreen(mScreenManager, false, mGameState.foodDelivered));
+			if (mGameStateController.hasPlayerLostThroughTime() && mGameStateController.gameState().isGameRunning) {
+				mGameStateController.gameState().isGameRunning = false;
+				screenManager().addScreen(new FinishedScreen(mScreenManager, false, mGameState.foodDelivered));
+			}
 		}
 
 		world.stepWorld((float) core.gameTime().elapsedTimeMilli() * 0.001f, NUM_PHYSICS_ITERATIONS);
@@ -319,6 +336,13 @@ public class GameScreen extends BaseGameScreen {
 		GL11.glClear(GL11.GL_COLOR_BUFFER_BIT | GL11.GL_DEPTH_BUFFER_BIT);
 
 		super.draw(core);
+
+		if (mShowHelpScreen) {
+			final var lTextureBatch = mRendererManager.uiTextureBatch();
+			lTextureBatch.begin(core.HUD());
+			lTextureBatch.draw(mHelpTexture, 0, 0, 960, 540, core.HUD().boundingRectangle(), -0.01f, ColorConstants.WHITE);
+			lTextureBatch.end();
+		}
 
 		mRenderTarget.unbind();
 
