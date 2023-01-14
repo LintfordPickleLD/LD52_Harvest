@@ -4,10 +4,10 @@ import lintfordpickle.harvest.data.CollisionTypes;
 import lintfordpickle.harvest.renderers.trails.TrailRendererComponent;
 import net.lintford.library.ConstantsPhysics;
 import net.lintford.library.core.LintfordCore;
-import net.lintford.library.core.collisions.RigidBody;
-import net.lintford.library.core.collisions.RigidBodyEntity;
 import net.lintford.library.core.graphics.sprites.SpriteInstance;
 import net.lintford.library.core.maths.Vector2f;
+import net.lintford.library.core.physics.dynamics.RigidBody;
+import net.lintford.library.core.physics.dynamics.RigidBodyEntity;
 
 public class Ship extends RigidBodyEntity {
 

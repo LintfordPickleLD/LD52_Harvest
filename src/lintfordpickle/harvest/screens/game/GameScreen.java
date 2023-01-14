@@ -20,6 +20,7 @@ import lintfordpickle.harvest.data.ships.Ship;
 import lintfordpickle.harvest.data.ships.ShipManager;
 import lintfordpickle.harvest.renderers.PlatformsRenderer;
 import lintfordpickle.harvest.renderers.ShipRenderer;
+import lintfordpickle.harvest.renderers.debug.PhysicsDebugGridRenderer;
 import lintfordpickle.harvest.renderers.debug.PhysicsDebugRenderer;
 import lintfordpickle.harvest.renderers.hud.HudRenderer;
 import lintfordpickle.harvest.renderers.scene.SceneAdWallRenderer;
@@ -30,14 +31,14 @@ import net.lintford.library.ConstantsPhysics;
 import net.lintford.library.controllers.core.ControllerManager;
 import net.lintford.library.core.LintfordCore;
 import net.lintford.library.core.ResourceManager;
-import net.lintford.library.core.collisions.PhysicsWorld;
-import net.lintford.library.core.collisions.RigidBody;
-import net.lintford.library.core.collisions.resolvers.CollisionResolverRotationAndFriction;
 import net.lintford.library.core.debug.Debug;
 import net.lintford.library.core.geometry.partitioning.GridEntity;
 import net.lintford.library.core.graphics.ColorConstants;
 import net.lintford.library.core.graphics.rendertarget.RenderTarget;
 import net.lintford.library.core.graphics.textures.Texture;
+import net.lintford.library.core.physics.PhysicsWorld;
+import net.lintford.library.core.physics.dynamics.RigidBody;
+import net.lintford.library.core.physics.resolvers.CollisionResolverRotationAndFriction;
 import net.lintford.library.screenmanager.ScreenManager;
 import net.lintford.library.screenmanager.screens.BaseGameScreen;
 import net.lintford.library.screenmanager.screens.LoadingScreen;
@@ -74,6 +75,7 @@ public class GameScreen extends BaseGameScreen {
 
 	// Renderers
 	private PhysicsDebugRenderer mPhysicsRenderer;
+	private PhysicsDebugGridRenderer mPhysicsDebugGridRenderer;
 	private ShipRenderer mShipRenderer;
 	private SceneRenderer mSceneRenderer;
 	private SceneAdWallRenderer mSceneAdWallRenderer;
@@ -119,11 +121,12 @@ public class GameScreen extends BaseGameScreen {
 
 		mCollisionHandler = new CollisionHandler();
 
-		world = new PhysicsWorld(0.0f, 9.87f);
+		world = new PhysicsWorld();
+		world.setGravity(0, 5.87f);
 		world.setContactResolver(new CollisionResolverRotationAndFriction());
 
 		world.addBody(lPlayerShip.body());
-		world.collisionCallback(mCollisionHandler);
+		world.addCollisionCallback(mCollisionHandler);
 		world.initialize();
 
 		createWorldCollidables();
@@ -381,8 +384,10 @@ public class GameScreen extends BaseGameScreen {
 	@Override
 	protected void createRenderers(LintfordCore core) {
 		mSceneRenderer = new SceneRenderer(mRendererManager, entityGroupUid());
-		if (ConstantsGame.PHYICS_DEBUG_MODE)
+		if (ConstantsGame.PHYICS_DEBUG_MODE) {
 			mPhysicsRenderer = new PhysicsDebugRenderer(mRendererManager, world, entityGroupUid());
+			mPhysicsDebugGridRenderer = new PhysicsDebugGridRenderer(mRendererManager, world, entityGroupUid());
+		}
 		mShipRenderer = new ShipRenderer(mRendererManager, entityGroupUid());
 		mSceneAdWallRenderer = new SceneAdWallRenderer(mRendererManager, entityGroupUid());
 		mPlatformsRenderer = new PlatformsRenderer(mRendererManager, entityGroupUid());
@@ -392,8 +397,10 @@ public class GameScreen extends BaseGameScreen {
 	@Override
 	protected void initializeRenderers(LintfordCore core) {
 		mShipRenderer.initialize(core);
-		if (ConstantsGame.PHYICS_DEBUG_MODE)
+		if (ConstantsGame.PHYICS_DEBUG_MODE) {
 			mPhysicsRenderer.initialize(core);
+			mPhysicsDebugGridRenderer.initialize(core);
+		}
 		mSceneRenderer.initialize(core);
 		mSceneAdWallRenderer.initialize(core);
 		mPlatformsRenderer.initialize(core);
@@ -405,8 +412,10 @@ public class GameScreen extends BaseGameScreen {
 		mSceneRenderer.loadResources(resourceManager);
 		mShipRenderer.loadResources(resourceManager);
 		mSceneAdWallRenderer.loadResources(resourceManager);
-		if (ConstantsGame.PHYICS_DEBUG_MODE)
+		if (ConstantsGame.PHYICS_DEBUG_MODE) {
 			mPhysicsRenderer.loadResources(resourceManager);
+			mPhysicsDebugGridRenderer.loadResources(resourceManager);
+		}
 		mPlatformsRenderer.loadResources(resourceManager);
 		mHudRenderer.loadResources(resourceManager);
 	}

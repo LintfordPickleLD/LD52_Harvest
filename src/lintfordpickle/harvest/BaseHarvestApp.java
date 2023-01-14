@@ -8,7 +8,6 @@ import org.lwjgl.opengl.GL11;
 import net.lintford.library.GameInfo;
 import net.lintford.library.GameResourceLoader;
 import net.lintford.library.core.LintfordCore;
-import net.lintford.library.core.camera.Camera;
 import net.lintford.library.core.graphics.fonts.BitmapFontManager;
 import net.lintford.library.core.maths.RandomNumbers;
 import net.lintford.library.renderers.RendererManager;
@@ -88,7 +87,6 @@ public abstract class BaseHarvestApp extends LintfordCore {
 		mGameResourceLoader.setMinimumTimeToShowLogosMs(ConstantsGame.IS_DEBUG_MODE ? 0 : 2000);
 		mGameResourceLoader.loadResourcesInBackground(this);
 
-		mGameCamera = new Camera(mMasterConfig.display());
 		mScreenManager.loadResources(mResourceManager);
 	}
 

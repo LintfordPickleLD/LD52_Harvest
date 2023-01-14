@@ -2,12 +2,11 @@ package lintfordpickle.harvest.renderers.debug;
 
 import org.lwjgl.opengl.GL11;
 
-import lintfordpickle.harvest.data.ships.Ship;
 import net.lintford.library.ConstantsPhysics;
 import net.lintford.library.core.LintfordCore;
-import net.lintford.library.core.collisions.PhysicsWorld;
-import net.lintford.library.core.collisions.RigidBody;
 import net.lintford.library.core.debug.Debug;
+import net.lintford.library.core.physics.PhysicsWorld;
+import net.lintford.library.core.physics.dynamics.RigidBody;
 import net.lintford.library.renderers.BaseRenderer;
 import net.lintford.library.renderers.RendererManager;
 
@@ -35,7 +34,6 @@ public class PhysicsDebugRenderer extends BaseRenderer {
 	@Override
 	public boolean isInitialized() {
 		return mWorld != null;
-
 	}
 
 	// ---------------------------------------------
@@ -82,9 +80,15 @@ public class PhysicsDebugRenderer extends BaseRenderer {
 		lLineBatch.lineWidth(2.f);
 		lLineBatch.lineType(GL11.GL_LINE_STRIP);
 
-		float r = 0.6f;
-		float g = 0.7f;
-		float b = body.isStatic() ? 1.f : 0.2f;
+		float r = .6f;
+		float g = .7f;
+		float b = .2f;
+
+		if (body.isStatic()) {
+			r = .3f;
+			g = .9f;
+			b = .2f;
+		}
 
 		final var lUnitToPixels = ConstantsPhysics.UnitsToPixels();
 
@@ -113,7 +117,7 @@ public class PhysicsDebugRenderer extends BaseRenderer {
 			break;
 		}
 
-		case Line: {
+		case LineWidth: {
 			lLineBatch.begin(core.gameCamera());
 			lLineBatch.draw(lVertices.get(0).x * lUnitToPixels, lVertices.get(0).y * lUnitToPixels, lVertices.get(1).x * lUnitToPixels, lVertices.get(1).y * lUnitToPixels, -0.01f, r, g, b, 1.f);
 			lLineBatch.draw(lVertices.get(1).x * lUnitToPixels, lVertices.get(1).y * lUnitToPixels, lVertices.get(2).x * lUnitToPixels, lVertices.get(2).y * lUnitToPixels, -0.01f, r, g, b, 1.f);
@@ -128,7 +132,7 @@ public class PhysicsDebugRenderer extends BaseRenderer {
 
 			else {
 				lLineBatch.begin(core.gameCamera());
-				lLineBatch.drawCircle(lVertices.get(0).x * lUnitToPixels, lVertices.get(0).y * lUnitToPixels, body.angle, body.radius * lUnitToPixels, 20, 1.f, 1.f, 1.f, true);
+				lLineBatch.drawCircle(lVertices.get(0).x * lUnitToPixels, lVertices.get(0).y * lUnitToPixels, body.angle, body.radius * lUnitToPixels, 20, r, g, b, true);
 				lLineBatch.end();
 			}
 
@@ -139,29 +143,5 @@ public class PhysicsDebugRenderer extends BaseRenderer {
 
 		if (RenderAABB)
 			Debug.debugManager().drawers().drawRectImmediate(core.gameCamera(), body.aabb().x() * lUnitToPixels, body.aabb().y() * lUnitToPixels, body.aabb().width() * lUnitToPixels, body.aabb().height() * lUnitToPixels, .93f, .06f, .98f);
-	}
-
-	private void drawDebugInfo(LintfordCore core, Ship ship) {
-		if (ship.isPlayerControlled) {
-			final var lBody = ship.body();
-
-			final var shipPosX = lBody.x;
-			final var shipPosY = lBody.y;
-
-			final var lFontUnit = rendererManager().uiTextFont();
-			final var lBoundingBox = core.HUD().boundingRectangle();
-
-			final var shipX = String.format(java.util.Locale.US, "%.1f", shipPosX);
-			final var shipY = String.format(java.util.Locale.US, "%.1f", shipPosY);
-
-			final var lFontScale = 1.0f;
-			final var lLineHeight = 18.f;
-
-			float yPos = lBoundingBox.top() + 5.f - 20.f;
-
-			lFontUnit.begin(core.HUD());
-			lFontUnit.drawText("position: " + shipX + "," + shipY, lBoundingBox.left() + 5.f, yPos += lLineHeight, -0.01f, lFontScale);
-			lFontUnit.end();
-		}
 	}
 }

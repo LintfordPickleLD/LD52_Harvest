@@ -30,16 +30,10 @@ public class CameraShipChaseController extends BaseController {
 	private boolean mIsTrackingPlayer;
 
 	private Vector2f mVelocity;
-	public Vector2f mDesiredPosition;
 	public Vector2f mPosition;
-	public Vector2f mLookAhead;
 
 	public float mZoomFactor;
 	public float mZoomVelocity;
-
-	private float mStiffness = 18.0f;
-	private float mDamping = 6.0f;
-	private float mMass = .5f;
 
 	// ---------------------------------------------
 	// Properties
@@ -78,9 +72,7 @@ public class CameraShipChaseController extends BaseController {
 		super(controllerManager, CONTROLLER_NAME, entityGroupUid);
 
 		mVelocity = new Vector2f();
-		mDesiredPosition = new Vector2f();
 		mPosition = new Vector2f();
-		mLookAhead = new Vector2f();
 
 		final var lBody = trackedShip.body();
 		mPosition.x = lBody.x;
@@ -149,54 +141,15 @@ public class CameraShipChaseController extends BaseController {
 			return;
 
 		if (mTrackedEntity != null) {
-			updateSpring(pCore);
+			// updateSpring(pCore);
+
+			if (mTrackedEntity != null) {
+				mPosition.x = mTrackedEntity.body().x * ConstantsPhysics.UnitsToPixels();
+				mPosition.y = mTrackedEntity.body().y * ConstantsPhysics.UnitsToPixels();
+			}
 
 			mGameCamera.setPosition(mPosition.x, mPosition.y);
 		}
-	}
-
-	private void updateSpring(LintfordCore core) {
-		mStiffness = 10000.0f;
-		mDamping = 1000.0f;
-		mMass = 100.f;
-
-		updatewWorldPositions(core);
-
-		float elapsed = (float) core.gameTime().elapsedTimeMilli() * 0.01f;
-
-		// Calculate spring force
-		float stretchX = Math.max(mPosition.x - mDesiredPosition.x, -1024 + 960 / 2);
-		float stretchY = mPosition.y - mDesiredPosition.y;
-
-		float forceX = -mStiffness * stretchX - mDamping * mVelocity.x;
-		float forceY = -mStiffness * stretchY - mDamping * mVelocity.y;
-
-		// Apply acceleration
-		float accelerationX = forceX / mMass;
-		float accelerationY = forceY / mMass;
-
-		mVelocity.x += accelerationX * elapsed;
-		mVelocity.y += accelerationY * elapsed;
-
-		// Apply velocity
-		mPosition.x += mVelocity.x * elapsed;
-		mPosition.y += mVelocity.y * elapsed;
-	}
-
-	private void updatewWorldPositions(LintfordCore core) {
-		final var lBody = mTrackedEntity.body();
-		float lAngle = lBody.angle;
-
-		mLookAhead.x = (float) Math.cos(lAngle);
-		mLookAhead.y = (float) Math.sin(lAngle);
-
-		// TODO: Tracking physics objects requires a different* caemra chase controller
-		final float lPixelToUnits = ConstantsPhysics.UnitsToPixels();
-
-		float lSpeedMod = mTrackedEntity.velocityMagnitude * 0.15f;
-
-		mDesiredPosition.x = lBody.x * lPixelToUnits + mLookAhead.x * lSpeedMod;
-		mDesiredPosition.y = lBody.y * lPixelToUnits + mLookAhead.y * lSpeedMod;
 	}
 
 	// ---------------------------------------------

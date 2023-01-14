@@ -1,8 +1,8 @@
 package lintfordpickle.harvest.data;
 
 import lintfordpickle.harvest.data.ships.ShipPhysicsData;
-import net.lintford.library.core.collisions.ContactManifold;
-import net.lintford.library.core.collisions.ICollisionCallback;
+import net.lintford.library.core.physics.collisions.ContactManifold;
+import net.lintford.library.core.physics.interfaces.ICollisionCallback;
 
 public class CollisionHandler implements ICollisionCallback {
 

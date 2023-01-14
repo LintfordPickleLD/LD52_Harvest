@@ -19,7 +19,7 @@ public class ShipController extends BaseController {
 	public static final String CONTROLLER_NAME = "Ship Controller";
 
 	public static final int DAMAGE_TOP_THREASHOLD = 2;
-	public static final int DAMAGE_BOTTOM_THREASHOLD = 5;
+	public static final int DAMAGE_BOTTOM_THREASHOLD = 10;
 
 	protected static final int MAX_SHIELDS_COMPONENTS = 40;
 
@@ -109,11 +109,16 @@ public class ShipController extends BaseController {
 	private void updateShip(LintfordCore core, Ship ship) {
 		ship.update(core);
 
+		if (ship.isDead()) {
+			ship.body().angularVelocity *= 0.99f;
+			return;
+		}
+
 		final var body = ship.body();
 		final var lShipInput = ship.inputs;
 
 		final float lThrustUpForce = 100.f;
-		final float lAngularTorque = 3.f;
+		final float lAngularTorque = .003f;
 
 		if (lShipInput.isUpThrottle) {
 			final float lAngle = body.angle;
@@ -122,19 +127,24 @@ public class ShipController extends BaseController {
 
 			ship.body().accX += -upY * -lThrustUpForce * body.invMass();
 			ship.body().accY += upX * -lThrustUpForce * body.invMass();
+			body.angularVelocity *= 0.99f;
 		}
 
 		{
 			if (lShipInput.isLeftThrottle) {
-				body.torque -= lAngularTorque * body.invInertia();
+				body.angle -= lAngularTorque * core.gameTime().elapsedTimeMilli();
+				if (body.angularVelocity > 0.f)
+					body.angularVelocity *= 0.9f;
 			}
 
 			if (lShipInput.isRightThrottle) {
-				body.torque += lAngularTorque * body.invInertia();
+				body.angle += lAngularTorque * core.gameTime().elapsedTimeMilli();
+				if (body.angularVelocity < 0.f)
+					body.angularVelocity *= 0.9f;
 			}
 
-			if (!lShipInput.isLeftThrottle && !lShipInput.isRightThrottle)
-				body.angularVelocity *= 0.8f;
+//			if (!lShipInput.isLeftThrottle && !lShipInput.isRightThrottle)
+//				body.angularVelocity *= 0.8f;
 
 		}
 
@@ -147,15 +157,15 @@ public class ShipController extends BaseController {
 
 			final float dot = Vector2f.dot(upX, upY, lShipUserData.lastCollisionNormalX, lShipUserData.lastCollisionNormalY);
 
-			if (dot >= 0) { // top end of ship
+			if (dot <= 0) { // top end of ship
 				final int mag = (int) Math.sqrt(lShipUserData.lastCollisionMagnitude2);
 				if (mag > DAMAGE_TOP_THREASHOLD) {
-					ship.applyDamage(mag*mag);
+					ship.applyDamage(mag);
 				}
 			} else {
 				final int mag = (int) Math.sqrt(lShipUserData.lastCollisionMagnitude2);
 				if (mag > DAMAGE_BOTTOM_THREASHOLD) {
-					ship.applyDamage(mag);
+					ship.applyDamage(mag - DAMAGE_BOTTOM_THREASHOLD);
 				}
 			}
 
