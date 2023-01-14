@@ -290,19 +290,6 @@ public class GameScreen extends BaseGameScreen {
 		if (core.input().keyboard().isKeyDownTimed(GLFW.GLFW_KEY_H)) {
 			mShowHelpScreen = !mShowHelpScreen;
 		}
-
-		if (core.input().keyboard().isKeyDownTimed(GLFW.GLFW_KEY_SPACE)) {
-			final var lPlayerBody = mShipManager.playerShip().body();
-
-			lPlayerBody.vx = 0.f;
-			lPlayerBody.vy = 0.f;
-//			lPlayerBody.x = 0.f;
-//			lPlayerBody.y = 0.f;
-
-			lPlayerBody.torque = 0.f;
-			lPlayerBody.angularVelocity = 0.f;
-			lPlayerBody.angle = 0.f;
-		}
 	}
 
 	@Override

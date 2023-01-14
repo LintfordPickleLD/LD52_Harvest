@@ -127,18 +127,14 @@ public class TestSatScreen extends BaseGameScreen {
 
 			if (!core.input().keyboard().isKeyDown(GLFW.GLFW_KEY_LEFT_SHIFT)) {
 				RigidBody newBody = null;
-//				switch (RandomNumbers.random(0, 3)) {
-//				case 0:
-//					newBody = RigidBody.createPolygonBody(lRandomWidth, lRandomHeight, 5.f, .5f, staticFriction, dynamicFriction, false);
-//					break;
-//				case 1:
-//					newBody = RigidBody.createBoxBody(lRandomWidth, lRandomHeight, 5.f, .5f, staticFriction, dynamicFriction, false);
-//					break;
-//				default:
-//					newBody = RigidBody.createCircleBody(/* lRandomRadius */ 1.f, 5.77f, .5f, staticFriction, dynamicFriction, false);
-//					break;
-//				}
-				newBody = RigidBody.createBoxBody(lRandomWidth, lRandomHeight, 5.f, .5f, staticFriction, dynamicFriction, false);
+				switch (RandomNumbers.random(0, 2)) {
+				case 0:
+					newBody = RigidBody.createPolygonBody(lRandomWidth, lRandomHeight, 5.f, .5f, staticFriction, dynamicFriction, false);
+					break;
+				default:
+					newBody = RigidBody.createCircleBody(/* lRandomRadius */ 1.f, 5.77f, .5f, staticFriction, dynamicFriction, false);
+					break;
+				}
 
 				newBody.moveTo(lMouseX * lPixelsToUnits, lMouseY * lPixelsToUnits);
 				world.addBody(newBody);
@@ -175,6 +171,7 @@ public class TestSatScreen extends BaseGameScreen {
 
 		if (simulationOn) {
 			world.stepWorld((float) core.gameTime().elapsedTimeMilli() * 0.001f, NUM_PHYSICS_ITERATIONS);
+			clearBodiesBelowGround(core);
 		}
 	}
 
@@ -185,32 +182,26 @@ public class TestSatScreen extends BaseGameScreen {
 
 		super.draw(core);
 
-		// world debug
-
-		final var lFontUnit = mRendererManager.uiTextFont();
-		lFontUnit.begin(core.gameCamera());
-
-		Debug.debugManager().drawers().drawLineImmediate(core.gameCamera(), -16.f, 0.f, 16.f, 0.f);
-		lFontUnit.drawText("0,0", 0, 0, -0.01f, .5f);
-
-		Debug.debugManager().drawers().drawLineImmediate(core.gameCamera(), -16.f, -32.f, 16.f, -32.f);
-		lFontUnit.drawText("0,-32", 0, -32, -0.01f, .5f);
-
-		Debug.debugManager().drawers().drawLineImmediate(core.gameCamera(), -16.f, -64.f, 16.f, -64.f);
-		lFontUnit.drawText("0,-64", 0, -64, -0.01f, .5f);
-
-		Debug.debugManager().drawers().drawLineImmediate(core.gameCamera(), -16.f, 32.f, 16.f, 32.f);
-		lFontUnit.drawText("0,32", 0, 32, -0.01f, .5f);
-
-		Debug.debugManager().drawers().drawLineImmediate(core.gameCamera(), -16.f, 64.f, 16.f, 64.f);
-		lFontUnit.drawText("0,64", 0, 64, -0.01f, .5f);
-
-		lFontUnit.end();
+		core.gameCamera().setZoomFactor(0.7f);
 	}
 
 	// ---------------------------------------------
 	// Methods
 	// ---------------------------------------------
+
+	private void clearBodiesBelowGround(LintfordCore core) {
+		final var lHudBb = core.HUD().boundingRectangle();
+		final var lPixelsToUnits = ConstantsPhysics.PixelsToUnits();
+		final var lDeathHeight = lHudBb.height() / 2 * lPixelsToUnits;
+
+		final var lBodies = world.bodies();
+		final var lNumBodies = lBodies.size();
+		for (int i = lNumBodies - 1; i >= 0; i--) {
+			final var lBody = lBodies.get(i);
+			if (!lBody.isStatic() && lBody.y > lDeathHeight)
+				world.removeBody(lBody);
+		}
+	}
 
 	private void createStaticWorld() {
 		final var lBoundingBox = mGameCamera.boundingRectangle();
@@ -225,13 +216,14 @@ public class TestSatScreen extends BaseGameScreen {
 
 		final var lLedge0 = RigidBody.createPolygonBody(200.f * lPixelsToUnits, 10.f * lPixelsToUnits, 1.f, .5f, staticFriction, dynamicFriction, true);
 		lLedge0.moveTo(-250.f * lPixelsToUnits, -250.f * lPixelsToUnits);
+		lLedge0.angle = (float) Math.toRadians(25.f);
 		final var lLedge1 = RigidBody.createPolygonBody(200.f * lPixelsToUnits, 10.f * lPixelsToUnits, 1.f, .5f, staticFriction, dynamicFriction, true);
 		lLedge1.moveTo(250.f * lPixelsToUnits, -250.f * lPixelsToUnits);
 		lLedge1.angle = (float) Math.toRadians(-15.f);
 
 		world.addBody(lGroundBox);
-//		world.addBody(lLedge0);
-//		world.addBody(lLedge1);
+		world.addBody(lLedge0);
+		world.addBody(lLedge1);
 
 		mPlayerBody = world.getBodyByIndex(0);
 	}
@@ -248,19 +240,19 @@ public class TestSatScreen extends BaseGameScreen {
 
 	@Override
 	protected void createRenderers(LintfordCore core) {
-		mPhysicsDebugGridRenderer = new PhysicsDebugGridRenderer(mRendererManager, world, entityGroupUid());
+		// mPhysicsDebugGridRenderer = new PhysicsDebugGridRenderer(mRendererManager, world, entityGroupUid());
 		mPhysicsDebugRenderer = new PhysicsDebugRenderer(mRendererManager, world, entityGroupUid());
 	}
 
 	@Override
 	protected void initializeRenderers(LintfordCore core) {
-		mPhysicsDebugGridRenderer.initialize(core);
+		// mPhysicsDebugGridRenderer.initialize(core);
 		mPhysicsDebugRenderer.initialize(core);
 	}
 
 	@Override
 	protected void loadRendererResources(ResourceManager resourceManager) {
-		mPhysicsDebugGridRenderer.loadResources(resourceManager);
+		// mPhysicsDebugGridRenderer.loadResources(resourceManager);
 		mPhysicsDebugRenderer.loadResources(resourceManager);
 	}
 

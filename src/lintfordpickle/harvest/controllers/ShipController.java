@@ -142,10 +142,6 @@ public class ShipController extends BaseController {
 				if (body.angularVelocity < 0.f)
 					body.angularVelocity *= 0.9f;
 			}
-
-//			if (!lShipInput.isLeftThrottle && !lShipInput.isRightThrottle)
-//				body.angularVelocity *= 0.8f;
-
 		}
 
 		final var lShipUserData = (ShipPhysicsData) ship.body().userData();
@@ -171,9 +167,7 @@ public class ShipController extends BaseController {
 
 			lShipUserData.lastCollisionHandled = true;
 			lShipUserData.lastCollisionMagnitude2 = 0.f;
-
 		}
-
 	}
 
 	// DAMAGE ---------------------------------------------
@@ -182,7 +176,5 @@ public class ShipController extends BaseController {
 		final var lShipToDamage = getShipByEntityUid(shipEntityUid);
 		if (lShipToDamage == null)
 			return;
-
-		// TODO:
 	}
 }

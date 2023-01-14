@@ -35,8 +35,5 @@ public class ResourceLoader extends GameResourceLoader {
 
 		mResourceManager.fontManager().loadBitmapFont("FONT_NULSCHOCK_12", "res/fonts/fontNulshock12.json");
 		mResourceManager.fontManager().loadBitmapFont("FONT_NULSCHOCK_22", "res/fonts/fontNulshock22.json");
-
 	}
-
-
 }

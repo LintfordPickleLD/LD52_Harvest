@@ -142,10 +142,10 @@
 	<!-- bundle the JRE in the output folder -->
 	<target name="bundle.jre" depends="check.jre" unless="jre.dir.exists">
 		<echo message="Bundling JRE" />
-		<echo message='${JDK.input.dir}/bin/jlink --module-path "${JDK.input.dir}/jmods" --add-modules java.base,java.sql,java.desktop,java.management,java.xml,jdk.unsupported,jdk.management --output ${dist.jre} --strip-debug --compress 2 --no-header-files --no-man-pages' />
+		<echo message='${JDK.input.dir}/bin/jlink --module-path "${JDK.input.dir}/jmods" --add-modules java.base,java.sql,java.desktop,java.management,java.instrument,java.xml,jdk.unsupported,jdk.management --output ${dist.jre} --strip-debug --compress 2 --no-header-files --no-man-pages' />
 		<exec executable="cmd">
 			<arg value="/c" />
-			<arg value='${JDK.input.dir}/bin/jlink --module-path ${JDK.input.dir}/jmods --add-modules java.base,java.sql,java.desktop,java.management,java.xml,jdk.unsupported,jdk.management --output ${dist.jre} --strip-debug --compress 2 --no-header-files --no-man-pages' />
+			<arg value='${JDK.input.dir}/bin/jlink --module-path ${JDK.input.dir}/jmods --add-modules java.base,java.sql,java.desktop,java.management,java.instrument,java.xml,jdk.unsupported,jdk.management --output ${dist.jre} --strip-debug --compress 2 --no-header-files --no-man-pages' />
 		</exec>
 	</target>
 	

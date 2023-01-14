@@ -77,7 +77,6 @@ public class PhysicsDebugRenderer extends BaseRenderer {
 
 	private void debugDrawRigidBody(LintfordCore core, RigidBody body) {
 		final var lLineBatch = rendererManager().uiLineBatch();
-		lLineBatch.lineWidth(2.f);
 		lLineBatch.lineType(GL11.GL_LINE_STRIP);
 
 		float r = .6f;
