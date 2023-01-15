@@ -1,19 +1,19 @@
 package lintfordpickle.harvest;
 
-import net.lintford.library.GameResourceLoader;
+import net.lintford.library.ResourceLoader;
 import net.lintford.library.core.LintfordCore;
 import net.lintford.library.core.ResourceManager;
 import net.lintford.library.core.debug.Debug;
 import net.lintford.library.options.DisplayManager;
 
-public class ResourceLoader extends GameResourceLoader {
+public class HarvestResourceLoader extends ResourceLoader {
 
 	// ---------------------------------------------
 	// Constructors
 	// ---------------------------------------------
 
-	public ResourceLoader(ResourceManager resourceManager, DisplayManager displayManager) {
-		super(resourceManager, displayManager);
+	public HarvestResourceLoader(ResourceManager resourceManager, DisplayManager displayManager) {
+		super(resourceManager, displayManager, true);
 
 	}
 

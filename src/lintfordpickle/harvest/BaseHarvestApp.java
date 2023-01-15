@@ -6,7 +6,7 @@ import static org.lwjgl.opengl.GL11.glClearColor;
 import org.lwjgl.opengl.GL11;
 
 import net.lintford.library.GameInfo;
-import net.lintford.library.GameResourceLoader;
+import net.lintford.library.ResourceLoader;
 import net.lintford.library.core.LintfordCore;
 import net.lintford.library.core.graphics.fonts.BitmapFontManager;
 import net.lintford.library.core.maths.RandomNumbers;
@@ -22,7 +22,7 @@ public abstract class BaseHarvestApp extends LintfordCore {
 
 	protected int mEntityGroupID;
 
-	protected GameResourceLoader mGameResourceLoader;
+	protected ResourceLoader mGameResourceLoader;
 	protected ScreenManager mScreenManager;
 
 	// ---------------------------------------------
@@ -81,7 +81,7 @@ public abstract class BaseHarvestApp extends LintfordCore {
 	protected void onLoadResources() {
 		super.onLoadResources();
 
-		mGameResourceLoader = new ResourceLoader(mResourceManager, config().display());
+		mGameResourceLoader = new HarvestResourceLoader(mResourceManager, config().display());
 
 		mGameResourceLoader.loadResources(mResourceManager);
 		mGameResourceLoader.setMinimumTimeToShowLogosMs(ConstantsGame.IS_DEBUG_MODE ? 0 : 2000);
