@@ -4,8 +4,6 @@ import org.lwjgl.glfw.GLFW;
 import org.lwjgl.opengl.GL11;
 
 import lintfordpickle.harvest.controllers.DebugCameraController;
-import lintfordpickle.harvest.renderers.debug.PhysicsDebugGridRenderer;
-import lintfordpickle.harvest.renderers.debug.PhysicsDebugRenderer;
 import net.lintford.library.ConstantsPhysics;
 import net.lintford.library.controllers.core.ControllerManager;
 import net.lintford.library.core.LintfordCore;
@@ -15,6 +13,8 @@ import net.lintford.library.core.maths.RandomNumbers;
 import net.lintford.library.core.physics.PhysicsWorld;
 import net.lintford.library.core.physics.dynamics.RigidBody;
 import net.lintford.library.core.physics.resolvers.CollisionResolverRotationAndFriction;
+import net.lintford.library.renderers.debug.DebugPhysicsGridRenderer;
+import net.lintford.library.renderers.debug.DebugPhysicsRenderer;
 import net.lintford.library.screenmanager.ScreenManager;
 import net.lintford.library.screenmanager.screens.BaseGameScreen;
 import net.lintford.library.screenmanager.screens.LoadingScreen;
@@ -39,8 +39,8 @@ public class TestSatScreen extends BaseGameScreen {
 
 	private DebugCameraController mDebugCameraController;
 
-	private PhysicsDebugGridRenderer mPhysicsDebugGridRenderer;
-	private PhysicsDebugRenderer mPhysicsDebugRenderer;
+	private DebugPhysicsGridRenderer mPhysicsDebugGridRenderer;
+	private DebugPhysicsRenderer mPhysicsDebugRenderer;
 
 	private boolean simulationOn;
 
@@ -241,7 +241,7 @@ public class TestSatScreen extends BaseGameScreen {
 	@Override
 	protected void createRenderers(LintfordCore core) {
 		// mPhysicsDebugGridRenderer = new PhysicsDebugGridRenderer(mRendererManager, world, entityGroupUid());
-		mPhysicsDebugRenderer = new PhysicsDebugRenderer(mRendererManager, world, entityGroupUid());
+		mPhysicsDebugRenderer = new DebugPhysicsRenderer(mRendererManager, world, entityGroupUid());
 	}
 
 	@Override

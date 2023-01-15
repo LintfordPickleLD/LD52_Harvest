@@ -20,8 +20,6 @@ import lintfordpickle.harvest.data.ships.Ship;
 import lintfordpickle.harvest.data.ships.ShipManager;
 import lintfordpickle.harvest.renderers.PlatformsRenderer;
 import lintfordpickle.harvest.renderers.ShipRenderer;
-import lintfordpickle.harvest.renderers.debug.PhysicsDebugGridRenderer;
-import lintfordpickle.harvest.renderers.debug.PhysicsDebugRenderer;
 import lintfordpickle.harvest.renderers.hud.HudRenderer;
 import lintfordpickle.harvest.renderers.scene.SceneAdWallRenderer;
 import lintfordpickle.harvest.renderers.scene.SceneRenderer;
@@ -39,6 +37,8 @@ import net.lintford.library.core.graphics.textures.Texture;
 import net.lintford.library.core.physics.PhysicsWorld;
 import net.lintford.library.core.physics.dynamics.RigidBody;
 import net.lintford.library.core.physics.resolvers.CollisionResolverRotationAndFriction;
+import net.lintford.library.renderers.debug.DebugPhysicsGridRenderer;
+import net.lintford.library.renderers.debug.DebugPhysicsRenderer;
 import net.lintford.library.screenmanager.ScreenManager;
 import net.lintford.library.screenmanager.screens.BaseGameScreen;
 import net.lintford.library.screenmanager.screens.LoadingScreen;
@@ -74,8 +74,8 @@ public class GameScreen extends BaseGameScreen {
 	private GameStateController mGameStateController;
 
 	// Renderers
-	private PhysicsDebugRenderer mPhysicsRenderer;
-	private PhysicsDebugGridRenderer mPhysicsDebugGridRenderer;
+	private DebugPhysicsRenderer mPhysicsRenderer;
+	private DebugPhysicsGridRenderer mPhysicsDebugGridRenderer;
 	private ShipRenderer mShipRenderer;
 	private SceneRenderer mSceneRenderer;
 	private SceneAdWallRenderer mSceneAdWallRenderer;
@@ -372,8 +372,8 @@ public class GameScreen extends BaseGameScreen {
 	protected void createRenderers(LintfordCore core) {
 		mSceneRenderer = new SceneRenderer(mRendererManager, entityGroupUid());
 		if (ConstantsGame.PHYICS_DEBUG_MODE) {
-			mPhysicsRenderer = new PhysicsDebugRenderer(mRendererManager, world, entityGroupUid());
-			mPhysicsDebugGridRenderer = new PhysicsDebugGridRenderer(mRendererManager, world, entityGroupUid());
+			mPhysicsRenderer = new DebugPhysicsRenderer(mRendererManager, world, entityGroupUid());
+			mPhysicsDebugGridRenderer = new DebugPhysicsGridRenderer(mRendererManager, world, entityGroupUid());
 		}
 		mShipRenderer = new ShipRenderer(mRendererManager, entityGroupUid());
 		mSceneAdWallRenderer = new SceneAdWallRenderer(mRendererManager, entityGroupUid());
