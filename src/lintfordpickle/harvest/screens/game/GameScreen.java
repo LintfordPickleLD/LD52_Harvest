@@ -150,22 +150,18 @@ public class GameScreen extends BaseGameScreen {
 		createStaticPolygon(1695, 255, 17, 97, 0);
 		createStaticPolygon(1503, 256, 192, 20, 0);
 		createStaticPolygon(1823, 160, 160, 63, 0);
-		createStaticPolygon(1833, 761, 35, 57, 0);
 		createStaticPolygon(1150, 768, 130, 284, 0);
 		createStaticPolygon(1150, 1052, 338, 22, 0);
 		createStaticPolygon(864, 576, 128, 658, 0);
-		createStaticPolygon(320, 224, 128, 1146, 0);
-		createStaticPolygon(320, 224, 128, 1146, 0);
+		createStaticPolygon(320, 224, 128, 899, 0);
 		createStaticPolygon(384, 160, 64, 64, 0);
 		createStaticPolygon(298, 224, 22, 288, 0);
-		createStaticPolygon(448, 512, 20, 128, 0);
 		createStaticPolygon(448, 512, 20, 128, 0);
 		createStaticPolygon(300, 640, 20, 64, 0);
 		createStaticPolygon(448, 768, 288, 32, 0);
 		createStaticPolygon(194, 800, 125, 96, 0);
 		createStaticPolygon(300, 960, 20, 160, 0);
-		createStaticPolygon(14, 546, 113, 123, 0);
-		createStaticPolygon(448, 1088, 20, 96, 0);
+		createStaticPolygon(448, 1088, 20, 33, 0);
 		createStaticPolygon(0, 1248, 128, 192, 0);
 		createStaticPolygon(128, 1370, 320, 70, 0);
 		createStaticPolygon(640, 968, 224, 24, 0);
@@ -177,6 +173,10 @@ public class GameScreen extends BaseGameScreen {
 		createStaticPolygon(1344, 1234, 144, 8, 0);
 		createStaticPolygon(1934, 1032, 100, 12, 0);
 		createStaticPolygon(1826, 622, 104, 9, 0);
+		createStaticPolygon(1480, 0, 186, 256, 0);
+		createStaticPolygon(14, 1440, 244, 161, 0);
+		createStaticPolygon(931, 1479, 604, 47, 0);
+		createStaticPolygon(13, 230, 152, 124, 0);
 
 		// Start platform
 		createStaticPolygon(844, 1888, 203, 108, 0);
@@ -188,7 +188,7 @@ public class GameScreen extends BaseGameScreen {
 		createStaticPolygon(930, 1438, 607, 40, 0);
 		createStaticPolygon(1440, 1328, 80, 110, 0);
 		createStaticPolygon(1440, 1234, 32, 94, 0);
-		createStaticPolygon(1696, 622, 130, 466, 0);
+		createStaticPolygon(1696, 622, 130, 408, 0);
 		createStaticPolygon(1696, 542, 32, 80, 0);
 
 		// walls
