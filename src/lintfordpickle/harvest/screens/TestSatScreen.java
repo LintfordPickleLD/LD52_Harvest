@@ -4,16 +4,16 @@ import org.lwjgl.glfw.GLFW;
 import org.lwjgl.opengl.GL11;
 
 import lintfordpickle.harvest.controllers.DebugCameraController;
+import lintfordpickle.harvest.controllers.PhysicsCollisionCallback;
+import lintfordpickle.harvest.controllers.input.GameInputController;
+import lintfordpickle.harvest.data.input.GameInputBufferManager;
 import net.lintford.library.ConstantsPhysics;
 import net.lintford.library.controllers.core.ControllerManager;
 import net.lintford.library.core.LintfordCore;
 import net.lintford.library.core.ResourceManager;
-import net.lintford.library.core.debug.Debug;
-import net.lintford.library.core.maths.RandomNumbers;
 import net.lintford.library.core.physics.PhysicsWorld;
 import net.lintford.library.core.physics.dynamics.RigidBody;
 import net.lintford.library.core.physics.resolvers.CollisionResolverRotationAndFriction;
-import net.lintford.library.renderers.debug.DebugPhysicsGridRenderer;
 import net.lintford.library.renderers.debug.DebugPhysicsRenderer;
 import net.lintford.library.screenmanager.ScreenManager;
 import net.lintford.library.screenmanager.screens.BaseGameScreen;
@@ -34,12 +34,18 @@ public class TestSatScreen extends BaseGameScreen {
 	// Variables
 	// ---------------------------------------------
 
-	private final PhysicsWorld world;
-	private RigidBody mPlayerBody;
+	// TODO: still need to formalize this
+	// true means we are playing the game and saving our input
+	// false means we are loading the inputs from a file and watching the playback
+	private static final boolean DEBUG_WRITE_MODE = false;
 
+	private PhysicsWorld world;
+	private RigidBody mPlayerBody;
+	private GameInputBufferManager mGameInputBufferManager;
+
+	private GameInputController mGameInputController;
 	private DebugCameraController mDebugCameraController;
 
-	private DebugPhysicsGridRenderer mPhysicsDebugGridRenderer;
 	private DebugPhysicsRenderer mPhysicsDebugRenderer;
 
 	private boolean simulationOn;
@@ -51,10 +57,17 @@ public class TestSatScreen extends BaseGameScreen {
 	public TestSatScreen(ScreenManager screenManager) {
 		super(screenManager);
 
+		mGameInputBufferManager = new GameInputBufferManager();
+
+		setupPhysicsWorld();
+	}
+
+	private void setupPhysicsWorld() {
 		ConstantsPhysics.setPhysicsWorldConstants(16);
+
 		world = new PhysicsWorld((int) (1024 * ConstantsPhysics.PixelsToUnits()), (int) (1024 * ConstantsPhysics.PixelsToUnits()), 7, 7);
 		world.setGravity(.0f, 9.87f);
-
+		world.addCollisionCallback(new PhysicsCollisionCallback());
 		simulationOn = true;
 	}
 
@@ -99,6 +112,7 @@ public class TestSatScreen extends BaseGameScreen {
 		super.handleInput(core);
 
 		if (core.input().keyboard().isKeyDownTimed(GLFW.GLFW_KEY_ESCAPE)) {
+			mGameInputController.finishWritingToFile();
 
 			if (core.input().keyboard().isKeyDown(GLFW.GLFW_KEY_LEFT_SHIFT)) {
 				screenManager().createLoadingScreen(new LoadingScreen(screenManager(), false, new MenuBackgroundScreen(mScreenManager), new MainMenu(screenManager())));
@@ -109,37 +123,40 @@ public class TestSatScreen extends BaseGameScreen {
 			return;
 		}
 
-		if (core.input().keyboard().isKeyDownTimed(GLFW.GLFW_KEY_SPACE)) {
+		final var lInputFrame = mGameInputController.currentInput();
+
+		if (lInputFrame.isSpaceDown) {
 			simulationOn = !simulationOn;
+			System.out.println("SPACE DOWN : RUNNING SIMULATION " + simulationOn);
 		}
 
-		if (core.input().mouse().isMouseLeftButtonDown()) {
-			final var lPixelsToUnits = ConstantsPhysics.PixelsToUnits();
-
-			final var lMouseX = core.gameCamera().getMouseWorldSpaceX();
-			final var lMouseY = core.gameCamera().getMouseWorldSpaceY();
-
-			final float lRandomWidth = RandomNumbers.random(.5f, 2.f);
-			final float lRandomHeight = RandomNumbers.random(.5f, 1.f);
-
-			final float staticFriction = 0.8f;
-			final float dynamicFriction = 0.3f;
-
-			if (!core.input().keyboard().isKeyDown(GLFW.GLFW_KEY_LEFT_SHIFT)) {
-				RigidBody newBody = null;
-				switch (RandomNumbers.random(0, 2)) {
-				case 0:
-					newBody = RigidBody.createPolygonBody(lRandomWidth, lRandomHeight, 5.f, .5f, staticFriction, dynamicFriction, false);
-					break;
-				default:
-					newBody = RigidBody.createCircleBody(/* lRandomRadius */ 1.f, 5.77f, .5f, staticFriction, dynamicFriction, false);
-					break;
-				}
-
-				newBody.moveTo(lMouseX * lPixelsToUnits, lMouseY * lPixelsToUnits);
-				world.addBody(newBody);
-			}
-		}
+//		if (core.input().mouse().isMouseLeftButtonDown()) {
+//			final var lPixelsToUnits = ConstantsPhysics.PixelsToUnits();
+//
+//			final var lMouseX = core.gameCamera().getMouseWorldSpaceX();
+//			final var lMouseY = core.gameCamera().getMouseWorldSpaceY();
+//
+//			final float lRandomWidth = RandomNumbers.random(.5f, 2.f);
+//			final float lRandomHeight = RandomNumbers.random(.5f, 1.f);
+//
+//			final float staticFriction = 0.8f;
+//			final float dynamicFriction = 0.3f;
+//
+//			if (!core.input().keyboard().isKeyDown(GLFW.GLFW_KEY_LEFT_SHIFT)) {
+//				RigidBody newBody = null;
+//				switch (RandomNumbers.random(0, 2)) {
+//				case 0:
+//					newBody = RigidBody.createPolygonBody(lRandomWidth, lRandomHeight, 5.f, .5f, staticFriction, dynamicFriction, false);
+//					break;
+//				default:
+//					newBody = RigidBody.createCircleBody(/* lRandomRadius */ 1.f, 5.77f, .5f, staticFriction, dynamicFriction, false);
+//					break;
+//				}
+//
+//				newBody.moveTo(lMouseX * lPixelsToUnits, lMouseY * lPixelsToUnits);
+//				world.addBody(newBody);
+//			}
+//		}
 
 		final float lSpeed = 2400.f;
 		if (mPlayerBody != null) {
@@ -168,6 +185,11 @@ public class TestSatScreen extends BaseGameScreen {
 	@Override
 	public void update(LintfordCore core, boolean otherScreenHasFocus, boolean coveredByOtherScreen) {
 		super.update(core, otherScreenHasFocus, coveredByOtherScreen);
+		if (otherScreenHasFocus == false && DEBUG_WRITE_MODE == false) {
+			if (mGameInputController.isPlaybackFinished()) {
+				mScreenManager.exitGame();
+			}
+		}
 
 		if (simulationOn) {
 			world.stepWorld((float) core.gameTime().elapsedTimeMilli() * 0.001f, NUM_PHYSICS_ITERATIONS);
@@ -182,6 +204,12 @@ public class TestSatScreen extends BaseGameScreen {
 
 		super.draw(core);
 
+		final var lHudBb = core.HUD().boundingRectangle();
+		final var lFontUnit = mRendererManager.uiTextFont();
+		lFontUnit.begin(core.HUD());
+		lFontUnit.drawText("h_frame: " + inputCounter().getCounter(), lHudBb.left() + 5.f, lHudBb.top() + 5.f, -0.01f, 1.f);
+		lFontUnit.end();
+
 		core.gameCamera().setZoomFactor(0.7f);
 	}
 
@@ -190,7 +218,7 @@ public class TestSatScreen extends BaseGameScreen {
 	// ---------------------------------------------
 
 	private void clearBodiesBelowGround(LintfordCore core) {
-		final var lHudBb = core.HUD().boundingRectangle();
+		final var lHudBb = mGameCamera.boundingRectangle();
 		final var lPixelsToUnits = ConstantsPhysics.PixelsToUnits();
 		final var lDeathHeight = lHudBb.height() / 2 * lPixelsToUnits;
 
@@ -204,15 +232,13 @@ public class TestSatScreen extends BaseGameScreen {
 	}
 
 	private void createStaticWorld() {
-		final var lBoundingBox = mGameCamera.boundingRectangle();
-
 		final var lPixelsToUnits = ConstantsPhysics.PixelsToUnits();
 
 		final var staticFriction = 0.8f;
 		final var dynamicFriction = 0.5f;
 
-		final var lGroundBox = RigidBody.createPolygonBody(lBoundingBox.width() * .5f * lPixelsToUnits, 10 * lPixelsToUnits, 1.f, .5f, .6f, .4f, true);
-		lGroundBox.moveTo(0, (lBoundingBox.height() / 2.f - 190) * lPixelsToUnits);
+		final var lGroundBox = RigidBody.createPolygonBody(1200 * .5f * lPixelsToUnits, 10 * lPixelsToUnits, 1.f, .5f, .6f, .4f, true);
+		lGroundBox.moveTo(0, 370.f * lPixelsToUnits);
 
 		final var lLedge0 = RigidBody.createPolygonBody(200.f * lPixelsToUnits, 10.f * lPixelsToUnits, 1.f, .5f, staticFriction, dynamicFriction, true);
 		lLedge0.moveTo(-250.f * lPixelsToUnits, -250.f * lPixelsToUnits);
@@ -230,29 +256,31 @@ public class TestSatScreen extends BaseGameScreen {
 
 	@Override
 	protected void createControllers(ControllerManager controllerManager) {
+		mGameInputController = new GameInputController(controllerManager, mGameInputBufferManager, inputCounter(), DEBUG_WRITE_MODE, entityGroupUid());
+
 		mDebugCameraController = new DebugCameraController(controllerManager, mGameCamera, entityGroupUid());
 	}
 
 	@Override
 	protected void initializeControllers(LintfordCore core) {
+
+		mGameInputController.initialize(core);
+
 		mDebugCameraController.initialize(core);
 	}
 
 	@Override
 	protected void createRenderers(LintfordCore core) {
-		// mPhysicsDebugGridRenderer = new PhysicsDebugGridRenderer(mRendererManager, world, entityGroupUid());
 		mPhysicsDebugRenderer = new DebugPhysicsRenderer(mRendererManager, world, entityGroupUid());
 	}
 
 	@Override
 	protected void initializeRenderers(LintfordCore core) {
-		// mPhysicsDebugGridRenderer.initialize(core);
 		mPhysicsDebugRenderer.initialize(core);
 	}
 
 	@Override
 	protected void loadRendererResources(ResourceManager resourceManager) {
-		// mPhysicsDebugGridRenderer.loadResources(resourceManager);
 		mPhysicsDebugRenderer.loadResources(resourceManager);
 	}
 

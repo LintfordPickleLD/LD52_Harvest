@@ -39,6 +39,6 @@ public class ConstantsGame {
 
 	public static final boolean WRAP_OBJECTS_AROUND_SCREEN_EDGE = false;
 	public static final boolean SKIP_MAIN_MENU_ON_STARTUP = false;
-	public static final boolean LAUNCH_SAT_TEST_SCREEN_ON_STARTUP = false;
+	public static final boolean LAUNCH_SAT_TEST_SCREEN_ON_STARTUP = true;
 	public static final boolean ESCAPE_RESTART_MAIN_SCENE = false;
 }

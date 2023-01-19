@@ -205,11 +205,20 @@ public class GameScreen extends BaseGameScreen {
 	private void createWorldPlatforms() {
 		createPlatform(1748, 574, 160, 48, PlatformType.Warehouse);
 
+		// 10
 		createPlatform(852, 318, 160, 48, PlatformType.Farm);
+		
+		// 15
 		createPlatform(586, 1271, 160, 48, PlatformType.Farm);
+		
+		// 14
 		createPlatform(142, 1319, 160, 48, PlatformType.Farm);
+		
+		// 22
 		createPlatform(1343, 877, 160, 48, PlatformType.Farm);
-		createPlatform(-32, 1200, 160, 48, PlatformType.Farm);
+
+		// 13
+		createPlatform(12, 181, 160, 48, PlatformType.Farm);
 
 		createPlatform(529, 1813, 160, 48, PlatformType.Water);
 		createPlatform(1470, 1820, 160, 48, PlatformType.Water);

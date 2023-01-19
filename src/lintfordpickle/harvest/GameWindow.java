@@ -1,11 +1,15 @@
 package lintfordpickle.harvest;
 
+import org.lwjgl.glfw.GLFW;
+
+import lintfordpickle.harvest.data.input.SatInputFrame;
 import lintfordpickle.harvest.screens.MainMenu;
 import lintfordpickle.harvest.screens.MenuBackgroundScreen;
 import lintfordpickle.harvest.screens.TestSatScreen;
 import lintfordpickle.harvest.screens.game.GameScreen;
 import net.lintford.library.GameInfo;
 import net.lintford.library.core.debug.Debug.DebugLogLevel;
+import net.lintford.library.core.input.KeyEventActionManager;
 
 public class GameWindow extends BaseHarvestApp {
 
@@ -88,7 +92,7 @@ public class GameWindow extends BaseHarvestApp {
 			mScreenManager.initialize();
 			return;
 		}
-		
+
 		if (ConstantsGame.SKIP_MAIN_MENU_ON_STARTUP) {
 			mScreenManager.addScreen(new GameScreen(screenManager(), true));
 
@@ -99,5 +103,19 @@ public class GameWindow extends BaseHarvestApp {
 		mScreenManager.addScreen(new MenuBackgroundScreen(mScreenManager));
 		mScreenManager.addScreen(new MainMenu(mScreenManager));
 		mScreenManager.initialize();
+	}
+
+	@Override
+	protected void onInitializeInputActions(KeyEventActionManager eventActionManager) {
+
+		// TODO: This needs to be specific to the windows (and not the game)
+
+		eventActionManager.registerNewEventAction(SatInputFrame.INPUT_ACTION_EVENT_SPACE_DOWN, GLFW.GLFW_KEY_SPACE);
+		eventActionManager.registerNewEventAction(SatInputFrame.INPUT_ACTION_EVENT_LEFT_DOWN, GLFW.GLFW_KEY_A);
+		eventActionManager.registerNewEventAction(SatInputFrame.INPUT_ACTION_EVENT_RIGHT_DOWN, GLFW.GLFW_KEY_D);
+		eventActionManager.registerNewEventAction(SatInputFrame.INPUT_ACTION_EVENT_UP_DOWN, GLFW.GLFW_KEY_W);
+		eventActionManager.registerNewEventAction(SatInputFrame.INPUT_ACTION_EVENT_DOWN_DOWN, GLFW.GLFW_KEY_S);
+
+		super.onInitializeInputActions(eventActionManager);
 	}
 }

@@ -1,6 +1,7 @@
 package lintfordpickle.harvest.data.ships;
 
 import lintfordpickle.harvest.data.CollisionTypes;
+import lintfordpickle.harvest.data.input.ShipInput;
 import lintfordpickle.harvest.renderers.trails.TrailRendererComponent;
 import net.lintford.library.ConstantsPhysics;
 import net.lintford.library.core.LintfordCore;
