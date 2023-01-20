@@ -5,8 +5,8 @@ import org.lwjgl.opengl.GL11;
 
 import lintfordpickle.harvest.controllers.DebugCameraController;
 import lintfordpickle.harvest.controllers.PhysicsCollisionCallback;
-import lintfordpickle.harvest.controllers.input.GameInputController;
-import lintfordpickle.harvest.data.input.GameInputBufferManager;
+import lintfordpickle.harvest.controllers.actionevents.ActionEventController;
+import lintfordpickle.harvest.data.actionevents.ActionEventManager;
 import net.lintford.library.ConstantsPhysics;
 import net.lintford.library.controllers.core.ControllerManager;
 import net.lintford.library.core.LintfordCore;
@@ -30,20 +30,19 @@ public class TestSatScreen extends BaseGameScreen {
 
 	public static final int NUM_PHYSICS_ITERATIONS = 8;
 
+	public static final boolean IS_RECORD_MODE = false;
+	public static final String mRecordFilename = "input_new.lms";
+
 	// ---------------------------------------------
 	// Variables
 	// ---------------------------------------------
 
-	// TODO: still need to formalize this
-	// true means we are playing the game and saving our input
-	// false means we are loading the inputs from a file and watching the playback
-	private static final boolean DEBUG_WRITE_MODE = false;
-
 	private PhysicsWorld world;
 	private RigidBody mPlayerBody;
-	private GameInputBufferManager mGameInputBufferManager;
 
-	private GameInputController mGameInputController;
+	private ActionEventManager mActionEventManager;
+
+	private ActionEventController mActionEventController;
 	private DebugCameraController mDebugCameraController;
 
 	private DebugPhysicsRenderer mPhysicsDebugRenderer;
@@ -57,7 +56,11 @@ public class TestSatScreen extends BaseGameScreen {
 	public TestSatScreen(ScreenManager screenManager) {
 		super(screenManager);
 
-		mGameInputBufferManager = new GameInputBufferManager();
+		mActionEventManager = new ActionEventManager();
+		if (IS_RECORD_MODE)
+			mActionEventManager.setRecordingMode(mRecordFilename);
+		else
+			mActionEventManager.setPlaybackMode(mRecordFilename);
 
 		setupPhysicsWorld();
 	}
@@ -95,12 +98,6 @@ public class TestSatScreen extends BaseGameScreen {
 	}
 
 	@Override
-	public void loadResources(ResourceManager resourceManager) {
-		super.loadResources(resourceManager);
-
-	}
-
-	@Override
 	public void unloadResources() {
 		super.unloadResources();
 
@@ -112,7 +109,7 @@ public class TestSatScreen extends BaseGameScreen {
 		super.handleInput(core);
 
 		if (core.input().keyboard().isKeyDownTimed(GLFW.GLFW_KEY_ESCAPE)) {
-			mGameInputController.finishWritingToFile();
+			mActionEventController.onExitingGame();
 
 			if (core.input().keyboard().isKeyDown(GLFW.GLFW_KEY_LEFT_SHIFT)) {
 				screenManager().createLoadingScreen(new LoadingScreen(screenManager(), false, new MenuBackgroundScreen(mScreenManager), new MainMenu(screenManager())));
@@ -123,40 +120,28 @@ public class TestSatScreen extends BaseGameScreen {
 			return;
 		}
 
-		final var lInputFrame = mGameInputController.currentInput();
+		final var lInputFrame = mActionEventController.currentInput();
 
 		if (lInputFrame.isSpaceDown) {
 			simulationOn = !simulationOn;
-			System.out.println("SPACE DOWN : RUNNING SIMULATION " + simulationOn);
 		}
 
-//		if (core.input().mouse().isMouseLeftButtonDown()) {
-//			final var lPixelsToUnits = ConstantsPhysics.PixelsToUnits();
-//
-//			final var lMouseX = core.gameCamera().getMouseWorldSpaceX();
-//			final var lMouseY = core.gameCamera().getMouseWorldSpaceY();
-//
-//			final float lRandomWidth = RandomNumbers.random(.5f, 2.f);
-//			final float lRandomHeight = RandomNumbers.random(.5f, 1.f);
-//
-//			final float staticFriction = 0.8f;
-//			final float dynamicFriction = 0.3f;
-//
-//			if (!core.input().keyboard().isKeyDown(GLFW.GLFW_KEY_LEFT_SHIFT)) {
-//				RigidBody newBody = null;
-//				switch (RandomNumbers.random(0, 2)) {
-//				case 0:
-//					newBody = RigidBody.createPolygonBody(lRandomWidth, lRandomHeight, 5.f, .5f, staticFriction, dynamicFriction, false);
-//					break;
-//				default:
-//					newBody = RigidBody.createCircleBody(/* lRandomRadius */ 1.f, 5.77f, .5f, staticFriction, dynamicFriction, false);
-//					break;
-//				}
-//
-//				newBody.moveTo(lMouseX * lPixelsToUnits, lMouseY * lPixelsToUnits);
-//				world.addBody(newBody);
-//			}
-//		}
+		if (lInputFrame.isLeftMouseDownTimed) {
+			final var lPixelsToUnits = ConstantsPhysics.PixelsToUnits();
+
+			final var lMouseX = lInputFrame.mouseX;
+			final var lMouseY = lInputFrame.mouseY;
+
+			final float staticFriction = 0.8f;
+			final float dynamicFriction = 0.3f;
+
+			if (!core.input().keyboard().isKeyDown(GLFW.GLFW_KEY_LEFT_SHIFT)) {
+				final var newBody = RigidBody.createCircleBody(/* lRandomRadius */ 1.f, 5.77f, .5f, staticFriction, dynamicFriction, false);
+
+				newBody.moveTo(lMouseX * lPixelsToUnits, lMouseY * lPixelsToUnits);
+				world.addBody(newBody);
+			}
+		}
 
 		final float lSpeed = 2400.f;
 		if (mPlayerBody != null) {
@@ -185,8 +170,8 @@ public class TestSatScreen extends BaseGameScreen {
 	@Override
 	public void update(LintfordCore core, boolean otherScreenHasFocus, boolean coveredByOtherScreen) {
 		super.update(core, otherScreenHasFocus, coveredByOtherScreen);
-		if (otherScreenHasFocus == false && DEBUG_WRITE_MODE == false) {
-			if (mGameInputController.isPlaybackFinished()) {
+		if (otherScreenHasFocus == false) {
+			if (mActionEventManager.endOfFileReached()) {
 				mScreenManager.exitGame();
 			}
 		}
@@ -256,15 +241,12 @@ public class TestSatScreen extends BaseGameScreen {
 
 	@Override
 	protected void createControllers(ControllerManager controllerManager) {
-		mGameInputController = new GameInputController(controllerManager, mGameInputBufferManager, inputCounter(), DEBUG_WRITE_MODE, entityGroupUid());
-
 		mDebugCameraController = new DebugCameraController(controllerManager, mGameCamera, entityGroupUid());
+		mActionEventController = new ActionEventController(controllerManager, mActionEventManager, inputCounter(), entityGroupUid());
 	}
 
 	@Override
 	protected void initializeControllers(LintfordCore core) {
-
-		mGameInputController.initialize(core);
 
 		mDebugCameraController.initialize(core);
 	}

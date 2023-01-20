@@ -2,7 +2,7 @@ package lintfordpickle.harvest;
 
 import org.lwjgl.glfw.GLFW;
 
-import lintfordpickle.harvest.data.input.SatInputFrame;
+import lintfordpickle.harvest.data.actionevents.SatActionEventMap;
 import lintfordpickle.harvest.screens.MainMenu;
 import lintfordpickle.harvest.screens.MenuBackgroundScreen;
 import lintfordpickle.harvest.screens.TestSatScreen;
@@ -110,11 +110,11 @@ public class GameWindow extends BaseHarvestApp {
 
 		// TODO: This needs to be specific to the windows (and not the game)
 
-		eventActionManager.registerNewEventAction(SatInputFrame.INPUT_ACTION_EVENT_SPACE_DOWN, GLFW.GLFW_KEY_SPACE);
-		eventActionManager.registerNewEventAction(SatInputFrame.INPUT_ACTION_EVENT_LEFT_DOWN, GLFW.GLFW_KEY_A);
-		eventActionManager.registerNewEventAction(SatInputFrame.INPUT_ACTION_EVENT_RIGHT_DOWN, GLFW.GLFW_KEY_D);
-		eventActionManager.registerNewEventAction(SatInputFrame.INPUT_ACTION_EVENT_UP_DOWN, GLFW.GLFW_KEY_W);
-		eventActionManager.registerNewEventAction(SatInputFrame.INPUT_ACTION_EVENT_DOWN_DOWN, GLFW.GLFW_KEY_S);
+		eventActionManager.registerNewEventAction(SatActionEventMap.INPUT_ACTION_EVENT_SPACE_DOWN, GLFW.GLFW_KEY_SPACE);
+		eventActionManager.registerNewEventAction(SatActionEventMap.INPUT_ACTION_EVENT_LEFT_DOWN, GLFW.GLFW_KEY_A);
+		eventActionManager.registerNewEventAction(SatActionEventMap.INPUT_ACTION_EVENT_RIGHT_DOWN, GLFW.GLFW_KEY_D);
+		eventActionManager.registerNewEventAction(SatActionEventMap.INPUT_ACTION_EVENT_UP_DOWN, GLFW.GLFW_KEY_W);
+		eventActionManager.registerNewEventAction(SatActionEventMap.INPUT_ACTION_EVENT_DOWN_DOWN, GLFW.GLFW_KEY_S);
 
 		super.onInitializeInputActions(eventActionManager);
 	}
