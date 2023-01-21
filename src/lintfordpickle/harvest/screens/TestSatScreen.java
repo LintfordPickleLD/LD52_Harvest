@@ -5,8 +5,7 @@ import org.lwjgl.opengl.GL11;
 
 import lintfordpickle.harvest.controllers.DebugCameraController;
 import lintfordpickle.harvest.controllers.PhysicsCollisionCallback;
-import lintfordpickle.harvest.controllers.actionevents.ActionEventController;
-import lintfordpickle.harvest.data.actionevents.ActionEventManager;
+import lintfordpickle.harvest.controllers.actionevents.GameActionEventController;
 import net.lintford.library.ConstantsPhysics;
 import net.lintford.library.controllers.core.ControllerManager;
 import net.lintford.library.core.LintfordCore;
@@ -30,9 +29,6 @@ public class TestSatScreen extends BaseGameScreen {
 
 	public static final int NUM_PHYSICS_ITERATIONS = 8;
 
-	public static final boolean IS_RECORD_MODE = false;
-	public static final String mRecordFilename = "input_new.lms";
-
 	// ---------------------------------------------
 	// Variables
 	// ---------------------------------------------
@@ -40,9 +36,7 @@ public class TestSatScreen extends BaseGameScreen {
 	private PhysicsWorld world;
 	private RigidBody mPlayerBody;
 
-	private ActionEventManager mActionEventManager;
-
-	private ActionEventController mActionEventController;
+	private GameActionEventController mActionEventController;
 	private DebugCameraController mDebugCameraController;
 
 	private DebugPhysicsRenderer mPhysicsDebugRenderer;
@@ -55,12 +49,6 @@ public class TestSatScreen extends BaseGameScreen {
 
 	public TestSatScreen(ScreenManager screenManager) {
 		super(screenManager);
-
-		mActionEventManager = new ActionEventManager();
-		if (IS_RECORD_MODE)
-			mActionEventManager.setRecordingMode(mRecordFilename);
-		else
-			mActionEventManager.setPlaybackMode(mRecordFilename);
 
 		setupPhysicsWorld();
 	}
@@ -171,7 +159,7 @@ public class TestSatScreen extends BaseGameScreen {
 	public void update(LintfordCore core, boolean otherScreenHasFocus, boolean coveredByOtherScreen) {
 		super.update(core, otherScreenHasFocus, coveredByOtherScreen);
 		if (otherScreenHasFocus == false) {
-			if (mActionEventManager.endOfFileReached()) {
+			if (mActionEventController.reachedLastFrame()) {
 				mScreenManager.exitGame();
 			}
 		}
@@ -242,7 +230,7 @@ public class TestSatScreen extends BaseGameScreen {
 	@Override
 	protected void createControllers(ControllerManager controllerManager) {
 		mDebugCameraController = new DebugCameraController(controllerManager, mGameCamera, entityGroupUid());
-		mActionEventController = new ActionEventController(controllerManager, mActionEventManager, inputCounter(), entityGroupUid());
+		mActionEventController = new GameActionEventController(controllerManager, inputCounter(), entityGroupUid());
 	}
 
 	@Override

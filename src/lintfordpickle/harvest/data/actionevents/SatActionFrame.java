@@ -1,6 +1,8 @@
 package lintfordpickle.harvest.data.actionevents;
 
-public class SatActionFrame {
+import net.lintford.library.core.actionevents.IActionFrame;
+
+public class SatActionFrame implements IActionFrame {
 
 	// ---------------------------------------------
 	// Constants
@@ -13,7 +15,7 @@ public class SatActionFrame {
 	// ---------------------------------------------
 
 	// control
-	public short frameNumber;
+	public int frameNumber;
 	public boolean markEndOfGame;
 	public boolean _isKeyboardChanged;
 	public boolean _isMouseChanged;
@@ -38,10 +40,27 @@ public class SatActionFrame {
 	public boolean isRightDown;
 
 	// ---------------------------------------------
+	// Properties
+	// ---------------------------------------------
+
+	@Override
+	public int tickNumber() {
+		return frameNumber;
+	}
+
+	@Override
+	public void tickNumber(int tickNumber) {
+		frameNumber = tickNumber;
+	}
+
+	// ---------------------------------------------
 	// Methods
 	// ---------------------------------------------
 
-	public void copy(SatActionFrame cpyFrm) {
+	@Override
+	public void copy(IActionFrame other) {
+		final var cpyFrm = (SatActionFrame) other;
+
 		isLeftMouseDown = cpyFrm.isLeftMouseDown;
 		isLeftMouseDownTimed = cpyFrm.isLeftMouseDownTimed;
 		isMiddleMouseDown = cpyFrm.isMiddleMouseDown;
@@ -64,11 +83,12 @@ public class SatActionFrame {
 		_isKeyboardChanged = false;
 		_isMouseChanged = false;
 		_isGamepadChanged = false;
-
 	}
 
 	// @formatter:off
-	public void setChangeFlags(SatActionFrame last) {
+	@Override
+	public void setChangeFlags(IActionFrame other) {
+		final var last = (SatActionFrame) other;
 		final var cur = this;
 		
 		// for the keyboard, we need only record the changes in the key presses
@@ -84,30 +104,12 @@ public class SatActionFrame {
 		// any one of these events requires we save the frame (for mouse position)
 		_isMouseChanged = cur.isLeftMouseDown || cur.isLeftMouseDownTimed || cur.isMiddleMouseDown || cur.isRightMouseDown || cur.isRightMouseDownTimed;
 		
-		if(_isKeyboardChanged) {
-			System.out.println("Keyboard change detected");
-			
-			if(cur.isSpaceDown != last.isSpaceDown) {
-				System.out.println("   space: " + (cur.isSpaceDown ? "down" : "up"));
-			}
-			
-		}
-		
-		if(_isMouseChanged) {
-			System.out.println("Mouse change detected");
-			
-			if(cur.isLeftMouseDown) {
-				System.out.println("   left mouse: " + (cur.isLeftMouseDown ? "down" : "up"));
-			}
-		}
-		
 		_isGamepadChanged = false;
 		
 	}
 	// @formatter:on
 
 	public void reset() {
-
 		markEndOfGame = false;
 		frameNumber = 0;
 		_isKeyboardChanged = false;
@@ -130,5 +132,10 @@ public class SatActionFrame {
 		mouseX = 0;
 		mouseY = 0;
 
+	}
+
+	@Override
+	public boolean hasChanges() {
+		return _isKeyboardChanged || _isMouseChanged || _isGamepadChanged;
 	}
 }
