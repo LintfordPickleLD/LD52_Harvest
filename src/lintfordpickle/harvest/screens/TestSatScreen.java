@@ -5,7 +5,7 @@ import org.lwjgl.opengl.GL11;
 
 import lintfordpickle.harvest.controllers.DebugCameraController;
 import lintfordpickle.harvest.controllers.PhysicsCollisionCallback;
-import lintfordpickle.harvest.controllers.actionevents.GameActionEventController;
+import lintfordpickle.harvest.controllers.actionevents.SatActionEventController;
 import net.lintford.library.ConstantsPhysics;
 import net.lintford.library.controllers.core.ControllerManager;
 import net.lintford.library.core.LintfordCore;
@@ -36,12 +36,13 @@ public class TestSatScreen extends BaseGameScreen {
 	private PhysicsWorld world;
 	private RigidBody mPlayerBody;
 
-	private GameActionEventController mActionEventController;
+	private SatActionEventController mActionEventController;
 	private DebugCameraController mDebugCameraController;
 
 	private DebugPhysicsRenderer mPhysicsDebugRenderer;
 
 	private boolean simulationOn;
+	private int mActiveActionPlayeruid; 
 
 	// ---------------------------------------------
 	// Constructors
@@ -108,7 +109,8 @@ public class TestSatScreen extends BaseGameScreen {
 			return;
 		}
 
-		final var lInputFrame = mActionEventController.currentInput();
+		final var lActionEventPlayer = mActionEventController.actionEventPlayer(mActiveActionPlayeruid);
+		final var lInputFrame = lActionEventPlayer.currentActionEvents;
 
 		if (lInputFrame.isSpaceDown) {
 			simulationOn = !simulationOn;
@@ -158,12 +160,6 @@ public class TestSatScreen extends BaseGameScreen {
 	@Override
 	public void update(LintfordCore core, boolean otherScreenHasFocus, boolean coveredByOtherScreen) {
 		super.update(core, otherScreenHasFocus, coveredByOtherScreen);
-		if (otherScreenHasFocus == false) {
-			if (mActionEventController.reachedLastFrame()) {
-				mScreenManager.exitGame();
-			}
-		}
-
 		if (simulationOn) {
 			world.stepWorld((float) core.gameTime().elapsedTimeMilli() * 0.001f, NUM_PHYSICS_ITERATIONS);
 			clearBodiesBelowGround(core);
@@ -230,7 +226,11 @@ public class TestSatScreen extends BaseGameScreen {
 	@Override
 	protected void createControllers(ControllerManager controllerManager) {
 		mDebugCameraController = new DebugCameraController(controllerManager, mGameCamera, entityGroupUid());
-		mActionEventController = new GameActionEventController(controllerManager, inputCounter(), entityGroupUid());
+		mActionEventController = new SatActionEventController(controllerManager, inputCounter(), entityGroupUid());
+
+		// mActionEventController.setActionRecorder("input_new.lms");
+		mActiveActionPlayeruid = mActionEventController.setActionPlayback("input_new.lms");
+
 	}
 
 	@Override

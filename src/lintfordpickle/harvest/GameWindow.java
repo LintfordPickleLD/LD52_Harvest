@@ -94,7 +94,7 @@ public class GameWindow extends BaseHarvestApp {
 		}
 
 		if (ConstantsGame.SKIP_MAIN_MENU_ON_STARTUP) {
-			mScreenManager.addScreen(new GameScreen(screenManager(), true));
+			mScreenManager.addScreen(new GameScreen(screenManager(), "player.lmp", "ghost.lmp", true));
 
 			mScreenManager.initialize();
 			return;

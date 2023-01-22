@@ -61,16 +61,15 @@ public class MainMenu extends MenuScreen {
 	@Override
 	public void draw(LintfordCore core) {
 		super.draw(core);
-		
-		
+
 		mPaddingTopNormalized = 300f;
 	}
-	
+
 	@Override
 	protected void handleOnClick() {
 		switch (mClickAction.consume()) {
 		case SCREEN_BUTTON_PLAY:
-			final var lLoadingScreen = new LoadingScreen(screenManager(), true, new GameScreen(screenManager(), true));
+			final var lLoadingScreen = new LoadingScreen(screenManager(), true, new GameScreen(screenManager(), "player.lmp", "ghost.lmp", true));
 			screenManager().createLoadingScreen(new LoadingScreen(screenManager(), true, lLoadingScreen));
 			break;
 

@@ -29,7 +29,6 @@ public class SatActionEventMap {
 	public static final int BYTEMASK_MOUSE_RIGHT_TIMED  = 0b00010000;
 	
 
-	//  TOOD: These no longer belong in this class since the class rename
 	// Input actions are bindable
 	public static final int INPUT_ACTION_EVENT_SPACE_DOWN = 0;
 	public static final int INPUT_ACTION_EVENT_LEFT_DOWN  = 1;

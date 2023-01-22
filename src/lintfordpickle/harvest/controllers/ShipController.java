@@ -1,7 +1,6 @@
 package lintfordpickle.harvest.controllers;
 
-import org.lwjgl.glfw.GLFW;
-
+import lintfordpickle.harvest.controllers.actionevents.GameActionEventController;
 import lintfordpickle.harvest.data.ships.Ship;
 import lintfordpickle.harvest.data.ships.ShipManager;
 import lintfordpickle.harvest.data.ships.ShipPhysicsData;
@@ -27,6 +26,7 @@ public class ShipController extends BaseController {
 	// Variables
 	// ---------------------------------------------
 
+	private GameActionEventController mActionEventController;
 	private GameStateController mGameStateController;
 	private ShipManager mShipManager;
 
@@ -69,6 +69,7 @@ public class ShipController extends BaseController {
 
 		final var lControllerManager = core.controllerManager();
 		mGameStateController = (GameStateController) lControllerManager.getControllerByNameRequired(GameStateController.CONTROLLER_NAME, entityGroupUid());
+		mActionEventController = (GameActionEventController) lControllerManager.getControllerByNameRequired(GameActionEventController.CONTROLLER_NAME, entityGroupUid());
 
 	}
 
@@ -80,11 +81,11 @@ public class ShipController extends BaseController {
 	@Override
 	public boolean handleInput(LintfordCore core) {
 		final var lPlayerShip = mShipManager.playerShip();
-		final var lKeyboard = core.input().keyboard();
+		final var lInputFrame = mActionEventController.actionEventPlayer(0);
 
-		lPlayerShip.inputs.isLeftThrottle = lKeyboard.isKeyDown(GLFW.GLFW_KEY_LEFT) || lKeyboard.isKeyDown(GLFW.GLFW_KEY_A);
-		lPlayerShip.inputs.isRightThrottle = lKeyboard.isKeyDown(GLFW.GLFW_KEY_RIGHT) || lKeyboard.isKeyDown(GLFW.GLFW_KEY_D);
-		lPlayerShip.inputs.isUpThrottle = lKeyboard.isKeyDown(GLFW.GLFW_KEY_UP) || lKeyboard.isKeyDown(GLFW.GLFW_KEY_W);
+		lPlayerShip.inputs.isLeftThrottle = lInputFrame.currentActionEvents.isThrottleLeftDown;
+		lPlayerShip.inputs.isRightThrottle = lInputFrame.currentActionEvents.isThrottleRightDown;
+		lPlayerShip.inputs.isUpThrottle = lInputFrame.currentActionEvents.isThrottleDown;
 
 		return super.handleInput(core);
 	}

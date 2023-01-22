@@ -9,6 +9,7 @@ import lintfordpickle.harvest.controllers.GameStateController;
 import lintfordpickle.harvest.controllers.PlatformsController;
 import lintfordpickle.harvest.controllers.SceneController;
 import lintfordpickle.harvest.controllers.ShipController;
+import lintfordpickle.harvest.controllers.actionevents.GameActionEventController;
 import lintfordpickle.harvest.data.CollisionHandler;
 import lintfordpickle.harvest.data.game.GameState;
 import lintfordpickle.harvest.data.platforms.Platform;
@@ -67,6 +68,7 @@ public class GameScreen extends BaseGameScreen {
 	private PlatformManager mPlatformManager;
 
 	// Controllers
+	private GameActionEventController mGameActionEventController;
 	private CameraShipChaseController mCameraShipChaseController;
 	private ShipController mShipController;
 	private SceneController mSceneController;
@@ -85,12 +87,18 @@ public class GameScreen extends BaseGameScreen {
 	private Texture mHelpTexture;
 	private boolean mShowHelpScreen;
 
+	private String mPlayerActionFile;
+	private String mGhostActionFile;
+
 	// ---------------------------------------------
 	// Constructors
 	// ---------------------------------------------
 
-	public GameScreen(ScreenManager screenManager, boolean showHelp) {
+	public GameScreen(ScreenManager screenManager, String playerSaveFile, String ghostFile, boolean showHelp) {
 		super(screenManager);
+
+		mPlayerActionFile = playerSaveFile;
+		mGhostActionFile = ghostFile;
 
 		mShowHelpScreen = showHelp;
 		ConstantsPhysics.setPhysicsWorldConstants(64.f);
@@ -207,13 +215,13 @@ public class GameScreen extends BaseGameScreen {
 
 		// 10
 		createPlatform(852, 318, 160, 48, PlatformType.Farm);
-		
+
 		// 15
 		createPlatform(586, 1271, 160, 48, PlatformType.Farm);
-		
+
 		// 14
 		createPlatform(142, 1319, 160, 48, PlatformType.Farm);
-		
+
 		// 22
 		createPlatform(1343, 877, 160, 48, PlatformType.Farm);
 
@@ -288,7 +296,7 @@ public class GameScreen extends BaseGameScreen {
 
 		if (core.input().keyboard().isKeyDownTimed(GLFW.GLFW_KEY_ESCAPE)) {
 			if (ConstantsGame.ESCAPE_RESTART_MAIN_SCENE) {
-				final var lLoadingScreen = new LoadingScreen(screenManager(), true, new GameScreen(screenManager(), true));
+				final var lLoadingScreen = new LoadingScreen(screenManager(), true, new GameScreen(screenManager(), "player.lmp", "ghost.lmp", true));
 				screenManager().createLoadingScreen(new LoadingScreen(screenManager(), true, lLoadingScreen));
 				return;
 			}
@@ -309,16 +317,22 @@ public class GameScreen extends BaseGameScreen {
 			if (mGameStateController.isPlayerDead() && mGameStateController.gameState().isGameRunning) {
 				mGameStateController.gameState().isGameRunning = false;
 				screenManager().addScreen(new FinishedScreen(mScreenManager, true, mGameState.foodDelivered));
+
+				mGameActionEventController.onExitingGame();
 			}
 
 			if (mGameStateController.hasPlayerLostThroughLives() && mGameStateController.gameState().isGameRunning) {
 				mGameStateController.gameState().isGameRunning = false;
 				screenManager().addScreen(new FinishedScreen(mScreenManager, true, mGameState.foodDelivered));
+
+				mGameActionEventController.onExitingGame();
 			}
 
 			if (mGameStateController.hasPlayerLostThroughTime() && mGameStateController.gameState().isGameRunning) {
 				mGameStateController.gameState().isGameRunning = false;
 				screenManager().addScreen(new FinishedScreen(mScreenManager, false, mGameState.foodDelivered));
+
+				mGameActionEventController.onExitingGame();
 			}
 		}
 
@@ -360,6 +374,10 @@ public class GameScreen extends BaseGameScreen {
 
 	@Override
 	protected void createControllers(ControllerManager controllerManager) {
+		mGameActionEventController = new GameActionEventController(controllerManager, inputCounter(), entityGroupUid());
+
+		mGameActionEventController.setActionPlayback("input.lmp");
+
 		mCameraShipChaseController = new CameraShipChaseController(controllerManager, mGameCamera, mShipManager.playerShip(), entityGroupUid());
 		mGameStateController = new GameStateController(controllerManager, mGameState, entityGroupUid());
 		mSceneController = new SceneController(controllerManager, mSceneManager, entityGroupUid());
@@ -370,6 +388,7 @@ public class GameScreen extends BaseGameScreen {
 
 	@Override
 	protected void initializeControllers(LintfordCore core) {
+		mGameActionEventController.initialize(core);
 		mCameraShipChaseController.initialize(core);
 		mSceneController.initialize(core);
 		mShipController.initialize(core);
