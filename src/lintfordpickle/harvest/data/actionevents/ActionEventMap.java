@@ -11,11 +11,12 @@ public class ActionEventMap {
 	public static final int BYTEMASK_CONTROL_KEYBOARD     = 0b00000010;
 	public static final int BYTEMASK_CONTROL_MOUSE        = 0b00000100;
 	public static final int BYTEMASK_CONTROL_GAMEPAD      = 0b00001000;
+	public static final int BYTEMASK_CONTROL_PHYSICS_SATE = 0b00010000;
 
-	public static final int BYTEMASK_UP                   = 0b00000001;
-	public static final int BYTEMASK_DOWN                 = 0b00000010;
-	public static final int BYTEMASK_LEFT                 = 0b00000100;
-	public static final int BYTEMASK_RIGHT                = 0b00001000;
+	public static final int BYTEMASK_INPUT_UP             = 0b00000001;
+	public static final int BYTEMASK_INPUT_DOWN           = 0b00000010;
+	public static final int BYTEMASK_INPUT_LEFT           = 0b00000100;
+	public static final int BYTEMASK_INPUT_RIGHT          = 0b00001000;
 		
 	// Input actions are bindable
 	public static final int INPUT_ACTION_EVENT_SPACE_DOWN = 0;

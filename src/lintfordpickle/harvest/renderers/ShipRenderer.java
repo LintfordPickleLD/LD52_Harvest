@@ -82,9 +82,14 @@ public class ShipRenderer extends BaseRenderer {
 	@Override
 	public void draw(LintfordCore core) {
 		final var lShipManager = mShipController.shipManager();
-		final var lPlayerShip = lShipManager.playerShip();
+		final var lShips = lShipManager.ships();
+		final var lNumShips = lShips.size();
+		for (int i = 0; i < lNumShips; i++) {
+			final var lShip = lShips.get(i);
 
-		drawShip(core, lPlayerShip);
+			drawShip(core, lShip);
+		}
+
 	}
 
 	// ---------------------------------------------

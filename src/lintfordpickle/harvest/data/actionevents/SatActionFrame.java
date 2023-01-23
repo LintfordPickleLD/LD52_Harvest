@@ -93,8 +93,8 @@ public class SatActionFrame implements IActionFrame {
 		
 		// for the keyboard, we need only record the changes in the key presses
 		_isKeyboardChanged = 
-				   cur.isLeftShiftDown != last.isLeftShiftDown 
-				|| cur.isSpaceDown != last.isSpaceDown
+				   // cur.isLeftShiftDown != last.isLeftShiftDown 
+				   cur.isSpaceDown != last.isSpaceDown
 				|| cur.isRDown  != last.isRDown
 				|| cur.isUpDown  != last.isUpDown
 				|| cur.isDownDown  != last.isDownDown

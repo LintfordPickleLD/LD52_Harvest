@@ -74,13 +74,16 @@ public class CameraShipChaseController extends BaseController {
 		mVelocity = new Vector2f();
 		mPosition = new Vector2f();
 
-		final var lBody = trackedShip.body();
-		mPosition.x = lBody.x;
-		mPosition.y = lBody.y;
-
 		mGameCamera = camera;
-		mTrackedEntity = trackedShip;
-		mIsTrackingPlayer = true;
+
+		if (trackedShip != null) {
+			mTrackedEntity = trackedShip;
+			final var lBody = trackedShip.body();
+			mPosition.x = lBody.x;
+			mPosition.y = lBody.y;
+			mIsTrackingPlayer = true;
+		}
+
 	}
 
 	// ---------------------------------------------

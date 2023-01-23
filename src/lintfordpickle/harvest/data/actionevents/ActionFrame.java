@@ -27,6 +27,14 @@ public class ActionFrame implements IActionFrame {
 	public boolean isThrottleLeftDown;
 	public boolean isThrottleRightDown;
 
+	// Custom
+	public float positionX;
+	public float positionY;
+	public float velocityX;
+	public float velocityY;
+	public float angle;
+	public float angularV;
+
 	// ---------------------------------------------
 	// Properties
 	// ---------------------------------------------

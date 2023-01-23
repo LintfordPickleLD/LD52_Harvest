@@ -23,7 +23,6 @@ public class CollisionHandler implements ICollisionCallback {
 				lUserData.lastCollisionMagnitude2 = manifold.bodyB.vx * manifold.bodyB.vx + manifold.bodyB.vy * manifold.bodyB.vy;
 			}
 		}
-
 	}
 
 	@Override
@@ -62,6 +61,9 @@ public class CollisionHandler implements ICollisionCallback {
 
 	@Override
 	public void postSolve(ContactManifold manifold) {
+
+		// notify controllers of new state information, if they are registered ??
+		// example: ship collided with dynamic object, and we are saving a time-ghost.
 
 	}
 

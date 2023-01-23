@@ -5,7 +5,6 @@ import java.util.List;
 
 public class ShipManager {
 
-	private Ship mPlayerShip;
 	private final List<Ship> mShips = new ArrayList<>();
 
 	public List<Ship> ships() {
@@ -13,11 +12,7 @@ public class ShipManager {
 	}
 
 	public Ship playerShip() {
-		return mPlayerShip;
-	}
-
-	public void playerShip(Ship newShip) {
-		mPlayerShip = newShip;
+		return mShips.get(0);
 	}
 
 }

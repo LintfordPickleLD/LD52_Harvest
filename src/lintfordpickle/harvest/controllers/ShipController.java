@@ -1,12 +1,16 @@
 package lintfordpickle.harvest.controllers;
 
 import lintfordpickle.harvest.controllers.actionevents.GameActionEventController;
+import lintfordpickle.harvest.data.players.PlayerManager;
 import lintfordpickle.harvest.data.ships.Ship;
 import lintfordpickle.harvest.data.ships.ShipManager;
 import lintfordpickle.harvest.data.ships.ShipPhysicsData;
 import net.lintford.library.controllers.BaseController;
+import net.lintford.library.controllers.actionevents.ActionEventController;
 import net.lintford.library.controllers.core.ControllerManager;
+import net.lintford.library.controllers.core.PhysicsController;
 import net.lintford.library.core.LintfordCore;
+import net.lintford.library.core.geometry.partitioning.GridEntity;
 import net.lintford.library.core.maths.Vector2f;
 
 public class ShipController extends BaseController {
@@ -28,7 +32,12 @@ public class ShipController extends BaseController {
 
 	private GameActionEventController mActionEventController;
 	private GameStateController mGameStateController;
+	private PhysicsController mPhysicsController;
+
+	private PlayerManager mPlayerManager;
 	private ShipManager mShipManager;
+
+	private int mPlayerUid;
 
 	// ---------------------------------------------
 	// Properties
@@ -53,9 +62,10 @@ public class ShipController extends BaseController {
 	// Constructor
 	// ---------------------------------------------
 
-	public ShipController(ControllerManager controllerManager, ShipManager shipManager, int entityGroupID) {
+	public ShipController(ControllerManager controllerManager, ShipManager shipManager, PlayerManager playerManager, int entityGroupID) {
 		super(controllerManager, CONTROLLER_NAME, entityGroupID);
 
+		mPlayerManager = playerManager;
 		mShipManager = shipManager;
 	}
 
@@ -70,7 +80,37 @@ public class ShipController extends BaseController {
 		final var lControllerManager = core.controllerManager();
 		mGameStateController = (GameStateController) lControllerManager.getControllerByNameRequired(GameStateController.CONTROLLER_NAME, entityGroupUid());
 		mActionEventController = (GameActionEventController) lControllerManager.getControllerByNameRequired(GameActionEventController.CONTROLLER_NAME, entityGroupUid());
+		mPhysicsController = (PhysicsController) lControllerManager.getControllerByNameRequired(PhysicsController.CONTROLLER_NAME, entityGroupUid());
+		final var lPhysicsWorld = mPhysicsController.world();
 
+		// loop over the players in the playermanager (player and ghosts), and create an action session for them
+		final int lNumPlayers = mPlayerManager.numActivePlayers();
+		for (int i = 0; i < lNumPlayers; i++) {
+
+			final var lPlayerSession = mPlayerManager.getPlayer(i);
+			switch (lPlayerSession.mode()) {
+			case Normal:
+				lPlayerSession.actionEventUid(ActionEventController.DEFAULT_PLAYER_UID);
+				break;
+			case Playback:
+				lPlayerSession.actionEventUid(mActionEventController.createActionPlayback(lPlayerSession.actionFilename()));
+				break;
+			case Record:
+				lPlayerSession.actionEventUid(mActionEventController.createActionRecorder(lPlayerSession.actionFilename()));
+				break;
+			}
+
+			// Add a ship for this entry to the world
+			final var lShip = new Ship(GridEntity.getNewEntityUid());
+			lShip.isPlayerControlled = i == 0;
+
+			final float lShipPositionX = -1.2f + (i == 0 ? -1 : 1);
+			final float lShipPositionY = 13.1f;
+
+			lShip.body().moveTo(lShipPositionX, lShipPositionY);
+			lPhysicsWorld.addBody(lShip.body());
+			mShipManager.ships().add(lShip);
+		}
 	}
 
 	@Override
@@ -80,12 +120,18 @@ public class ShipController extends BaseController {
 
 	@Override
 	public boolean handleInput(LintfordCore core) {
-		final var lPlayerShip = mShipManager.playerShip();
-		final var lInputFrame = mActionEventController.actionEventPlayer(0);
+		final var lShips = mShipManager.ships();
+		final var lNumShips = lShips.size();
+		for (int i = 0; i < lNumShips; i++) {
+			final var lShip = lShips.get(i);
 
-		lPlayerShip.inputs.isLeftThrottle = lInputFrame.currentActionEvents.isThrottleLeftDown;
-		lPlayerShip.inputs.isRightThrottle = lInputFrame.currentActionEvents.isThrottleRightDown;
-		lPlayerShip.inputs.isUpThrottle = lInputFrame.currentActionEvents.isThrottleDown;
+			// TODO: pretty sure this Uid isn't the correct one (check: ShipController where the playerSession is referenced)
+			final var lInputFrame = mActionEventController.actionEventPlayer(lShip.entityUid);
+
+			lShip.inputs.isLeftThrottle = lInputFrame.currentActionEvents.isThrottleLeftDown;
+			lShip.inputs.isRightThrottle = lInputFrame.currentActionEvents.isThrottleRightDown;
+			lShip.inputs.isUpThrottle = lInputFrame.currentActionEvents.isThrottleDown;
+		}
 
 		return super.handleInput(core);
 	}
@@ -94,13 +140,17 @@ public class ShipController extends BaseController {
 	public void update(LintfordCore core) {
 		super.update(core);
 
-		final var lPlayerShip = mShipManager.playerShip();
-		updateShip(core, lPlayerShip);
+		final var lShips = mShipManager.ships();
+		final var lNumShips = lShips.size();
+		for (int i = 0; i < lNumShips; i++) {
+			final var lShip = lShips.get(i);
 
-		if (lPlayerShip.isDead()) {
-			mGameStateController.setPlayerDied();
+			updateShip(core, lShip);
+
+			if (lShip.isDead()) {
+				// mGameStateController.setPlayerDied();
+			}
 		}
-
 	}
 
 	// ---------------------------------------------

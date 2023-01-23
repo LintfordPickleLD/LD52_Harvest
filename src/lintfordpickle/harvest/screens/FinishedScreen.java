@@ -1,5 +1,6 @@
 package lintfordpickle.harvest.screens;
 
+import lintfordpickle.harvest.data.players.PlayerManager;
 import lintfordpickle.harvest.screens.game.GameScreen;
 import net.lintford.library.core.LintfordCore;
 import net.lintford.library.screenmanager.MenuEntry;
@@ -24,15 +25,19 @@ public class FinishedScreen extends MenuScreen {
 	private boolean diedThroughLives;
 	private int foodAmountDelivered;
 
+	private PlayerManager mPlayerManager;
+
 	// ---------------------------------------------
 	// Constructor
 	// ---------------------------------------------
 
-	public FinishedScreen(ScreenManager screenManager, boolean diedThroughLives, int foodDeliverd) {
+	public FinishedScreen(ScreenManager screenManager, PlayerManager playerManager, boolean diedThroughLives, int foodDeliverd) {
 		super(screenManager, "Game Over");
 
 		this.diedThroughLives = diedThroughLives;
 		this.foodAmountDelivered = foodDeliverd;
+
+		mPlayerManager = playerManager;
 
 		final var lLayout = new ListLayout(this);
 
@@ -61,7 +66,7 @@ public class FinishedScreen extends MenuScreen {
 	protected void handleOnClick() {
 		switch (mClickAction.consume()) {
 		case SCREEN_BUTTON_RESTART:
-			screenManager().createLoadingScreen(new LoadingScreen(screenManager(), false, new GameScreen(screenManager(), "player.lmp", "ghost.lmp", true)));
+			screenManager().createLoadingScreen(new LoadingScreen(screenManager(), false, new GameScreen(screenManager(), mPlayerManager, true)));
 			break;
 
 		case SCREEN_BUTTON_EXIT:

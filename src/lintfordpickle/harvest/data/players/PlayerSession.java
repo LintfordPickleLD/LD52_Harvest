@@ -1,5 +1,7 @@
 package lintfordpickle.harvest.data.players;
 
+import net.lintford.library.core.actionevents.ActionEventManager.PlaybackMode;
+
 public class PlayerSession {
 
 	// ---------------------------------------------
@@ -8,14 +10,35 @@ public class PlayerSession {
 
 	private final PlayerGameContainer mGameContainer = new PlayerGameContainer();
 
-	private int mPlayerNumber;
+	private int mUid;
 
-	private boolean mIsPlayerEnabled;
+	private int mActionEventUid;
+	private String mActionInputFilename;
+
+	private PlaybackMode mPlaybackMode;
+
+	private boolean nIsPlayerControlled;
 	private boolean mCanBeDeactivated;
 
 	// ---------------------------------------------
 	// Properties
 	// ---------------------------------------------
+
+	public PlaybackMode mode() {
+		return mPlaybackMode;
+	}
+
+	public int actionEventUid() {
+		return mActionEventUid;
+	}
+
+	public void actionEventUid(int actionEventUid) {
+		mActionEventUid = actionEventUid;
+	}
+
+	public String actionFilename() {
+		return mActionInputFilename;
+	}
 
 	public boolean canBeDeactivated() {
 		return mCanBeDeactivated;
@@ -25,36 +48,45 @@ public class PlayerSession {
 		return mGameContainer;
 	}
 
-	public int playerNumber() {
-		return mPlayerNumber;
+	public int playerUid() {
+		return mUid;
 	}
 
 	public boolean isPlayerEnabled() {
-		return mIsPlayerEnabled;
+		return nIsPlayerControlled;
 	}
 
 	// ---------------------------------------------
 	// Constructor
 	// ---------------------------------------------
 
-	public PlayerSession(int playerNumber, boolean canBeDeactivated) {
-		mCanBeDeactivated = canBeDeactivated;
-		mIsPlayerEnabled = !canBeDeactivated;
-		mPlayerNumber = playerNumber;
+	public PlayerSession(int uid) {
+		nIsPlayerControlled = true;
+		mPlaybackMode = PlaybackMode.Normal;
 	}
 
 	// ---------------------------------------------
 	// Methods
 	// ---------------------------------------------
 
+	public void setPlayback(String filename) {
+		mPlaybackMode = PlaybackMode.Playback;
+		mActionInputFilename = filename;
+	}
+
+	public void setRecorder(String filename) {
+		mPlaybackMode = PlaybackMode.Record;
+		mActionInputFilename = filename;
+	}
+
 	public void enablePlayer(boolean enable) {
 		if (enable) {
-			mIsPlayerEnabled = true;
+			nIsPlayerControlled = true;
 
 			return;
 		}
 
-		mIsPlayerEnabled = false;
+		nIsPlayerControlled = false;
 
 	}
 
@@ -62,7 +94,7 @@ public class PlayerSession {
 		mGameContainer.position.x = x;
 		mGameContainer.position.y = y;
 
-		mIsPlayerEnabled = true;
+		nIsPlayerControlled = true;
 	}
 
 	public void reset() {

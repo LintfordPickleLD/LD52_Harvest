@@ -1,5 +1,6 @@
 package lintfordpickle.harvest.screens;
 
+import lintfordpickle.harvest.data.players.PlayerManager;
 import lintfordpickle.harvest.screens.game.GameScreen;
 import net.lintford.library.core.LintfordCore;
 import net.lintford.library.screenmanager.MenuEntry;
@@ -69,7 +70,12 @@ public class MainMenu extends MenuScreen {
 	protected void handleOnClick() {
 		switch (mClickAction.consume()) {
 		case SCREEN_BUTTON_PLAY:
-			final var lLoadingScreen = new LoadingScreen(screenManager(), true, new GameScreen(screenManager(), "player.lmp", "ghost.lmp", true));
+
+			final var lPlayerManager = new PlayerManager();
+			final var lGhostPlayer = lPlayerManager.addNewPlayer();
+			lGhostPlayer.setPlayback("ghost.lmp");
+
+			final var lLoadingScreen = new LoadingScreen(screenManager(), true, new GameScreen(screenManager(), lPlayerManager, true));
 			screenManager().createLoadingScreen(new LoadingScreen(screenManager(), true, lLoadingScreen));
 			break;
 

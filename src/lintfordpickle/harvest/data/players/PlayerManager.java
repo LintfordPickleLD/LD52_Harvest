@@ -1,5 +1,8 @@
 package lintfordpickle.harvest.data.players;
 
+import java.util.ArrayList;
+import java.util.List;
+
 public class PlayerManager {
 
 	// ---------------------------------------------
@@ -12,19 +15,23 @@ public class PlayerManager {
 	// Variables
 	// ---------------------------------------------
 
-	private final PlayerSession[] mPlayerSessions = new PlayerSession[MAX_PLAYERS];
+	private final List<PlayerSession> mPlayerSessions = new ArrayList<>();
 
-	private int mNumberActivePlayers = 1;
+	private int mPlayerUidCounter;
 
 	// ---------------------------------------------
 	// Properties
 	// ---------------------------------------------
 
-	public int numActivePlayers() {
-		return mNumberActivePlayers;
+	private int getNewPlayerUid() {
+		return mPlayerUidCounter++;
 	}
 
-	public PlayerSession[] playerSessions() {
+	public int numActivePlayers() {
+		return mPlayerSessions.size();
+	}
+
+	public List<PlayerSession> playerSessions() {
 		return mPlayerSessions;
 	}
 
@@ -33,62 +40,37 @@ public class PlayerManager {
 	// ---------------------------------------------
 
 	public PlayerManager() {
-		mPlayerSessions[0] = new PlayerSession(1, false);
-		mPlayerSessions[1] = new PlayerSession(2, true);
-		mPlayerSessions[2] = new PlayerSession(3, true);
-		mPlayerSessions[3] = new PlayerSession(4, true);
+		final var lDefaultPlayer = new PlayerSession(getNewPlayerUid());
+
+		mPlayerSessions.add(lDefaultPlayer);
 	}
 
 	// ---------------------------------------------
 	// Methods
 	// ---------------------------------------------
 
-	public boolean isPlayerActive(int playerNumber) {
-		return playerNumber <= mNumberActivePlayers;
+	public void resetSessions() {
+		// restart all the sessions
 	}
 
-	public PlayerSession getPlayer(int i) {
-		if (i < 1 || i > 4)
+	public boolean isPlayerActive(int playerNumber) {
+		return playerNumber <= mPlayerSessions.size() - 1;
+	}
+
+	public PlayerSession getPlayer(int playerUid) {
+		if (playerUid < 0 || playerUid >= mPlayerSessions.size())
 			return null;
 
-		return mPlayerSessions[i - 1];
+		return mPlayerSessions.get(playerUid);
 	}
 
-	public void addPlayer() {
-		if (mNumberActivePlayers >= MAX_PLAYERS)
-			return;
+	public PlayerSession addNewPlayer() {
+		if (numActivePlayers() >= MAX_PLAYERS)
+			return null;
 
-		mNumberActivePlayers++;
+		final var lNewPlayer = new PlayerSession(getNewPlayerUid());
 
-		switch (mNumberActivePlayers) {
-		case 4:
-			mPlayerSessions[3].enablePlayer(true);
-			break;
-		case 3:
-			mPlayerSessions[2].enablePlayer(true);
-			break;
-		case 2:
-			mPlayerSessions[1].enablePlayer(true);
-			break;
-		}
-	}
-
-	public void disablePlayer() {
-		if (mNumberActivePlayers <= 1)
-			return;
-
-		switch (mNumberActivePlayers) {
-		case 4:
-			mPlayerSessions[3].enablePlayer(false);
-			break;
-		case 3:
-			mPlayerSessions[2].enablePlayer(false);
-			break;
-		case 2:
-			mPlayerSessions[1].enablePlayer(false);
-			break;
-		}
-
-		mNumberActivePlayers--;
+		mPlayerSessions.add(lNewPlayer);
+		return lNewPlayer;
 	}
 }

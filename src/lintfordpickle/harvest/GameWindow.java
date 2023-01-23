@@ -3,6 +3,7 @@ package lintfordpickle.harvest;
 import org.lwjgl.glfw.GLFW;
 
 import lintfordpickle.harvest.data.actionevents.SatActionEventMap;
+import lintfordpickle.harvest.data.players.PlayerManager;
 import lintfordpickle.harvest.screens.MainMenu;
 import lintfordpickle.harvest.screens.MenuBackgroundScreen;
 import lintfordpickle.harvest.screens.TestSatScreen;
@@ -94,7 +95,11 @@ public class GameWindow extends BaseHarvestApp {
 		}
 
 		if (ConstantsGame.SKIP_MAIN_MENU_ON_STARTUP) {
-			mScreenManager.addScreen(new GameScreen(screenManager(), "player.lmp", "ghost.lmp", true));
+			final var lPlayerManager = new PlayerManager();
+			final var lGhostPlayer = lPlayerManager.addNewPlayer();
+			lGhostPlayer.setPlayback("ghost.lms");
+
+			mScreenManager.addScreen(new GameScreen(screenManager(), lPlayerManager, true));
 
 			mScreenManager.initialize();
 			return;

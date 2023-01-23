@@ -111,22 +111,44 @@ public class GameActionEventController extends ActionEventController<ActionFrame
 			byte keyboardInputValue0 = 0;
 
 			if (frame.isThrottleDown)
-				keyboardInputValue0 |= ActionEventMap.BYTEMASK_UP;
+				keyboardInputValue0 |= ActionEventMap.BYTEMASK_INPUT_UP;
 
 			if (frame.isDownDown)
-				keyboardInputValue0 |= ActionEventMap.BYTEMASK_DOWN;
+				keyboardInputValue0 |= ActionEventMap.BYTEMASK_INPUT_DOWN;
 
 			if (frame.isThrottleLeftDown)
-				keyboardInputValue0 |= ActionEventMap.BYTEMASK_LEFT;
+				keyboardInputValue0 |= ActionEventMap.BYTEMASK_INPUT_LEFT;
 
 			if (frame.isThrottleRightDown)
-				keyboardInputValue0 |= ActionEventMap.BYTEMASK_RIGHT;
+				keyboardInputValue0 |= ActionEventMap.BYTEMASK_INPUT_RIGHT;
 
 			dataBuffer.put(keyboardInputValue0);
 		}
 
 		// gamepad
 		// --->
+	}
+
+	@Override
+	protected void saveCustomActionEvents(ActionFrame frame, ByteBuffer dataBuffer) {
+		var controlByte = (byte) ActionEventMap.BYTEMASK_CONTROL_PHYSICS_SATE;
+
+		System.out.println("Writing new custom frame");
+		System.out.println("  frame number: " + frame.frameNumber);
+		System.out.println("       control: " + (byte) controlByte);
+
+		dataBuffer.putShort((short) frame.frameNumber);
+		dataBuffer.put(controlByte);
+
+		dataBuffer.putFloat(frame.positionX);
+		dataBuffer.putFloat(frame.positionY);
+
+		dataBuffer.putFloat(frame.velocityX);
+		dataBuffer.putFloat(frame.velocityY);
+
+		dataBuffer.putFloat(frame.angle);
+		dataBuffer.putFloat(frame.angularV);
+
 	}
 
 	@Override
@@ -147,30 +169,37 @@ public class GameActionEventController extends ActionEventController<ActionFrame
 	@Override
 	protected void readNextFrame(ByteBuffer dataBuffer, ActionEventPlayer player) {
 		// Read the next player input from the 'file' into temp
-		if (mIsTempFrameConsumed) {
-			final var lRemaining = dataBuffer.limit() - dataBuffer.position();
-			if (lRemaining < 2) { // only check for the exisitence of the tick number
-				System.out.println("END OF INPUT BUFFER REACHED BUT NO MARKER!");
-				return;
-			}
-
-			final short nextFrameNumber = dataBuffer.getShort();
-			final var nextControlByte = dataBuffer.get();
-
-			System.out.println("next frame input on: " + nextFrameNumber);
-			System.out.println("            control: " + nextControlByte);
-
-			if ((nextControlByte & ActionEventMap.BYTEMASK_CONTROL_KEYBOARD) == ActionEventMap.BYTEMASK_CONTROL_KEYBOARD) {
-				final var nextInput = dataBuffer.get();
-
-				player.tempFrameInput.isThrottleDown = (nextInput & ActionEventMap.BYTEMASK_UP) == ActionEventMap.BYTEMASK_UP;
-				player.tempFrameInput.isThrottleLeftDown = (nextInput & ActionEventMap.BYTEMASK_LEFT) == ActionEventMap.BYTEMASK_LEFT;
-				player.tempFrameInput.isThrottleRightDown = (nextInput & ActionEventMap.BYTEMASK_RIGHT) == ActionEventMap.BYTEMASK_RIGHT;
-			}
-
-			player.tempFrameInput.frameNumber = nextFrameNumber;
-			mIsTempFrameConsumed = false;
+		final var lRemaining = dataBuffer.limit() - dataBuffer.position();
+		if (lRemaining < 2) { // only check for the exisitence of the tick number
+			System.out.println("END OF INPUT BUFFER REACHED BUT NO MARKER!");
+			return;
 		}
-	}
 
+		final short nextFrameNumber = dataBuffer.getShort();
+		final var nextControlByte = dataBuffer.get();
+
+		System.out.println("next frame input on: " + nextFrameNumber);
+		System.out.println("            control: " + nextControlByte);
+
+		if ((nextControlByte & ActionEventMap.BYTEMASK_CONTROL_KEYBOARD) == ActionEventMap.BYTEMASK_CONTROL_KEYBOARD) {
+			final var nextInput = dataBuffer.get();
+
+			player.tempFrameInput.isThrottleDown = (nextInput & ActionEventMap.BYTEMASK_INPUT_UP) == ActionEventMap.BYTEMASK_INPUT_UP;
+			player.tempFrameInput.isThrottleLeftDown = (nextInput & ActionEventMap.BYTEMASK_INPUT_LEFT) == ActionEventMap.BYTEMASK_INPUT_LEFT;
+			player.tempFrameInput.isThrottleRightDown = (nextInput & ActionEventMap.BYTEMASK_INPUT_RIGHT) == ActionEventMap.BYTEMASK_INPUT_RIGHT;
+		}
+
+		if ((nextControlByte & ActionEventMap.BYTEMASK_CONTROL_PHYSICS_SATE) == ActionEventMap.BYTEMASK_CONTROL_PHYSICS_SATE) {
+			player.tempFrameInput.positionX = dataBuffer.getFloat();
+			player.tempFrameInput.positionY = dataBuffer.getFloat();
+
+			player.tempFrameInput.velocityX = dataBuffer.getFloat();
+			player.tempFrameInput.velocityY = dataBuffer.getFloat();
+
+			player.tempFrameInput.angle = dataBuffer.getFloat();
+			player.tempFrameInput.angularV = dataBuffer.getFloat();
+		}
+
+		player.tempFrameInput.frameNumber = nextFrameNumber;
+	}
 }
