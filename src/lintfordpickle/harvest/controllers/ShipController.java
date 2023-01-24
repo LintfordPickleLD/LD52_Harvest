@@ -1,5 +1,6 @@
 package lintfordpickle.harvest.controllers;
 
+import lintfordpickle.harvest.ConstantsGame;
 import lintfordpickle.harvest.controllers.actionevents.GameActionEventController;
 import lintfordpickle.harvest.data.players.PlayerManager;
 import lintfordpickle.harvest.data.ships.Ship;
@@ -30,14 +31,12 @@ public class ShipController extends BaseController {
 	// Variables
 	// ---------------------------------------------
 
-	private GameActionEventController mActionEventController;
 	private GameStateController mGameStateController;
+	private GameActionEventController mActionEventController;
 	private PhysicsController mPhysicsController;
 
 	private PlayerManager mPlayerManager;
 	private ShipManager mShipManager;
-
-	private int mPlayerUid;
 
 	// ---------------------------------------------
 	// Properties
@@ -81,6 +80,7 @@ public class ShipController extends BaseController {
 		mGameStateController = (GameStateController) lControllerManager.getControllerByNameRequired(GameStateController.CONTROLLER_NAME, entityGroupUid());
 		mActionEventController = (GameActionEventController) lControllerManager.getControllerByNameRequired(GameActionEventController.CONTROLLER_NAME, entityGroupUid());
 		mPhysicsController = (PhysicsController) lControllerManager.getControllerByNameRequired(PhysicsController.CONTROLLER_NAME, entityGroupUid());
+
 		final var lPhysicsWorld = mPhysicsController.world();
 
 		// loop over the players in the playermanager (player and ghosts), and create an action session for them
@@ -104,13 +104,29 @@ public class ShipController extends BaseController {
 			final var lShip = new Ship(GridEntity.getNewEntityUid());
 			lShip.isPlayerControlled = i == 0;
 
-			final float lShipPositionX = -1.2f;// + (i == 0 ? -1 : 1);
+			// Need to make sure all recorded ships start in the same place!
+			// TODO: Physics masking!
+
+			final float lShipPositionX = -1.2f + (i == 0 ? -2 : 0);
 			final float lShipPositionY = 13.1f;
 
 			lShip.body().moveTo(lShipPositionX, lShipPositionY);
-			lPhysicsWorld.addBody(lShip.body());
+
 			mShipManager.ships().add(lShip);
+
+			// Sort out the physics stuff
+			lShip.body().categoryBits(ConstantsGame.PHYSICS_WORLD_MASK_SHIP);
+			lShip.body().maskBits(ConstantsGame.PHYSICS_WORLD_MASK_WALL);
+			lPhysicsWorld.addBody(lShip.body());
+
 		}
+
+		final var lCameraChaseController = (CameraShipChaseController) lControllerManager.getControllerByNameRequired(CameraShipChaseController.CONTROLLER_NAME, entityGroupUid());
+		if (lCameraChaseController != null) {
+			final var lDefaultShip = mShipManager.ships().get(0);
+			lCameraChaseController.setTrackedEntity(core.gameCamera(), lDefaultShip);
+		}
+
 	}
 
 	@Override

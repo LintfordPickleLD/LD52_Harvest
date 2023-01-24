@@ -29,6 +29,16 @@ public class ConstantsGame {
 	public static final float TOTAL_GAME_TIME_AT_START = 60 * 4 * 1000;
 
 	// ---------------------------------------------
+	// Physics
+	// ---------------------------------------------
+
+	// @formatter:off
+	public static final int PHYSICS_WORLD_MASK_SHIP     = 0b0000000000000001;
+	public static final int PHYSICS_WORLD_MASK_PLATFORM = 0b0000000000000010;
+	public static final int PHYSICS_WORLD_MASK_WALL     = 0b0000000000000100;
+	// @formatter:on
+
+	// ---------------------------------------------
 	// Debug
 	// ---------------------------------------------
 

@@ -1,6 +1,6 @@
 package lintfordpickle.harvest.data.ships;
 
-import lintfordpickle.harvest.data.CollisionTypes;
+import lintfordpickle.harvest.data.GridCollisionTypes;
 import lintfordpickle.harvest.data.input.ShipInput;
 import lintfordpickle.harvest.renderers.trails.TrailRendererComponent;
 import net.lintford.library.ConstantsPhysics;
@@ -87,7 +87,7 @@ public class Ship extends RigidBodyEntity {
 	// ---------------------------------------------
 
 	public Ship(int entityUid) {
-		super(entityUid, CollisionTypes.COLLISION_TYPE_SHIP);
+		super(entityUid, GridCollisionTypes.COLLISION_TYPE_SHIP);
 
 		final var lPixelsToUnits = ConstantsPhysics.PixelsToUnits();
 

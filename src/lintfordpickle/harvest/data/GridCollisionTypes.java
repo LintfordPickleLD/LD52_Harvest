@@ -1,6 +1,6 @@
 package lintfordpickle.harvest.data;
 
-public class CollisionTypes {
+public class GridCollisionTypes {
 
 	public static final int COLLISION_TYPE_NONE = 0;
 	public static final int COLLISION_TYPE_SHIP = 1;

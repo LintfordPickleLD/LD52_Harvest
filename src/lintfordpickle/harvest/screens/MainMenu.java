@@ -71,10 +71,16 @@ public class MainMenu extends MenuScreen {
 		switch (mClickAction.consume()) {
 		case SCREEN_BUTTON_PLAY:
 
+			// TODO: Default player is created automatically (don't do this?)
 			final var lPlayerManager = new PlayerManager();
-			lPlayerManager.playerSessions().get(0).setPlayback("ghost1.lmp");
-//			final var lGhostPlayer = lPlayerManager.addNewPlayer();
-//			lGhostPlayer.setPlayback("ghost.lmp");
+			
+			// DEBUG
+			// lPlayerManager.getPlayer(0).setPlayback("ghost2.lmp");
+			
+
+			// ghost player ship takes input from file
+			final var lGhostPlayer = lPlayerManager.addNewPlayer();
+			lGhostPlayer.setPlayback("ghost2.lmp");
 
 			final var lLoadingScreen = new LoadingScreen(screenManager(), true, new GameScreen(screenManager(), lPlayerManager, true));
 			screenManager().createLoadingScreen(new LoadingScreen(screenManager(), true, lLoadingScreen));
