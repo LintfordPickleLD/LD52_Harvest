@@ -17,7 +17,6 @@ import lintfordpickle.harvest.data.platforms.PlatformManager;
 import lintfordpickle.harvest.data.platforms.PlatformType;
 import lintfordpickle.harvest.data.players.PlayerManager;
 import lintfordpickle.harvest.data.scene.backgrounds.SceneManager;
-import lintfordpickle.harvest.data.ships.Ship;
 import lintfordpickle.harvest.data.ships.ShipManager;
 import lintfordpickle.harvest.renderers.PlatformsRenderer;
 import lintfordpickle.harvest.renderers.ShipRenderer;
@@ -32,7 +31,6 @@ import net.lintford.library.controllers.core.PhysicsController;
 import net.lintford.library.core.LintfordCore;
 import net.lintford.library.core.ResourceManager;
 import net.lintford.library.core.debug.Debug;
-import net.lintford.library.core.geometry.partitioning.GridEntity;
 import net.lintford.library.core.graphics.ColorConstants;
 import net.lintford.library.core.graphics.rendertarget.RenderTarget;
 import net.lintford.library.core.graphics.textures.Texture;
@@ -285,6 +283,8 @@ public class GameScreen extends BaseGameScreen {
 		super.handleInput(core);
 
 		if (core.input().keyboard().isKeyDownTimed(GLFW.GLFW_KEY_ESCAPE)) {
+			mGameActionEventController.onExitingGame();
+
 			if (ConstantsGame.ESCAPE_RESTART_MAIN_SCENE) {
 				final var lLoadingScreen = new LoadingScreen(screenManager(), true, new GameScreen(screenManager(), mPlayerManager, true));
 				screenManager().createLoadingScreen(new LoadingScreen(screenManager(), true, lLoadingScreen));

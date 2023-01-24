@@ -101,8 +101,10 @@ public class SatActionFrame implements IActionFrame {
 				|| cur.isLeftDown  != last.isLeftDown
 				|| cur.isRightDown != last.isRightDown;
 		
+		final var lMouseDownReleased = last.isLeftMouseDownTimed && !cur.isLeftMouseDownTimed ||  last.isRightMouseDownTimed && !cur.isRightMouseDownTimed;
+		
 		// any one of these events requires we save the frame (for mouse position)
-		_isMouseChanged = cur.isLeftMouseDown || cur.isLeftMouseDownTimed || cur.isMiddleMouseDown || cur.isRightMouseDown || cur.isRightMouseDownTimed;
+		_isMouseChanged = cur.isLeftMouseDown || cur.isLeftMouseDownTimed || cur.isMiddleMouseDown || cur.isRightMouseDown || cur.isRightMouseDownTimed || lMouseDownReleased;
 		
 		_isGamepadChanged = false;
 		

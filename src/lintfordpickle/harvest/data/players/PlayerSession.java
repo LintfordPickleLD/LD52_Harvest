@@ -61,6 +61,7 @@ public class PlayerSession {
 	// ---------------------------------------------
 
 	public PlayerSession(int uid) {
+		mUid = uid;
 		nIsPlayerControlled = true;
 		mPlaybackMode = PlaybackMode.Normal;
 	}

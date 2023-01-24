@@ -72,8 +72,9 @@ public class MainMenu extends MenuScreen {
 		case SCREEN_BUTTON_PLAY:
 
 			final var lPlayerManager = new PlayerManager();
-			final var lGhostPlayer = lPlayerManager.addNewPlayer();
-			lGhostPlayer.setPlayback("ghost.lmp");
+			lPlayerManager.playerSessions().get(0).setPlayback("ghost1.lmp");
+//			final var lGhostPlayer = lPlayerManager.addNewPlayer();
+//			lGhostPlayer.setPlayback("ghost.lmp");
 
 			final var lLoadingScreen = new LoadingScreen(screenManager(), true, new GameScreen(screenManager(), lPlayerManager, true));
 			screenManager().createLoadingScreen(new LoadingScreen(screenManager(), true, lLoadingScreen));

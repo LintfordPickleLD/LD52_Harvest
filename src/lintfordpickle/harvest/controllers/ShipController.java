@@ -104,7 +104,7 @@ public class ShipController extends BaseController {
 			final var lShip = new Ship(GridEntity.getNewEntityUid());
 			lShip.isPlayerControlled = i == 0;
 
-			final float lShipPositionX = -1.2f + (i == 0 ? -1 : 1);
+			final float lShipPositionX = -1.2f;// + (i == 0 ? -1 : 1);
 			final float lShipPositionY = 13.1f;
 
 			lShip.body().moveTo(lShipPositionX, lShipPositionY);
@@ -120,13 +120,15 @@ public class ShipController extends BaseController {
 
 	@Override
 	public boolean handleInput(LintfordCore core) {
+
 		final var lShips = mShipManager.ships();
 		final var lNumShips = lShips.size();
 		for (int i = 0; i < lNumShips; i++) {
 			final var lShip = lShips.get(i);
+			// TODO: The ship uid isn't the correct way to resolve the player
+			final var lPlayerSessions = mPlayerManager.getPlayer(lShip.entityUid);
 
-			// TODO: pretty sure this Uid isn't the correct one (check: ShipController where the playerSession is referenced)
-			final var lInputFrame = mActionEventController.actionEventPlayer(lShip.entityUid);
+			final var lInputFrame = mActionEventController.actionEventPlayer(lPlayerSessions.actionEventUid());
 
 			lShip.inputs.isLeftThrottle = lInputFrame.currentActionEvents.isThrottleLeftDown;
 			lShip.inputs.isRightThrottle = lInputFrame.currentActionEvents.isThrottleRightDown;

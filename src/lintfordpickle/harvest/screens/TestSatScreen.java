@@ -228,13 +228,13 @@ public class TestSatScreen extends BaseGameScreen {
 		mDebugCameraController = new DebugCameraController(controllerManager, mGameCamera, entityGroupUid());
 		mActionEventController = new SatActionEventController(controllerManager, inputCounter(), entityGroupUid());
 
-//		boolean recMode = false;
-//
-//		if (recMode)
-//			mActiveActionPlayeruid = mActionEventController.setActionRecorder("input_new.lms");
-//
-//		else
-//			mActiveActionPlayeruid = mActionEventController.setActionPlayback("input_new.lms");
+		boolean recMode = false;
+
+		if (recMode)
+			mActiveActionPlayeruid = mActionEventController.createActionRecorder("input_new.lms");
+
+		else
+			mActiveActionPlayeruid = mActionEventController.createActionPlayback("input_new.lms");
 
 	}
 
