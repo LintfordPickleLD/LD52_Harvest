@@ -93,30 +93,38 @@ public class ShipController extends BaseController {
 				lPlayerSession.actionEventUid(ActionEventController.DEFAULT_PLAYER_UID);
 				break;
 			case Playback:
-				lPlayerSession.actionEventUid(mActionEventController.createActionPlayback(lPlayerSession.actionFilename()));
+				final int lActionEventUid = mActionEventController.createActionPlayback(lPlayerSession.actionFilename());
+				lPlayerSession.actionEventUid(lActionEventUid);
+
 				break;
 			case Record:
 				lPlayerSession.actionEventUid(mActionEventController.createActionRecorder(lPlayerSession.actionFilename()));
 				break;
 			}
 
+			mActionEventController.actionEventPlayer(lPlayerSession.actionEventUid()).isPlayerControlled = lPlayerSession.isPlayerControlled();
+
 			// Add a ship for this entry to the world
 			final var lShip = new Ship(GridEntity.getNewEntityUid());
-			lShip.isPlayerControlled = i == 0;
+			lShip.owningPlayerSessionUid = lPlayerSession.playerUid();
+			lShip.isPlayerControlled = lPlayerSession.isPlayerControlled();
+			lShip.isGhostShip = lPlayerSession.isGhostMode();
 
-			// Need to make sure all recorded ships start in the same place!
-			// TODO: Physics masking!
-
-			final float lShipPositionX = -1.2f + (i == 0 ? -2 : 0);
+			final float lShipPositionX = -1.2f;
 			final float lShipPositionY = 13.1f;
 
 			lShip.body().moveTo(lShipPositionX, lShipPositionY);
 
 			mShipManager.ships().add(lShip);
 
-			// Sort out the physics stuff
-			lShip.body().categoryBits(ConstantsGame.PHYSICS_WORLD_MASK_SHIP);
-			lShip.body().maskBits(ConstantsGame.PHYSICS_WORLD_MASK_WALL);
+			if (lShip.isGhostShip) {
+				lShip.body().categoryBits(ConstantsGame.PHYSICS_WORLD_MASK_GHOST);
+				lShip.body().maskBits(ConstantsGame.PHYSICS_WORLD_MASK_WALL);
+			} else {
+				lShip.body().categoryBits(ConstantsGame.PHYSICS_WORLD_MASK_SHIP);
+				lShip.body().maskBits(ConstantsGame.PHYSICS_WORLD_MASK_WALL);
+			}
+
 			lPhysicsWorld.addBody(lShip.body());
 
 		}
@@ -141,9 +149,7 @@ public class ShipController extends BaseController {
 		final var lNumShips = lShips.size();
 		for (int i = 0; i < lNumShips; i++) {
 			final var lShip = lShips.get(i);
-			// TODO: The ship uid isn't the correct way to resolve the player
-			final var lPlayerSessions = mPlayerManager.getPlayer(lShip.entityUid);
-
+			final var lPlayerSessions = mPlayerManager.getPlayer(lShip.owningPlayerSessionUid);
 			final var lInputFrame = mActionEventController.actionEventPlayer(lPlayerSessions.actionEventUid());
 
 			lShip.inputs.isLeftThrottle = lInputFrame.currentActionEvents.isThrottleLeftDown;
@@ -165,8 +171,8 @@ public class ShipController extends BaseController {
 
 			updateShip(core, lShip);
 
-			if (lShip.isDead()) {
-				// mGameStateController.setPlayerDied();
+			if (lShip.isDead() && lShip.isPlayerControlled) {
+				mGameStateController.setPlayerDied();
 			}
 		}
 	}

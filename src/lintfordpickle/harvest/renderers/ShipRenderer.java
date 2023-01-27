@@ -41,7 +41,6 @@ public class ShipRenderer extends BaseRenderer {
 	@Override
 	public boolean isInitialized() {
 		return mShipController != null;
-
 	}
 
 	// ---------------------------------------------
@@ -133,7 +132,11 @@ public class ShipRenderer extends BaseRenderer {
 			final var shipPosY = lBody.y * lUnitsToPixels;
 			final var shipPosRot = lBody.angle;
 
-			spriteBatch.drawAroundCenter(mShipSpritesheet, lSpriteFrame, shipPosX, shipPosY, lDestW, lDestH, shipPosRot, 0f, 0f, lScale, ColorConstants.WHITE);
+			var lShipColor = ColorConstants.WHITE;
+			if (ship.isGhostShip)
+				lShipColor = ColorConstants.getBlackWithAlpha(0.3f);
+
+			spriteBatch.drawAroundCenter(mShipSpritesheet, lSpriteFrame, shipPosX, shipPosY, lDestW, lDestH, shipPosRot, 0f, 0f, lScale, lShipColor);
 		}
 	}
 
@@ -160,8 +163,11 @@ public class ShipRenderer extends BaseRenderer {
 		if (ship.leftEngineSprite != null) {
 			ship.leftEngineSprite.update(core);
 
-			final var lWhiteWithAlpha = ColorConstants.getWhiteWithAlpha(0.8f);
-			spriteBatch.drawAroundCenter(mShipSpritesheet, ship.leftEngineSprite.currentSpriteFrame(), shipPosX, shipPosY, 16.f * 2, 16.f * 2, shipRot, 0, 0, -0.01f, lWhiteWithAlpha);
+			var lShipColor = ColorConstants.getWhiteWithAlpha(0.8f);
+			if (ship.isGhostShip)
+				lShipColor = ColorConstants.getBlackWithAlpha(0f);
+
+			spriteBatch.drawAroundCenter(mShipSpritesheet, ship.leftEngineSprite.currentSpriteFrame(), shipPosX, shipPosY, 16.f * 2, 16.f * 2, shipRot, 0, 0, -0.01f, lShipColor);
 		}
 
 		final var r = ship.engineColorR * 2f;
@@ -176,15 +182,19 @@ public class ShipRenderer extends BaseRenderer {
 
 		final var lSpriteFrameFlare = mShipSpritesheet.getSpriteFrame("TEXTUREENGINEGLOW");
 
+		var lShipColor = ColorConstants.WHITE;
+		if (ship.isGhostShip)
+			lShipColor = ColorConstants.getBlackWithAlpha(0.3f);
+
 		if (leftEngine) {
 			if (ship.inputs.isLeftThrottle || ship.inputs.isUpThrottle) {
 				spriteBatch.drawAroundCenter(mShipSpritesheet, lSpriteFrameFlare, shipPosX, shipPosY, 4 * lSpeedSizeMod, 2, 0, 0, 0, -0.01f, engineColor);
-				spriteBatch.drawAroundCenter(mShipSpritesheet, lSpriteFrameFlare, shipPosX, shipPosY, 4 * lSpeedSizeMod * .5f, 2, 0, 0, 0, -0.01f, ColorConstants.WHITE);
+				spriteBatch.drawAroundCenter(mShipSpritesheet, lSpriteFrameFlare, shipPosX, shipPosY, 4 * lSpeedSizeMod * .5f, 2, 0, 0, 0, -0.01f, lShipColor);
 			}
 		} else {
 			if (ship.inputs.isRightThrottle || ship.inputs.isUpThrottle) {
 				spriteBatch.drawAroundCenter(mShipSpritesheet, lSpriteFrameFlare, shipPosX, shipPosY, 4 * lSpeedSizeMod, 2, 0, 0, 0, -0.01f, engineColor);
-				spriteBatch.drawAroundCenter(mShipSpritesheet, lSpriteFrameFlare, shipPosX, shipPosY, 4 * lSpeedSizeMod * .5f, 2, 0, 0, 0, -0.01f, ColorConstants.WHITE);
+				spriteBatch.drawAroundCenter(mShipSpritesheet, lSpriteFrameFlare, shipPosX, shipPosY, 4 * lSpeedSizeMod * .5f, 2, 0, 0, 0, -0.01f, lShipColor);
 			}
 		}
 	}

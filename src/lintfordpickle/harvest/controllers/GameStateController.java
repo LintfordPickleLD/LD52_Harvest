@@ -45,8 +45,12 @@ public class GameStateController extends BaseController {
 	public void update(LintfordCore core) {
 		super.update(core);
 
-		if (mGameState.gameDeathTimerMs > 0.f) {
-			mGameState.gameDeathTimerMs -= core.gameTime().elapsedTimeMilli();
+		final var lDelta = (float) core.gameTime().elapsedTimeMilli();
+
+		if (mGameState.gameCountdownTimerUntilDeath > 0.f) {
+
+			mGameState.gameCountdownTimerUntilDeath -= lDelta;
+			mGameState.timeAliveInMs += lDelta;
 		}
 
 	}
@@ -56,7 +60,7 @@ public class GameStateController extends BaseController {
 	// ---------------------------------------------
 
 	public boolean hasPlayerLostThroughTime() {
-		return mGameState.gameDeathTimerMs <= 0.f;
+		return mGameState.gameCountdownTimerUntilDeath <= 0.f;
 	}
 
 	public boolean hasPlayerLostThroughLives() {
@@ -73,7 +77,7 @@ public class GameStateController extends BaseController {
 
 	public void addFoodDelivered(int amt) {
 		mGameState.foodDelivered += amt;
-		mGameState.gameDeathTimerMs += 30000; // 30 seconds
+		mGameState.gameCountdownTimerUntilDeath += 30000; // 30 seconds
 	}
 
 }

@@ -5,6 +5,8 @@ import static org.lwjgl.opengl.GL11.glClearColor;
 
 import org.lwjgl.opengl.GL11;
 
+import lintfordpickle.harvest.controllers.replays.ReplayController;
+import lintfordpickle.harvest.data.players.ReplayManager;
 import net.lintford.library.GameInfo;
 import net.lintford.library.ResourceLoader;
 import net.lintford.library.core.LintfordCore;
@@ -75,6 +77,15 @@ public abstract class BaseHarvestApp extends LintfordCore {
 		RendererManager.RendererManagerFonts.AddOrUpdate(RendererManager.UI_FONT_TEXT_BOLD_NAME, "res/fonts/fontNulshock12.json");
 		RendererManager.RendererManagerFonts.AddOrUpdate(RendererManager.UI_FONT_HEADER_NAME, "res/fonts/fontNulshock12.json");
 		RendererManager.RendererManagerFonts.AddOrUpdate(RendererManager.UI_FONT_TITLE_NAME, "res/fonts/fontNulshock22.json");
+	}
+
+	@Override
+	protected void onInitializeApp() {
+		super.onInitializeApp();
+
+		final var lBestReplayManager = new ReplayManager();
+		final var lReplayController = new ReplayController(mControllerManager, lBestReplayManager, ConstantsGame.GAME_RESOURCE_GROUP_ID);
+		lReplayController.initialize(this);
 	}
 
 	@Override

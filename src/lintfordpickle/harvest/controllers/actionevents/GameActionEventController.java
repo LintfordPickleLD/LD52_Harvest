@@ -2,11 +2,18 @@ package lintfordpickle.harvest.controllers.actionevents;
 
 import java.nio.ByteBuffer;
 
+import lintfordpickle.harvest.ConstantsGame;
+import lintfordpickle.harvest.controllers.GameStateController;
+import lintfordpickle.harvest.controllers.replays.ReplayController;
+import lintfordpickle.harvest.data.actionevents.ActionEventFileHeader;
 import lintfordpickle.harvest.data.actionevents.ActionEventMap;
 import lintfordpickle.harvest.data.actionevents.ActionFrame;
+import lintfordpickle.harvest.data.players.ReplayManager;
 import net.lintford.library.controllers.actionevents.ActionEventController;
 import net.lintford.library.controllers.core.ControllerManager;
 import net.lintford.library.core.LintfordCore;
+import net.lintford.library.core.actionevents.ActionEventManager.PlaybackMode;
+import net.lintford.library.core.debug.Debug;
 import net.lintford.library.core.time.LogicialCounter;
 
 public class GameActionEventController extends ActionEventController<ActionFrame> {
@@ -15,16 +22,19 @@ public class GameActionEventController extends ActionEventController<ActionFrame
 	// Constants
 	// ---------------------------------------------
 
-	private static final int HEADER_VERSION_BYTE_SIZE = 2; // short
-	private static final int HEADER_TICKCOUNT_BYTE_SIZE = 4; // int
-	private static final int HEADER_SIZE_IN_BYTES = HEADER_VERSION_BYTE_SIZE + HEADER_TICKCOUNT_BYTE_SIZE;
-
 	private static final int INPUT_MAX_BUFFER_SIZE_IN_BYTES = 5 * 1024 * 1024;
 
 	// ---------------------------------------------
 
 	public static final boolean IS_RECORD_MODE = true;
 	public static final String mRecordFilename = "input_new.lms";
+
+	// ---------------------------------------------
+	// Constructor
+	// ---------------------------------------------
+
+	private GameStateController mGameStateController;
+	private ReplayController mReplayController;
 
 	// ---------------------------------------------
 	// Constructor
@@ -38,7 +48,7 @@ public class GameActionEventController extends ActionEventController<ActionFrame
 
 	@Override
 	protected int getHeaderSizeInBytes() {
-		return HEADER_SIZE_IN_BYTES;
+		return ActionEventFileHeader.HEADER_SIZE_IN_BYTES;
 	}
 
 	@Override
@@ -54,6 +64,16 @@ public class GameActionEventController extends ActionEventController<ActionFrame
 	// ---------------------------------------------
 	// Core-Methods
 	// ---------------------------------------------
+
+	@Override
+	public void initialize(LintfordCore core) {
+		super.initialize(core);
+
+		final var lControllerManager = core.controllerManager();
+		mReplayController = (ReplayController) lControllerManager.getControllerByNameRequired(ReplayController.CONTROLLER_NAME, ConstantsGame.GAME_RESOURCE_GROUP_ID);
+		mGameStateController = (GameStateController) lControllerManager.getControllerByNameRequired(GameStateController.CONTROLLER_NAME, entityGroupUid());
+
+	}
 
 	protected void updateInputActionEvents(LintfordCore core, ActionEventPlayer player) {
 
@@ -72,12 +92,52 @@ public class GameActionEventController extends ActionEventController<ActionFrame
 
 	}
 
+	@Override
+	public void onExitingGame() {
+		super.onExitingGame();
+
+		final var lGameState = mGameStateController.gameState();
+		final var lReplayManager = mReplayController.replayManager();
+
+		final var isPreviousAvailable = lReplayManager.isRecordedGameAvailable();
+		final var justGotMoreFood = lGameState.foodDelivered >= lReplayManager.header().numberdeliveredFood();
+		final var justGotFasterTime = lGameState.timeAliveInMs <= lReplayManager.header().runtimeInSeconds();
+
+		var shouldWeKeepThisRecording = !isPreviousAvailable || justGotMoreFood || justGotFasterTime;
+		if (!shouldWeKeepThisRecording)
+			return;
+
+		Debug.debugManager().logger().i(getClass().getSimpleName(), "Best time so far - replay will be recorded");
+
+		final int numActionPlayers = actionEventPlayers().size();
+		for (int i = 0; i < numActionPlayers; i++) {
+			final var actionPlayer = actionEventPlayers().get(i);
+			if (actionPlayer.isPlayerControlled) {
+				final var actionManager = actionPlayer.actionEventManager;
+
+				if (actionPlayer.actionEventManager.mode() == PlaybackMode.Record) {
+					actionManager.filename(ReplayManager.RecordedGameFilename);
+					actionManager.saveToFile();
+
+					Debug.debugManager().logger().i(getClass().getSimpleName(), "  done saving replay");
+
+				}
+
+				return;
+			}
+		}
+	}
+
 	// RECORDING -----------------------------------
 
 	@Override
 	protected void saveHeaderToBuffer(ActionFrame currentFrame, ByteBuffer headerBuffer) {
-		headerBuffer.putShort((short) 0);
-		headerBuffer.putInt(mLogicialCounter.getCounter());
+		final var lGameState = mGameStateController.gameState();
+		final var lHeaderDefinition = new ActionEventFileHeader();
+
+		lHeaderDefinition.initialize((short) 0, "Just a test", lGameState.foodDelivered, lGameState.timeAliveInMs);
+
+		lHeaderDefinition.saveHeaderToByteBuffer(headerBuffer);
 	}
 
 	@Override
@@ -101,13 +161,18 @@ public class GameActionEventController extends ActionEventController<ActionFrame
 		dataBuffer.putShort((short) frame.frameNumber);
 		dataBuffer.put(controlByte);
 
-		System.out.println("Writing new input frame");
-		System.out.println("  frame number: " + frame.frameNumber);
-		System.out.println("       control: " + (byte) controlByte);
+		if (ConstantsGame.DEBUG_OUTPUT_ACTIONEVENT_LOGS) {
+			Debug.debugManager().logger().i(getClass().getSimpleName(), "Writing new input frame");
+			Debug.debugManager().logger().i(getClass().getSimpleName(), "  frame number: " + frame.frameNumber);
+			Debug.debugManager().logger().i(getClass().getSimpleName(), "       control: " + (byte) controlByte);
+		}
 
 		// keyboard
 		if (frame._isKeyboardChanged) {
-			System.out.println("  + keyboard");
+
+			if (ConstantsGame.DEBUG_OUTPUT_ACTIONEVENT_LOGS)
+				Debug.debugManager().logger().i(getClass().getSimpleName(), "  + keyboard");
+
 			byte keyboardInputValue0 = 0;
 
 			if (frame.isThrottleDown)
@@ -133,9 +198,11 @@ public class GameActionEventController extends ActionEventController<ActionFrame
 	protected void saveCustomActionEvents(ActionFrame frame, ByteBuffer dataBuffer) {
 		var controlByte = (byte) ActionEventMap.BYTEMASK_CONTROL_PHYSICS_SATE;
 
-		System.out.println("Writing new custom frame");
-		System.out.println("  frame number: " + frame.frameNumber);
-		System.out.println("       control: " + (byte) controlByte);
+		if (ConstantsGame.DEBUG_OUTPUT_ACTIONEVENT_LOGS) {
+			Debug.debugManager().logger().i(getClass().getSimpleName(), "Writing new custom frame");
+			Debug.debugManager().logger().i(getClass().getSimpleName(), "  frame number: " + frame.frameNumber);
+			Debug.debugManager().logger().i(getClass().getSimpleName(), "       control: " + (byte) controlByte);
+		}
 
 		dataBuffer.putShort((short) frame.frameNumber);
 		dataBuffer.put(controlByte);
@@ -153,6 +220,9 @@ public class GameActionEventController extends ActionEventController<ActionFrame
 
 	@Override
 	protected void saveEndOfFile(ActionFrame frame, ByteBuffer dataBuffer) {
+		if (ConstantsGame.DEBUG_OUTPUT_ACTIONEVENT_LOGS)
+			Debug.debugManager().logger().i(getClass().getSimpleName(), "Marking end of recording");
+
 		frame.markEndOfGame = true;
 		saveActionEvents(frame, dataBuffer);
 	}
@@ -161,8 +231,14 @@ public class GameActionEventController extends ActionEventController<ActionFrame
 
 	@Override
 	protected void readHeaderBuffer(ByteBuffer headerBuffer) {
-		headerBuffer.getShort(); // consume version
+		final var lLmpVersion = headerBuffer.getShort(); // consume version
 		mTotalTicks = headerBuffer.getInt();
+
+		if (ConstantsGame.DEBUG_OUTPUT_ACTIONEVENT_LOGS) {
+			Debug.debugManager().logger().i(getClass().getSimpleName(), "Reading Header buffer");
+			Debug.debugManager().logger().i(getClass().getSimpleName(), "  lmp version: " + lLmpVersion);
+			Debug.debugManager().logger().i(getClass().getSimpleName(), " total frames: " + mTotalTicks);
+		}
 
 	}
 
@@ -171,15 +247,20 @@ public class GameActionEventController extends ActionEventController<ActionFrame
 		// Read the next player input from the 'file' into temp
 		final var lRemaining = dataBuffer.limit() - dataBuffer.position();
 		if (lRemaining < 2) { // only check for the exisitence of the tick number
-			System.out.println("END OF INPUT BUFFER REACHED BUT NO MARKER!");
+
+			if (ConstantsGame.DEBUG_OUTPUT_ACTIONEVENT_LOGS)
+				Debug.debugManager().logger().i(getClass().getSimpleName(), "End of input buffer reached - but no marker! Incorrectly saved?");
+
 			return;
 		}
 
 		final short nextFrameNumber = dataBuffer.getShort();
 		final var nextControlByte = dataBuffer.get();
 
-		System.out.println("next frame input on: " + nextFrameNumber);
-		System.out.println("            control: " + nextControlByte);
+		if (ConstantsGame.DEBUG_OUTPUT_ACTIONEVENT_LOGS) {
+			Debug.debugManager().logger().i(getClass().getSimpleName(), "next frame input on: " + nextFrameNumber);
+			Debug.debugManager().logger().i(getClass().getSimpleName(), "            control: " + nextControlByte);
+		}
 
 		if ((nextControlByte & ActionEventMap.BYTEMASK_CONTROL_KEYBOARD) == ActionEventMap.BYTEMASK_CONTROL_KEYBOARD) {
 			final var nextInput = dataBuffer.get();

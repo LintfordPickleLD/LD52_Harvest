@@ -4,18 +4,36 @@ import lintfordpickle.harvest.ConstantsGame;
 
 public class GameState {
 
+	// ---------------------------------------------
+	// Variables
+	// ---------------------------------------------
+
 	public boolean isPlayerDead;
 	public int lives;
-	public float gameDeathTimerMs; // death on 0
-	public int foodDelivered;
+	public float gameCountdownTimerUntilDeath; // death at 0
+	public int timeAliveInMs;
+	public short foodDelivered;
 
 	public boolean isGameRunning;
+
+	// ---------------------------------------------
+	// Properties
+	// ---------------------------------------------
+
+	// ---------------------------------------------
+	// Constructor
+	// ---------------------------------------------
+
+	// ---------------------------------------------
+	// Methods
+	// ---------------------------------------------
 
 	public void startNewGame() {
 		lives = 3;
 		foodDelivered = 0;
+		timeAliveInMs = 0;
 
-		gameDeathTimerMs = ConstantsGame.TOTAL_GAME_TIME_AT_START;
+		gameCountdownTimerUntilDeath = ConstantsGame.TOTAL_GAME_TIME_AT_START;
 		isGameRunning = true;
 		isPlayerDead = false;
 	}

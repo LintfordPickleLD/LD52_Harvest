@@ -98,7 +98,7 @@ public class HudRenderer extends BaseRenderer {
 
 		lSpriteBatch.begin(core.HUD());
 
-		final var lTimeRemaining = mGameStateController.gameState().gameDeathTimerMs / 1000.f;
+		final var lTimeRemaining = mGameStateController.gameState().gameCountdownTimerUntilDeath / 1000.f;
 		final var lTimeFormatted = String.format(java.util.Locale.US, "%.1f", lTimeRemaining);
 
 		lFontUnit.begin(core.HUD());

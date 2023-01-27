@@ -36,6 +36,7 @@ public class ConstantsGame {
 	public static final int PHYSICS_WORLD_MASK_SHIP     = 0b0000000000000001;
 	public static final int PHYSICS_WORLD_MASK_PLATFORM = 0b0000000000000010;
 	public static final int PHYSICS_WORLD_MASK_WALL     = 0b0000000000000100;
+	public static final int PHYSICS_WORLD_MASK_GHOST    = 0b0000000000001000;
 	// @formatter:on
 
 	// ---------------------------------------------
@@ -46,6 +47,9 @@ public class ConstantsGame {
 	public static final boolean CAMERA_DEBUG_MODE = true;
 	public static final boolean PHYICS_DEBUG_MODE = false;
 	public static final boolean SHIP_DEBUG_MODE = false;
+
+	// produces a lot of log data
+	public static final boolean DEBUG_OUTPUT_ACTIONEVENT_LOGS = false;
 
 	public static final boolean WRAP_OBJECTS_AROUND_SCREEN_EDGE = false;
 	public static final boolean SKIP_MAIN_MENU_ON_STARTUP = false;

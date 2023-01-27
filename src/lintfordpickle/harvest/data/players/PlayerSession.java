@@ -15,6 +15,8 @@ public class PlayerSession {
 	private int mActionEventUid;
 	private String mActionInputFilename;
 
+	// ghost ships are used in time-trial mode to show the relative state of a previous playthrough
+	private boolean mIsGhostMode;
 	private PlaybackMode mPlaybackMode;
 
 	private boolean nIsPlayerControlled;
@@ -52,8 +54,16 @@ public class PlayerSession {
 		return mUid;
 	}
 
-	public boolean isPlayerEnabled() {
+	public boolean isPlayerControlled() {
 		return nIsPlayerControlled;
+	}
+
+	public boolean isGhostMode() {
+		return mIsGhostMode;
+	}
+
+	public void isGhostMode(boolean isGhostMode) {
+		mIsGhostMode = isGhostMode;
 	}
 
 	// ---------------------------------------------
@@ -80,7 +90,8 @@ public class PlayerSession {
 		mActionInputFilename = filename;
 	}
 
-	public void enablePlayer(boolean enable) {
+	/** Marks this player as being player controllered or not. A ghost-ship in time-trials or a recorded playback is not player-controlled. */
+	public void setPlayerControlled(boolean enable) {
 		if (enable) {
 			nIsPlayerControlled = true;
 

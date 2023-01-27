@@ -230,10 +230,10 @@ public class GameScreen extends BaseGameScreen {
 		final float dynamicFriction = 0.5f;
 
 		final var lPolygon = RigidBody.createPolygonBody(w * lPxToUts, h * lPxToUts, 1.f, staticFriction, dynamicFriction, .4f, true);
-		
+
 		lPolygon.categoryBits(ConstantsGame.PHYSICS_WORLD_MASK_WALL);
-		lPolygon.maskBits(ConstantsGame.PHYSICS_WORLD_MASK_SHIP	);
-		
+		lPolygon.maskBits(ConstantsGame.PHYSICS_WORLD_MASK_SHIP | ConstantsGame.PHYSICS_WORLD_MASK_GHOST);
+
 		lPolygon.moveTo((worldXOffset + x + w / 2) * lPxToUts, (worldYOffset + y + h / 2) * lPxToUts);
 
 		world.addBody(lPolygon);

@@ -59,6 +59,11 @@ public class Ship extends RigidBodyEntity {
 	public final ShipInput inputs = new ShipInput();
 	public final Vector2f rearEngine = new Vector2f();
 	public final Vector2f frontEngine = new Vector2f();
+	
+	public int owningPlayerSessionUid;
+
+	// ghost ships are used in time-trial mode to show the relative state of a previous playthrough
+	public boolean isGhostShip;
 
 	public float engineColorR = 0.11f;
 	public float engineColorG = 0.2f;
