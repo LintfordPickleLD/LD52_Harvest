@@ -12,7 +12,7 @@ import net.lintford.library.renderers.BaseRenderer;
 import net.lintford.library.renderers.RendererManager;
 import net.lintford.library.renderers.windows.components.UiBar;
 
-public class HudRenderer extends BaseRenderer {
+public class TimeTrialHudRenderer extends BaseRenderer {
 
 	// ---------------------------------------------
 	// Constants
@@ -45,7 +45,7 @@ public class HudRenderer extends BaseRenderer {
 	// Constructor
 	// ---------------------------------------------
 
-	public HudRenderer(RendererManager rendererManager, int entityGroupID) {
+	public TimeTrialHudRenderer(RendererManager rendererManager, int entityGroupID) {
 		super(rendererManager, RENDERER_NAME, entityGroupID);
 
 		mHealthBar = new UiBar(0.f, 100.f);
@@ -105,8 +105,23 @@ public class HudRenderer extends BaseRenderer {
 		lSpriteBatch.draw(mHudSpritesheet, mHudSpritesheet.getSpriteFrame("TEXTURE_CLOCK"), lHudBoundingBox.left() + 5.f, lHudBoundingBox.top() + 5.0f, 32, 32, -0.01f, ColorConstants.WHITE);
 		lFontUnit.drawText(": " + lTimeFormatted, lHudBoundingBox.left() + 38.f, lHudBoundingBox.top() + 5.0f, -0.01f, 1.f);
 
-		lSpriteBatch.draw(mHudSpritesheet, mHudSpritesheet.getSpriteFrame("TEXTURE_WHEAT"), lHudBoundingBox.left() + 5.f, lHudBoundingBox.top() + 38.0f, 32, 32, -0.01f, ColorConstants.WHITE);
-		lFontUnit.drawText(": " + mGameStateController.gameState().foodDelivered, lHudBoundingBox.left() + 38.f, lHudBoundingBox.top() + 40.0f, -0.01f, 1.f);
+		float lGridPositionY = lHudBoundingBox.top() + 38.0f;
+
+		lSpriteBatch.draw(mHudSpritesheet, mHudSpritesheet.getSpriteFrame("TEXTURE_WHEAT"), lHudBoundingBox.left() + 5.f, lGridPositionY += 32.f, 32, 32, -0.01f, ColorConstants.WHITE);
+		lFontUnit.drawText(": " + mGameStateController.gameState().foodDelivered, lHudBoundingBox.left() + 38.f, lGridPositionY, -0.01f, 1.f);
+		
+		lSpriteBatch.draw(mHudSpritesheet, mHudSpritesheet.getSpriteFrame("TEXTURE_WHEAT"), lHudBoundingBox.left() + 5.f, lGridPositionY += 32.f, 32, 32, -0.01f, ColorConstants.WHITE);
+		lFontUnit.drawText(": " + mGameStateController.gameState().foodDelivered, lHudBoundingBox.left() + 38.f, lGridPositionY, -0.01f, 1.f);
+		
+		lSpriteBatch.draw(mHudSpritesheet, mHudSpritesheet.getSpriteFrame("TEXTURE_WHEAT"), lHudBoundingBox.left() + 5.f, lGridPositionY += 32.f, 32, 32, -0.01f, ColorConstants.WHITE);
+		lFontUnit.drawText(": " + mGameStateController.gameState().foodDelivered, lHudBoundingBox.left() + 38.f, lGridPositionY, -0.01f, 1.f);
+		
+		lSpriteBatch.draw(mHudSpritesheet, mHudSpritesheet.getSpriteFrame("TEXTURE_WHEAT"), lHudBoundingBox.left() + 5.f, lGridPositionY += 32.f, 32, 32, -0.01f, ColorConstants.WHITE);
+		lFontUnit.drawText(": " + mGameStateController.gameState().foodDelivered, lHudBoundingBox.left() + 38.f, lGridPositionY, -0.01f, 1.f);
+		
+		lSpriteBatch.draw(mHudSpritesheet, mHudSpritesheet.getSpriteFrame("TEXTURE_WHEAT"), lHudBoundingBox.left() + 5.f, lGridPositionY += 32.f, 32, 32, -0.01f, ColorConstants.WHITE);
+		lFontUnit.drawText(": " + mGameStateController.gameState().foodDelivered, lHudBoundingBox.left() + 38.f, lGridPositionY, -0.01f, 1.f);
+		
 
 		lSpriteBatch.draw(mHudSpritesheet, mHudSpritesheet.getSpriteFrame("TEXTURE_SPANNER"), lHudBoundingBox.right() - 5.f - 32f, lHudBoundingBox.top() + 5.0f, 32, 32, -0.01f, ColorConstants.WHITE);
 		final var lShip = mShipController.shipManager().playerShip();
@@ -122,5 +137,4 @@ public class HudRenderer extends BaseRenderer {
 		lSpriteBatch.end();
 
 	}
-
 }

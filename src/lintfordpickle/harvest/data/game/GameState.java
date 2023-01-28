@@ -12,6 +12,7 @@ public class GameState {
 	public int lives;
 	public float gameCountdownTimerUntilDeath; // death at 0
 	public int timeAliveInMs;
+
 	public short foodDelivered;
 
 	public boolean isGameRunning;

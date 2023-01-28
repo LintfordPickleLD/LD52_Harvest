@@ -1,30 +1,24 @@
 package lintfordpickle.harvest.renderers.hud;
 
-import org.lwjgl.glfw.GLFW;
-
 import lintfordpickle.harvest.ConstantsGame;
 import lintfordpickle.harvest.controllers.GameStateController;
 import lintfordpickle.harvest.controllers.PlatformsController;
 import lintfordpickle.harvest.controllers.ShipController;
-import net.lintford.library.ConstantsPhysics;
 import net.lintford.library.core.LintfordCore;
 import net.lintford.library.core.ResourceManager;
 import net.lintford.library.core.graphics.ColorConstants;
 import net.lintford.library.core.graphics.sprites.spritesheet.SpriteSheetDefinition;
-import net.lintford.library.core.graphics.sprites.spritesheet.SpriteSheetManager;
-import net.lintford.library.core.graphics.textures.Texture;
-import net.lintford.library.core.maths.MathHelper;
 import net.lintford.library.renderers.BaseRenderer;
 import net.lintford.library.renderers.RendererManager;
 import net.lintford.library.renderers.windows.components.UiBar;
 
-public class MinimapRenderer extends BaseRenderer {
+public class SurvivalHudRenderer extends BaseRenderer {
 
 	// ---------------------------------------------
 	// Constants
 	// ---------------------------------------------
 
-	public static final String RENDERER_NAME = "Minimap Renderer";
+	public static final String RENDERER_NAME = "Hud Renderer";
 
 	// ---------------------------------------------
 	// Variables
@@ -34,9 +28,7 @@ public class MinimapRenderer extends BaseRenderer {
 	private ShipController mShipController;
 	private PlatformsController mPlatformsController;
 
-	private SpriteSheetDefinition mCoreSpritesheet;
-	private Texture mMinimapTexture;
-
+	private SpriteSheetDefinition mHudSpritesheet;
 	private UiBar mHealthBar;
 
 	// ---------------------------------------------
@@ -53,7 +45,7 @@ public class MinimapRenderer extends BaseRenderer {
 	// Constructor
 	// ---------------------------------------------
 
-	public MinimapRenderer(RendererManager rendererManager, int entityGroupID) {
+	public SurvivalHudRenderer(RendererManager rendererManager, int entityGroupID) {
 		super(rendererManager, RENDERER_NAME, entityGroupID);
 
 		mHealthBar = new UiBar(0.f, 100.f);
@@ -76,8 +68,8 @@ public class MinimapRenderer extends BaseRenderer {
 	public void loadResources(ResourceManager resourceManager) {
 		super.loadResources(resourceManager);
 
-		mCoreSpritesheet = resourceManager.spriteSheetManager().getSpriteSheet(SpriteSheetManager.CORE_SPRITESHEET_NAME, LintfordCore.CORE_ENTITY_GROUP_ID);
-		mMinimapTexture = resourceManager.textureManager().getTexture("TEXTURE_MINIMAP", ConstantsGame.GAME_RESOURCE_GROUP_ID);
+		mHudSpritesheet = resourceManager.spriteSheetManager().getSpriteSheet("SPRITESHEET_HUD", ConstantsGame.GAME_RESOURCE_GROUP_ID);
+
 	}
 
 	@Override
@@ -87,10 +79,6 @@ public class MinimapRenderer extends BaseRenderer {
 
 	@Override
 	public boolean handleInput(LintfordCore core) {
-
-		if (core.input().keyboard().isKeyDownTimed(GLFW.GLFW_KEY_M)) {
-			// TODO: Toggle minimap
-		}
 
 		return super.handleInput(core);
 	}
@@ -110,29 +98,25 @@ public class MinimapRenderer extends BaseRenderer {
 
 		lSpriteBatch.begin(core.HUD());
 
-		final var lSize = 196;
-
-		final var lMinimapPositionX = lHudBoundingBox.right() - 10.f - lSize;
-		final var lMinimapPositionY = lHudBoundingBox.top() + 48.0f;
+		final var lTimeRemaining = mGameStateController.gameState().gameCountdownTimerUntilDeath / 1000.f;
+		final var lTimeFormatted = String.format(java.util.Locale.US, "%.1f", lTimeRemaining);
 
 		lFontUnit.begin(core.HUD());
-		final var lMinimapHudColor = ColorConstants.getWhiteWithAlpha(0.75f);
-		lSpriteBatch.draw(mMinimapTexture, 0, 0, 196, 196, lMinimapPositionX, lMinimapPositionY, lSize, lSize, -0.01f, lMinimapHudColor);
+		lSpriteBatch.draw(mHudSpritesheet, mHudSpritesheet.getSpriteFrame("TEXTURE_CLOCK"), lHudBoundingBox.left() + 5.f, lHudBoundingBox.top() + 5.0f, 32, 32, -0.01f, ColorConstants.WHITE);
+		lFontUnit.drawText(": " + lTimeFormatted, lHudBoundingBox.left() + 38.f, lHudBoundingBox.top() + 5.0f, -0.01f, 1.f);
 
-		final var lShipManager = mShipController.shipManager();
-		final var lShips = lShipManager.ships();
-		final var lNumShips = lShips.size();
-		for (int i = 0; i < lNumShips; i++) {
-			final var lShip = lShips.get(i);
-			final var lWorldPositionX = lShip.body().x * ConstantsPhysics.UnitsToPixels();
-			final var lWorldPositionY = lShip.body().y * ConstantsPhysics.UnitsToPixels();
+		lSpriteBatch.draw(mHudSpritesheet, mHudSpritesheet.getSpriteFrame("TEXTURE_WHEAT"), lHudBoundingBox.left() + 5.f, lHudBoundingBox.top() + 38.0f, 32, 32, -0.01f, ColorConstants.WHITE);
+		lFontUnit.drawText(": " + mGameStateController.gameState().foodDelivered, lHudBoundingBox.left() + 38.f, lHudBoundingBox.top() + 40.0f, -0.01f, 1.f);
 
-			final var lScaledPositionX = MathHelper.scaleToRange(lWorldPositionX, -1024, 1024, 0, lSize);
-			final var lScaledPositionY = MathHelper.scaleToRange(lWorldPositionY, -1024, 1024, 0, lSize);
+		lSpriteBatch.draw(mHudSpritesheet, mHudSpritesheet.getSpriteFrame("TEXTURE_SPANNER"), lHudBoundingBox.right() - 5.f - 32f, lHudBoundingBox.top() + 5.0f, 32, 32, -0.01f, ColorConstants.WHITE);
+		final var lShip = mShipController.shipManager().playerShip();
 
-			var lShipColor = lShip.isPlayerControlled ? ColorConstants.RED : ColorConstants.GREY_DARK;
-			lSpriteBatch.draw(mCoreSpritesheet, mCoreSpritesheet.getSpriteFrame("TEXTURE_WHITE"), lMinimapPositionX + lScaledPositionX, lMinimapPositionY + lScaledPositionY, 2, 2, -0.01f, lShipColor);
-		}
+		mHealthBar.innerBorderPadding(2);
+		mHealthBar.setInnerColor(0.92f, 0.07f, 0.04f, 1.f);
+		mHealthBar.setDestRectangle(lHudBoundingBox.right() - 5 - 205 - 32, lHudBoundingBox.top() + 12, 200, 20);
+		mHealthBar.setCurrentValue(lShip.health);
+		mHealthBar.setMinMax(0, 100);
+		mHealthBar.draw(core, lSpriteBatch, lFontUnit, -0.01f);
 
 		lFontUnit.end();
 		lSpriteBatch.end();

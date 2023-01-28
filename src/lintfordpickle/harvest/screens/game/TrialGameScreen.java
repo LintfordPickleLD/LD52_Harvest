@@ -20,8 +20,9 @@ import lintfordpickle.harvest.data.scene.backgrounds.SceneManager;
 import lintfordpickle.harvest.data.ships.ShipManager;
 import lintfordpickle.harvest.renderers.PlatformsRenderer;
 import lintfordpickle.harvest.renderers.ShipRenderer;
-import lintfordpickle.harvest.renderers.hud.HudRenderer;
 import lintfordpickle.harvest.renderers.hud.MinimapRenderer;
+import lintfordpickle.harvest.renderers.hud.SurvivalHudRenderer;
+import lintfordpickle.harvest.renderers.hud.TimeTrialHudRenderer;
 import lintfordpickle.harvest.renderers.scene.SceneAdWallRenderer;
 import lintfordpickle.harvest.renderers.scene.SceneRenderer;
 import lintfordpickle.harvest.screens.FinishedScreen;
@@ -42,7 +43,7 @@ import net.lintford.library.screenmanager.ScreenManager;
 import net.lintford.library.screenmanager.screens.BaseGameScreen;
 import net.lintford.library.screenmanager.screens.LoadingScreen;
 
-public class GameScreen extends BaseGameScreen {
+public class TrialGameScreen extends BaseGameScreen {
 
 	// ---------------------------------------------
 	// Constants
@@ -82,14 +83,14 @@ public class GameScreen extends BaseGameScreen {
 	private SceneRenderer mSceneRenderer;
 	private SceneAdWallRenderer mSceneAdWallRenderer;
 	private PlatformsRenderer mPlatformsRenderer;
-	private HudRenderer mHudRenderer;
+	private TimeTrialHudRenderer mHudRenderer;
 	private MinimapRenderer mMinimapRenderer;
 
 	// ---------------------------------------------
 	// Constructors
 	// ---------------------------------------------
 
-	public GameScreen(ScreenManager screenManager, PlayerManager playerManager) {
+	public TrialGameScreen(ScreenManager screenManager, PlayerManager playerManager) {
 		super(screenManager);
 
 		mPlayerManager = playerManager;
@@ -284,7 +285,7 @@ public class GameScreen extends BaseGameScreen {
 			mGameActionEventController.onExitingGame();
 
 			if (ConstantsGame.ESCAPE_RESTART_MAIN_SCENE) {
-				final var lLoadingScreen = new LoadingScreen(screenManager(), true, new GameScreen(screenManager(), mPlayerManager));
+				final var lLoadingScreen = new LoadingScreen(screenManager(), true, new TrialGameScreen(screenManager(), mPlayerManager));
 				screenManager().createLoadingScreen(new LoadingScreen(screenManager(), true, lLoadingScreen));
 				return;
 			}
@@ -382,7 +383,7 @@ public class GameScreen extends BaseGameScreen {
 		mShipRenderer = new ShipRenderer(mRendererManager, entityGroupUid());
 		mSceneAdWallRenderer = new SceneAdWallRenderer(mRendererManager, entityGroupUid());
 		mPlatformsRenderer = new PlatformsRenderer(mRendererManager, entityGroupUid());
-		mHudRenderer = new HudRenderer(mRendererManager, entityGroupUid());
+		mHudRenderer = new TimeTrialHudRenderer(mRendererManager, entityGroupUid());
 		mMinimapRenderer = new MinimapRenderer(mRendererManager, entityGroupUid());
 	}
 

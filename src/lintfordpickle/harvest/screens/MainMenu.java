@@ -4,8 +4,8 @@ import lintfordpickle.harvest.ConstantsGame;
 import lintfordpickle.harvest.controllers.replays.ReplayController;
 import lintfordpickle.harvest.data.players.PlayerManager;
 import lintfordpickle.harvest.data.players.ReplayManager;
-import lintfordpickle.harvest.screens.game.GameScreen;
-import net.lintford.library.core.LintfordCore;
+import lintfordpickle.harvest.screens.game.SurvivalGameScreen;
+import lintfordpickle.harvest.screens.game.TrialGameScreen;
 import net.lintford.library.screenmanager.MenuEntry;
 import net.lintford.library.screenmanager.MenuScreen;
 import net.lintford.library.screenmanager.ScreenManager;
@@ -110,7 +110,7 @@ public class MainMenu extends MenuScreen {
 			final var lPlayerManager = new PlayerManager();
 			lPlayerManager.getPlayer(0).setPlayerControlled(true);
 
-			final var lLoadingScreen = new LoadingScreen(screenManager(), true, new GameScreen(screenManager(), lPlayerManager));
+			final var lLoadingScreen = new LoadingScreen(screenManager(), true, new SurvivalGameScreen(screenManager(), lPlayerManager));
 			screenManager().createLoadingScreen(new LoadingScreen(screenManager(), true, lLoadingScreen));
 			break;
 		}
@@ -129,7 +129,7 @@ public class MainMenu extends MenuScreen {
 				lGhostPlayer.isGhostMode(true);
 			}
 
-			final var lLoadingScreen = new LoadingScreen(screenManager(), true, new GameScreen(screenManager(), lPlayerManager));
+			final var lLoadingScreen = new LoadingScreen(screenManager(), true, new TrialGameScreen(screenManager(), lPlayerManager));
 			screenManager().createLoadingScreen(new LoadingScreen(screenManager(), true, lLoadingScreen));
 			break;
 		}

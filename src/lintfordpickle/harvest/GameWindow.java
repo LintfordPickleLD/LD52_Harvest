@@ -7,7 +7,7 @@ import lintfordpickle.harvest.data.players.PlayerManager;
 import lintfordpickle.harvest.screens.MainMenu;
 import lintfordpickle.harvest.screens.MenuBackgroundScreen;
 import lintfordpickle.harvest.screens.TestSatScreen;
-import lintfordpickle.harvest.screens.game.GameScreen;
+import lintfordpickle.harvest.screens.game.SurvivalGameScreen;
 import net.lintford.library.GameInfo;
 import net.lintford.library.core.debug.Debug.DebugLogLevel;
 import net.lintford.library.core.input.KeyEventActionManager;
@@ -99,7 +99,7 @@ public class GameWindow extends BaseHarvestApp {
 			final var lGhostPlayer = lPlayerManager.addNewPlayer();
 			lGhostPlayer.setPlayback("ghost.lms");
 
-			mScreenManager.addScreen(new GameScreen(screenManager(), lPlayerManager));
+			mScreenManager.addScreen(new SurvivalGameScreen(screenManager(), lPlayerManager));
 
 			mScreenManager.initialize();
 			return;

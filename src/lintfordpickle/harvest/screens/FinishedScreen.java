@@ -1,7 +1,7 @@
 package lintfordpickle.harvest.screens;
 
 import lintfordpickle.harvest.data.players.PlayerManager;
-import lintfordpickle.harvest.screens.game.GameScreen;
+import lintfordpickle.harvest.screens.game.SurvivalGameScreen;
 import net.lintford.library.core.LintfordCore;
 import net.lintford.library.screenmanager.MenuEntry;
 import net.lintford.library.screenmanager.MenuScreen;
@@ -66,7 +66,7 @@ public class FinishedScreen extends MenuScreen {
 	protected void handleOnClick() {
 		switch (mClickAction.consume()) {
 		case SCREEN_BUTTON_RESTART:
-			screenManager().createLoadingScreen(new LoadingScreen(screenManager(), false, new GameScreen(screenManager(), mPlayerManager)));
+			screenManager().createLoadingScreen(new LoadingScreen(screenManager(), false, new SurvivalGameScreen(screenManager(), mPlayerManager)));
 			break;
 
 		case SCREEN_BUTTON_EXIT:
