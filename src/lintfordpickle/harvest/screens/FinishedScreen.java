@@ -66,7 +66,7 @@ public class FinishedScreen extends MenuScreen {
 	protected void handleOnClick() {
 		switch (mClickAction.consume()) {
 		case SCREEN_BUTTON_RESTART:
-			screenManager().createLoadingScreen(new LoadingScreen(screenManager(), false, new GameScreen(screenManager(), mPlayerManager, true)));
+			screenManager().createLoadingScreen(new LoadingScreen(screenManager(), false, new GameScreen(screenManager(), mPlayerManager)));
 			break;
 
 		case SCREEN_BUTTON_EXIT:

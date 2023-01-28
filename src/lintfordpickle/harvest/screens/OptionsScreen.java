@@ -16,7 +16,9 @@ public class OptionsScreen extends MenuScreen {
 	private static final String SCREEN_TITLE = "Options";
 
 	private static final int BUTTON_AUDIO = 10;
-	private static final int BUTTON_BACK = 11;
+	private static final int BUTTON_GRAPHICS = 11;
+	private static final int BUTTON_KEY_BINDS = 12;
+	private static final int BUTTON_BACK = 30;
 
 	// ---------------------------------------------
 	// Constructors
@@ -27,13 +29,21 @@ public class OptionsScreen extends MenuScreen {
 
 		final var lLayout = new ListLayout(this);
 
-		//---
+		// ---
+		final var lKeyBindsEntry = new MenuEntry(mScreenManager, lLayout, "Key Binds");
+		lKeyBindsEntry.registerClickListener(this, BUTTON_KEY_BINDS);
+
+		final var lGraphicsEntry = new MenuEntry(mScreenManager, lLayout, "Graphics");
+		lGraphicsEntry.registerClickListener(this, BUTTON_GRAPHICS);
+
 		final var lAudioSettingsEntry = new MenuEntry(mScreenManager, lLayout, "Audio");
 		lAudioSettingsEntry.registerClickListener(this, BUTTON_AUDIO);
 
 		final var lBackEntry = new MenuEntry(mScreenManager, lLayout, "Back");
 		lBackEntry.registerClickListener(this, BUTTON_BACK);
 
+		lLayout.addMenuEntry(lKeyBindsEntry);
+		lLayout.addMenuEntry(lGraphicsEntry);
 		lLayout.addMenuEntry(lAudioSettingsEntry);
 		lLayout.addMenuEntry(lBackEntry);
 

@@ -21,6 +21,7 @@ import lintfordpickle.harvest.data.ships.ShipManager;
 import lintfordpickle.harvest.renderers.PlatformsRenderer;
 import lintfordpickle.harvest.renderers.ShipRenderer;
 import lintfordpickle.harvest.renderers.hud.HudRenderer;
+import lintfordpickle.harvest.renderers.hud.MinimapRenderer;
 import lintfordpickle.harvest.renderers.scene.SceneAdWallRenderer;
 import lintfordpickle.harvest.renderers.scene.SceneRenderer;
 import lintfordpickle.harvest.screens.FinishedScreen;
@@ -31,9 +32,7 @@ import net.lintford.library.controllers.core.PhysicsController;
 import net.lintford.library.core.LintfordCore;
 import net.lintford.library.core.ResourceManager;
 import net.lintford.library.core.debug.Debug;
-import net.lintford.library.core.graphics.ColorConstants;
 import net.lintford.library.core.graphics.rendertarget.RenderTarget;
-import net.lintford.library.core.graphics.textures.Texture;
 import net.lintford.library.core.physics.PhysicsWorld;
 import net.lintford.library.core.physics.dynamics.RigidBody;
 import net.lintford.library.core.physics.resolvers.CollisionResolverRotationAndFriction;
@@ -84,18 +83,15 @@ public class GameScreen extends BaseGameScreen {
 	private SceneAdWallRenderer mSceneAdWallRenderer;
 	private PlatformsRenderer mPlatformsRenderer;
 	private HudRenderer mHudRenderer;
-
-	private Texture mHelpTexture;
-	private boolean mShowHelpScreen;
+	private MinimapRenderer mMinimapRenderer;
 
 	// ---------------------------------------------
 	// Constructors
 	// ---------------------------------------------
 
-	public GameScreen(ScreenManager screenManager, PlayerManager playerManager, boolean showHelp) {
+	public GameScreen(ScreenManager screenManager, PlayerManager playerManager) {
 		super(screenManager);
 
-		mShowHelpScreen = showHelp;
 		mPlayerManager = playerManager;
 		mPlayerManager.resetSessions();
 
@@ -270,8 +266,6 @@ public class GameScreen extends BaseGameScreen {
 		final var lCanvasWidth = lDisplaySettings.gameResolutionWidth();
 		final var lCanvasHeight = lDisplaySettings.gameResolutionHeight();
 
-		mHelpTexture = resourceManager.textureManager().getTexture("HELP_OVERLAY", ConstantsGame.GAME_RESOURCE_GROUP_ID);
-
 		mRenderTarget = mRendererManager.createRenderTarget("RT_MAIN", lCanvasWidth, lCanvasHeight, 1.f, GL11.GL_NEAREST, false);
 	}
 
@@ -290,16 +284,12 @@ public class GameScreen extends BaseGameScreen {
 			mGameActionEventController.onExitingGame();
 
 			if (ConstantsGame.ESCAPE_RESTART_MAIN_SCENE) {
-				final var lLoadingScreen = new LoadingScreen(screenManager(), true, new GameScreen(screenManager(), mPlayerManager, true));
+				final var lLoadingScreen = new LoadingScreen(screenManager(), true, new GameScreen(screenManager(), mPlayerManager));
 				screenManager().createLoadingScreen(new LoadingScreen(screenManager(), true, lLoadingScreen));
 				return;
 			}
 			screenManager().addScreen(new PauseScreen(screenManager(), mPlayerManager));
 			return;
-		}
-
-		if (core.input().keyboard().isKeyDownTimed(GLFW.GLFW_KEY_H)) {
-			mShowHelpScreen = !mShowHelpScreen;
 		}
 	}
 
@@ -343,13 +333,6 @@ public class GameScreen extends BaseGameScreen {
 		GL11.glClear(GL11.GL_COLOR_BUFFER_BIT | GL11.GL_DEPTH_BUFFER_BIT);
 
 		super.draw(core);
-
-		if (mShowHelpScreen) {
-			final var lTextureBatch = mRendererManager.uiTextureBatch();
-			lTextureBatch.begin(core.HUD());
-			lTextureBatch.draw(mHelpTexture, 0, 0, 960, 540, core.HUD().boundingRectangle(), -0.01f, ColorConstants.WHITE);
-			lTextureBatch.end();
-		}
 
 		mRenderTarget.unbind();
 
@@ -400,6 +383,7 @@ public class GameScreen extends BaseGameScreen {
 		mSceneAdWallRenderer = new SceneAdWallRenderer(mRendererManager, entityGroupUid());
 		mPlatformsRenderer = new PlatformsRenderer(mRendererManager, entityGroupUid());
 		mHudRenderer = new HudRenderer(mRendererManager, entityGroupUid());
+		mMinimapRenderer = new MinimapRenderer(mRendererManager, entityGroupUid());
 	}
 
 	@Override
@@ -413,6 +397,7 @@ public class GameScreen extends BaseGameScreen {
 		mSceneAdWallRenderer.initialize(core);
 		mPlatformsRenderer.initialize(core);
 		mHudRenderer.initialize(core);
+		mMinimapRenderer.initialize(core);
 	}
 
 	@Override
@@ -426,6 +411,7 @@ public class GameScreen extends BaseGameScreen {
 		}
 		mPlatformsRenderer.loadResources(resourceManager);
 		mHudRenderer.loadResources(resourceManager);
+		mMinimapRenderer.loadResources(resourceManager);
 	}
 
 }

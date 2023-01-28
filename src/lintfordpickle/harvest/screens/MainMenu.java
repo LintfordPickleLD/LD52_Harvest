@@ -22,6 +22,8 @@ public class MainMenu extends MenuScreen {
 
 	private static final int SCREEN_BUTTON_PLAY_SURVIVAL = 10;
 	private static final int SCREEN_BUTTON_PLAY_TIME_TRIAL = 11;
+	private static final int SCREEN_BUTTON_HELP = 12;
+	private static final int SCREEN_BUTTON_OPTIONS = 13;
 	private static final int SCREEN_BUTTON_EXIT = 15;
 
 	// ---------------------------------------------
@@ -56,6 +58,16 @@ public class MainMenu extends MenuScreen {
 		lPlayTimeEntry.registerClickListener(this, SCREEN_BUTTON_PLAY_TIME_TRIAL);
 		lPlayTimeEntry.setToolTip("You need ot harvest and deliver food from each of the farms. Fastest time wins.");
 
+		final var lHelpButton = new MenuEntry(mScreenManager, lLayout, "Instructions");
+		lHelpButton.desiredWidth(lDesiredEntryWidth);
+		lHelpButton.desiredHeight(lDesiredEntryHeight);
+		lHelpButton.registerClickListener(this, SCREEN_BUTTON_HELP);
+
+		final var lOptionsEntry = new MenuEntry(mScreenManager, lLayout, "Options");
+		lOptionsEntry.desiredWidth(lDesiredEntryWidth);
+		lOptionsEntry.desiredHeight(lDesiredEntryHeight);
+		lOptionsEntry.registerClickListener(this, SCREEN_BUTTON_OPTIONS);
+
 		final var lExitEntry = new MenuEntry(mScreenManager, lLayout, "Exit");
 		lExitEntry.desiredWidth(lDesiredEntryWidth);
 		lExitEntry.desiredHeight(lDesiredEntryHeight);
@@ -63,6 +75,9 @@ public class MainMenu extends MenuScreen {
 
 		lLayout.addMenuEntry(lPlaySurvivaEntry);
 		lLayout.addMenuEntry(lPlayTimeEntry);
+		lLayout.addMenuEntry(MenuEntry.menuSeparator());
+		lLayout.addMenuEntry(lHelpButton);
+		lLayout.addMenuEntry(lOptionsEntry);
 		lLayout.addMenuEntry(MenuEntry.menuSeparator());
 		lLayout.addMenuEntry(lExitEntry);
 
@@ -89,20 +104,13 @@ public class MainMenu extends MenuScreen {
 	}
 
 	@Override
-	public void draw(LintfordCore core) {
-		super.draw(core);
-
-		mPaddingTopNormalized = 300f;
-	}
-
-	@Override
 	protected void handleOnClick() {
 		switch (mClickAction.consume()) {
 		case SCREEN_BUTTON_PLAY_SURVIVAL: {
 			final var lPlayerManager = new PlayerManager();
 			lPlayerManager.getPlayer(0).setPlayerControlled(true);
 
-			final var lLoadingScreen = new LoadingScreen(screenManager(), true, new GameScreen(screenManager(), lPlayerManager, true));
+			final var lLoadingScreen = new LoadingScreen(screenManager(), true, new GameScreen(screenManager(), lPlayerManager));
 			screenManager().createLoadingScreen(new LoadingScreen(screenManager(), true, lLoadingScreen));
 			break;
 		}
@@ -121,10 +129,18 @@ public class MainMenu extends MenuScreen {
 				lGhostPlayer.isGhostMode(true);
 			}
 
-			final var lLoadingScreen = new LoadingScreen(screenManager(), true, new GameScreen(screenManager(), lPlayerManager, true));
+			final var lLoadingScreen = new LoadingScreen(screenManager(), true, new GameScreen(screenManager(), lPlayerManager));
 			screenManager().createLoadingScreen(new LoadingScreen(screenManager(), true, lLoadingScreen));
 			break;
 		}
+
+		case SCREEN_BUTTON_OPTIONS:
+			screenManager().addScreen(new OptionsScreen(mScreenManager));
+			break;
+
+		case SCREEN_BUTTON_HELP:
+			screenManager().addScreen(new MenuHelpScreen(mScreenManager));
+			break;
 
 		case SCREEN_BUTTON_EXIT:
 			screenManager().exitGame();

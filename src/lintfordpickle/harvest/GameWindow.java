@@ -99,7 +99,7 @@ public class GameWindow extends BaseHarvestApp {
 			final var lGhostPlayer = lPlayerManager.addNewPlayer();
 			lGhostPlayer.setPlayback("ghost.lms");
 
-			mScreenManager.addScreen(new GameScreen(screenManager(), lPlayerManager, true));
+			mScreenManager.addScreen(new GameScreen(screenManager(), lPlayerManager));
 
 			mScreenManager.initialize();
 			return;

@@ -65,7 +65,7 @@ public class PauseScreen extends MenuScreen {
 			return;
 
 		case SCREEN_BUTTON_RESTART:
-			final var lLoadingScreen = new LoadingScreen(screenManager(), true, new GameScreen(screenManager(), mPlayerManager, true));
+			final var lLoadingScreen = new LoadingScreen(screenManager(), true, new GameScreen(screenManager(), mPlayerManager));
 			screenManager().createLoadingScreen(new LoadingScreen(screenManager(), true, lLoadingScreen));
 			break;
 
