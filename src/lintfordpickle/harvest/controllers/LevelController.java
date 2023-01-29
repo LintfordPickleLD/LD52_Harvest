@@ -142,25 +142,24 @@ public class LevelController extends BaseController {
 	}
 
 	private void createWorldPlatforms() {
-		createPlatform(1748, 574, 160, 48, PlatformType.Warehouse);
+		// Hq
+		createPlatform(0, 1748, 574, 160, 48, PlatformType.Warehouse);
 
 		// 10
-		createPlatform(852, 318, 160, 48, PlatformType.Farm);
-
-		// 15
-		createPlatform(586, 1271, 160, 48, PlatformType.Farm);
-
-		// 14
-		createPlatform(142, 1319, 160, 48, PlatformType.Farm);
-
-		// 22
-		createPlatform(1343, 877, 160, 48, PlatformType.Farm);
+		createPlatform(1, 852, 318, 160, 48, PlatformType.Farm);
 
 		// 13
-		createPlatform(12, 181, 160, 48, PlatformType.Farm);
+		createPlatform(2, 2, 192, 160, 48, PlatformType.Farm);
 
-		createPlatform(529, 1813, 160, 48, PlatformType.Water);
-		createPlatform(1470, 1820, 160, 48, PlatformType.Water);
+		// 14
+		createPlatform(3, 142, 1332, 160, 48, PlatformType.Farm);
+
+		// 22
+		createPlatform(4, 1343, 888, 160, 48, PlatformType.Farm);
+
+		// Water
+		createPlatform(5, 529, 1813, 160, 48, PlatformType.Water);
+		createPlatform(6, 1470, 1820, 160, 48, PlatformType.Water);
 	}
 
 	private void createStaticPolygon(float x, float y, float w, float h, float r) {
@@ -182,11 +181,11 @@ public class LevelController extends BaseController {
 		mPhysicsWorld.addBody(lPolygon);
 	}
 
-	private void createPlatform(float x, float y, float w, float h, PlatformType type) {
+	private void createPlatform(int platformUid, float x, float y, float w, float h, PlatformType type) {
 		final float worldXOffset = -1024;
 		final float worldYOffset = -1024;
 
-		final var lNewPlatform = new Platform();
+		final var lNewPlatform = new Platform(platformUid);
 		lNewPlatform.set(worldXOffset + x, worldYOffset + y, w, h);
 		lNewPlatform.platformType = type;
 
