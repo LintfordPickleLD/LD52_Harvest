@@ -4,15 +4,18 @@ import org.lwjgl.glfw.GLFW;
 import org.lwjgl.opengl.GL11;
 
 import lintfordpickle.harvest.ConstantsGame;
-import lintfordpickle.harvest.controllers.CameraShipChaseController;
+import lintfordpickle.harvest.controllers.CargoController;
 import lintfordpickle.harvest.controllers.GameStateController;
 import lintfordpickle.harvest.controllers.LevelController;
-import lintfordpickle.harvest.controllers.PlatformsController;
+import lintfordpickle.harvest.controllers.PlatformController;
 import lintfordpickle.harvest.controllers.SceneController;
 import lintfordpickle.harvest.controllers.ShipController;
 import lintfordpickle.harvest.controllers.actionevents.GameActionEventController;
+import lintfordpickle.harvest.controllers.camera.CameraShipChaseController;
 import lintfordpickle.harvest.data.CollisionHandler;
+import lintfordpickle.harvest.data.cargo.CargoManager;
 import lintfordpickle.harvest.data.game.GameState;
+import lintfordpickle.harvest.data.game.GameState.GameMode;
 import lintfordpickle.harvest.data.platforms.PlatformManager;
 import lintfordpickle.harvest.data.players.PlayerManager;
 import lintfordpickle.harvest.data.scene.backgrounds.SceneManager;
@@ -23,8 +26,9 @@ import lintfordpickle.harvest.renderers.hud.MinimapRenderer;
 import lintfordpickle.harvest.renderers.hud.TimeTrialHudRenderer;
 import lintfordpickle.harvest.renderers.scene.SceneAdWallRenderer;
 import lintfordpickle.harvest.renderers.scene.SceneRenderer;
-import lintfordpickle.harvest.screens.FinishedScreen;
 import lintfordpickle.harvest.screens.PauseScreen;
+import lintfordpickle.harvest.screens.endscreens.DiedScreen;
+import lintfordpickle.harvest.screens.endscreens.FInishedScreen;
 import net.lintford.library.ConstantsPhysics;
 import net.lintford.library.controllers.core.ControllerManager;
 import net.lintford.library.controllers.core.PhysicsController;
@@ -59,6 +63,7 @@ public class TrialGameScreen extends BaseGameScreen {
 
 	// Data
 	private PlayerManager mPlayerManager;
+	private CargoManager mCargoManager;
 	private GameState mGameState;
 	private ShipManager mShipManager;
 	private SceneManager mSceneManager;
@@ -67,10 +72,11 @@ public class TrialGameScreen extends BaseGameScreen {
 	// Controllers
 	private GameActionEventController mGameActionEventController;
 	private CameraShipChaseController mCameraShipChaseController;
+	private CargoController mCargoController;
 	private LevelController mLevelController;
 	private ShipController mShipController;
 	private SceneController mSceneController;
-	private PlatformsController mPlatformsController;
+	private PlatformController mPlatformsController;
 	private GameStateController mGameStateController;
 	private PhysicsController mPhysicsController;
 
@@ -105,9 +111,10 @@ public class TrialGameScreen extends BaseGameScreen {
 	public void initialize() {
 
 		mGameState = new GameState();
-		mGameState.startNewGame();
+		mGameState.startNewGame(GameMode.TimeTrial);
 
 		mShipManager = new ShipManager();
+		mCargoManager = new CargoManager();
 		mSceneManager = new SceneManager();
 		mPlatformManager = new PlatformManager();
 
@@ -164,25 +171,30 @@ public class TrialGameScreen extends BaseGameScreen {
 		super.update(core, otherScreenHasFocus, coveredByOtherScreen);
 
 		if (otherScreenHasFocus == false) {
-			if (mGameStateController.isPlayerDead() && mGameStateController.gameState().isGameRunning) {
-				mGameStateController.gameState().isGameRunning = false;
-				screenManager().addScreen(new FinishedScreen(mScreenManager, mPlayerManager, true, mGameState.foodDelivered));
+			final var lPlayerScoreCard = mGameState.getScoreCard(0);
+
+			if (lPlayerScoreCard.allPlatformsDelivered()) {
+				mGameState.isGameRunning = false;
+				screenManager().addScreen(new FInishedScreen(mScreenManager, mPlayerManager, mGameState.timeAliveInMs));
 
 				mGameActionEventController.onExitingGame();
+				return;
 			}
 
-			if (mGameStateController.hasPlayerLostThroughLives() && mGameStateController.gameState().isGameRunning) {
-				mGameStateController.gameState().isGameRunning = false;
-				screenManager().addScreen(new FinishedScreen(mScreenManager, mPlayerManager, true, mGameState.foodDelivered));
+			if (lPlayerScoreCard.isPlayerDead && mGameStateController.gameState().isGameRunning) {
+				mGameState.isGameRunning = false;
+				screenManager().addScreen(new DiedScreen(mScreenManager, mPlayerManager, true, lPlayerScoreCard.foodDelivered));
 
 				mGameActionEventController.onExitingGame();
+				return;
 			}
 
 			if (mGameStateController.hasPlayerLostThroughTime() && mGameStateController.gameState().isGameRunning) {
-				mGameStateController.gameState().isGameRunning = false;
-				screenManager().addScreen(new FinishedScreen(mScreenManager, mPlayerManager, false, mGameState.foodDelivered));
+				mGameState.isGameRunning = false;
+				screenManager().addScreen(new DiedScreen(mScreenManager, mPlayerManager, false, lPlayerScoreCard.foodDelivered));
 
 				mGameActionEventController.onExitingGame();
+				return;
 			}
 		}
 
@@ -221,11 +233,11 @@ public class TrialGameScreen extends BaseGameScreen {
 		mPhysicsController = new PhysicsController(controllerManager, world, entityGroupUid());
 		mLevelController = new LevelController(controllerManager, entityGroupUid());
 		mCameraShipChaseController = new CameraShipChaseController(controllerManager, mGameCamera, null, entityGroupUid());
-		mGameStateController = new GameStateController(controllerManager, mGameState, entityGroupUid());
+		mGameStateController = new GameStateController(controllerManager, mGameState, mPlayerManager, entityGroupUid());
 		mSceneController = new SceneController(controllerManager, mSceneManager, entityGroupUid());
-
+		mCargoController = new CargoController(controllerManager, mCargoManager, entityGroupUid());
 		mShipController = new ShipController(controllerManager, mShipManager, mPlayerManager, entityGroupUid());
-		mPlatformsController = new PlatformsController(controllerManager, mPlatformManager, entityGroupUid());
+		mPlatformsController = new PlatformController(controllerManager, mPlatformManager, entityGroupUid());
 	}
 
 	@Override
@@ -235,6 +247,7 @@ public class TrialGameScreen extends BaseGameScreen {
 		mLevelController.initialize(core);
 		mCameraShipChaseController.initialize(core);
 		mSceneController.initialize(core);
+		mCargoController.initialize(core);
 		mShipController.initialize(core);
 		mPlatformsController.initialize(core);
 		mGameStateController.initialize(core);
@@ -247,6 +260,7 @@ public class TrialGameScreen extends BaseGameScreen {
 			mPhysicsRenderer = new DebugPhysicsRenderer(mRendererManager, world, entityGroupUid());
 			mPhysicsDebugGridRenderer = new DebugPhysicsGridRenderer(mRendererManager, world, entityGroupUid());
 		}
+
 		mShipRenderer = new ShipRenderer(mRendererManager, entityGroupUid());
 		mSceneAdWallRenderer = new SceneAdWallRenderer(mRendererManager, entityGroupUid());
 		mPlatformsRenderer = new PlatformsRenderer(mRendererManager, entityGroupUid());
@@ -261,6 +275,7 @@ public class TrialGameScreen extends BaseGameScreen {
 			mPhysicsRenderer.initialize(core);
 			mPhysicsDebugGridRenderer.initialize(core);
 		}
+
 		mSceneRenderer.initialize(core);
 		mSceneAdWallRenderer.initialize(core);
 		mPlatformsRenderer.initialize(core);

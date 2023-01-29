@@ -1,7 +1,8 @@
-package lintfordpickle.harvest.controllers;
+package lintfordpickle.harvest.controllers.camera;
 
 import org.lwjgl.glfw.GLFW;
 
+import lintfordpickle.harvest.controllers.SceneController;
 import lintfordpickle.harvest.data.ships.Ship;
 import net.lintford.library.ConstantsPhysics;
 import net.lintford.library.controllers.BaseController;
@@ -34,6 +35,8 @@ public class CameraShipChaseController extends BaseController {
 
 	public float mZoomFactor;
 	public float mZoomVelocity;
+
+	private SceneController mSceneController;
 
 	// ---------------------------------------------
 	// Properties
@@ -92,6 +95,9 @@ public class CameraShipChaseController extends BaseController {
 
 	@Override
 	public void initialize(LintfordCore core) {
+		final var lControllerManager = core.controllerManager();
+
+		mSceneController = (SceneController) lControllerManager.getControllerByNameRequired(SceneController.CONTROLLER_NAME, mEntityGroupUid);
 
 	}
 
@@ -146,10 +152,26 @@ public class CameraShipChaseController extends BaseController {
 		if (mTrackedEntity != null) {
 			// updateSpring(pCore);
 
+			final var lSceneManager = mSceneController.sceneManager();
+
 			if (mTrackedEntity != null) {
 				mPosition.x = mTrackedEntity.body().x * ConstantsPhysics.UnitsToPixels();
 				mPosition.y = mTrackedEntity.body().y * ConstantsPhysics.UnitsToPixels();
 			}
+
+			final var lCamWidth = mGameCamera.getWidth();
+			final var lCamHeight = mGameCamera.getHeight();
+
+			// ensure camera doesn't go beyond scene extents
+			if (mPosition.x - lCamWidth * .5f < -lSceneManager.sceneWidthInPx() * 0.5f)
+				mPosition.x = -lSceneManager.sceneWidthInPx() * 0.5f + lCamWidth * .5f;
+			if (mPosition.y - lCamHeight * .5f < -lSceneManager.sceneHeightInPx() * 0.5f)
+				mPosition.y = -lSceneManager.sceneHeightInPx() * 0.5f + lCamHeight * .5f;
+
+			if (mPosition.x + lCamWidth * .5f > lSceneManager.sceneWidthInPx() * 0.5f)
+				mPosition.x = lSceneManager.sceneWidthInPx() * 0.5f - lCamWidth * .5f;
+			if (mPosition.y + lCamHeight * .5f > lSceneManager.sceneHeightInPx() * 0.5f)
+				mPosition.y = lSceneManager.sceneHeightInPx() * 0.5f - lCamHeight * .5f;
 
 			mGameCamera.setPosition(mPosition.x, mPosition.y);
 		}

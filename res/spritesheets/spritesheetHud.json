@@ -75,8 +75,20 @@
       "anchorPoints": []
     },
     {
-      "name": "TEXTURE_WHEAT",
+      "name": "TEXTURE_WATER",
       "x": 36,
+      "y": 0,
+      "w": 16,
+      "h": 16,
+      "pivotX": 0,
+      "pivotY": 0,
+      "scaleX": 1.0,
+      "scaleY": 1.0,
+      "anchorPoints": []
+    },
+    {
+      "name": "TEXTURE_WHEAT",
+      "x": 54,
       "y": 0,
       "w": 16,
       "h": 16,

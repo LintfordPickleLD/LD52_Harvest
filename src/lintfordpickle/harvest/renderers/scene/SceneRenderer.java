@@ -73,7 +73,7 @@ public class SceneRenderer extends BaseRenderer {
 		super.loadResources(resourceManager);
 
 		mPropsSpritesheetDefintion = resourceManager.spriteSheetManager().getSpriteSheet("SPRITESHEET_PROPS", ConstantsGame.GAME_RESOURCE_GROUP_ID);
-		
+
 		final var lSceneManager = mSceneController.sceneManager();
 		final var lLayers = lSceneManager.layers();
 		final var lNumLayers = lLayers.size();
@@ -124,16 +124,17 @@ public class SceneRenderer extends BaseRenderer {
 		final var lTextureBatch = mRendererManager.uiTextureBatch();
 		lTextureBatch.begin(core.gameCamera());
 
+		// TODO: Should come from the scene layer definition
 		final int srcX = 0;
 		final int srcY = 0;
 		final int srcW = 1024;
 		final int srcH = 1024;
 
-		final float lDstW = 1024 * 2.f;
-		final float lDstH = 1024 * 2.f;
+		final float lDstW = sceneLayer.widthInPx;
+		final float lDstH = sceneLayer.heightInPx;
 
-		final float lDstX = -lDstW / 2.f;
-		final float lDstY = -lDstH / 2.f;
+		final float lDstX = sceneLayer.centerX - sceneLayer.widthInPx * .5f;
+		final float lDstY = sceneLayer.centerY - sceneLayer.heightInPx * .5f;
 
 		lTextureBatch.draw(lTexture, srcX, srcY, srcW, srcH, lDstX, lDstY, lDstW, lDstH, -0.01f, ColorConstants.WHITE);
 
@@ -149,9 +150,9 @@ public class SceneRenderer extends BaseRenderer {
 		for (int i = 0; i < lNumCarStreams; i++) {
 			final var lCarStream = carStreams.get(i);
 			final var lSpriteFrame = mPropsSpritesheetDefintion.getSpriteFrame(lCarStream.spriteStreamName);
-			if(lSpriteFrame == null)
+			if (lSpriteFrame == null)
 				continue;
-			
+
 			lCarStream.intSrcPositionX += lCarStream.speedX;
 
 			final float srcX = lCarStream.intSrcPositionX;

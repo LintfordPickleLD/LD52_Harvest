@@ -29,7 +29,7 @@ public class LevelController extends BaseController {
 	private PlatformManager mPlatformManager;
 
 	private PhysicsController mPhysicsController;
-	private PlatformsController mPlatformsController;
+	private PlatformController mPlatformsController;
 
 	// ---------------------------------------------
 	// Properties
@@ -60,7 +60,7 @@ public class LevelController extends BaseController {
 		final var lControllerManager = core.controllerManager();
 
 		mPhysicsController = (PhysicsController) lControllerManager.getControllerByNameRequired(PhysicsController.CONTROLLER_NAME, mEntityGroupUid);
-		mPlatformsController = (PlatformsController) lControllerManager.getControllerByNameRequired(PlatformsController.CONTROLLER_NAME, mEntityGroupUid);
+		mPlatformsController = (PlatformController) lControllerManager.getControllerByNameRequired(PlatformController.CONTROLLER_NAME, mEntityGroupUid);
 
 		mPlatformManager = mPlatformsController.platformManager();
 		mPhysicsWorld = mPhysicsController.world();

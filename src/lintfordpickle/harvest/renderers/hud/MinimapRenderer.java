@@ -4,8 +4,9 @@ import org.lwjgl.glfw.GLFW;
 
 import lintfordpickle.harvest.ConstantsGame;
 import lintfordpickle.harvest.controllers.GameStateController;
-import lintfordpickle.harvest.controllers.PlatformsController;
+import lintfordpickle.harvest.controllers.PlatformController;
 import lintfordpickle.harvest.controllers.ShipController;
+import lintfordpickle.harvest.data.platforms.PlatformType;
 import net.lintford.library.ConstantsPhysics;
 import net.lintford.library.core.LintfordCore;
 import net.lintford.library.core.ResourceManager;
@@ -32,7 +33,7 @@ public class MinimapRenderer extends BaseRenderer {
 
 	private GameStateController mGameStateController;
 	private ShipController mShipController;
-	private PlatformsController mPlatformsController;
+	private PlatformController mPlatformsController;
 
 	private SpriteSheetDefinition mCoreSpritesheet;
 	private Texture mMinimapTexture;
@@ -67,7 +68,7 @@ public class MinimapRenderer extends BaseRenderer {
 	public void initialize(LintfordCore core) {
 		final var lControllerManager = core.controllerManager();
 
-		mPlatformsController = (PlatformsController) lControllerManager.getControllerByNameRequired(PlatformsController.CONTROLLER_NAME, entityGroupID());
+		mPlatformsController = (PlatformController) lControllerManager.getControllerByNameRequired(PlatformController.CONTROLLER_NAME, entityGroupID());
 		mShipController = (ShipController) lControllerManager.getControllerByNameRequired(ShipController.CONTROLLER_NAME, entityGroupID());
 		mGameStateController = (GameStateController) lControllerManager.getControllerByNameRequired(GameStateController.CONTROLLER_NAME, entityGroupID());
 	}
@@ -119,6 +120,27 @@ public class MinimapRenderer extends BaseRenderer {
 		final var lMinimapHudColor = ColorConstants.getWhiteWithAlpha(0.75f);
 		lSpriteBatch.draw(mMinimapTexture, 0, 0, 196, 196, lMinimapPositionX, lMinimapPositionY, lSize, lSize, -0.01f, lMinimapHudColor);
 
+		final var lPlatformManager = mPlatformsController.platformManager();
+		final var lPlatforms = lPlatformManager.platforms();
+		final var lNumPlatforms = lPlatforms.size();
+		for (int i = 0; i < lNumPlatforms; i++) {
+			final var lPlatform = lPlatforms.get(i);
+			final var lWorldPositionX = lPlatform.x();
+			final var lWorldPositionY = lPlatform.y();
+
+			final var lScaledPositionX = MathHelper.scaleToRange(lWorldPositionX, -1024, 1024, 0, lSize);
+			final var lScaledPositionY = MathHelper.scaleToRange(lWorldPositionY, -1024, 1024, 0, lSize);
+
+			var lShipColor = ColorConstants.GREEN;
+			if (lPlatform.platformType == PlatformType.Warehouse) {
+				lShipColor = ColorConstants.YELLOW;
+			} else if (lPlatform.platformType == PlatformType.Water) {
+				lShipColor = ColorConstants.BLUE;
+			}
+
+			lSpriteBatch.draw(mCoreSpritesheet, mCoreSpritesheet.getSpriteFrame("TEXTURE_WHITE"), lMinimapPositionX + lScaledPositionX, lMinimapPositionY + lScaledPositionY, 4, 4, -0.01f, lShipColor);
+		}
+
 		final var lShipManager = mShipController.shipManager();
 		final var lShips = lShipManager.ships();
 		final var lNumShips = lShips.size();
@@ -131,7 +153,7 @@ public class MinimapRenderer extends BaseRenderer {
 			final var lScaledPositionY = MathHelper.scaleToRange(lWorldPositionY, -1024, 1024, 0, lSize);
 
 			var lShipColor = lShip.isPlayerControlled ? ColorConstants.RED : ColorConstants.GREY_DARK;
-			lSpriteBatch.draw(mCoreSpritesheet, mCoreSpritesheet.getSpriteFrame("TEXTURE_WHITE"), lMinimapPositionX + lScaledPositionX, lMinimapPositionY + lScaledPositionY, 2, 2, -0.01f, lShipColor);
+			lSpriteBatch.draw(mCoreSpritesheet, mCoreSpritesheet.getSpriteFrame("TEXTURE_WHITE"), lMinimapPositionX + lScaledPositionX, lMinimapPositionY + lScaledPositionY, 4, 4, -0.01f, lShipColor);
 		}
 
 		lFontUnit.end();

@@ -100,7 +100,11 @@ public class GameActionEventController extends ActionEventController<ActionFrame
 		final var lReplayManager = mReplayController.replayManager();
 
 		final var isPreviousAvailable = lReplayManager.isRecordedGameAvailable();
-		final var justGotMoreFood = lGameState.foodDelivered >= lReplayManager.header().numberdeliveredFood();
+
+		final var lMainPlayerUid = 0;
+		final var lPlayerScoreCard = lGameState.getScoreCard(lMainPlayerUid);
+
+		final var justGotMoreFood = lPlayerScoreCard.foodDelivered >= lReplayManager.header().numberdeliveredFood();
 		final var justGotFasterTime = lGameState.timeAliveInMs <= lReplayManager.header().runtimeInSeconds();
 
 		var shouldWeKeepThisRecording = !isPreviousAvailable || justGotMoreFood || justGotFasterTime;
@@ -135,7 +139,10 @@ public class GameActionEventController extends ActionEventController<ActionFrame
 		final var lGameState = mGameStateController.gameState();
 		final var lHeaderDefinition = new ActionEventFileHeader();
 
-		lHeaderDefinition.initialize((short) 0, "Just a test", lGameState.foodDelivered, lGameState.timeAliveInMs);
+		final var lMainPlayerUid = 0;
+		final var lPlayerScoreCard = lGameState.getScoreCard(lMainPlayerUid);
+
+		lHeaderDefinition.initialize((short) 0, "Just a test", lPlayerScoreCard.foodDelivered, lGameState.timeAliveInMs);
 
 		lHeaderDefinition.saveHeaderToByteBuffer(headerBuffer);
 	}

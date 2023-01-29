@@ -2,10 +2,11 @@ package lintfordpickle.harvest.controllers;
 
 import lintfordpickle.harvest.ConstantsGame;
 import lintfordpickle.harvest.controllers.actionevents.GameActionEventController;
+import lintfordpickle.harvest.controllers.camera.CameraShipChaseController;
+import lintfordpickle.harvest.data.physics.ShipPhysicsData;
 import lintfordpickle.harvest.data.players.PlayerManager;
 import lintfordpickle.harvest.data.ships.Ship;
 import lintfordpickle.harvest.data.ships.ShipManager;
-import lintfordpickle.harvest.data.ships.ShipPhysicsData;
 import net.lintford.library.controllers.BaseController;
 import net.lintford.library.controllers.actionevents.ActionEventController;
 import net.lintford.library.controllers.core.ControllerManager;
@@ -172,7 +173,7 @@ public class ShipController extends BaseController {
 			updateShip(core, lShip);
 
 			if (lShip.isDead() && lShip.isPlayerControlled) {
-				mGameStateController.setPlayerDied();
+				mGameStateController.setPlayerDied(lShip.owningPlayerSessionUid);
 			}
 		}
 	}

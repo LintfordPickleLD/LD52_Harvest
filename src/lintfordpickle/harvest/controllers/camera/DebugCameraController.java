@@ -1,4 +1,4 @@
-package lintfordpickle.harvest.controllers;
+package lintfordpickle.harvest.controllers.camera;
 
 import org.lwjgl.glfw.GLFW;
 

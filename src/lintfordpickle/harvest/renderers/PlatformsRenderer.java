@@ -1,7 +1,7 @@
 package lintfordpickle.harvest.renderers;
 
 import lintfordpickle.harvest.ConstantsGame;
-import lintfordpickle.harvest.controllers.PlatformsController;
+import lintfordpickle.harvest.controllers.PlatformController;
 import lintfordpickle.harvest.data.platforms.Platform;
 import net.lintford.library.core.LintfordCore;
 import net.lintford.library.core.ResourceManager;
@@ -23,7 +23,7 @@ public class PlatformsRenderer extends BaseRenderer {
 	// Variables
 	// ---------------------------------------------
 
-	private PlatformsController mPlatformsController;
+	private PlatformController mPlatformsController;
 	private SpriteSheetDefinition mPlatformsSpritesheet;
 
 	// ---------------------------------------------
@@ -50,7 +50,7 @@ public class PlatformsRenderer extends BaseRenderer {
 
 	@Override
 	public void initialize(LintfordCore core) {
-		mPlatformsController = (PlatformsController) core.controllerManager().getControllerByNameRequired(PlatformsController.CONTROLLER_NAME, entityGroupID());
+		mPlatformsController = (PlatformController) core.controllerManager().getControllerByNameRequired(PlatformController.CONTROLLER_NAME, entityGroupID());
 	}
 
 	@Override

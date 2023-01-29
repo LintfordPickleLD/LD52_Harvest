@@ -3,9 +3,9 @@ package lintfordpickle.harvest.screens;
 import org.lwjgl.glfw.GLFW;
 import org.lwjgl.opengl.GL11;
 
-import lintfordpickle.harvest.controllers.DebugCameraController;
 import lintfordpickle.harvest.controllers.PhysicsCollisionCallback;
 import lintfordpickle.harvest.controllers.actionevents.SatActionEventController;
+import lintfordpickle.harvest.controllers.camera.DebugCameraController;
 import net.lintford.library.ConstantsPhysics;
 import net.lintford.library.controllers.core.ControllerManager;
 import net.lintford.library.core.LintfordCore;

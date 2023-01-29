@@ -1,5 +1,7 @@
 package lintfordpickle.harvest.controllers;
 
+import lintfordpickle.harvest.data.cargo.CargoType;
+import lintfordpickle.harvest.data.game.GameState.GameMode;
 import lintfordpickle.harvest.data.platforms.Platform;
 import lintfordpickle.harvest.data.platforms.PlatformManager;
 import lintfordpickle.harvest.data.ships.Ship;
@@ -7,8 +9,9 @@ import net.lintford.library.ConstantsPhysics;
 import net.lintford.library.controllers.BaseController;
 import net.lintford.library.controllers.core.ControllerManager;
 import net.lintford.library.core.LintfordCore;
+import net.lintford.library.core.debug.Debug;
 
-public class PlatformsController extends BaseController {
+public class PlatformController extends BaseController {
 
 	// ---------------------------------------------
 	// Constants
@@ -21,7 +24,9 @@ public class PlatformsController extends BaseController {
 	// ---------------------------------------------
 
 	private GameStateController mGameStateController;
+	private CargoController mCargoController;
 	private ShipController mShipController;
+
 	private PlatformManager mPlatformManager;
 
 	// ---------------------------------------------
@@ -36,7 +41,7 @@ public class PlatformsController extends BaseController {
 	// Constructor
 	// ---------------------------------------------
 
-	public PlatformsController(ControllerManager controllerManager, PlatformManager platformManager, int entityGroupUid) {
+	public PlatformController(ControllerManager controllerManager, PlatformManager platformManager, int entityGroupUid) {
 		super(controllerManager, CONTROLLER_NAME, entityGroupUid);
 
 		mPlatformManager = platformManager;
@@ -53,6 +58,7 @@ public class PlatformsController extends BaseController {
 		final var lControllerManager = core.controllerManager();
 
 		mShipController = (ShipController) lControllerManager.getControllerByNameRequired(ShipController.CONTROLLER_NAME, entityGroupUid());
+		mCargoController = (CargoController) lControllerManager.getControllerByNameRequired(CargoController.CONTROLLER_NAME, entityGroupUid());
 		mGameStateController = (GameStateController) lControllerManager.getControllerByNameRequired(GameStateController.CONTROLLER_NAME, entityGroupUid());
 	}
 
@@ -91,6 +97,22 @@ public class PlatformsController extends BaseController {
 		return mShipController.shipManager().playerShip();
 	}
 
+	private boolean isFarmAvailableToWater(LintfordCore core, Platform platform) {
+		final var lGameState = mGameStateController.gameState();
+		if (lGameState.gameMode() == GameMode.Survival)
+			return true;
+
+		return platform.isWatered == false;
+	}
+
+	private boolean isFarmAvailableToHarvest(LintfordCore core, Platform platform) {
+		final var lGameState = mGameStateController.gameState();
+		if (lGameState.gameMode() == GameMode.Survival)
+			return true;
+
+		return platform.isHarvested == false;
+	}
+
 	private boolean isPlayerShipAtPlatform(LintfordCore core, Platform platform, Ship ship) {
 		// TODO: Cache this in the ship class
 		final var lUnitsToPx = ConstantsPhysics.UnitsToPixels();
@@ -118,14 +140,13 @@ public class PlatformsController extends BaseController {
 
 		// stock full
 		if (platform.isStockFull) {
-			if (lIsPlayerAtPlatform && lShip.cargo.freeSpace > 0) {
-				lShip.cargo.waterAmt++;
-				lShip.cargo.freeSpace--;
+			if (lIsPlayerAtPlatform && lShip.cargo.hasFreeSpace()) {
+				final var lNewWaterCargo = mCargoController.createNewCargo(platform.uid, CargoType.Water);
+				lShip.cargo.addCargo(lNewWaterCargo);
 
 				platform.isStockFull = false;
 				platform.stockValueF = 0.f;
 			}
-
 		}
 
 		// refill
@@ -156,26 +177,73 @@ public class PlatformsController extends BaseController {
 	private void updateFarmPlatform(LintfordCore core, Platform platform) {
 		final var lShip = getPlayerShip();
 		final var lIsPlayerAtPlatform = isPlayerShipAtPlatform(core, platform, lShip);
+		final var lIsPlatformAvailableToWater = isFarmAvailableToWater(core, platform);
+		final var lIsPlatformAvailableToHarvest = isFarmAvailableToHarvest(core, platform);
 
-		// stock full
+		if (lIsPlatformAvailableToHarvest == false)
+			return;
+
+		final var lGameState = mGameStateController.gameState();
+
+		// stock full (wheat)
 		if (platform.isStockFull) {
-			if (lIsPlayerAtPlatform && lShip.cargo.freeSpace > 0) {
-				lShip.cargo.wheatAmt++;
-				lShip.cargo.freeSpace--;
+			if (lIsPlayerAtPlatform && lShip.cargo.hasFreeSpace()) {
+				final var lNewWheatCargo = mCargoController.createNewCargo(platform.uid, CargoType.Wheat);
+				lShip.cargo.addCargo(lNewWheatCargo);
 
 				platform.isStockFull = false;
 				platform.stockValueI = 0;
+				platform.isHarvested = true;
+
+				final var lPLayerScoreCard = lGameState.getScoreCard(lShip.owningPlayerSessionUid);
+
+				switch (platform.uid) {
+				case 1:
+					lPLayerScoreCard.platform1Harvested = true;
+					break;
+				case 2:
+					lPLayerScoreCard.platform2Harvested = true;
+					break;
+				case 3:
+					lPLayerScoreCard.platform3Harvested = true;
+					break;
+				case 4:
+					lPLayerScoreCard.platform4Harvested = true;
+					break;
+				}
 			}
 		}
 
-		// refill
-		if (!platform.isRefillingStock && !platform.isStockFull && lIsPlayerAtPlatform) {
-			if (!platform.refilPrerequisteFulfilled) {
-				if (lIsPlayerAtPlatform && lShip.cargo.waterAmt > 0) {
-					lShip.cargo.waterAmt--;
-					lShip.cargo.freeSpace++;
+		if (lIsPlatformAvailableToWater) {
+			// water delivered
+			if (!platform.isRefillingStock && !platform.isStockFull && lIsPlayerAtPlatform) {
+				if (!platform.refilPrerequisteFulfilled) {
+					if (lIsPlayerAtPlatform) {
+						// We are now ready to water this platform ...
+						final var lPLayerScoreCard = lGameState.getScoreCard(lShip.owningPlayerSessionUid);
+						final var lWaterCargo = lShip.cargo.removeCargo(CargoType.Water);
 
-					platform.refilPrerequisteFulfilled = true;
+						if (lWaterCargo != null) {
+							// The player has the water
+							switch (platform.uid) {
+							case 1:
+								lPLayerScoreCard.platform1Watered = true;
+								break;
+							case 2:
+								lPLayerScoreCard.platform2Watered = true;
+								break;
+							case 3:
+								lPLayerScoreCard.platform3Watered = true;
+								break;
+							case 4:
+								lPLayerScoreCard.platform4Watered = true;
+								break;
+							}
+
+							platform.isWatered = true;
+							platform.refilPrerequisteFulfilled = true;
+						}
+					}
 				}
 			}
 		}
@@ -206,13 +274,18 @@ public class PlatformsController extends BaseController {
 		final var lIsPlayerAtPlatform = isPlayerShipAtPlatform(core, platform, lShip);
 
 		// check unload of wheat
-		if (lIsPlayerAtPlatform && lShip.cargo.wheatAmt > 0) {
-			final int lNumWheat = lShip.cargo.wheatAmt;
-			for (int i = 0; i < lNumWheat; i++) {
-				mGameStateController.addFoodDelivered(1);
+		if (lIsPlayerAtPlatform) {
 
-				lShip.cargo.freeSpace++;
-				lShip.cargo.wheatAmt--;
+			var lWheatCargo = lShip.cargo.removeCargo(CargoType.Wheat);
+			while (lWheatCargo != null) {
+				Debug.debugManager().logger().i(getClass().getSimpleName(), "");
+
+				final var lScoreCard = mGameStateController.gameState().getScoreCard(lShip.owningPlayerSessionUid);
+				lScoreCard.foodDelivered++;
+
+				lScoreCard.setPlatformDelivered(lWheatCargo.parentPlatformUid);
+
+				lWheatCargo = lShip.cargo.removeCargo(CargoType.Wheat);
 			}
 		}
 	}

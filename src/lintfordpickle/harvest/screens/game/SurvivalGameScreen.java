@@ -4,15 +4,18 @@ import org.lwjgl.glfw.GLFW;
 import org.lwjgl.opengl.GL11;
 
 import lintfordpickle.harvest.ConstantsGame;
-import lintfordpickle.harvest.controllers.CameraShipChaseController;
+import lintfordpickle.harvest.controllers.CargoController;
 import lintfordpickle.harvest.controllers.GameStateController;
 import lintfordpickle.harvest.controllers.LevelController;
-import lintfordpickle.harvest.controllers.PlatformsController;
+import lintfordpickle.harvest.controllers.PlatformController;
 import lintfordpickle.harvest.controllers.SceneController;
 import lintfordpickle.harvest.controllers.ShipController;
 import lintfordpickle.harvest.controllers.actionevents.GameActionEventController;
+import lintfordpickle.harvest.controllers.camera.CameraShipChaseController;
 import lintfordpickle.harvest.data.CollisionHandler;
+import lintfordpickle.harvest.data.cargo.CargoManager;
 import lintfordpickle.harvest.data.game.GameState;
+import lintfordpickle.harvest.data.game.GameState.GameMode;
 import lintfordpickle.harvest.data.platforms.PlatformManager;
 import lintfordpickle.harvest.data.players.PlayerManager;
 import lintfordpickle.harvest.data.scene.backgrounds.SceneManager;
@@ -23,8 +26,8 @@ import lintfordpickle.harvest.renderers.hud.MinimapRenderer;
 import lintfordpickle.harvest.renderers.hud.SurvivalHudRenderer;
 import lintfordpickle.harvest.renderers.scene.SceneAdWallRenderer;
 import lintfordpickle.harvest.renderers.scene.SceneRenderer;
-import lintfordpickle.harvest.screens.FinishedScreen;
 import lintfordpickle.harvest.screens.PauseScreen;
+import lintfordpickle.harvest.screens.endscreens.DiedScreen;
 import net.lintford.library.ConstantsPhysics;
 import net.lintford.library.controllers.core.ControllerManager;
 import net.lintford.library.controllers.core.PhysicsController;
@@ -60,6 +63,7 @@ public class SurvivalGameScreen extends BaseGameScreen {
 	// Data
 	private PlayerManager mPlayerManager;
 	private GameState mGameState;
+	private CargoManager mCargoManager;
 	private ShipManager mShipManager;
 	private SceneManager mSceneManager;
 	private PlatformManager mPlatformManager;
@@ -69,8 +73,9 @@ public class SurvivalGameScreen extends BaseGameScreen {
 	private GameActionEventController mGameActionEventController;
 	private CameraShipChaseController mCameraShipChaseController;
 	private ShipController mShipController;
+	private CargoController mCargoController;
 	private SceneController mSceneController;
-	private PlatformsController mPlatformsController;
+	private PlatformController mPlatformsController;
 	private GameStateController mGameStateController;
 	private PhysicsController mPhysicsController;
 
@@ -105,10 +110,11 @@ public class SurvivalGameScreen extends BaseGameScreen {
 	public void initialize() {
 
 		mGameState = new GameState();
-		mGameState.startNewGame();
+		mGameState.startNewGame(GameMode.Survival);
 
 		mShipManager = new ShipManager();
 		mSceneManager = new SceneManager();
+		mCargoManager = new CargoManager();
 		mPlatformManager = new PlatformManager();
 
 		mCollisionHandler = new CollisionHandler();
@@ -119,8 +125,6 @@ public class SurvivalGameScreen extends BaseGameScreen {
 
 		world.addCollisionCallback(mCollisionHandler);
 		world.initialize();
-
-		
 
 		super.initialize();
 		mGameCamera.setPosition(ConstantsPhysics.toPixels(-1.2f), ConstantsPhysics.toPixels(13.1f));
@@ -166,23 +170,20 @@ public class SurvivalGameScreen extends BaseGameScreen {
 		super.update(core, otherScreenHasFocus, coveredByOtherScreen);
 
 		if (otherScreenHasFocus == false) {
-			if (mGameStateController.isPlayerDead() && mGameStateController.gameState().isGameRunning) {
+			if (mGameStateController.isPlayerDead(0) && mGameStateController.gameState().isGameRunning) {
 				mGameStateController.gameState().isGameRunning = false;
-				screenManager().addScreen(new FinishedScreen(mScreenManager, mPlayerManager, true, mGameState.foodDelivered));
+				final var lPlayerScoreCard = mGameState.getScoreCard(0);
 
-				mGameActionEventController.onExitingGame();
-			}
-
-			if (mGameStateController.hasPlayerLostThroughLives() && mGameStateController.gameState().isGameRunning) {
-				mGameStateController.gameState().isGameRunning = false;
-				screenManager().addScreen(new FinishedScreen(mScreenManager, mPlayerManager, true, mGameState.foodDelivered));
+				screenManager().addScreen(new DiedScreen(mScreenManager, mPlayerManager, true, lPlayerScoreCard.foodDelivered));
 
 				mGameActionEventController.onExitingGame();
 			}
 
 			if (mGameStateController.hasPlayerLostThroughTime() && mGameStateController.gameState().isGameRunning) {
 				mGameStateController.gameState().isGameRunning = false;
-				screenManager().addScreen(new FinishedScreen(mScreenManager, mPlayerManager, false, mGameState.foodDelivered));
+				final var lPlayerScoreCard = mGameState.getScoreCard(0);
+
+				screenManager().addScreen(new DiedScreen(mScreenManager, mPlayerManager, false, lPlayerScoreCard.foodDelivered));
 
 				mGameActionEventController.onExitingGame();
 			}
@@ -220,14 +221,15 @@ public class SurvivalGameScreen extends BaseGameScreen {
 	@Override
 	protected void createControllers(ControllerManager controllerManager) {
 		mGameActionEventController = new GameActionEventController(controllerManager, inputCounter(), entityGroupUid());
+		mCargoController = new CargoController(controllerManager, mCargoManager, entityGroupUid());
 		mPhysicsController = new PhysicsController(controllerManager, world, entityGroupUid());
 		mLevelController = new LevelController(controllerManager, entityGroupUid());
 		mCameraShipChaseController = new CameraShipChaseController(controllerManager, mGameCamera, null, entityGroupUid());
-		mGameStateController = new GameStateController(controllerManager, mGameState, entityGroupUid());
+		mGameStateController = new GameStateController(controllerManager, mGameState, mPlayerManager, entityGroupUid());
 		mSceneController = new SceneController(controllerManager, mSceneManager, entityGroupUid());
 
 		mShipController = new ShipController(controllerManager, mShipManager, mPlayerManager, entityGroupUid());
-		mPlatformsController = new PlatformsController(controllerManager, mPlatformManager, entityGroupUid());
+		mPlatformsController = new PlatformController(controllerManager, mPlatformManager, entityGroupUid());
 	}
 
 	@Override
@@ -235,6 +237,7 @@ public class SurvivalGameScreen extends BaseGameScreen {
 		mLevelController.initialize(core);
 		mGameActionEventController.initialize(core);
 		mPhysicsController.initialize(core);
+		mCargoController.initialize(core);
 		mCameraShipChaseController.initialize(core);
 		mSceneController.initialize(core);
 		mShipController.initialize(core);

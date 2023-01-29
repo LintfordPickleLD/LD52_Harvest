@@ -1,4 +1,4 @@
-package lintfordpickle.harvest.data.ships;
+package lintfordpickle.harvest.data.physics;
 
 import net.lintford.library.core.entity.BaseInstanceData;
 

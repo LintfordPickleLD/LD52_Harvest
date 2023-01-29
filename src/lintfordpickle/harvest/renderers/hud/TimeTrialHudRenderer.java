@@ -2,11 +2,14 @@ package lintfordpickle.harvest.renderers.hud;
 
 import lintfordpickle.harvest.ConstantsGame;
 import lintfordpickle.harvest.controllers.GameStateController;
-import lintfordpickle.harvest.controllers.PlatformsController;
+import lintfordpickle.harvest.controllers.PlatformController;
 import lintfordpickle.harvest.controllers.ShipController;
+import lintfordpickle.harvest.data.game.GameState;
 import net.lintford.library.core.LintfordCore;
 import net.lintford.library.core.ResourceManager;
 import net.lintford.library.core.graphics.ColorConstants;
+import net.lintford.library.core.graphics.batching.SpriteBatch;
+import net.lintford.library.core.graphics.fonts.FontUnit;
 import net.lintford.library.core.graphics.sprites.spritesheet.SpriteSheetDefinition;
 import net.lintford.library.renderers.BaseRenderer;
 import net.lintford.library.renderers.RendererManager;
@@ -26,8 +29,9 @@ public class TimeTrialHudRenderer extends BaseRenderer {
 
 	private GameStateController mGameStateController;
 	private ShipController mShipController;
-	private PlatformsController mPlatformsController;
+	private PlatformController mPlatformsController;
 
+	private GameState mGameState;
 	private SpriteSheetDefinition mHudSpritesheet;
 	private UiBar mHealthBar;
 
@@ -59,9 +63,11 @@ public class TimeTrialHudRenderer extends BaseRenderer {
 	public void initialize(LintfordCore core) {
 		final var lControllerManager = core.controllerManager();
 
-		mPlatformsController = (PlatformsController) lControllerManager.getControllerByNameRequired(PlatformsController.CONTROLLER_NAME, entityGroupID());
+		mPlatformsController = (PlatformController) lControllerManager.getControllerByNameRequired(PlatformController.CONTROLLER_NAME, entityGroupID());
 		mShipController = (ShipController) lControllerManager.getControllerByNameRequired(ShipController.CONTROLLER_NAME, entityGroupID());
 		mGameStateController = (GameStateController) lControllerManager.getControllerByNameRequired(GameStateController.CONTROLLER_NAME, entityGroupID());
+
+		mGameState = mGameStateController.gameState();
 	}
 
 	@Override
@@ -105,22 +111,13 @@ public class TimeTrialHudRenderer extends BaseRenderer {
 		lSpriteBatch.draw(mHudSpritesheet, mHudSpritesheet.getSpriteFrame("TEXTURE_CLOCK"), lHudBoundingBox.left() + 5.f, lHudBoundingBox.top() + 5.0f, 32, 32, -0.01f, ColorConstants.WHITE);
 		lFontUnit.drawText(": " + lTimeFormatted, lHudBoundingBox.left() + 38.f, lHudBoundingBox.top() + 5.0f, -0.01f, 1.f);
 
-		float lGridPositionY = lHudBoundingBox.top() + 38.0f;
+		float lGridPositionY = lHudBoundingBox.top() + 16.0f;
 
-		lSpriteBatch.draw(mHudSpritesheet, mHudSpritesheet.getSpriteFrame("TEXTURE_WHEAT"), lHudBoundingBox.left() + 5.f, lGridPositionY += 32.f, 32, 32, -0.01f, ColorConstants.WHITE);
-		lFontUnit.drawText(": " + mGameStateController.gameState().foodDelivered, lHudBoundingBox.left() + 38.f, lGridPositionY, -0.01f, 1.f);
-
-		lSpriteBatch.draw(mHudSpritesheet, mHudSpritesheet.getSpriteFrame("TEXTURE_WHEAT"), lHudBoundingBox.left() + 5.f, lGridPositionY += 32.f, 32, 32, -0.01f, ColorConstants.WHITE);
-		lFontUnit.drawText(": " + mGameStateController.gameState().foodDelivered, lHudBoundingBox.left() + 38.f, lGridPositionY, -0.01f, 1.f);
-
-		lSpriteBatch.draw(mHudSpritesheet, mHudSpritesheet.getSpriteFrame("TEXTURE_WHEAT"), lHudBoundingBox.left() + 5.f, lGridPositionY += 32.f, 32, 32, -0.01f, ColorConstants.WHITE);
-		lFontUnit.drawText(": " + mGameStateController.gameState().foodDelivered, lHudBoundingBox.left() + 38.f, lGridPositionY, -0.01f, 1.f);
-
-		lSpriteBatch.draw(mHudSpritesheet, mHudSpritesheet.getSpriteFrame("TEXTURE_WHEAT"), lHudBoundingBox.left() + 5.f, lGridPositionY += 32.f, 32, 32, -0.01f, ColorConstants.WHITE);
-		lFontUnit.drawText(": " + mGameStateController.gameState().foodDelivered, lHudBoundingBox.left() + 38.f, lGridPositionY, -0.01f, 1.f);
-
-		lSpriteBatch.draw(mHudSpritesheet, mHudSpritesheet.getSpriteFrame("TEXTURE_WHEAT"), lHudBoundingBox.left() + 5.f, lGridPositionY += 32.f, 32, 32, -0.01f, ColorConstants.WHITE);
-		lFontUnit.drawText(": " + mGameStateController.gameState().foodDelivered, lHudBoundingBox.left() + 38.f, lGridPositionY, -0.01f, 1.f);
+		// Player Stats
+		drawPlatformStatus(core, lFontUnit, lSpriteBatch, lHudBoundingBox.left() + 10.f, lGridPositionY += 32.f, 1);
+		drawPlatformStatus(core, lFontUnit, lSpriteBatch, lHudBoundingBox.left() + 10.f, lGridPositionY += 32.f, 2);
+		drawPlatformStatus(core, lFontUnit, lSpriteBatch, lHudBoundingBox.left() + 10.f, lGridPositionY += 32.f, 3);
+		drawPlatformStatus(core, lFontUnit, lSpriteBatch, lHudBoundingBox.left() + 10.f, lGridPositionY += 32.f, 4);
 
 		lSpriteBatch.draw(mHudSpritesheet, mHudSpritesheet.getSpriteFrame("TEXTURE_SPANNER"), lHudBoundingBox.right() - 5.f - 32f, lHudBoundingBox.top() + 5.0f, 32, 32, -0.01f, ColorConstants.WHITE);
 		final var lShip = mShipController.shipManager().playerShip();
@@ -137,4 +134,18 @@ public class TimeTrialHudRenderer extends BaseRenderer {
 		lSpriteBatch.end();
 
 	}
+
+	private void drawPlatformStatus(LintfordCore core, FontUnit font, SpriteBatch spriteBatch, float x, float y, int platformNr) {
+		font.drawText(String.valueOf(platformNr), x, y, -0.01f, 1.f);
+
+		// TODO: Show both players
+		final var lPlayerScorecard = mGameState.getScoreCard(0);
+
+		final var lWaterColor = lPlayerScorecard.isPlatformWatered(platformNr) ? ColorConstants.WHITE : ColorConstants.GREY_DARK;
+		spriteBatch.draw(mHudSpritesheet, mHudSpritesheet.getSpriteFrame("TEXTURE_WATER"), x + 24.f, y, 32, 32, -0.01f, lWaterColor);
+
+		final var lWheatColor = lPlayerScorecard.isPlatformHarvested(platformNr) ? ColorConstants.WHITE : ColorConstants.GREY_DARK;
+		spriteBatch.draw(mHudSpritesheet, mHudSpritesheet.getSpriteFrame("TEXTURE_WHEAT"), x + 48.f, y, 32, 32, -0.01f, lWheatColor);
+	}
+
 }

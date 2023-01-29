@@ -1,6 +1,7 @@
 package lintfordpickle.harvest.controllers;
 
 import lintfordpickle.harvest.data.game.GameState;
+import lintfordpickle.harvest.data.players.PlayerManager;
 import net.lintford.library.controllers.BaseController;
 import net.lintford.library.controllers.core.ControllerManager;
 import net.lintford.library.core.LintfordCore;
@@ -17,6 +18,7 @@ public class GameStateController extends BaseController {
 	// Variables
 	// ---------------------------------------------
 
+	private PlayerManager mPlayerManager;
 	private GameState mGameState;
 
 	// ---------------------------------------------
@@ -31,15 +33,30 @@ public class GameStateController extends BaseController {
 	// Constructor
 	// ---------------------------------------------
 
-	public GameStateController(ControllerManager controllerManager, GameState gameState, int entityGroupUid) {
+	public GameStateController(ControllerManager controllerManager, GameState gameState, PlayerManager playerManager, int entityGroupUid) {
 		super(controllerManager, CONTROLLER_NAME, entityGroupUid);
 
 		mGameState = gameState;
+		mPlayerManager = playerManager;
 	}
 
 	// ---------------------------------------------
 	// Core-Methods
 	// ---------------------------------------------
+
+	@Override
+	public void initialize(LintfordCore core) {
+		super.initialize(core);
+
+		final var lPlayerSessions = mPlayerManager.playerSessions();
+		final var lNumPlayerSessions = lPlayerSessions.size();
+		for (int i = 0; i < lNumPlayerSessions; i++) {
+			final var lPlayerSession = lPlayerSessions.get(i);
+
+			mGameState.addPlayerScoreCard(lPlayerSession.playerUid());
+		}
+
+	}
 
 	@Override
 	public void update(LintfordCore core) {
@@ -63,21 +80,14 @@ public class GameStateController extends BaseController {
 		return mGameState.gameCountdownTimerUntilDeath <= 0.f;
 	}
 
-	public boolean hasPlayerLostThroughLives() {
-		return mGameState.lives <= 0;
+	public boolean isPlayerDead(int playerUid) {
+		final var lPlayerScoreCard = mGameState.getScoreCard(playerUid);
+		return lPlayerScoreCard.isPlayerDead;
 	}
 
-	public boolean isPlayerDead() {
-		return mGameState.isPlayerDead;
-	}
-
-	public void setPlayerDied() {
-		mGameState.isPlayerDead = true;
-	}
-
-	public void addFoodDelivered(int amt) {
-		mGameState.foodDelivered += amt;
-		mGameState.gameCountdownTimerUntilDeath += 30000; // 30 seconds
+	public void setPlayerDied(int playerUid) {
+		final var lPlayerScoreCard = mGameState.getScoreCard(playerUid);
+		lPlayerScoreCard.isPlayerDead = true;
 	}
 
 }

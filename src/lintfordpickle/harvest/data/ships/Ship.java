@@ -1,7 +1,13 @@
 package lintfordpickle.harvest.data.ships;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import lintfordpickle.harvest.data.GridCollisionTypes;
+import lintfordpickle.harvest.data.cargo.Cargo;
+import lintfordpickle.harvest.data.cargo.CargoType;
 import lintfordpickle.harvest.data.input.ShipInput;
+import lintfordpickle.harvest.data.physics.ShipPhysicsData;
 import lintfordpickle.harvest.renderers.trails.TrailRendererComponent;
 import net.lintford.library.ConstantsPhysics;
 import net.lintford.library.core.LintfordCore;
@@ -12,7 +18,7 @@ import net.lintford.library.core.physics.dynamics.RigidBodyEntity;
 
 public class Ship extends RigidBodyEntity {
 
-	public class Cargo {
+	public class Inventory {
 
 		// ---------------------------------------------
 		// Constants
@@ -24,19 +30,63 @@ public class Ship extends RigidBodyEntity {
 		// Variables
 		// ---------------------------------------------
 
-		public int freeSpace;
+		private final List<Cargo> mCargo = new ArrayList<>();
 
-		public int waterAmt;
-		public int wheatAmt;
+		// ---------------------------------------------
+		// Properties
+		// ---------------------------------------------
+
+		public Cargo getCargoByIndex(int index) {
+			return mCargo.get(index);
+		}
+
+		public boolean hasFreeSpace() {
+			return mCargo.size() < TOTAL_CARGO_SPACE;
+		}
+
+		public int freeSpace() {
+			return TOTAL_CARGO_SPACE - mCargo.size();
+		}
+
+		public Cargo removeCargoOfType(CargoType cargoType) {
+			final var lNumCargo = mCargo.size();
+			for (int i = 0; i < lNumCargo; i++) {
+				if (mCargo.get(i).cargoType == cargoType)
+					return mCargo.remove(i);
+			}
+			return null;
+		}
 
 		// ---------------------------------------------
 		// Constructor
 		// ---------------------------------------------
 
-		public Cargo() {
-			freeSpace = TOTAL_CARGO_SPACE;
-			waterAmt = 0;
-			wheatAmt = 0;
+		public Inventory() {
+		}
+
+		// ---------------------------------------------
+		// Methods
+		// ---------------------------------------------
+
+		public void addCargo(Cargo newCargo) {
+			if (hasFreeSpace() == false)
+				return;
+
+			if (mCargo.contains(newCargo))
+				return;
+
+			mCargo.add(newCargo);
+		}
+
+		public Cargo removeCargo(CargoType type) {
+			final var lNumCargo = mCargo.size();
+			for (int i = 0; i < lNumCargo; i++) {
+				if (mCargo.get(i).cargoType == type) {
+					return mCargo.remove(i);
+				}
+			}
+
+			return null;
 		}
 	}
 
@@ -59,7 +109,7 @@ public class Ship extends RigidBodyEntity {
 	public final ShipInput inputs = new ShipInput();
 	public final Vector2f rearEngine = new Vector2f();
 	public final Vector2f frontEngine = new Vector2f();
-	
+
 	public int owningPlayerSessionUid;
 
 	// ghost ships are used in time-trial mode to show the relative state of a previous playthrough
@@ -72,7 +122,7 @@ public class Ship extends RigidBodyEntity {
 	public final TrailRendererComponent mRearTrailRendererComponent = new TrailRendererComponent();
 	public final TrailRendererComponent mFrontTrailRendererComponent = new TrailRendererComponent();
 
-	public final Cargo cargo = new Cargo();
+	public final Inventory cargo = new Inventory();
 	public final int maxHealth = 100;
 	public int health;
 

@@ -1,6 +1,8 @@
-package lintfordpickle.harvest.screens;
+package lintfordpickle.harvest.screens.endscreens;
 
 import lintfordpickle.harvest.data.players.PlayerManager;
+import lintfordpickle.harvest.screens.MainMenu;
+import lintfordpickle.harvest.screens.MenuBackgroundScreen;
 import lintfordpickle.harvest.screens.game.SurvivalGameScreen;
 import net.lintford.library.core.LintfordCore;
 import net.lintford.library.screenmanager.MenuEntry;
@@ -9,7 +11,7 @@ import net.lintford.library.screenmanager.ScreenManager;
 import net.lintford.library.screenmanager.layouts.ListLayout;
 import net.lintford.library.screenmanager.screens.LoadingScreen;
 
-public class FinishedScreen extends MenuScreen {
+public class DiedScreen extends MenuScreen {
 
 	// ---------------------------------------------
 	// Constants
@@ -22,7 +24,7 @@ public class FinishedScreen extends MenuScreen {
 	// Variables
 	// ---------------------------------------------
 
-	private boolean diedThroughLives;
+	private boolean mDiedViaLoastHealth;
 	private int foodAmountDelivered;
 
 	private PlayerManager mPlayerManager;
@@ -31,11 +33,11 @@ public class FinishedScreen extends MenuScreen {
 	// Constructor
 	// ---------------------------------------------
 
-	public FinishedScreen(ScreenManager screenManager, PlayerManager playerManager, boolean diedThroughLives, int foodDeliverd) {
+	public DiedScreen(ScreenManager screenManager, PlayerManager playerManager, boolean diedViaLostLife, int foodDelivered) {
 		super(screenManager, "Game Over");
 
-		this.diedThroughLives = diedThroughLives;
-		this.foodAmountDelivered = foodDeliverd;
+		this.mDiedViaLoastHealth = diedViaLostLife;
+		this.foodAmountDelivered = foodDelivered;
 
 		mPlayerManager = playerManager;
 
@@ -90,13 +92,18 @@ public class FinishedScreen extends MenuScreen {
 		lTitleFont.drawText(lHeaderText, -lHeaderTextWidth / 2, -200, -0.01f, 1.f);
 		lTitleFont.end();
 
-		final var lGameOverText0 = "You totaled your ship!";
-		final var lTextWidth0 = lFont.getStringWidth(lGameOverText0);
-
 		lFont.begin(core.HUD());
-		lFont.drawText(lGameOverText0, -lTextWidth0 / 2, -100, -0.01f, 1.f);
+		if (mDiedViaLoastHealth) {
+			final var lGameOverText0 = "You totaled your ship!";
+			final var lTextWidth0 = lFont.getStringWidth(lGameOverText0);
+			lFont.drawText(lGameOverText0, -lTextWidth0 / 2, -100, -0.01f, 1.f);
+		} else {
+			final var lGameOverText0 = "Despite your efforts, the city has succumbed to famine!";
+			final var lTextWidth0 = lFont.getStringWidth(lGameOverText0);
+			lFont.drawText(lGameOverText0, -lTextWidth0 / 2, -100, -0.01f, 1.f);
+		}
 
-		final var lGameOverText1 = "You were able to provide the city with " + foodAmountDelivered + "tn addition food";
+		final var lGameOverText1 = "You were able to provide the city with " + foodAmountDelivered + "-tn addition food";
 		final var lTextWidth1 = lFont.getStringWidth(lGameOverText1);
 
 		lFont.begin(core.HUD());

@@ -9,6 +9,11 @@ public class SceneLayer {
 	public String textureName;
 	public transient Texture texture;
 
+	public float centerX;
+	public float centerY;
+	public float widthInPx;
+	public float heightInPx;
+
 	public float translation_speed = 1.f;
 
 	public SceneLayer() {

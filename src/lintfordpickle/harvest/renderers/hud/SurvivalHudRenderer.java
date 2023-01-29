@@ -2,7 +2,6 @@ package lintfordpickle.harvest.renderers.hud;
 
 import lintfordpickle.harvest.ConstantsGame;
 import lintfordpickle.harvest.controllers.GameStateController;
-import lintfordpickle.harvest.controllers.PlatformsController;
 import lintfordpickle.harvest.controllers.ShipController;
 import net.lintford.library.core.LintfordCore;
 import net.lintford.library.core.ResourceManager;
@@ -26,7 +25,6 @@ public class SurvivalHudRenderer extends BaseRenderer {
 
 	private GameStateController mGameStateController;
 	private ShipController mShipController;
-	private PlatformsController mPlatformsController;
 
 	private SpriteSheetDefinition mHudSpritesheet;
 	private UiBar mHealthBar;
@@ -59,7 +57,6 @@ public class SurvivalHudRenderer extends BaseRenderer {
 	public void initialize(LintfordCore core) {
 		final var lControllerManager = core.controllerManager();
 
-		mPlatformsController = (PlatformsController) lControllerManager.getControllerByNameRequired(PlatformsController.CONTROLLER_NAME, entityGroupID());
 		mShipController = (ShipController) lControllerManager.getControllerByNameRequired(ShipController.CONTROLLER_NAME, entityGroupID());
 		mGameStateController = (GameStateController) lControllerManager.getControllerByNameRequired(GameStateController.CONTROLLER_NAME, entityGroupID());
 	}
@@ -105,8 +102,10 @@ public class SurvivalHudRenderer extends BaseRenderer {
 		lSpriteBatch.draw(mHudSpritesheet, mHudSpritesheet.getSpriteFrame("TEXTURE_CLOCK"), lHudBoundingBox.left() + 5.f, lHudBoundingBox.top() + 5.0f, 32, 32, -0.01f, ColorConstants.WHITE);
 		lFontUnit.drawText(": " + lTimeFormatted, lHudBoundingBox.left() + 38.f, lHudBoundingBox.top() + 5.0f, -0.01f, 1.f);
 
+		final var lPlayerScoreCard = mGameStateController.gameState().getScoreCard(0);
+
 		lSpriteBatch.draw(mHudSpritesheet, mHudSpritesheet.getSpriteFrame("TEXTURE_WHEAT"), lHudBoundingBox.left() + 5.f, lHudBoundingBox.top() + 38.0f, 32, 32, -0.01f, ColorConstants.WHITE);
-		lFontUnit.drawText(": " + mGameStateController.gameState().foodDelivered, lHudBoundingBox.left() + 38.f, lHudBoundingBox.top() + 40.0f, -0.01f, 1.f);
+		lFontUnit.drawText(": " + lPlayerScoreCard.foodDelivered, lHudBoundingBox.left() + 38.f, lHudBoundingBox.top() + 40.0f, -0.01f, 1.f);
 
 		lSpriteBatch.draw(mHudSpritesheet, mHudSpritesheet.getSpriteFrame("TEXTURE_SPANNER"), lHudBoundingBox.right() - 5.f - 32f, lHudBoundingBox.top() + 5.0f, 32, 32, -0.01f, ColorConstants.WHITE);
 		final var lShip = mShipController.shipManager().playerShip();

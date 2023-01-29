@@ -2,8 +2,9 @@ package lintfordpickle.harvest.renderers;
 
 import lintfordpickle.harvest.ConstantsGame;
 import lintfordpickle.harvest.controllers.ShipController;
+import lintfordpickle.harvest.data.cargo.CargoType;
 import lintfordpickle.harvest.data.ships.Ship;
-import lintfordpickle.harvest.data.ships.Ship.Cargo;
+import lintfordpickle.harvest.data.ships.Ship.Inventory;
 import lintfordpickle.harvest.renderers.trails.TrailBatchRenderer;
 import net.lintford.library.ConstantsPhysics;
 import net.lintford.library.core.LintfordCore;
@@ -207,11 +208,12 @@ public class ShipRenderer extends BaseRenderer {
 		float xx = 12;
 		float yy = -3;
 
-		final int lTotalNumberCargo = Cargo.TOTAL_CARGO_SPACE - ship.cargo.freeSpace;
+		final int lTotalNumberCargo = Inventory.TOTAL_CARGO_SPACE - ship.cargo.freeSpace();
 		for (int i = 0; i < lTotalNumberCargo; i++) {
+			final var lCargo = ship.cargo.getCargoByIndex(i);
 
 			final SpriteFrame lSpriteFrameFlare;
-			if (i < ship.cargo.waterAmt) {
+			if (lCargo.cargoType == CargoType.Water) {
 				lSpriteFrameFlare = mShipSpritesheet.getSpriteFrame("TEXTURECARGOWATER");
 			} else {
 				lSpriteFrameFlare = mShipSpritesheet.getSpriteFrame("TEXTURECARGOWHEAT");
@@ -275,9 +277,7 @@ public class ShipRenderer extends BaseRenderer {
 
 			lFontUnit.drawText(" ", lBoundingBox.left() + 5.f, yPos += lLineHeight, -0.01f, lFontScale);
 
-			lFontUnit.drawText("free space: " + ship.cargo.freeSpace, lBoundingBox.left() + 5.f, yPos += lLineHeight, -0.01f, lFontScale);
-			lFontUnit.drawText("water: " + ship.cargo.waterAmt, lBoundingBox.left() + 5.f, yPos += lLineHeight, -0.01f, lFontScale);
-			lFontUnit.drawText("wheat: " + ship.cargo.wheatAmt, lBoundingBox.left() + 5.f, yPos += lLineHeight, -0.01f, lFontScale);
+			lFontUnit.drawText("free space: " + ship.cargo.freeSpace(), lBoundingBox.left() + 5.f, yPos += lLineHeight, -0.01f, lFontScale);
 			lFontUnit.end();
 		}
 	}
