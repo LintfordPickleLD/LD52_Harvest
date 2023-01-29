@@ -109,26 +109,26 @@ public class TimeTrialHudRenderer extends BaseRenderer {
 
 		lSpriteBatch.draw(mHudSpritesheet, mHudSpritesheet.getSpriteFrame("TEXTURE_WHEAT"), lHudBoundingBox.left() + 5.f, lGridPositionY += 32.f, 32, 32, -0.01f, ColorConstants.WHITE);
 		lFontUnit.drawText(": " + mGameStateController.gameState().foodDelivered, lHudBoundingBox.left() + 38.f, lGridPositionY, -0.01f, 1.f);
-		
+
 		lSpriteBatch.draw(mHudSpritesheet, mHudSpritesheet.getSpriteFrame("TEXTURE_WHEAT"), lHudBoundingBox.left() + 5.f, lGridPositionY += 32.f, 32, 32, -0.01f, ColorConstants.WHITE);
 		lFontUnit.drawText(": " + mGameStateController.gameState().foodDelivered, lHudBoundingBox.left() + 38.f, lGridPositionY, -0.01f, 1.f);
-		
+
 		lSpriteBatch.draw(mHudSpritesheet, mHudSpritesheet.getSpriteFrame("TEXTURE_WHEAT"), lHudBoundingBox.left() + 5.f, lGridPositionY += 32.f, 32, 32, -0.01f, ColorConstants.WHITE);
 		lFontUnit.drawText(": " + mGameStateController.gameState().foodDelivered, lHudBoundingBox.left() + 38.f, lGridPositionY, -0.01f, 1.f);
-		
+
 		lSpriteBatch.draw(mHudSpritesheet, mHudSpritesheet.getSpriteFrame("TEXTURE_WHEAT"), lHudBoundingBox.left() + 5.f, lGridPositionY += 32.f, 32, 32, -0.01f, ColorConstants.WHITE);
 		lFontUnit.drawText(": " + mGameStateController.gameState().foodDelivered, lHudBoundingBox.left() + 38.f, lGridPositionY, -0.01f, 1.f);
-		
+
 		lSpriteBatch.draw(mHudSpritesheet, mHudSpritesheet.getSpriteFrame("TEXTURE_WHEAT"), lHudBoundingBox.left() + 5.f, lGridPositionY += 32.f, 32, 32, -0.01f, ColorConstants.WHITE);
 		lFontUnit.drawText(": " + mGameStateController.gameState().foodDelivered, lHudBoundingBox.left() + 38.f, lGridPositionY, -0.01f, 1.f);
-		
 
 		lSpriteBatch.draw(mHudSpritesheet, mHudSpritesheet.getSpriteFrame("TEXTURE_SPANNER"), lHudBoundingBox.right() - 5.f - 32f, lHudBoundingBox.top() + 5.0f, 32, 32, -0.01f, ColorConstants.WHITE);
 		final var lShip = mShipController.shipManager().playerShip();
 
+		final var lHealthBarWidth = 196.f - 32.f;
 		mHealthBar.innerBorderPadding(2);
 		mHealthBar.setInnerColor(0.92f, 0.07f, 0.04f, 1.f);
-		mHealthBar.setDestRectangle(lHudBoundingBox.right() - 5 - 205 - 32, lHudBoundingBox.top() + 12, 200, 20);
+		mHealthBar.setDestRectangle(lHudBoundingBox.right() - 10 - lHealthBarWidth - 32, lHudBoundingBox.top() + 12, lHealthBarWidth, 20);
 		mHealthBar.setCurrentValue(lShip.health);
 		mHealthBar.setMinMax(0, 100);
 		mHealthBar.draw(core, lSpriteBatch, lFontUnit, -0.01f);
