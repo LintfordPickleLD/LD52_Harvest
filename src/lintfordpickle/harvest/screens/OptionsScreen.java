@@ -4,6 +4,7 @@ import net.lintford.library.core.LintfordCore;
 import net.lintford.library.screenmanager.MenuEntry;
 import net.lintford.library.screenmanager.MenuScreen;
 import net.lintford.library.screenmanager.ScreenManager;
+import net.lintford.library.screenmanager.ScreenManagerConstants.LAYOUT_ALIGNMENT;
 import net.lintford.library.screenmanager.layouts.ListLayout;
 import net.lintford.library.screenmanager.screens.AudioOptionsScreen;
 
@@ -29,23 +30,39 @@ public class OptionsScreen extends MenuScreen {
 
 		final var lLayout = new ListLayout(this);
 
+		final float lDesiredEntryWidth = 56.f;
+		final float lDesiredEntryHeight = 17.f;
+
 		// ---
 		final var lKeyBindsEntry = new MenuEntry(mScreenManager, lLayout, "Key Binds");
+		lKeyBindsEntry.desiredWidth(lDesiredEntryWidth);
+		lKeyBindsEntry.desiredHeight(lDesiredEntryHeight);
 		lKeyBindsEntry.registerClickListener(this, BUTTON_KEY_BINDS);
 
 		final var lGraphicsEntry = new MenuEntry(mScreenManager, lLayout, "Graphics");
+		lGraphicsEntry.desiredWidth(lDesiredEntryWidth);
+		lGraphicsEntry.desiredHeight(lDesiredEntryHeight);
 		lGraphicsEntry.registerClickListener(this, BUTTON_GRAPHICS);
 
 		final var lAudioSettingsEntry = new MenuEntry(mScreenManager, lLayout, "Audio");
+		lAudioSettingsEntry.desiredWidth(lDesiredEntryWidth);
+		lAudioSettingsEntry.desiredHeight(lDesiredEntryHeight);
 		lAudioSettingsEntry.registerClickListener(this, BUTTON_AUDIO);
 
 		final var lBackEntry = new MenuEntry(mScreenManager, lLayout, "Back");
+		lBackEntry.desiredWidth(lDesiredEntryWidth);
+		lBackEntry.desiredHeight(lDesiredEntryHeight);
 		lBackEntry.registerClickListener(this, BUTTON_BACK);
 
 		lLayout.addMenuEntry(lKeyBindsEntry);
 		lLayout.addMenuEntry(lGraphicsEntry);
 		lLayout.addMenuEntry(lAudioSettingsEntry);
 		lLayout.addMenuEntry(lBackEntry);
+
+		mLayoutAlignment = LAYOUT_ALIGNMENT.LEFT;
+
+		mShowBackgroundScreens = false;
+		mBlockInputInBackground = true;
 
 		mLayouts.add(lLayout);
 

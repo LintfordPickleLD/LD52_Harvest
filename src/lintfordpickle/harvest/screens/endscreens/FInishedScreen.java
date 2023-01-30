@@ -27,16 +27,20 @@ public class FInishedScreen extends MenuScreen {
 
 	private PlayerManager mPlayerManager;
 	private float mTotalTimeInMs;
+	private boolean mFastestTimeRecorded;
+	private boolean mFastestTimeFlashOn;
+	private float mFastestTimeFlashTimer;
 
 	// ---------------------------------------------
 	// Constructor
 	// ---------------------------------------------
 
-	public FInishedScreen(ScreenManager screenManager, PlayerManager playerManager, float totalTimeInMs) {
+	public FInishedScreen(ScreenManager screenManager, PlayerManager playerManager, float totalTimeInMs, boolean fastestTimeRecorded) {
 		super(screenManager, "");
 
 		mPlayerManager = playerManager;
 		mTotalTimeInMs = totalTimeInMs;
+		mFastestTimeRecorded = fastestTimeRecorded;
 
 		final var lLayout = new ListLayout(this);
 
@@ -103,6 +107,10 @@ public class FInishedScreen extends MenuScreen {
 
 		final var lGameOverText1 = "Your total time was: " + lTotalMinutes + ":" + lTotalSeconds + ":" + tempTime;
 		final var lTextWidth1 = lFont.getStringWidth(lGameOverText1);
+
+		if (mFastestTimeRecorded) {
+
+		}
 
 		lFont.begin(core.HUD());
 		lFont.drawText(lGameOverText1, -lTextWidth1 / 2, -80, -0.01f, 1.f);

@@ -174,26 +174,28 @@ public class TrialGameScreen extends BaseGameScreen {
 			final var lPlayerScoreCard = mGameState.getScoreCard(0);
 
 			if (lPlayerScoreCard.allPlatformsDelivered()) {
-				mGameState.isGameRunning = false;
-				screenManager().addScreen(new FInishedScreen(mScreenManager, mPlayerManager, mGameState.timeAliveInMs));
-
 				mGameActionEventController.onExitingGame();
+
+				mGameState.isGameRunning = false;
+				screenManager().addScreen(new FInishedScreen(mScreenManager, mPlayerManager, mGameState.timeAliveInMs, mGameActionEventController.fastestTimeOnExitReached()));
 				return;
 			}
 
 			if (lPlayerScoreCard.isPlayerDead && mGameStateController.gameState().isGameRunning) {
+				mGameActionEventController.onExitingGame();
+
 				mGameState.isGameRunning = false;
 				screenManager().addScreen(new DiedScreen(mScreenManager, mPlayerManager, true, lPlayerScoreCard.foodDelivered));
 
-				mGameActionEventController.onExitingGame();
 				return;
 			}
 
 			if (mGameStateController.hasPlayerLostThroughTime() && mGameStateController.gameState().isGameRunning) {
+				mGameActionEventController.onExitingGame();
+
 				mGameState.isGameRunning = false;
 				screenManager().addScreen(new DiedScreen(mScreenManager, mPlayerManager, false, lPlayerScoreCard.foodDelivered));
 
-				mGameActionEventController.onExitingGame();
 				return;
 			}
 		}

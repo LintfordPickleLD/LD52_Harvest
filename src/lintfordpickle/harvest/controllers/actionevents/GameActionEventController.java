@@ -36,6 +36,24 @@ public class GameActionEventController extends ActionEventController<ActionFrame
 	private GameStateController mGameStateController;
 	private ReplayController mReplayController;
 
+	private boolean mFastestTimeOnExitReached;
+
+	private GameActionEventListener mGameActionEventListener;
+
+	// ---------------------------------------------
+	// Properties
+	// ---------------------------------------------
+
+	public boolean fastestTimeOnExitReached() {
+		return mFastestTimeOnExitReached;
+	}
+
+	public void setActionEventListener(GameActionEventListener listener) {
+		mGameActionEventListener = listener;
+
+		mFastestTimeOnExitReached = false;
+	}
+
 	// ---------------------------------------------
 	// Constructor
 	// ---------------------------------------------
@@ -96,6 +114,8 @@ public class GameActionEventController extends ActionEventController<ActionFrame
 	public void onExitingGame() {
 		super.onExitingGame();
 
+		mFastestTimeOnExitReached = false;
+
 		final var lGameState = mGameStateController.gameState();
 		final var lReplayManager = mReplayController.replayManager();
 
@@ -110,6 +130,8 @@ public class GameActionEventController extends ActionEventController<ActionFrame
 		var shouldWeKeepThisRecording = !isPreviousAvailable || justGotMoreFood || justGotFasterTime;
 		if (!shouldWeKeepThisRecording)
 			return;
+
+		mFastestTimeOnExitReached = true;
 
 		Debug.debugManager().logger().i(getClass().getSimpleName(), "Best time so far - replay will be recorded");
 

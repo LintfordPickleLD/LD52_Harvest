@@ -9,6 +9,7 @@ public class PlayerManager {
 	// Constants
 	// ---------------------------------------------
 
+	public static final int DEFAULT_PLAYER_SESSION_UID = 0;
 	public static final int MAX_PLAYERS = 4;
 
 	// ---------------------------------------------
