@@ -145,19 +145,13 @@ public class LevelController extends BaseController {
 		// Hq
 		createPlatform(0, 1748, 574, 160, 48, PlatformType.Warehouse);
 
-		// 10
+		// Farm Platforms
 		createPlatform(1, 852, 318, 160, 48, PlatformType.Farm);
-
-		// 13
 		createPlatform(2, 2, 192, 160, 48, PlatformType.Farm);
-
-		// 14
 		createPlatform(3, 142, 1332, 160, 48, PlatformType.Farm);
-
-		// 22
 		createPlatform(4, 1343, 888, 160, 48, PlatformType.Farm);
 
-		// Water
+		// Water Platforms
 		createPlatform(5, 529, 1813, 160, 48, PlatformType.Water);
 		createPlatform(6, 1470, 1820, 160, 48, PlatformType.Water);
 	}
