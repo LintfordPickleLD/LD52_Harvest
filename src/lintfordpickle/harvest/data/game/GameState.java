@@ -121,7 +121,8 @@ public class GameState {
 	// Variables
 	// ---------------------------------------------
 
-	public float gameCountdownTimerUntilDeath; // death at 0
+	public float gameTimer;
+
 	public int timeAliveInMs;
 	public boolean isGameRunning;
 
@@ -137,17 +138,18 @@ public class GameState {
 	}
 
 	// ---------------------------------------------
-	// Constructor
-	// ---------------------------------------------
-
-	// ---------------------------------------------
 	// Methods
 	// ---------------------------------------------
 
 	public void startNewGame(GameMode mode) {
 		mGameMode = mode;
 
-		gameCountdownTimerUntilDeath = ConstantsGame.TOTAL_GAME_TIME_AT_START;
+		if (mode == GameMode.Survival) {
+			gameTimer = ConstantsGame.SURVIVAL_STARTING_TIME_IN_MS;
+		} else {
+			gameTimer = 0;
+		}
+
 		isGameRunning = true;
 	}
 

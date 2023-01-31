@@ -17,7 +17,6 @@ import net.lintford.library.core.graphics.textures.Texture;
 import net.lintford.library.core.maths.MathHelper;
 import net.lintford.library.renderers.BaseRenderer;
 import net.lintford.library.renderers.RendererManager;
-import net.lintford.library.renderers.windows.components.UiBar;
 
 public class MinimapRenderer extends BaseRenderer {
 
@@ -38,8 +37,6 @@ public class MinimapRenderer extends BaseRenderer {
 	private SpriteSheetDefinition mCoreSpritesheet;
 	private Texture mMinimapTexture;
 
-	private UiBar mHealthBar;
-
 	// ---------------------------------------------
 	// Properties
 	// ---------------------------------------------
@@ -56,8 +53,6 @@ public class MinimapRenderer extends BaseRenderer {
 
 	public MinimapRenderer(RendererManager rendererManager, int entityGroupID) {
 		super(rendererManager, RENDERER_NAME, entityGroupID);
-
-		mHealthBar = new UiBar(0.f, 100.f);
 	}
 
 	// ---------------------------------------------

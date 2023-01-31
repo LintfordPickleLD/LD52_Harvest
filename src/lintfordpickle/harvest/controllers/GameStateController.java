@@ -6,7 +6,7 @@ import net.lintford.library.controllers.BaseController;
 import net.lintford.library.controllers.core.ControllerManager;
 import net.lintford.library.core.LintfordCore;
 
-public class GameStateController extends BaseController {
+public abstract class GameStateController extends BaseController {
 
 	// ---------------------------------------------
 	// Constants
@@ -18,8 +18,8 @@ public class GameStateController extends BaseController {
 	// Variables
 	// ---------------------------------------------
 
-	private PlayerManager mPlayerManager;
-	private GameState mGameState;
+	protected PlayerManager mPlayerManager;
+	protected GameState mGameState;
 
 	// ---------------------------------------------
 	// Properties
@@ -55,30 +55,13 @@ public class GameStateController extends BaseController {
 
 			mGameState.addPlayerScoreCard(lPlayerSession.playerUid());
 		}
-
-	}
-
-	@Override
-	public void update(LintfordCore core) {
-		super.update(core);
-
-		final var lDelta = (float) core.gameTime().elapsedTimeMilli();
-
-		if (mGameState.gameCountdownTimerUntilDeath > 0.f) {
-
-			mGameState.gameCountdownTimerUntilDeath -= lDelta;
-			mGameState.timeAliveInMs += lDelta;
-		}
-
 	}
 
 	// ---------------------------------------------
 	// Methods
 	// ---------------------------------------------
 
-	public boolean hasPlayerLostThroughTime() {
-		return mGameState.gameCountdownTimerUntilDeath <= 0.f;
-	}
+	public abstract boolean hasPlayerLostThroughTime();
 
 	public boolean isPlayerDead(int playerUid) {
 		final var lPlayerScoreCard = mGameState.getScoreCard(playerUid);

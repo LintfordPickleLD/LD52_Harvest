@@ -5,7 +5,7 @@ import org.lwjgl.opengl.GL11;
 
 import lintfordpickle.harvest.ConstantsGame;
 import lintfordpickle.harvest.controllers.CargoController;
-import lintfordpickle.harvest.controllers.GameStateController;
+import lintfordpickle.harvest.controllers.SurvivalGameStateController;
 import lintfordpickle.harvest.controllers.LevelController;
 import lintfordpickle.harvest.controllers.PlatformController;
 import lintfordpickle.harvest.controllers.SceneController;
@@ -27,7 +27,7 @@ import lintfordpickle.harvest.renderers.hud.SurvivalHudRenderer;
 import lintfordpickle.harvest.renderers.scene.SceneAdWallRenderer;
 import lintfordpickle.harvest.renderers.scene.SceneRenderer;
 import lintfordpickle.harvest.screens.PauseScreen;
-import lintfordpickle.harvest.screens.endscreens.DiedScreen;
+import lintfordpickle.harvest.screens.endscreens.SurvivalEndScreen;
 import net.lintford.library.ConstantsPhysics;
 import net.lintford.library.controllers.core.ControllerManager;
 import net.lintford.library.controllers.core.PhysicsController;
@@ -76,7 +76,7 @@ public class SurvivalGameScreen extends BaseGameScreen {
 	private CargoController mCargoController;
 	private SceneController mSceneController;
 	private PlatformController mPlatformsController;
-	private GameStateController mGameStateController;
+	private SurvivalGameStateController mGameStateController;
 	private PhysicsController mPhysicsController;
 
 	// Renderers
@@ -174,7 +174,7 @@ public class SurvivalGameScreen extends BaseGameScreen {
 				mGameStateController.gameState().isGameRunning = false;
 				final var lPlayerScoreCard = mGameState.getScoreCard(0);
 
-				screenManager().addScreen(new DiedScreen(mScreenManager, mPlayerManager, true, lPlayerScoreCard.foodDelivered));
+				screenManager().addScreen(new SurvivalEndScreen(mScreenManager, mPlayerManager, true, lPlayerScoreCard.foodDelivered));
 
 				mGameActionEventController.onExitingGame();
 			}
@@ -183,7 +183,7 @@ public class SurvivalGameScreen extends BaseGameScreen {
 				mGameStateController.gameState().isGameRunning = false;
 				final var lPlayerScoreCard = mGameState.getScoreCard(0);
 
-				screenManager().addScreen(new DiedScreen(mScreenManager, mPlayerManager, false, lPlayerScoreCard.foodDelivered));
+				screenManager().addScreen(new SurvivalEndScreen(mScreenManager, mPlayerManager, false, lPlayerScoreCard.foodDelivered));
 
 				mGameActionEventController.onExitingGame();
 			}
@@ -225,7 +225,7 @@ public class SurvivalGameScreen extends BaseGameScreen {
 		mPhysicsController = new PhysicsController(controllerManager, world, entityGroupUid());
 		mLevelController = new LevelController(controllerManager, entityGroupUid());
 		mCameraShipChaseController = new CameraShipChaseController(controllerManager, mGameCamera, null, entityGroupUid());
-		mGameStateController = new GameStateController(controllerManager, mGameState, mPlayerManager, entityGroupUid());
+		mGameStateController = new SurvivalGameStateController(controllerManager, mGameState, mPlayerManager, entityGroupUid());
 		mSceneController = new SceneController(controllerManager, mSceneManager, entityGroupUid());
 
 		mShipController = new ShipController(controllerManager, mShipManager, mPlayerManager, entityGroupUid());

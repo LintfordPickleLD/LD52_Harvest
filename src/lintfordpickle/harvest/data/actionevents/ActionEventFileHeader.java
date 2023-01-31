@@ -32,6 +32,10 @@ public class ActionEventFileHeader {
 	// Properties
 	// ---------------------------------------------
 
+	public String name() {
+		return mRecordName;
+	}
+
 	public short fileVersion() {
 		return mFileversion;
 	}

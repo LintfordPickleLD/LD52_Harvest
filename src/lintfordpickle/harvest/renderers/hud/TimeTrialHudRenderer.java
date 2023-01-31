@@ -11,6 +11,7 @@ import net.lintford.library.core.graphics.ColorConstants;
 import net.lintford.library.core.graphics.batching.SpriteBatch;
 import net.lintford.library.core.graphics.fonts.FontUnit;
 import net.lintford.library.core.graphics.sprites.spritesheet.SpriteSheetDefinition;
+import net.lintford.library.core.time.TimeConstants;
 import net.lintford.library.renderers.BaseRenderer;
 import net.lintford.library.renderers.RendererManager;
 import net.lintford.library.renderers.windows.components.UiBar;
@@ -104,8 +105,18 @@ public class TimeTrialHudRenderer extends BaseRenderer {
 
 		lSpriteBatch.begin(core.HUD());
 
-		final var lTimeRemaining = mGameStateController.gameState().gameCountdownTimerUntilDeath / 1000.f;
-		final var lTimeFormatted = String.format(java.util.Locale.US, "%.1f", lTimeRemaining);
+		final var lTimeRemaining = mGameStateController.gameState().gameTimer;
+
+		var tempTime = lTimeRemaining;
+		final var lTotalMinutes = (int) tempTime / TimeConstants.MillisPerMinute;
+		tempTime -= lTotalMinutes * TimeConstants.MillisPerMinute;
+		final var lTotalSeconds = (int) tempTime / TimeConstants.MillisPerSecond;
+		tempTime -= lTotalSeconds * TimeConstants.MillisPerSecond;
+
+		final var lTimeFormatted = 
+				String.format(java.util.Locale.US, "%02d", lTotalMinutes) + 
+				":" + String.format(java.util.Locale.US, "%02d", lTotalSeconds) + 
+				":" + String.format(java.util.Locale.US, "%1.0f", tempTime);
 
 		lFontUnit.begin(core.HUD());
 		lSpriteBatch.draw(mHudSpritesheet, mHudSpritesheet.getSpriteFrame("TEXTURE_CLOCK"), lHudBoundingBox.left() + 5.f, lHudBoundingBox.top() + 5.0f, 32, 32, -0.01f, ColorConstants.WHITE);

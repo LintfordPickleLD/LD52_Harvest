@@ -11,7 +11,7 @@ import net.lintford.library.screenmanager.ScreenManager;
 import net.lintford.library.screenmanager.layouts.ListLayout;
 import net.lintford.library.screenmanager.screens.LoadingScreen;
 
-public class DiedScreen extends MenuScreen {
+public class SurvivalEndScreen extends MenuScreen {
 
 	// ---------------------------------------------
 	// Constants
@@ -33,7 +33,7 @@ public class DiedScreen extends MenuScreen {
 	// Constructor
 	// ---------------------------------------------
 
-	public DiedScreen(ScreenManager screenManager, PlayerManager playerManager, boolean diedViaLostLife, int foodDelivered) {
+	public SurvivalEndScreen(ScreenManager screenManager, PlayerManager playerManager, boolean diedViaLostLife, int foodDelivered) {
 		super(screenManager, "Game Over");
 
 		this.mDiedViaLoastHealth = diedViaLostLife;

@@ -59,6 +59,7 @@ public class OptionsScreen extends MenuScreen {
 		lLayout.addMenuEntry(lAudioSettingsEntry);
 		lLayout.addMenuEntry(lBackEntry);
 
+		mMenuScreenWidthScaleFactor = 0.5f;
 		mLayoutAlignment = LAYOUT_ALIGNMENT.LEFT;
 
 		mShowBackgroundScreens = false;

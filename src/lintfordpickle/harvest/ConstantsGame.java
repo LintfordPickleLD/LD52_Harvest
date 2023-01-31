@@ -26,7 +26,7 @@ public class ConstantsGame {
 
 	public static final boolean LOCK_ZOOM_TO_ONE = true;
 
-	public static final float TOTAL_GAME_TIME_AT_START = 60 * 4 * 1000;
+	public static final float SURVIVAL_STARTING_TIME_IN_MS = 60 * 4 * 1000;
 
 	// ---------------------------------------------
 	// Physics

@@ -1,7 +1,7 @@
 package lintfordpickle.harvest.renderers.hud;
 
 import lintfordpickle.harvest.ConstantsGame;
-import lintfordpickle.harvest.controllers.GameStateController;
+import lintfordpickle.harvest.controllers.SurvivalGameStateController;
 import lintfordpickle.harvest.controllers.ShipController;
 import net.lintford.library.core.LintfordCore;
 import net.lintford.library.core.ResourceManager;
@@ -23,7 +23,7 @@ public class SurvivalHudRenderer extends BaseRenderer {
 	// Variables
 	// ---------------------------------------------
 
-	private GameStateController mGameStateController;
+	private SurvivalGameStateController mGameStateController;
 	private ShipController mShipController;
 
 	private SpriteSheetDefinition mHudSpritesheet;
@@ -58,7 +58,7 @@ public class SurvivalHudRenderer extends BaseRenderer {
 		final var lControllerManager = core.controllerManager();
 
 		mShipController = (ShipController) lControllerManager.getControllerByNameRequired(ShipController.CONTROLLER_NAME, entityGroupID());
-		mGameStateController = (GameStateController) lControllerManager.getControllerByNameRequired(GameStateController.CONTROLLER_NAME, entityGroupID());
+		mGameStateController = (SurvivalGameStateController) lControllerManager.getControllerByNameRequired(SurvivalGameStateController.CONTROLLER_NAME, entityGroupID());
 	}
 
 	@Override
@@ -95,7 +95,7 @@ public class SurvivalHudRenderer extends BaseRenderer {
 
 		lSpriteBatch.begin(core.HUD());
 
-		final var lTimeRemaining = mGameStateController.gameState().gameCountdownTimerUntilDeath / 1000.f;
+		final var lTimeRemaining = mGameStateController.gameState().gameTimer / 1000.f;
 		final var lTimeFormatted = String.format(java.util.Locale.US, "%.1f", lTimeRemaining);
 
 		lFontUnit.begin(core.HUD());

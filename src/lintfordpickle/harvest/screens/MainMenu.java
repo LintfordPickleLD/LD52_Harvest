@@ -2,8 +2,8 @@ package lintfordpickle.harvest.screens;
 
 import lintfordpickle.harvest.ConstantsGame;
 import lintfordpickle.harvest.controllers.replays.ReplayController;
-import lintfordpickle.harvest.screens.landing.SurviallLanding;
-import lintfordpickle.harvest.screens.landing.TimeTrailLanding;
+import lintfordpickle.harvest.screens.landing.SurvialLandingScreen;
+import lintfordpickle.harvest.screens.landing.TimeTrailLandingScreen;
 import net.lintford.library.screenmanager.MenuEntry;
 import net.lintford.library.screenmanager.MenuScreen;
 import net.lintford.library.screenmanager.ScreenManager;
@@ -81,6 +81,7 @@ public class MainMenu extends MenuScreen {
 
 		mLayouts.add(mMainMenuListBox);
 
+		mMenuScreenWidthScaleFactor = 0.5f;
 		mLayoutAlignment = LAYOUT_ALIGNMENT.LEFT;
 
 		mIsPopup = false;
@@ -109,7 +110,7 @@ public class MainMenu extends MenuScreen {
 		switch (mClickAction.consume()) {
 		case SCREEN_BUTTON_PLAY_SURVIVAL: {
 			final var lTopMostScreen = mScreenManager.getTopScreen();
-			if (lTopMostScreen instanceof SurviallLanding) {
+			if (lTopMostScreen instanceof SurvialLandingScreen) {
 				return;
 			}
 
@@ -117,14 +118,14 @@ public class MainMenu extends MenuScreen {
 				mScreenManager.removeScreen(lTopMostScreen);
 			}
 
-			screenManager().addScreen(new SurviallLanding(mScreenManager));
+			screenManager().addScreen(new SurvialLandingScreen(mScreenManager));
 			break;
 		}
 
 		case SCREEN_BUTTON_PLAY_TIME_TRIAL: {
 			final var lTopMostScreen = mScreenManager.getTopScreen();
 
-			if (lTopMostScreen instanceof TimeTrailLanding) {
+			if (lTopMostScreen instanceof TimeTrailLandingScreen) {
 				return;
 			}
 
@@ -132,7 +133,7 @@ public class MainMenu extends MenuScreen {
 				mScreenManager.removeScreen(lTopMostScreen);
 			}
 
-			screenManager().addScreen(new TimeTrailLanding(mScreenManager));
+			screenManager().addScreen(new TimeTrailLandingScreen(mScreenManager));
 			break;
 		}
 

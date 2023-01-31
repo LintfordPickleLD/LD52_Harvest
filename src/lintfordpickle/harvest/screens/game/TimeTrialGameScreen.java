@@ -5,11 +5,11 @@ import org.lwjgl.opengl.GL11;
 
 import lintfordpickle.harvest.ConstantsGame;
 import lintfordpickle.harvest.controllers.CargoController;
-import lintfordpickle.harvest.controllers.GameStateController;
 import lintfordpickle.harvest.controllers.LevelController;
 import lintfordpickle.harvest.controllers.PlatformController;
 import lintfordpickle.harvest.controllers.SceneController;
 import lintfordpickle.harvest.controllers.ShipController;
+import lintfordpickle.harvest.controllers.TimeTrialGameStateController;
 import lintfordpickle.harvest.controllers.actionevents.GameActionEventController;
 import lintfordpickle.harvest.controllers.camera.CameraShipChaseController;
 import lintfordpickle.harvest.data.CollisionHandler;
@@ -27,8 +27,8 @@ import lintfordpickle.harvest.renderers.hud.TimeTrialHudRenderer;
 import lintfordpickle.harvest.renderers.scene.SceneAdWallRenderer;
 import lintfordpickle.harvest.renderers.scene.SceneRenderer;
 import lintfordpickle.harvest.screens.PauseScreen;
-import lintfordpickle.harvest.screens.endscreens.DiedScreen;
-import lintfordpickle.harvest.screens.endscreens.FInishedScreen;
+import lintfordpickle.harvest.screens.endscreens.SurvivalEndScreen;
+import lintfordpickle.harvest.screens.endscreens.TimeTrialEndScreen;
 import net.lintford.library.ConstantsPhysics;
 import net.lintford.library.controllers.core.ControllerManager;
 import net.lintford.library.controllers.core.PhysicsController;
@@ -44,7 +44,7 @@ import net.lintford.library.screenmanager.ScreenManager;
 import net.lintford.library.screenmanager.screens.BaseGameScreen;
 import net.lintford.library.screenmanager.screens.LoadingScreen;
 
-public class TrialGameScreen extends BaseGameScreen {
+public class TimeTrialGameScreen extends BaseGameScreen {
 
 	// ---------------------------------------------
 	// Constants
@@ -77,7 +77,7 @@ public class TrialGameScreen extends BaseGameScreen {
 	private ShipController mShipController;
 	private SceneController mSceneController;
 	private PlatformController mPlatformsController;
-	private GameStateController mGameStateController;
+	private TimeTrialGameStateController mGameStateController;
 	private PhysicsController mPhysicsController;
 
 	// Renderers
@@ -94,7 +94,7 @@ public class TrialGameScreen extends BaseGameScreen {
 	// Constructors
 	// ---------------------------------------------
 
-	public TrialGameScreen(ScreenManager screenManager, PlayerManager playerManager) {
+	public TimeTrialGameScreen(ScreenManager screenManager, PlayerManager playerManager) {
 		super(screenManager);
 
 		mPlayerManager = playerManager;
@@ -157,7 +157,7 @@ public class TrialGameScreen extends BaseGameScreen {
 			mGameActionEventController.onExitingGame();
 
 			if (ConstantsGame.ESCAPE_RESTART_MAIN_SCENE) {
-				final var lLoadingScreen = new LoadingScreen(screenManager(), true, new TrialGameScreen(screenManager(), mPlayerManager));
+				final var lLoadingScreen = new LoadingScreen(screenManager(), true, new TimeTrialGameScreen(screenManager(), mPlayerManager));
 				screenManager().createLoadingScreen(new LoadingScreen(screenManager(), true, lLoadingScreen));
 				return;
 			}
@@ -177,7 +177,7 @@ public class TrialGameScreen extends BaseGameScreen {
 				mGameActionEventController.onExitingGame();
 
 				mGameState.isGameRunning = false;
-				screenManager().addScreen(new FInishedScreen(mScreenManager, mPlayerManager, mGameState.timeAliveInMs, mGameActionEventController.fastestTimeOnExitReached()));
+				screenManager().addScreen(new TimeTrialEndScreen(mScreenManager, mPlayerManager, mGameState.timeAliveInMs, mGameActionEventController.fastestTimeOnExitReached()));
 				return;
 			}
 
@@ -185,16 +185,7 @@ public class TrialGameScreen extends BaseGameScreen {
 				mGameActionEventController.onExitingGame();
 
 				mGameState.isGameRunning = false;
-				screenManager().addScreen(new DiedScreen(mScreenManager, mPlayerManager, true, lPlayerScoreCard.foodDelivered));
-
-				return;
-			}
-
-			if (mGameStateController.hasPlayerLostThroughTime() && mGameStateController.gameState().isGameRunning) {
-				mGameActionEventController.onExitingGame();
-
-				mGameState.isGameRunning = false;
-				screenManager().addScreen(new DiedScreen(mScreenManager, mPlayerManager, false, lPlayerScoreCard.foodDelivered));
+				screenManager().addScreen(new SurvivalEndScreen(mScreenManager, mPlayerManager, true, lPlayerScoreCard.foodDelivered));
 
 				return;
 			}
@@ -235,7 +226,7 @@ public class TrialGameScreen extends BaseGameScreen {
 		mPhysicsController = new PhysicsController(controllerManager, world, entityGroupUid());
 		mLevelController = new LevelController(controllerManager, entityGroupUid());
 		mCameraShipChaseController = new CameraShipChaseController(controllerManager, mGameCamera, null, entityGroupUid());
-		mGameStateController = new GameStateController(controllerManager, mGameState, mPlayerManager, entityGroupUid());
+		mGameStateController = new TimeTrialGameStateController(controllerManager, mGameState, mPlayerManager, entityGroupUid());
 		mSceneController = new SceneController(controllerManager, mSceneManager, entityGroupUid());
 		mCargoController = new CargoController(controllerManager, mCargoManager, entityGroupUid());
 		mShipController = new ShipController(controllerManager, mShipManager, mPlayerManager, entityGroupUid());

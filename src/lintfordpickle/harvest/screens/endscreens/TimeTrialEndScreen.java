@@ -3,7 +3,7 @@ package lintfordpickle.harvest.screens.endscreens;
 import lintfordpickle.harvest.data.players.PlayerManager;
 import lintfordpickle.harvest.screens.MainMenu;
 import lintfordpickle.harvest.screens.MenuBackgroundScreen;
-import lintfordpickle.harvest.screens.game.TrialGameScreen;
+import lintfordpickle.harvest.screens.game.TimeTrialGameScreen;
 import net.lintford.library.core.LintfordCore;
 import net.lintford.library.core.time.TimeConstants;
 import net.lintford.library.screenmanager.MenuEntry;
@@ -12,7 +12,7 @@ import net.lintford.library.screenmanager.ScreenManager;
 import net.lintford.library.screenmanager.layouts.ListLayout;
 import net.lintford.library.screenmanager.screens.LoadingScreen;
 
-public class FInishedScreen extends MenuScreen {
+public class TimeTrialEndScreen extends MenuScreen {
 
 	// ---------------------------------------------
 	// Constants
@@ -35,7 +35,7 @@ public class FInishedScreen extends MenuScreen {
 	// Constructor
 	// ---------------------------------------------
 
-	public FInishedScreen(ScreenManager screenManager, PlayerManager playerManager, float totalTimeInMs, boolean fastestTimeRecorded) {
+	public TimeTrialEndScreen(ScreenManager screenManager, PlayerManager playerManager, float totalTimeInMs, boolean fastestTimeRecorded) {
 		super(screenManager, "");
 
 		mPlayerManager = playerManager;
@@ -69,7 +69,7 @@ public class FInishedScreen extends MenuScreen {
 	protected void handleOnClick() {
 		switch (mClickAction.consume()) {
 		case SCREEN_BUTTON_RESTART:
-			screenManager().createLoadingScreen(new LoadingScreen(screenManager(), false, new TrialGameScreen(screenManager(), mPlayerManager)));
+			screenManager().createLoadingScreen(new LoadingScreen(screenManager(), false, new TimeTrialGameScreen(screenManager(), mPlayerManager)));
 			break;
 
 		case SCREEN_BUTTON_EXIT:
