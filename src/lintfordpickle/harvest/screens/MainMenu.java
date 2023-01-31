@@ -2,7 +2,7 @@ package lintfordpickle.harvest.screens;
 
 import lintfordpickle.harvest.ConstantsGame;
 import lintfordpickle.harvest.controllers.replays.ReplayController;
-import lintfordpickle.harvest.screens.landing.SurvialLandingScreen;
+import lintfordpickle.harvest.screens.landing.SurvivalLandingScreen;
 import lintfordpickle.harvest.screens.landing.TimeTrailLandingScreen;
 import net.lintford.library.screenmanager.MenuEntry;
 import net.lintford.library.screenmanager.MenuScreen;
@@ -44,13 +44,13 @@ public class MainMenu extends MenuScreen {
 		final float lDesiredEntryHeight = 17.f;
 
 		// ---
-		final var lPlaySurvivaEntry = new MenuEntry(mScreenManager, mMainMenuListBox, "Start Survival");
+		final var lPlaySurvivaEntry = new MenuEntry(mScreenManager, mMainMenuListBox, "Survival");
 		lPlaySurvivaEntry.desiredWidth(lDesiredEntryWidth);
 		lPlaySurvivaEntry.desiredHeight(lDesiredEntryHeight);
 		lPlaySurvivaEntry.registerClickListener(this, SCREEN_BUTTON_PLAY_SURVIVAL);
 		lPlaySurvivaEntry.setToolTip("Starts a new survival game. You need to deliver as much food to the HQ before the time runs out.");
 
-		final var lPlayTimeEntry = new MenuEntry(mScreenManager, mMainMenuListBox, "Time Trial");
+		final var lPlayTimeEntry = new MenuEntry(mScreenManager, mMainMenuListBox, "Time-Trial");
 		lPlayTimeEntry.desiredWidth(lDesiredEntryWidth);
 		lPlayTimeEntry.desiredHeight(lDesiredEntryHeight);
 		lPlayTimeEntry.registerClickListener(this, SCREEN_BUTTON_PLAY_TIME_TRIAL);
@@ -110,7 +110,7 @@ public class MainMenu extends MenuScreen {
 		switch (mClickAction.consume()) {
 		case SCREEN_BUTTON_PLAY_SURVIVAL: {
 			final var lTopMostScreen = mScreenManager.getTopScreen();
-			if (lTopMostScreen instanceof SurvialLandingScreen) {
+			if (lTopMostScreen instanceof SurvivalLandingScreen) {
 				return;
 			}
 
@@ -118,7 +118,7 @@ public class MainMenu extends MenuScreen {
 				mScreenManager.removeScreen(lTopMostScreen);
 			}
 
-			screenManager().addScreen(new SurvialLandingScreen(mScreenManager));
+			screenManager().addScreen(new SurvivalLandingScreen(mScreenManager));
 			break;
 		}
 

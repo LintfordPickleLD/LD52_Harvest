@@ -127,7 +127,7 @@ public class GameActionEventController extends ActionEventController<ActionFrame
 		final var justGotMoreFood = lPlayerScoreCard.foodDelivered >= lReplayManager.header().numberdeliveredFood();
 		final var justGotFasterTime = lGameState.timeAliveInMs <= lReplayManager.header().runtimeInSeconds();
 
-		var shouldWeKeepThisRecording = !isPreviousAvailable || justGotMoreFood || justGotFasterTime;
+		var shouldWeKeepThisRecording = !isPreviousAvailable || justGotMoreFood && justGotFasterTime;
 		if (!shouldWeKeepThisRecording)
 			return;
 

@@ -134,8 +134,11 @@ public class TimeTrailLandingScreen extends MenuScreen {
 			mNoFastestTime.active(true);
 
 			mGhostEnabled.active(false);
+			mGhostEnabled.enabled(false);
 			mGhostEnabled.isChecked(false);
+
 			mGhostFatestTime.active(false);
+			mGhostFatestTime.enabled(false);
 			mGhostFatestTime.inputString(null);
 		}
 	}

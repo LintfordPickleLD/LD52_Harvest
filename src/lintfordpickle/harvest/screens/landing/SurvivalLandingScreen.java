@@ -1,17 +1,19 @@
 package lintfordpickle.harvest.screens.landing;
 
-import lintfordpickle.harvest.ConstantsGame;
-import lintfordpickle.harvest.controllers.replays.ReplayController;
 import lintfordpickle.harvest.data.players.PlayerManager;
 import lintfordpickle.harvest.screens.game.SurvivalGameScreen;
+import net.lintford.library.core.graphics.Color;
 import net.lintford.library.screenmanager.MenuEntry;
 import net.lintford.library.screenmanager.MenuScreen;
 import net.lintford.library.screenmanager.ScreenManager;
+import net.lintford.library.screenmanager.ScreenManagerConstants.FILLTYPE;
 import net.lintford.library.screenmanager.ScreenManagerConstants.LAYOUT_ALIGNMENT;
+import net.lintford.library.screenmanager.entries.MenuInputEntry;
+import net.lintford.library.screenmanager.entries.MenuLabelEntry;
 import net.lintford.library.screenmanager.layouts.ListLayout;
 import net.lintford.library.screenmanager.screens.LoadingScreen;
 
-public class SurvialLandingScreen extends MenuScreen {
+public class SurvivalLandingScreen extends MenuScreen {
 
 	// ---------------------------------------------
 	// Constants
@@ -25,17 +27,21 @@ public class SurvialLandingScreen extends MenuScreen {
 	// Variables
 	// ---------------------------------------------
 
-	private ReplayController mReplayController;
 	private ListLayout mMainMenuListBox;
+
+	private MenuInputEntry mHighScore;
+	private MenuLabelEntry mNoHighScore;
 
 	// ---------------------------------------------
 	// Constructors
 	// ---------------------------------------------
 
-	public SurvialLandingScreen(ScreenManager pScreenManager) {
+	public SurvivalLandingScreen(ScreenManager pScreenManager) {
 		super(pScreenManager, TITLE);
 
 		mMainMenuListBox = new ListLayout(this);
+		mMainMenuListBox.layoutFillType(FILLTYPE.TAKE_WHATS_NEEDED);
+		mMainMenuListBox.setDrawBackground(true, new Color(0.02f, 0.12f, 0.15f, 0.13f));
 
 		// As we know the game canvas size
 		final float lDesiredEntryWidth = 56.f;
@@ -47,6 +53,19 @@ public class SurvialLandingScreen extends MenuScreen {
 		lPlaySurvivaEntry.desiredHeight(lDesiredEntryHeight);
 		lPlaySurvivaEntry.registerClickListener(this, SCREEN_BUTTON_PLAY_SURVIVAL);
 
+		mHighScore = new MenuInputEntry(pScreenManager, mMainMenuListBox);
+		mHighScore.label("HighScore");
+		mHighScore.horizontalFillType(FILLTYPE.TAKE_DESIRED_SIZE);
+		mHighScore.canHoverOver(false);
+
+		mNoHighScore = new MenuLabelEntry(pScreenManager, mMainMenuListBox);
+		mNoHighScore.label("No fastest time");
+
+		mMainMenuListBox.addMenuEntry(mHighScore);
+		mMainMenuListBox.addMenuEntry(MenuEntry.menuSeparator());
+		mMainMenuListBox.addMenuEntry(mNoHighScore);
+		mMainMenuListBox.addMenuEntry(MenuEntry.menuSeparator());
+		mMainMenuListBox.addMenuEntry(MenuEntry.menuSeparator());
 		mMainMenuListBox.addMenuEntry(lPlaySurvivaEntry);
 
 		mLayouts.add(mMainMenuListBox);
@@ -67,11 +86,8 @@ public class SurvialLandingScreen extends MenuScreen {
 	public void initialize() {
 		super.initialize();
 
-		final var lControllerManager = mScreenManager.core().controllerManager();
-		mReplayController = (ReplayController) lControllerManager.getControllerByNameRequired(ReplayController.CONTROLLER_NAME, ConstantsGame.GAME_RESOURCE_GROUP_ID);
+		// TODO: Implement high-scores in survival mode
 
-		final var lReplayManager = mReplayController.replayManager();
-		lReplayManager.loadRecordedGame();
 	}
 
 	@Override
