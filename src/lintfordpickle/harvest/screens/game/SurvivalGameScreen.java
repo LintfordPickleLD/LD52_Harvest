@@ -220,7 +220,7 @@ public class SurvivalGameScreen extends BaseGameScreen {
 
 	@Override
 	protected void createControllers(ControllerManager controllerManager) {
-		mGameActionEventController = new GameActionEventController(controllerManager, inputCounter(), entityGroupUid());
+		mGameActionEventController = new GameActionEventController(controllerManager, mPlayerManager, inputCounter(), entityGroupUid());
 		mCargoController = new CargoController(controllerManager, mCargoManager, entityGroupUid());
 		mPhysicsController = new PhysicsController(controllerManager, world, entityGroupUid());
 		mLevelController = new LevelController(controllerManager, entityGroupUid());

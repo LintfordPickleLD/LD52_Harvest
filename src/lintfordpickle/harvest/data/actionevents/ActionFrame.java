@@ -17,17 +17,21 @@ public class ActionFrame implements IActionFrame {
 	// control
 	public int frameNumber;
 	public boolean markEndOfGame;
-	public boolean _isKeyboardChanged;
-	public boolean _isMouseChanged;
-	public boolean _isGamepadChanged;
 
-	// Keyboard
+	public boolean _isInputSaveNeeded;
+	public boolean _isPhysicsStateSaveNeeded;
+
+	// Attribs
+	// Input Save
 	public boolean isThrottleDown;
 	public boolean isDownDown;
 	public boolean isThrottleLeftDown;
 	public boolean isThrottleRightDown;
 
-	// Custom
+	public float axisX;
+	public float axisY;
+
+	// Custom Save
 	public float positionX;
 	public float positionY;
 	public float velocityX;
@@ -64,9 +68,9 @@ public class ActionFrame implements IActionFrame {
 
 		frameNumber = cpyFrm.frameNumber;
 
-		_isKeyboardChanged = false;
-		_isMouseChanged = false;
-		_isGamepadChanged = false;
+		_isInputSaveNeeded = false;
+		_isPhysicsStateSaveNeeded = false;
+
 	}
 
 	// @formatter:off
@@ -76,13 +80,11 @@ public class ActionFrame implements IActionFrame {
 		final var cur = this;
 		
 		// for the keyboard, we need only record the changes in the key presses
-		_isKeyboardChanged =  
+		_isInputSaveNeeded =  
 				   cur.isThrottleDown  != last.isThrottleDown
 				|| cur.isDownDown  != last.isDownDown
 				|| cur.isThrottleLeftDown  != last.isThrottleLeftDown
 				|| cur.isThrottleRightDown != last.isThrottleRightDown;
-		
-		_isGamepadChanged = false;
 		
 	}
 	// @formatter:on
@@ -90,19 +92,18 @@ public class ActionFrame implements IActionFrame {
 	public void reset() {
 		markEndOfGame = false;
 		frameNumber = 0;
-		_isKeyboardChanged = false;
-		_isMouseChanged = false;
-		_isGamepadChanged = false;
+
+		_isInputSaveNeeded = false;
+		_isPhysicsStateSaveNeeded = false;
 
 		isThrottleDown = false;
 		isDownDown = false;
 		isThrottleLeftDown = false;
 		isThrottleRightDown = false;
-
 	}
 
 	@Override
 	public boolean hasChanges() {
-		return _isKeyboardChanged || _isMouseChanged || _isGamepadChanged;
+		return _isInputSaveNeeded || _isPhysicsStateSaveNeeded;
 	}
 }

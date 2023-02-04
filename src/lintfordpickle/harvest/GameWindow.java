@@ -113,13 +113,17 @@ public class GameWindow extends BaseHarvestApp {
 	@Override
 	protected void onInitializeInputActions(KeyEventActionManager eventActionManager) {
 
-		// TODO: This needs to be specific to the windows (and not the game)
+		eventActionManager.registerNewKeyboardEventAction(SatActionEventMap.INPUT_ACTION_EVENT_THRUSTER_UP, GLFW.GLFW_KEY_W);
+		eventActionManager.registerNewGamepadEventAction(SatActionEventMap.INPUT_ACTION_EVENT_THRUSTER_UP, GLFW.GLFW_GAMEPAD_BUTTON_DPAD_UP);
 
-		eventActionManager.registerNewEventAction(SatActionEventMap.INPUT_ACTION_EVENT_SPACE_DOWN, GLFW.GLFW_KEY_SPACE);
-		eventActionManager.registerNewEventAction(SatActionEventMap.INPUT_ACTION_EVENT_LEFT_DOWN, GLFW.GLFW_KEY_A);
-		eventActionManager.registerNewEventAction(SatActionEventMap.INPUT_ACTION_EVENT_RIGHT_DOWN, GLFW.GLFW_KEY_D);
-		eventActionManager.registerNewEventAction(SatActionEventMap.INPUT_ACTION_EVENT_UP_DOWN, GLFW.GLFW_KEY_W);
-		eventActionManager.registerNewEventAction(SatActionEventMap.INPUT_ACTION_EVENT_DOWN_DOWN, GLFW.GLFW_KEY_S);
+		eventActionManager.registerNewKeyboardEventAction(SatActionEventMap.INPUT_ACTION_EVENT_THRUSTER_LEFT, GLFW.GLFW_KEY_A);
+		eventActionManager.registerNewGamepadEventAction(SatActionEventMap.INPUT_ACTION_EVENT_THRUSTER_LEFT, GLFW.GLFW_HAT_LEFT);
+
+		eventActionManager.registerNewKeyboardEventAction(SatActionEventMap.INPUT_ACTION_EVENT_THRUSTER_RIGHT, GLFW.GLFW_KEY_D);
+		eventActionManager.registerNewGamepadEventAction(SatActionEventMap.INPUT_ACTION_EVENT_THRUSTER_RIGHT, GLFW.GLFW_HAT_RIGHT);
+
+		eventActionManager.registerNewKeyboardEventAction(SatActionEventMap.INPUT_ACTION_EVENT_THRUSTER_DOWN, GLFW.GLFW_KEY_S);
+		eventActionManager.registerNewGamepadEventAction(SatActionEventMap.INPUT_ACTION_EVENT_THRUSTER_DOWN, GLFW.GLFW_HAT_DOWN);
 
 		super.onInitializeInputActions(eventActionManager);
 	}

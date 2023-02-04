@@ -2,21 +2,26 @@ package lintfordpickle.harvest.controllers.actionevents;
 
 import java.nio.ByteBuffer;
 
+import org.lwjgl.glfw.GLFW;
+
 import lintfordpickle.harvest.ConstantsGame;
 import lintfordpickle.harvest.controllers.GameStateController;
 import lintfordpickle.harvest.controllers.replays.ReplayController;
 import lintfordpickle.harvest.data.actionevents.ActionEventFileHeader;
 import lintfordpickle.harvest.data.actionevents.ActionEventMap;
 import lintfordpickle.harvest.data.actionevents.ActionFrame;
+import lintfordpickle.harvest.data.players.PlayerManager;
 import lintfordpickle.harvest.data.players.ReplayManager;
 import net.lintford.library.controllers.actionevents.ActionEventController;
 import net.lintford.library.controllers.core.ControllerManager;
 import net.lintford.library.core.LintfordCore;
 import net.lintford.library.core.actionevents.ActionEventManager.PlaybackMode;
 import net.lintford.library.core.debug.Debug;
+import net.lintford.library.core.input.gamepad.IGamepadListener;
+import net.lintford.library.core.input.gamepad.InputGamepad;
 import net.lintford.library.core.time.LogicialCounter;
 
-public class GameActionEventController extends ActionEventController<ActionFrame> {
+public class GameActionEventController extends ActionEventController<ActionFrame> implements IGamepadListener {
 
 	// ---------------------------------------------
 	// Constants
@@ -36,9 +41,9 @@ public class GameActionEventController extends ActionEventController<ActionFrame
 	private GameStateController mGameStateController;
 	private ReplayController mReplayController;
 
-	private boolean mFastestTimeOnExitReached;
+	private PlayerManager mPlayerManager;
 
-	private GameActionEventListener mGameActionEventListener;
+	private boolean mFastestTimeOnExitReached;
 
 	// ---------------------------------------------
 	// Properties
@@ -48,18 +53,15 @@ public class GameActionEventController extends ActionEventController<ActionFrame
 		return mFastestTimeOnExitReached;
 	}
 
-	public void setActionEventListener(GameActionEventListener listener) {
-		mGameActionEventListener = listener;
-
-		mFastestTimeOnExitReached = false;
-	}
-
 	// ---------------------------------------------
 	// Constructor
 	// ---------------------------------------------
 
-	public GameActionEventController(ControllerManager controllerManager, LogicialCounter frameCounter, int entityGroupUid) {
+	public GameActionEventController(ControllerManager controllerManager, PlayerManager playerManager, LogicialCounter frameCounter, int entityGroupUid) {
 		super(controllerManager, frameCounter, entityGroupUid);
+
+		mPlayerManager = playerManager;
+
 	}
 
 	// ---------------------------------------------
@@ -91,17 +93,65 @@ public class GameActionEventController extends ActionEventController<ActionFrame
 		mReplayController = (ReplayController) lControllerManager.getControllerByNameRequired(ReplayController.CONTROLLER_NAME, ConstantsGame.GAME_RESOURCE_GROUP_ID);
 		mGameStateController = (GameStateController) lControllerManager.getControllerByNameRequired(GameStateController.CONTROLLER_NAME, entityGroupUid());
 
+		// input
+		final var lGamepadManager = core.input().gamepads();
+		final var lActiveGamepads = lGamepadManager.getActiveGamepads();
+		int lActiveControllerIndex = 0;
+
+		final int lNumPlayers = mPlayerManager.numActivePlayers();
+		for (int i = 0; i < lNumPlayers; i++) {
+			final var lPlayerSession = mPlayerManager.getPlayer(i);
+			switch (lPlayerSession.mode()) {
+			case Normal:
+				lPlayerSession.actionEventUid(ActionEventController.DEFAULT_PLAYER_UID);
+				break;
+			case Playback:
+				final int lActionEventUid = createActionPlayback(lPlayerSession.playerUid(), lPlayerSession.actionFilename());
+				lPlayerSession.actionEventUid(lActionEventUid);
+
+				break;
+			case Record:
+				lPlayerSession.actionEventUid(createActionRecorder(lPlayerSession.playerUid(), lPlayerSession.actionFilename()));
+				break;
+			}
+
+			if (lPlayerSession.isPlayerControlled()) {
+				actionEventPlayer(lPlayerSession.actionEventUid()).isPlayerControlled = true;
+
+				// This is where we actually assign the gamepads to the players
+				// TODO: Gamepad to player assignment should probably happen in the menues (either options or player selection*)
+				if (lActiveControllerIndex <= lActiveGamepads.size()) {
+					final var lGamepadController = lActiveGamepads.get(lActiveControllerIndex);
+					if (lGamepadController != null) {
+						actionEventPlayer(lPlayerSession.actionEventUid()).gamepadUid = lGamepadController.index();
+					}
+					lActiveControllerIndex++;
+				}
+			}
+		}
 	}
 
 	protected void updateInputActionEvents(LintfordCore core, ActionEventPlayer player) {
-
 		final var lEventActionManager = core.input().eventActionManager();
+
+		// TODO: Need to resovle the player Uid from the ActionEventPlayer to match it up with a controller
 
 		// keyboard
 		player.currentActionEvents.isThrottleDown = lEventActionManager.getCurrentControlActionState(ActionEventMap.INPUT_ACTION_EVENT_UP_DOWN);
 		player.currentActionEvents.isDownDown = lEventActionManager.getCurrentControlActionState(ActionEventMap.INPUT_ACTION_EVENT_DOWN_DOWN);
 		player.currentActionEvents.isThrottleLeftDown = lEventActionManager.getCurrentControlActionState(ActionEventMap.INPUT_ACTION_EVENT_LEFT_DOWN);
 		player.currentActionEvents.isThrottleRightDown = lEventActionManager.getCurrentControlActionState(ActionEventMap.INPUT_ACTION_EVENT_RIGHT_DOWN);
+
+		final var lGamepadManager = core.input().gamepads();
+		final var lGamepad = lGamepadManager.getGamepad(player.playerUid);
+
+		if (lGamepad != null) {
+			final float lValue = lGamepad.getLeftAxisX();
+			player.currentActionEvents.isThrottleLeftDown |= lValue < -0.4f;
+			player.currentActionEvents.isThrottleRightDown |= lValue > 0.4f;
+
+			player.currentActionEvents.isThrottleDown |= lGamepad.getIsButtonDown(GLFW.GLFW_GAMEPAD_BUTTON_A);
+		}
 
 		// detect changes in keyboard / mouse / gamepad and set the flags
 		// (n.b. we don't consider the mouse movement as input by default - but we record the mouse position when the player clicks a mouse button.)
@@ -177,14 +227,11 @@ public class GameActionEventController extends ActionEventController<ActionFrame
 		if (frame.markEndOfGame)
 			controlByte |= ActionEventMap.BYTEMASK_CONTROL_END_GAME;
 
-		if (frame._isKeyboardChanged)
-			controlByte |= ActionEventMap.BYTEMASK_CONTROL_KEYBOARD;
+		if (frame._isInputSaveNeeded)
+			controlByte |= ActionEventMap.BYTEMASK_CONTROL_INPUT;
 
-		if (frame._isMouseChanged)
-			controlByte |= ActionEventMap.BYTEMASK_CONTROL_MOUSE;
-
-		if (frame._isGamepadChanged)
-			controlByte |= ActionEventMap.BYTEMASK_CONTROL_GAMEPAD;
+		if (frame._isPhysicsStateSaveNeeded)
+			controlByte |= ActionEventMap.BYTEMASK_CONTROL_PHYSICS_STATE;
 
 		mCurrentTick = frame.frameNumber;
 		dataBuffer.putShort((short) frame.frameNumber);
@@ -197,10 +244,10 @@ public class GameActionEventController extends ActionEventController<ActionFrame
 		}
 
 		// keyboard
-		if (frame._isKeyboardChanged) {
+		if (frame._isInputSaveNeeded) {
 
 			if (ConstantsGame.DEBUG_OUTPUT_ACTIONEVENT_LOGS)
-				Debug.debugManager().logger().i(getClass().getSimpleName(), "  + keyboard");
+				Debug.debugManager().logger().i(getClass().getSimpleName(), "  + input event");
 
 			byte keyboardInputValue0 = 0;
 
@@ -225,7 +272,7 @@ public class GameActionEventController extends ActionEventController<ActionFrame
 
 	@Override
 	protected void saveCustomActionEvents(ActionFrame frame, ByteBuffer dataBuffer) {
-		var controlByte = (byte) ActionEventMap.BYTEMASK_CONTROL_PHYSICS_SATE;
+		var controlByte = (byte) ActionEventMap.BYTEMASK_CONTROL_PHYSICS_STATE;
 
 		if (ConstantsGame.DEBUG_OUTPUT_ACTIONEVENT_LOGS) {
 			Debug.debugManager().logger().i(getClass().getSimpleName(), "Writing new custom frame");
@@ -291,7 +338,7 @@ public class GameActionEventController extends ActionEventController<ActionFrame
 			Debug.debugManager().logger().i(getClass().getSimpleName(), "            control: " + nextControlByte);
 		}
 
-		if ((nextControlByte & ActionEventMap.BYTEMASK_CONTROL_KEYBOARD) == ActionEventMap.BYTEMASK_CONTROL_KEYBOARD) {
+		if ((nextControlByte & ActionEventMap.BYTEMASK_CONTROL_INPUT) == ActionEventMap.BYTEMASK_CONTROL_INPUT) {
 			final var nextInput = dataBuffer.get();
 
 			player.tempFrameInput.isThrottleDown = (nextInput & ActionEventMap.BYTEMASK_INPUT_UP) == ActionEventMap.BYTEMASK_INPUT_UP;
@@ -299,7 +346,7 @@ public class GameActionEventController extends ActionEventController<ActionFrame
 			player.tempFrameInput.isThrottleRightDown = (nextInput & ActionEventMap.BYTEMASK_INPUT_RIGHT) == ActionEventMap.BYTEMASK_INPUT_RIGHT;
 		}
 
-		if ((nextControlByte & ActionEventMap.BYTEMASK_CONTROL_PHYSICS_SATE) == ActionEventMap.BYTEMASK_CONTROL_PHYSICS_SATE) {
+		if ((nextControlByte & ActionEventMap.BYTEMASK_CONTROL_PHYSICS_STATE) == ActionEventMap.BYTEMASK_CONTROL_PHYSICS_STATE) {
 			player.tempFrameInput.positionX = dataBuffer.getFloat();
 			player.tempFrameInput.positionY = dataBuffer.getFloat();
 
@@ -311,5 +358,28 @@ public class GameActionEventController extends ActionEventController<ActionFrame
 		}
 
 		player.tempFrameInput.frameNumber = nextFrameNumber;
+	}
+
+	// GAMEPAD CALLBACKS --------------------------
+
+	@Override
+	public void onGamepadConnected(InputGamepad gamepad) {
+		final var lPlayer = mPlayerManager.getPlayer(PlayerManager.DEFAULT_PLAYER_SESSION_UID);
+		final var lActionEventPlayer = actionEventPlayer(lPlayer.playerUid());
+
+		if (lActionEventPlayer.gamepadUid == -1) {
+			lActionEventPlayer.gamepadUid = gamepad.index();
+		}
+	}
+
+	@Override
+	public void onGamepadDisconnected(InputGamepad gamepad) {
+		final var lPlayer = mPlayerManager.getPlayer(PlayerManager.DEFAULT_PLAYER_SESSION_UID);
+		final var lActionEventPlayer = actionEventPlayer(lPlayer.playerUid());
+
+		if (lActionEventPlayer.gamepadUid == gamepad.index()) {
+			lActionEventPlayer.gamepadUid = -1;
+		}
+
 	}
 }

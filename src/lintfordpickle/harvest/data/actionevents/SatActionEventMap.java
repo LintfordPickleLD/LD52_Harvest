@@ -30,11 +30,10 @@ public class SatActionEventMap {
 	
 
 	// Input actions are bindable
-	public static final int INPUT_ACTION_EVENT_SPACE_DOWN = 0;
-	public static final int INPUT_ACTION_EVENT_LEFT_DOWN  = 1;
-	public static final int INPUT_ACTION_EVENT_RIGHT_DOWN = 2;
-	public static final int INPUT_ACTION_EVENT_UP_DOWN    = 3;
-	public static final int INPUT_ACTION_EVENT_DOWN_DOWN  = 4;
+	public static final int INPUT_ACTION_EVENT_THRUSTER_UP    = 0;
+	public static final int INPUT_ACTION_EVENT_THRUSTER_LEFT  = 1;
+	public static final int INPUT_ACTION_EVENT_THRUSTER_RIGHT = 2;
+	public static final int INPUT_ACTION_EVENT_THRUSTER_DOWN  = 4;
 	// @formatter:on
 
 }

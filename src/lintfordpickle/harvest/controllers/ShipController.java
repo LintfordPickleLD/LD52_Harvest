@@ -8,7 +8,6 @@ import lintfordpickle.harvest.data.players.PlayerManager;
 import lintfordpickle.harvest.data.ships.Ship;
 import lintfordpickle.harvest.data.ships.ShipManager;
 import net.lintford.library.controllers.BaseController;
-import net.lintford.library.controllers.actionevents.ActionEventController;
 import net.lintford.library.controllers.core.ControllerManager;
 import net.lintford.library.controllers.core.PhysicsController;
 import net.lintford.library.core.LintfordCore;
@@ -87,23 +86,7 @@ public class ShipController extends BaseController {
 		// loop over the players in the playermanager (player and ghosts), and create an action session for them
 		final int lNumPlayers = mPlayerManager.numActivePlayers();
 		for (int i = 0; i < lNumPlayers; i++) {
-
 			final var lPlayerSession = mPlayerManager.getPlayer(i);
-			switch (lPlayerSession.mode()) {
-			case Normal:
-				lPlayerSession.actionEventUid(ActionEventController.DEFAULT_PLAYER_UID);
-				break;
-			case Playback:
-				final int lActionEventUid = mActionEventController.createActionPlayback(lPlayerSession.actionFilename());
-				lPlayerSession.actionEventUid(lActionEventUid);
-
-				break;
-			case Record:
-				lPlayerSession.actionEventUid(mActionEventController.createActionRecorder(lPlayerSession.actionFilename()));
-				break;
-			}
-
-			mActionEventController.actionEventPlayer(lPlayerSession.actionEventUid()).isPlayerControlled = lPlayerSession.isPlayerControlled();
 
 			// Add a ship for this entry to the world
 			final var lShip = new Ship(GridEntity.getNewEntityUid());
@@ -135,7 +118,6 @@ public class ShipController extends BaseController {
 			final var lDefaultShip = mShipManager.ships().get(0);
 			lCameraChaseController.setTrackedEntity(core.gameCamera(), lDefaultShip);
 		}
-
 	}
 
 	@Override

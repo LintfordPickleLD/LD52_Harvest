@@ -19,7 +19,7 @@ public class PlayerSession {
 	private boolean mIsGhostMode;
 	private PlaybackMode mPlaybackMode;
 
-	private boolean nIsPlayerControlled;
+	private boolean mIsPlayerControlled;
 	private boolean mCanBeDeactivated;
 
 	// ---------------------------------------------
@@ -55,7 +55,7 @@ public class PlayerSession {
 	}
 
 	public boolean isPlayerControlled() {
-		return nIsPlayerControlled;
+		return mIsPlayerControlled;
 	}
 
 	public boolean isGhostMode() {
@@ -72,7 +72,7 @@ public class PlayerSession {
 
 	public PlayerSession(int uid) {
 		mUid = uid;
-		nIsPlayerControlled = true;
+		mIsPlayerControlled = true;
 		mPlaybackMode = PlaybackMode.Normal;
 	}
 
@@ -93,12 +93,12 @@ public class PlayerSession {
 	/** Marks this player as being player controllered or not. A ghost-ship in time-trials or a recorded playback is not player-controlled. */
 	public void setPlayerControlled(boolean enable) {
 		if (enable) {
-			nIsPlayerControlled = true;
+			mIsPlayerControlled = true;
 
 			return;
 		}
 
-		nIsPlayerControlled = false;
+		mIsPlayerControlled = false;
 
 	}
 
@@ -106,7 +106,7 @@ public class PlayerSession {
 		mGameContainer.position.x = x;
 		mGameContainer.position.y = y;
 
-		nIsPlayerControlled = true;
+		mIsPlayerControlled = true;
 	}
 
 	public void reset() {

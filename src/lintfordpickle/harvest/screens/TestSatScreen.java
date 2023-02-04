@@ -231,10 +231,10 @@ public class TestSatScreen extends BaseGameScreen {
 		boolean recMode = false;
 
 		if (recMode)
-			mActiveActionPlayeruid = mActionEventController.createActionRecorder("input_new.lms");
+			mActiveActionPlayeruid = mActionEventController.createActionRecorder(1, "input_new.lms");
 
 		else
-			mActiveActionPlayeruid = mActionEventController.createActionPlayback("input_new.lms");
+			mActiveActionPlayeruid = mActionEventController.createActionPlayback(1, "input_new.lms");
 
 	}
 

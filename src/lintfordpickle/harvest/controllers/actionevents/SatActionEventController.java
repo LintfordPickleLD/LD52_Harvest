@@ -60,11 +60,10 @@ public class SatActionEventController extends ActionEventController<SatActionFra
 		final var lEventActionManager = core.input().eventActionManager();
 
 		// keyboard
-		player.currentActionEvents.isSpaceDown = lEventActionManager.getCurrentControlActionStateTimed(SatActionEventMap.INPUT_ACTION_EVENT_SPACE_DOWN);
-		player.currentActionEvents.isUpDown = lEventActionManager.getCurrentControlActionState(SatActionEventMap.INPUT_ACTION_EVENT_UP_DOWN);
-		player.currentActionEvents.isDownDown = lEventActionManager.getCurrentControlActionState(SatActionEventMap.INPUT_ACTION_EVENT_DOWN_DOWN);
-		player.currentActionEvents.isLeftDown = lEventActionManager.getCurrentControlActionState(SatActionEventMap.INPUT_ACTION_EVENT_LEFT_DOWN);
-		player.currentActionEvents.isRightDown = lEventActionManager.getCurrentControlActionState(SatActionEventMap.INPUT_ACTION_EVENT_RIGHT_DOWN);
+		player.currentActionEvents.isSpaceDown = lEventActionManager.getCurrentControlActionStateTimed(SatActionEventMap.INPUT_ACTION_EVENT_THRUSTER_UP);
+		player.currentActionEvents.isDownDown = lEventActionManager.getCurrentControlActionState(SatActionEventMap.INPUT_ACTION_EVENT_THRUSTER_DOWN);
+		player.currentActionEvents.isLeftDown = lEventActionManager.getCurrentControlActionState(SatActionEventMap.INPUT_ACTION_EVENT_THRUSTER_LEFT);
+		player.currentActionEvents.isRightDown = lEventActionManager.getCurrentControlActionState(SatActionEventMap.INPUT_ACTION_EVENT_THRUSTER_RIGHT);
 
 		// mouse
 		player.currentActionEvents.mouseX = core.gameCamera().getMouseWorldSpaceX();
