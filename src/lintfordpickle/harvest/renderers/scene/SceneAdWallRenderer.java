@@ -1,6 +1,5 @@
 package lintfordpickle.harvest.renderers.scene;
 
-import org.lwjgl.glfw.GLFW;
 import org.lwjgl.opengl.GL20;
 
 import lintfordpickle.harvest.ConstantsGame;
@@ -117,15 +116,6 @@ public class SceneAdWallRenderer extends BaseRenderer {
 	}
 
 	@Override
-	public boolean handleInput(LintfordCore core) {
-
-		if (core.input().keyboard().isKeyDownTimed(GLFW.GLFW_KEY_U))
-			mAdWallShader.recompile();
-
-		return super.handleInput(core);
-	}
-
-	@Override
 	public void update(LintfordCore core) {
 		super.update(core);
 
@@ -134,7 +124,7 @@ public class SceneAdWallRenderer extends BaseRenderer {
 
 	@Override
 	public void draw(LintfordCore core) {
-		final var horAds = mSceneController.horizontalAdWall();
+		// final var horAds = mSceneController.horizontalAdWall();
 
 		// drawAdWall(core, horAds);
 		drawAdWall(core, mSceneController.verticalAdWall());

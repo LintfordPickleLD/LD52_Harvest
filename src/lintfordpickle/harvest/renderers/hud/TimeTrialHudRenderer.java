@@ -2,7 +2,6 @@ package lintfordpickle.harvest.renderers.hud;
 
 import lintfordpickle.harvest.ConstantsGame;
 import lintfordpickle.harvest.controllers.GameStateController;
-import lintfordpickle.harvest.controllers.PlatformController;
 import lintfordpickle.harvest.controllers.ShipController;
 import lintfordpickle.harvest.data.game.GameState;
 import net.lintford.library.core.LintfordCore;
@@ -30,7 +29,6 @@ public class TimeTrialHudRenderer extends BaseRenderer {
 
 	private GameStateController mGameStateController;
 	private ShipController mShipController;
-	private PlatformController mPlatformsController;
 
 	private GameState mGameState;
 	private SpriteSheetDefinition mHudSpritesheet;
@@ -64,7 +62,6 @@ public class TimeTrialHudRenderer extends BaseRenderer {
 	public void initialize(LintfordCore core) {
 		final var lControllerManager = core.controllerManager();
 
-		mPlatformsController = (PlatformController) lControllerManager.getControllerByNameRequired(PlatformController.CONTROLLER_NAME, entityGroupID());
 		mShipController = (ShipController) lControllerManager.getControllerByNameRequired(ShipController.CONTROLLER_NAME, entityGroupID());
 		mGameStateController = (GameStateController) lControllerManager.getControllerByNameRequired(GameStateController.CONTROLLER_NAME, entityGroupID());
 
@@ -113,10 +110,8 @@ public class TimeTrialHudRenderer extends BaseRenderer {
 		final var lTotalSeconds = (int) tempTime / TimeConstants.MillisPerSecond;
 		tempTime -= lTotalSeconds * TimeConstants.MillisPerSecond;
 
-		final var lTimeFormatted = 
-				String.format(java.util.Locale.US, "%02d", lTotalMinutes) + 
-				":" + String.format(java.util.Locale.US, "%02d", lTotalSeconds) + 
-				":" + String.format(java.util.Locale.US, "%1.0f", tempTime);
+		final var lTimeFormatted = String.format(java.util.Locale.US, "%02d", lTotalMinutes) + ":" + String.format(java.util.Locale.US, "%02d", lTotalSeconds) + ":"
+				+ String.format(java.util.Locale.US, "%1.0f", tempTime);
 
 		lFontUnit.begin(core.HUD());
 		lSpriteBatch.draw(mHudSpritesheet, mHudSpritesheet.getSpriteFrame("TEXTURE_CLOCK"), lHudBoundingBox.left() + 5.f, lHudBoundingBox.top() + 5.0f, 32, 32, -0.01f, ColorConstants.WHITE);

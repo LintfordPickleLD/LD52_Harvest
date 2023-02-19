@@ -47,7 +47,7 @@ public class MenuBackgroundScreen extends Screen {
 	public void draw(LintfordCore core) {
 		super.draw(core);
 
-		GL11.glClearColor(0.06f, 0.18f, 0.11f, 1.0f);
+		GL11.glClearColor(0.12f, 0.14f, 0.01f, 1.0f);
 		GL11.glClear(GL11.GL_COLOR_BUFFER_BIT | GL11.GL_DEPTH_BUFFER_BIT);
 
 		final var lHudBoundingBox = core.HUD().boundingRectangle();

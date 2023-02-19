@@ -153,7 +153,7 @@ public class TimeTrialGameScreen extends BaseGameScreen {
 	public void handleInput(LintfordCore core) {
 		super.handleInput(core);
 
-		if (core.input().keyboard().isKeyDownTimed(GLFW.GLFW_KEY_ESCAPE)) {
+		if (core.input().keyboard().isKeyDownTimed(GLFW.GLFW_KEY_ESCAPE, this)) {
 			mGameActionEventController.onExitingGame();
 
 			if (ConstantsGame.ESCAPE_RESTART_MAIN_SCENE) {

@@ -34,22 +34,22 @@ public class OptionsScreen extends MenuScreen {
 		final float lDesiredEntryHeight = 17.f;
 
 		// ---
-		final var lKeyBindsEntry = new MenuEntry(mScreenManager, lLayout, "Key Binds");
+		final var lKeyBindsEntry = new MenuEntry(mScreenManager, this, "Key Binds");
 		lKeyBindsEntry.desiredWidth(lDesiredEntryWidth);
 		lKeyBindsEntry.desiredHeight(lDesiredEntryHeight);
 		lKeyBindsEntry.registerClickListener(this, BUTTON_KEY_BINDS);
 
-		final var lGraphicsEntry = new MenuEntry(mScreenManager, lLayout, "Graphics");
+		final var lGraphicsEntry = new MenuEntry(mScreenManager, this, "Graphics");
 		lGraphicsEntry.desiredWidth(lDesiredEntryWidth);
 		lGraphicsEntry.desiredHeight(lDesiredEntryHeight);
 		lGraphicsEntry.registerClickListener(this, BUTTON_GRAPHICS);
 
-		final var lAudioSettingsEntry = new MenuEntry(mScreenManager, lLayout, "Audio");
+		final var lAudioSettingsEntry = new MenuEntry(mScreenManager, this, "Audio");
 		lAudioSettingsEntry.desiredWidth(lDesiredEntryWidth);
 		lAudioSettingsEntry.desiredHeight(lDesiredEntryHeight);
 		lAudioSettingsEntry.registerClickListener(this, BUTTON_AUDIO);
 
-		final var lBackEntry = new MenuEntry(mScreenManager, lLayout, "Back");
+		final var lBackEntry = new MenuEntry(mScreenManager, this, "Back");
 		lBackEntry.desiredWidth(lDesiredEntryWidth);
 		lBackEntry.desiredHeight(lDesiredEntryHeight);
 		lBackEntry.registerClickListener(this, BUTTON_BACK);

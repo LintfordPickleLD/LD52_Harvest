@@ -109,7 +109,7 @@ public class PlatformsRenderer extends BaseRenderer {
 		lSpriteBatch.begin(core.gameCamera());
 
 		final var lWhiteWithAlpha = ColorConstants.getColor(0.95f, 0.12f, 0.03f, 0.6f);
-		lSpriteBatch.draw(mPlatformsSpritesheet, lSpriteFrame, platform, -0.01f, ColorConstants.WHITE);
+		lSpriteBatch.draw(mPlatformsSpritesheet, lSpriteFrame, platform, -0.01f, lWhiteWithAlpha);
 
 		if (platform.isStockFull) {
 			lSpriteBatch.draw(mPlatformsSpritesheet, mPlatformsSpritesheet.getSpriteFrame("TEXTURELIGHTGLOW"), platform.x(), platform.y(), 8, 8, -0.01f, ColorConstants.GREEN);

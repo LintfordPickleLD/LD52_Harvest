@@ -5,7 +5,6 @@ import org.lwjgl.opengl.GL11;
 import net.lintford.library.core.LintfordCore;
 import net.lintford.library.core.ResourceManager;
 import net.lintford.library.core.graphics.ColorConstants;
-import net.lintford.library.core.graphics.fonts.FontUnit;
 import net.lintford.library.core.graphics.textures.Texture;
 import net.lintford.library.screenmanager.MenuScreen;
 import net.lintford.library.screenmanager.ScreenManager;
@@ -17,8 +16,6 @@ public class MenuHelpScreen extends MenuScreen {
 	// ---------------------------------------------
 
 	private Texture mHelpTexture;
-
-	private FontUnit mGameTitleFont;
 
 	// ---------------------------------------------
 	// Constructor

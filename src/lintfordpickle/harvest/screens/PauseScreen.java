@@ -38,13 +38,13 @@ public class PauseScreen extends MenuScreen {
 		final var lLayout = new ListLayout(this);
 
 		// ---
-		final var lPlayEntry = new MenuEntry(mScreenManager, lLayout, "Continue");
+		final var lPlayEntry = new MenuEntry(mScreenManager, this, "Continue");
 		lPlayEntry.registerClickListener(this, SCREEN_BUTTON_CONTINUE);
 
-		final var lOptionsEntry = new MenuEntry(mScreenManager, lLayout, "Restart");
+		final var lOptionsEntry = new MenuEntry(mScreenManager, this, "Restart");
 		lOptionsEntry.registerClickListener(this, SCREEN_BUTTON_RESTART);
 
-		final var lCreditsEntry = new MenuEntry(mScreenManager, lLayout, "Exit");
+		final var lCreditsEntry = new MenuEntry(mScreenManager, this, "Exit");
 		lCreditsEntry.registerClickListener(this, SCREEN_BUTTON_EXIT);
 
 		lLayout.addMenuEntry(lPlayEntry);

@@ -8,7 +8,7 @@ import lintfordpickle.harvest.ConstantsGame;
 import lintfordpickle.harvest.controllers.GameStateController;
 import lintfordpickle.harvest.controllers.replays.ReplayController;
 import lintfordpickle.harvest.data.actionevents.ActionEventFileHeader;
-import lintfordpickle.harvest.data.actionevents.ActionEventMap;
+import lintfordpickle.harvest.data.actionevents.GameActionEventMap;
 import lintfordpickle.harvest.data.actionevents.ActionFrame;
 import lintfordpickle.harvest.data.players.PlayerManager;
 import lintfordpickle.harvest.data.players.ReplayManager;
@@ -120,7 +120,7 @@ public class GameActionEventController extends ActionEventController<ActionFrame
 
 				// This is where we actually assign the gamepads to the players
 				// TODO: Gamepad to player assignment should probably happen in the menues (either options or player selection*)
-				if (lActiveControllerIndex <= lActiveGamepads.size()) {
+				if (lActiveControllerIndex < lActiveGamepads.size()) {
 					final var lGamepadController = lActiveGamepads.get(lActiveControllerIndex);
 					if (lGamepadController != null) {
 						actionEventPlayer(lPlayerSession.actionEventUid()).gamepadUid = lGamepadController.index();
@@ -137,10 +137,10 @@ public class GameActionEventController extends ActionEventController<ActionFrame
 		// TODO: Need to resovle the player Uid from the ActionEventPlayer to match it up with a controller
 
 		// keyboard
-		player.currentActionEvents.isThrottleDown = lEventActionManager.getCurrentControlActionState(ActionEventMap.INPUT_ACTION_EVENT_UP_DOWN);
-		player.currentActionEvents.isDownDown = lEventActionManager.getCurrentControlActionState(ActionEventMap.INPUT_ACTION_EVENT_DOWN_DOWN);
-		player.currentActionEvents.isThrottleLeftDown = lEventActionManager.getCurrentControlActionState(ActionEventMap.INPUT_ACTION_EVENT_LEFT_DOWN);
-		player.currentActionEvents.isThrottleRightDown = lEventActionManager.getCurrentControlActionState(ActionEventMap.INPUT_ACTION_EVENT_RIGHT_DOWN);
+		player.currentActionEvents.isThrottleDown = lEventActionManager.getCurrentControlActionState(GameActionEventMap.INPUT_ACTION_EVENT_THRUSTER_UP);
+		player.currentActionEvents.isDownDown = lEventActionManager.getCurrentControlActionState(GameActionEventMap.INPUT_ACTION_EVENT_THRUSTER_DOWN);
+		player.currentActionEvents.isThrottleLeftDown = lEventActionManager.getCurrentControlActionState(GameActionEventMap.INPUT_ACTION_EVENT_THRUSTER_LEFT);
+		player.currentActionEvents.isThrottleRightDown = lEventActionManager.getCurrentControlActionState(GameActionEventMap.INPUT_ACTION_EVENT_THRUSTER_RIGHT);
 
 		final var lGamepadManager = core.input().gamepads();
 		final var lGamepad = lGamepadManager.getGamepad(player.playerUid);
@@ -225,13 +225,13 @@ public class GameActionEventController extends ActionEventController<ActionFrame
 
 		// control
 		if (frame.markEndOfGame)
-			controlByte |= ActionEventMap.BYTEMASK_CONTROL_END_GAME;
+			controlByte |= GameActionEventMap.BYTEMASK_CONTROL_END_GAME;
 
 		if (frame._isInputSaveNeeded)
-			controlByte |= ActionEventMap.BYTEMASK_CONTROL_INPUT;
+			controlByte |= GameActionEventMap.BYTEMASK_CONTROL_INPUT;
 
 		if (frame._isPhysicsStateSaveNeeded)
-			controlByte |= ActionEventMap.BYTEMASK_CONTROL_PHYSICS_STATE;
+			controlByte |= GameActionEventMap.BYTEMASK_CONTROL_PHYSICS_STATE;
 
 		mCurrentTick = frame.frameNumber;
 		dataBuffer.putShort((short) frame.frameNumber);
@@ -252,16 +252,16 @@ public class GameActionEventController extends ActionEventController<ActionFrame
 			byte keyboardInputValue0 = 0;
 
 			if (frame.isThrottleDown)
-				keyboardInputValue0 |= ActionEventMap.BYTEMASK_INPUT_UP;
+				keyboardInputValue0 |= GameActionEventMap.BYTEMASK_INPUT_UP;
 
 			if (frame.isDownDown)
-				keyboardInputValue0 |= ActionEventMap.BYTEMASK_INPUT_DOWN;
+				keyboardInputValue0 |= GameActionEventMap.BYTEMASK_INPUT_DOWN;
 
 			if (frame.isThrottleLeftDown)
-				keyboardInputValue0 |= ActionEventMap.BYTEMASK_INPUT_LEFT;
+				keyboardInputValue0 |= GameActionEventMap.BYTEMASK_INPUT_LEFT;
 
 			if (frame.isThrottleRightDown)
-				keyboardInputValue0 |= ActionEventMap.BYTEMASK_INPUT_RIGHT;
+				keyboardInputValue0 |= GameActionEventMap.BYTEMASK_INPUT_RIGHT;
 
 			dataBuffer.put(keyboardInputValue0);
 		}
@@ -272,7 +272,7 @@ public class GameActionEventController extends ActionEventController<ActionFrame
 
 	@Override
 	protected void saveCustomActionEvents(ActionFrame frame, ByteBuffer dataBuffer) {
-		var controlByte = (byte) ActionEventMap.BYTEMASK_CONTROL_PHYSICS_STATE;
+		var controlByte = (byte) GameActionEventMap.BYTEMASK_CONTROL_PHYSICS_STATE;
 
 		if (ConstantsGame.DEBUG_OUTPUT_ACTIONEVENT_LOGS) {
 			Debug.debugManager().logger().i(getClass().getSimpleName(), "Writing new custom frame");
@@ -338,15 +338,15 @@ public class GameActionEventController extends ActionEventController<ActionFrame
 			Debug.debugManager().logger().i(getClass().getSimpleName(), "            control: " + nextControlByte);
 		}
 
-		if ((nextControlByte & ActionEventMap.BYTEMASK_CONTROL_INPUT) == ActionEventMap.BYTEMASK_CONTROL_INPUT) {
+		if ((nextControlByte & GameActionEventMap.BYTEMASK_CONTROL_INPUT) == GameActionEventMap.BYTEMASK_CONTROL_INPUT) {
 			final var nextInput = dataBuffer.get();
 
-			player.tempFrameInput.isThrottleDown = (nextInput & ActionEventMap.BYTEMASK_INPUT_UP) == ActionEventMap.BYTEMASK_INPUT_UP;
-			player.tempFrameInput.isThrottleLeftDown = (nextInput & ActionEventMap.BYTEMASK_INPUT_LEFT) == ActionEventMap.BYTEMASK_INPUT_LEFT;
-			player.tempFrameInput.isThrottleRightDown = (nextInput & ActionEventMap.BYTEMASK_INPUT_RIGHT) == ActionEventMap.BYTEMASK_INPUT_RIGHT;
+			player.tempFrameInput.isThrottleDown = (nextInput & GameActionEventMap.BYTEMASK_INPUT_UP) == GameActionEventMap.BYTEMASK_INPUT_UP;
+			player.tempFrameInput.isThrottleLeftDown = (nextInput & GameActionEventMap.BYTEMASK_INPUT_LEFT) == GameActionEventMap.BYTEMASK_INPUT_LEFT;
+			player.tempFrameInput.isThrottleRightDown = (nextInput & GameActionEventMap.BYTEMASK_INPUT_RIGHT) == GameActionEventMap.BYTEMASK_INPUT_RIGHT;
 		}
 
-		if ((nextControlByte & ActionEventMap.BYTEMASK_CONTROL_PHYSICS_STATE) == ActionEventMap.BYTEMASK_CONTROL_PHYSICS_STATE) {
+		if ((nextControlByte & GameActionEventMap.BYTEMASK_CONTROL_PHYSICS_STATE) == GameActionEventMap.BYTEMASK_CONTROL_PHYSICS_STATE) {
 			player.tempFrameInput.positionX = dataBuffer.getFloat();
 			player.tempFrameInput.positionY = dataBuffer.getFloat();
 

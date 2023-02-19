@@ -20,6 +20,7 @@ public class MainMenu extends MenuScreen {
 
 	private static final int SCREEN_BUTTON_PLAY_SURVIVAL = 10;
 	private static final int SCREEN_BUTTON_PLAY_TIME_TRIAL = 11;
+	private static final int SCREEN_BUTTON_PLAY_TEST = 20;
 	private static final int SCREEN_BUTTON_HELP = 12;
 	private static final int SCREEN_BUTTON_OPTIONS = 13;
 	private static final int SCREEN_BUTTON_EXIT = 15;
@@ -44,35 +45,41 @@ public class MainMenu extends MenuScreen {
 		final float lDesiredEntryHeight = 17.f;
 
 		// ---
-		final var lPlaySurvivaEntry = new MenuEntry(mScreenManager, mMainMenuListBox, "Survival");
+		final var lPlaySurvivaEntry = new MenuEntry(mScreenManager, this, "Survival");
 		lPlaySurvivaEntry.desiredWidth(lDesiredEntryWidth);
 		lPlaySurvivaEntry.desiredHeight(lDesiredEntryHeight);
 		lPlaySurvivaEntry.registerClickListener(this, SCREEN_BUTTON_PLAY_SURVIVAL);
 		lPlaySurvivaEntry.setToolTip("Starts a new survival game. You need to deliver as much food to the HQ before the time runs out.");
 
-		final var lPlayTimeEntry = new MenuEntry(mScreenManager, mMainMenuListBox, "Time-Trial");
+		final var lPlayTimeEntry = new MenuEntry(mScreenManager, this, "Time-Trial");
 		lPlayTimeEntry.desiredWidth(lDesiredEntryWidth);
 		lPlayTimeEntry.desiredHeight(lDesiredEntryHeight);
 		lPlayTimeEntry.registerClickListener(this, SCREEN_BUTTON_PLAY_TIME_TRIAL);
 		lPlayTimeEntry.setToolTip("You need ot harvest and deliver food from each of the farms. Fastest time wins.");
 
-		final var lHelpButton = new MenuEntry(mScreenManager, mMainMenuListBox, "Instructions");
+		final var lTestEntry = new MenuEntry(mScreenManager, this, "Test");
+		lTestEntry.desiredWidth(lDesiredEntryWidth);
+		lTestEntry.desiredHeight(lDesiredEntryHeight);
+		lTestEntry.registerClickListener(this, SCREEN_BUTTON_PLAY_TEST);
+
+		final var lHelpButton = new MenuEntry(mScreenManager, this, "Instructions");
 		lHelpButton.desiredWidth(lDesiredEntryWidth);
 		lHelpButton.desiredHeight(lDesiredEntryHeight);
 		lHelpButton.registerClickListener(this, SCREEN_BUTTON_HELP);
 
-		final var lOptionsEntry = new MenuEntry(mScreenManager, mMainMenuListBox, "Options");
+		final var lOptionsEntry = new MenuEntry(mScreenManager, this, "Options");
 		lOptionsEntry.desiredWidth(lDesiredEntryWidth);
 		lOptionsEntry.desiredHeight(lDesiredEntryHeight);
 		lOptionsEntry.registerClickListener(this, SCREEN_BUTTON_OPTIONS);
 
-		final var lExitEntry = new MenuEntry(mScreenManager, mMainMenuListBox, "Exit");
+		final var lExitEntry = new MenuEntry(mScreenManager, this, "Exit");
 		lExitEntry.desiredWidth(lDesiredEntryWidth);
 		lExitEntry.desiredHeight(lDesiredEntryHeight);
 		lExitEntry.registerClickListener(this, SCREEN_BUTTON_EXIT);
 
 		mMainMenuListBox.addMenuEntry(lPlaySurvivaEntry);
 		mMainMenuListBox.addMenuEntry(lPlayTimeEntry);
+		mMainMenuListBox.addMenuEntry(lTestEntry);
 		mMainMenuListBox.addMenuEntry(MenuEntry.menuSeparator());
 		mMainMenuListBox.addMenuEntry(lHelpButton);
 		mMainMenuListBox.addMenuEntry(lOptionsEntry);
@@ -80,6 +87,9 @@ public class MainMenu extends MenuScreen {
 		mMainMenuListBox.addMenuEntry(lExitEntry);
 
 		mLayouts.add(mMainMenuListBox);
+
+		mSelectedLayoutIndex = mLayouts.size() - 1;
+		mSelectedEntryIndex = 0;
 
 		mMenuScreenWidthScaleFactor = 0.5f;
 		mLayoutAlignment = LAYOUT_ALIGNMENT.LEFT;
@@ -144,6 +154,11 @@ public class MainMenu extends MenuScreen {
 			}
 
 			screenManager().addScreen(new OptionsScreen(mScreenManager));
+			break;
+		}
+
+		case SCREEN_BUTTON_PLAY_TEST: {
+			screenManager().addScreen(new TestMenuScreen(mScreenManager));
 			break;
 		}
 

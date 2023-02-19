@@ -43,23 +43,22 @@ public class SurvivalLandingScreen extends MenuScreen {
 		mMainMenuListBox.layoutFillType(FILLTYPE.TAKE_WHATS_NEEDED);
 		mMainMenuListBox.setDrawBackground(true, new Color(0.02f, 0.12f, 0.15f, 0.13f));
 
-		// As we know the game canvas size
-		final float lDesiredEntryWidth = 56.f;
-		final float lDesiredEntryHeight = 17.f;
+		final var lDesiredEntryWidth = 56.f;
+		final var lDesiredEntryHeight = 17.f;
 
-		// ---
-		final var lPlaySurvivaEntry = new MenuEntry(mScreenManager, mMainMenuListBox, "Start");
+		final var lPlaySurvivaEntry = new MenuEntry(mScreenManager, this, "Start");
 		lPlaySurvivaEntry.desiredWidth(lDesiredEntryWidth);
 		lPlaySurvivaEntry.desiredHeight(lDesiredEntryHeight);
 		lPlaySurvivaEntry.registerClickListener(this, SCREEN_BUTTON_PLAY_SURVIVAL);
 
-		mHighScore = new MenuInputEntry(pScreenManager, mMainMenuListBox);
+		mHighScore = new MenuInputEntry(pScreenManager, this);
 		mHighScore.label("HighScore");
 		mHighScore.horizontalFillType(FILLTYPE.TAKE_DESIRED_SIZE);
-		mHighScore.canHoverOver(false);
+		mHighScore.enabled(false);
 
-		mNoHighScore = new MenuLabelEntry(pScreenManager, mMainMenuListBox);
+		mNoHighScore = new MenuLabelEntry(pScreenManager, this);
 		mNoHighScore.label("No fastest time");
+		mNoHighScore.enabled(false);
 
 		mMainMenuListBox.addMenuEntry(mHighScore);
 		mMainMenuListBox.addMenuEntry(MenuEntry.menuSeparator());
@@ -69,6 +68,9 @@ public class SurvivalLandingScreen extends MenuScreen {
 		mMainMenuListBox.addMenuEntry(lPlaySurvivaEntry);
 
 		mLayouts.add(mMainMenuListBox);
+
+		mSelectedLayoutIndex = 0;
+		mSelectedEntryIndex = 5;
 
 		mMenuScreenWidthScaleFactor = 0.5f;
 		mLayoutAlignment = LAYOUT_ALIGNMENT.RIGHT;
@@ -81,14 +83,6 @@ public class SurvivalLandingScreen extends MenuScreen {
 	// ---------------------------------------------
 	// Core-Methods
 	// ---------------------------------------------
-
-	@Override
-	public void initialize() {
-		super.initialize();
-
-		// TODO: Implement high-scores in survival mode
-
-	}
 
 	@Override
 	protected void handleOnClick() {

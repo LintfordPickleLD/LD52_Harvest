@@ -14,11 +14,12 @@ import net.lintford.library.core.graphics.ColorConstants;
 import net.lintford.library.core.graphics.sprites.spritesheet.SpriteSheetDefinition;
 import net.lintford.library.core.graphics.sprites.spritesheet.SpriteSheetManager;
 import net.lintford.library.core.graphics.textures.Texture;
+import net.lintford.library.core.input.mouse.IInputProcessor;
 import net.lintford.library.core.maths.MathHelper;
 import net.lintford.library.renderers.BaseRenderer;
 import net.lintford.library.renderers.RendererManager;
 
-public class MinimapRenderer extends BaseRenderer {
+public class MinimapRenderer extends BaseRenderer implements IInputProcessor {
 
 	// ---------------------------------------------
 	// Constants
@@ -36,6 +37,7 @@ public class MinimapRenderer extends BaseRenderer {
 
 	private SpriteSheetDefinition mCoreSpritesheet;
 	private Texture mMinimapTexture;
+	private float mInputTimer;
 
 	// ---------------------------------------------
 	// Properties
@@ -84,7 +86,7 @@ public class MinimapRenderer extends BaseRenderer {
 	@Override
 	public boolean handleInput(LintfordCore core) {
 
-		if (core.input().keyboard().isKeyDownTimed(GLFW.GLFW_KEY_M)) {
+		if (core.input().keyboard().isKeyDownTimed(GLFW.GLFW_KEY_M, this)) {
 			// TODO: Toggle minimap
 		}
 
@@ -154,6 +156,16 @@ public class MinimapRenderer extends BaseRenderer {
 		lFontUnit.end();
 		lSpriteBatch.end();
 
+	}
+
+	@Override
+	public boolean isCoolDownElapsed() {
+		return mInputTimer <= 0;
+	}
+
+	@Override
+	public void resetCoolDownTimer() {
+		mInputTimer = IInputProcessor.INPUT_COOLDOWN_TIME;
 	}
 
 }

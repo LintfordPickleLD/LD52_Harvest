@@ -55,27 +55,26 @@ public class TimeTrailLandingScreen extends MenuScreen {
 		final float lDesiredEntryHeight = 17.f;
 
 		// ---
-		final var lPlayTimeEntry = new MenuEntry(mScreenManager, mMainMenuListBox, "Start");
+		final var lPlayTimeEntry = new MenuEntry(mScreenManager, this, "Start");
 		lPlayTimeEntry.desiredWidth(lDesiredEntryWidth);
 		lPlayTimeEntry.desiredHeight(lDesiredEntryHeight);
 		lPlayTimeEntry.registerClickListener(this, SCREEN_BUTTON_PLAY_TIME_TRIAL);
 		lPlayTimeEntry.setToolTip("You need ot harvest and deliver food from each of the farms. Fastest time wins.");
 
-		mGhostFatestTime = new MenuInputEntry(pScreenManager, mMainMenuListBox);
+		mGhostFatestTime = new MenuInputEntry(pScreenManager, this);
 		mGhostFatestTime.label("Time");
-		mGhostFatestTime.horizontalFillType(FILLTYPE.TAKE_DESIRED_SIZE);
-		mGhostFatestTime.canHoverOver(false);
+		mGhostFatestTime.horizontalFillType(FILLTYPE.THIRD_PARENT);
+		mGhostFatestTime.enabled(false);
 
-		mGhostEnabled = new MenuToggleEntry(pScreenManager, mMainMenuListBox);
+		mGhostEnabled = new MenuToggleEntry(pScreenManager, this);
 		mGhostEnabled.label("Ghost");
 		mGhostEnabled.horizontalFillType(FILLTYPE.TAKE_DESIRED_SIZE);
-		mGhostEnabled.canHoverOver(false);
 		mGhostEnabled.showInfoButton(true);
 		mGhostEnabled.setToolTip("The ghost ship replays the actions of the fastest time, but doesn't interfere with the gameplay");
 		mGhostEnabled.desiredWidth(lDesiredEntryWidth);
 		mGhostEnabled.desiredHeight(lDesiredEntryHeight);
 
-		mNoFastestTime = new MenuLabelEntry(pScreenManager, mMainMenuListBox);
+		mNoFastestTime = new MenuLabelEntry(pScreenManager, this);
 		mNoFastestTime.label("No fastest time");
 
 		mMainMenuListBox.addMenuEntry(mNoFastestTime);
@@ -87,6 +86,9 @@ public class TimeTrailLandingScreen extends MenuScreen {
 		mMainMenuListBox.addMenuEntry(lPlayTimeEntry);
 
 		mLayouts.add(mMainMenuListBox);
+
+		mSelectedLayoutIndex = 0;
+		mSelectedEntryIndex = 6;
 
 		mMenuScreenWidthScaleFactor = 0.5f;
 		mLayoutAlignment = LAYOUT_ALIGNMENT.RIGHT;
@@ -119,26 +121,19 @@ public class TimeTrailLandingScreen extends MenuScreen {
 			tempTime -= lTotalSeconds * TimeConstants.MillisPerSecond;
 
 			mNoFastestTime.enabled(false);
-			mNoFastestTime.active(false);
 
-			mGhostEnabled.active(true);
 			mGhostEnabled.isChecked(true);
 
-			mGhostFatestTime.active(true);
 			mGhostFatestTime.inputString(lTotalMinutes + ":" + lTotalSeconds + " s");
-			mGhostFatestTime.enabled(true);
 			mGhostFatestTime.canHaveFocus(false);
 
 		} else {
 			mNoFastestTime.enabled(true);
 			mNoFastestTime.active(true);
 
-			mGhostEnabled.active(false);
 			mGhostEnabled.enabled(false);
 			mGhostEnabled.isChecked(false);
 
-			mGhostFatestTime.active(false);
-			mGhostFatestTime.enabled(false);
 			mGhostFatestTime.inputString(null);
 		}
 	}

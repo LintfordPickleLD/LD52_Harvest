@@ -28,8 +28,6 @@ public class TimeTrialEndScreen extends MenuScreen {
 	private PlayerManager mPlayerManager;
 	private float mTotalTimeInMs;
 	private boolean mFastestTimeRecorded;
-	private boolean mFastestTimeFlashOn;
-	private float mFastestTimeFlashTimer;
 
 	// ---------------------------------------------
 	// Constructor
@@ -46,10 +44,10 @@ public class TimeTrialEndScreen extends MenuScreen {
 
 		// ---
 
-		final var lRetryButton = new MenuEntry(mScreenManager, lLayout, "Go Again");
+		final var lRetryButton = new MenuEntry(mScreenManager, this, "Go Again");
 		lRetryButton.registerClickListener(this, SCREEN_BUTTON_RESTART);
 
-		final var lExitToMenuButton = new MenuEntry(mScreenManager, lLayout, "Back to Menu");
+		final var lExitToMenuButton = new MenuEntry(mScreenManager, this, "Back to Menu");
 		lExitToMenuButton.registerClickListener(this, SCREEN_BUTTON_EXIT);
 
 		lLayout.addMenuEntry(lRetryButton);

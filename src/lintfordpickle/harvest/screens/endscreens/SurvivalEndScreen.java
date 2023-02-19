@@ -45,10 +45,10 @@ public class SurvivalEndScreen extends MenuScreen {
 
 		// ---
 
-		final var lOptionsEntry = new MenuEntry(mScreenManager, lLayout, "Restart");
+		final var lOptionsEntry = new MenuEntry(mScreenManager, this, "Restart");
 		lOptionsEntry.registerClickListener(this, SCREEN_BUTTON_RESTART);
 
-		final var lCreditsEntry = new MenuEntry(mScreenManager, lLayout, "Exit");
+		final var lCreditsEntry = new MenuEntry(mScreenManager, this, "Exit");
 		lCreditsEntry.registerClickListener(this, SCREEN_BUTTON_EXIT);
 
 		lLayout.addMenuEntry(lOptionsEntry);
