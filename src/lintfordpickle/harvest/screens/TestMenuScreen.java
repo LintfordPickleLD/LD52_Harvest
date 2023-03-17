@@ -5,6 +5,7 @@ import net.lintford.library.screenmanager.DualMenuScreen;
 import net.lintford.library.screenmanager.MenuEntry;
 import net.lintford.library.screenmanager.ScreenManager;
 import net.lintford.library.screenmanager.ScreenManagerConstants.FILLTYPE;
+import net.lintford.library.screenmanager.ScreenManagerConstants.LAYOUT_WIDTH;
 import net.lintford.library.screenmanager.entries.MenuDropDownEntry;
 import net.lintford.library.screenmanager.entries.MenuEnumEntry;
 import net.lintford.library.screenmanager.entries.MenuInputEntry;
@@ -63,6 +64,8 @@ public class TestMenuScreen extends DualMenuScreen {
 		lLeftLayout.showTitle(true);
 		lLeftLayout.cropPaddingTop(10.f);
 		lLeftLayout.cropPaddingBottom(10.f);
+		lLeftLayout.layoutWidth(LAYOUT_WIDTH.FULL);
+		lLeftLayout.layoutFillType(FILLTYPE.TAKE_WHATS_NEEDED);
 
 		createLeftLayout(lLeftLayout);
 
@@ -98,6 +101,8 @@ public class TestMenuScreen extends DualMenuScreen {
 		// Add the three layouts
 		addLayout(lLeftLayout);
 		// addLayout(lFooterLayout);
+
+		mShowBackgroundScreens = false;
 
 		mSelectedEntryIndex = 0;
 		mSelectedLayoutIndex = 0;
@@ -136,16 +141,14 @@ public class TestMenuScreen extends DualMenuScreen {
 
 		mLeftInputEntry01 = new MenuEnumEntry(screenManager(), this, "Multiplayer");
 		mLeftInputEntry01.addItems("Closed", "Friends", "Public");
-		mLeftInputEntry01.setToolTip(
-				"Select whether or not other people can join your world:\n\n[CLOSED] A single player game\n\n[FRIENDS] Only people in your friends list can join your games.\n\n[PUBLIC] Your game is open for anyone with your IP to join");
+		mLeftInputEntry01.setToolTip("Select whether or not other people can join your world:\n\n[CLOSED] A single player game\n\n[FRIENDS] Only people in your friends list can join your games.\n\n[PUBLIC] Your game is open for anyone with your IP to join");
 		mLeftInputEntry01.showInfoButton(true);
 		mLeftInputEntry01.setButtonsEnabled(true);
 		mLeftInputEntry01.horizontalFillType(FILLTYPE.FILL_CONTAINER);
 
 		mLeftInputEntry02 = new MenuEnumEntry(screenManager(), this, "Game Mode");
 		mLeftInputEntry02.addItems("Survival", "Creative");
-		mLeftInputEntry02.setToolTip(
-				"[Survival] In survival mode its you against the elements, just as the game was meant to be played.\n[Creative] In creative mode, you have all the blocks and objects available to you at any time. You also have access to the creative console.");
+		mLeftInputEntry02.setToolTip("[Survival] In survival mode its you against the elements, just as the game was meant to be played.\n[Creative] In creative mode, you have all the blocks and objects available to you at any time. You also have access to the creative console.");
 		mLeftInputEntry02.showInfoButton(true);
 		mLeftInputEntry02.setButtonsEnabled(true);
 		mLeftInputEntry02.horizontalFillType(FILLTYPE.FILL_CONTAINER);
@@ -221,16 +224,14 @@ public class TestMenuScreen extends DualMenuScreen {
 
 		mRightInputEntry01 = new MenuEnumEntry(screenManager(), this, "Multiplayer");
 		mRightInputEntry01.addItems("Closed", "Friends", "Public");
-		mRightInputEntry01.setToolTip(
-				"Select whether or not other people can join your world:\n\n[CLOSED] A single player game\n\n[FRIENDS] Only people in your friends list can join your games.\n\n[PUBLIC] Your game is open for anyone with your IP to join");
+		mRightInputEntry01.setToolTip("Select whether or not other people can join your world:\n\n[CLOSED] A single player game\n\n[FRIENDS] Only people in your friends list can join your games.\n\n[PUBLIC] Your game is open for anyone with your IP to join");
 		mRightInputEntry01.showInfoButton(true);
 		mRightInputEntry01.setButtonsEnabled(true);
 		mRightInputEntry01.horizontalFillType(FILLTYPE.FILL_CONTAINER);
 
 		mRightInputEntry02 = new MenuEnumEntry(screenManager(), this, "Game Mode");
 		mRightInputEntry02.addItems("Survival", "Creative");
-		mRightInputEntry02.setToolTip(
-				"[Survival] In survival mode its you against the elements, just as the game was meant to be played.\n[Creative] In creative mode, you have all the blocks and objects available to you at any time. You also have access to the creative console.");
+		mRightInputEntry02.setToolTip("[Survival] In survival mode its you against the elements, just as the game was meant to be played.\n[Creative] In creative mode, you have all the blocks and objects available to you at any time. You also have access to the creative console.");
 		mRightInputEntry02.showInfoButton(true);
 		mRightInputEntry02.setButtonsEnabled(true);
 		mRightInputEntry02.horizontalFillType(FILLTYPE.FILL_CONTAINER);

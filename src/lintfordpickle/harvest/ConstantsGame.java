@@ -8,10 +8,10 @@ public class ConstantsGame {
 	// Setup
 	// ---------------------------------------------
 
-	public static final String FOOTER_TEXT = "LintfordPickle LD#52 - Harvester 008";
+	public static final String FOOTER_TEXT = "(c) 2023 LintfordPickle";
 
 	public static final String APPLICATION_NAME = "Harvester 008";
-	public static final String WINDOW_TITLE = "LD#52 - Harvester 008";
+	public static final String WINDOW_TITLE = "Harvester 008";
 
 	public static final float ASPECT_RATIO = 16.f / 9.f;
 

@@ -45,12 +45,11 @@ public class MenuHelpScreen extends MenuScreen {
 		GL11.glClear(GL11.GL_COLOR_BUFFER_BIT | GL11.GL_DEPTH_BUFFER_BIT);
 
 		final var lHudBoundingBox = core.HUD().boundingRectangle();
-		final var lTextureBatch = rendererManager().uiTextureBatch();
+		final var lTextureBatch = rendererManager().uiSpriteBatch();
 
 		lTextureBatch.begin(core.HUD());
 		lTextureBatch.draw(mHelpTexture, 0, 0, 960, 540, lHudBoundingBox.left(), lHudBoundingBox.top(), lHudBoundingBox.width(), lHudBoundingBox.height(), -0.01f, ColorConstants.WHITE);
 		lTextureBatch.end();
-
 	}
 
 	@Override

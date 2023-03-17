@@ -8,6 +8,7 @@ import net.lintford.library.screenmanager.MenuScreen;
 import net.lintford.library.screenmanager.ScreenManager;
 import net.lintford.library.screenmanager.ScreenManagerConstants.FILLTYPE;
 import net.lintford.library.screenmanager.ScreenManagerConstants.LAYOUT_ALIGNMENT;
+import net.lintford.library.screenmanager.ScreenManagerConstants.LAYOUT_WIDTH;
 import net.lintford.library.screenmanager.entries.MenuInputEntry;
 import net.lintford.library.screenmanager.entries.MenuLabelEntry;
 import net.lintford.library.screenmanager.layouts.ListLayout;
@@ -40,8 +41,9 @@ public class SurvivalLandingScreen extends MenuScreen {
 		super(pScreenManager, TITLE);
 
 		mMainMenuListBox = new ListLayout(this);
+		mMainMenuListBox.layoutWidth(LAYOUT_WIDTH.FULL);
 		mMainMenuListBox.layoutFillType(FILLTYPE.TAKE_WHATS_NEEDED);
-		mMainMenuListBox.setDrawBackground(true, new Color(0.02f, 0.12f, 0.15f, 0.13f));
+		mMainMenuListBox.setDrawBackground(true, new Color(0.02f, 0.12f, 0.15f, 0.8f));
 
 		final var lDesiredEntryWidth = 56.f;
 		final var lDesiredEntryHeight = 17.f;
@@ -53,7 +55,7 @@ public class SurvivalLandingScreen extends MenuScreen {
 
 		mHighScore = new MenuInputEntry(pScreenManager, this);
 		mHighScore.label("HighScore");
-		mHighScore.horizontalFillType(FILLTYPE.TAKE_DESIRED_SIZE);
+		mHighScore.horizontalFillType(FILLTYPE.THIRD_PARENT);
 		mHighScore.enabled(false);
 
 		mNoHighScore = new MenuLabelEntry(pScreenManager, this);
@@ -72,7 +74,7 @@ public class SurvivalLandingScreen extends MenuScreen {
 		mSelectedLayoutIndex = 0;
 		mSelectedEntryIndex = 5;
 
-		mMenuScreenWidthScaleFactor = 0.5f;
+		mPaddingTopNormalized = 30.f;
 		mLayoutAlignment = LAYOUT_ALIGNMENT.RIGHT;
 
 		mIsPopup = false;

@@ -121,7 +121,7 @@ public class SceneRenderer extends BaseRenderer {
 		if (lTexture == null)
 			return;
 
-		final var lTextureBatch = mRendererManager.uiTextureBatch();
+		final var lTextureBatch = mRendererManager.uiSpriteBatch();
 		lTextureBatch.begin(core.gameCamera());
 
 		// TODO: Should come from the scene layer definition
@@ -142,7 +142,7 @@ public class SceneRenderer extends BaseRenderer {
 	}
 
 	private void drawCarStreams(LintfordCore core) {
-		final var lTextureBatch = mRendererManager.uiTextureBatch();
+		final var lTextureBatch = mRendererManager.uiSpriteBatch();
 
 		lTextureBatch.begin(core.gameCamera());
 

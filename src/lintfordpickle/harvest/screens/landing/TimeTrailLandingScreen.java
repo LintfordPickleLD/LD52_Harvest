@@ -12,6 +12,7 @@ import net.lintford.library.screenmanager.MenuScreen;
 import net.lintford.library.screenmanager.ScreenManager;
 import net.lintford.library.screenmanager.ScreenManagerConstants.FILLTYPE;
 import net.lintford.library.screenmanager.ScreenManagerConstants.LAYOUT_ALIGNMENT;
+import net.lintford.library.screenmanager.ScreenManagerConstants.LAYOUT_WIDTH;
 import net.lintford.library.screenmanager.entries.MenuInputEntry;
 import net.lintford.library.screenmanager.entries.MenuLabelEntry;
 import net.lintford.library.screenmanager.entries.MenuToggleEntry;
@@ -47,8 +48,9 @@ public class TimeTrailLandingScreen extends MenuScreen {
 		super(pScreenManager, TITLE);
 
 		mMainMenuListBox = new ListLayout(this);
+		mMainMenuListBox.layoutWidth(LAYOUT_WIDTH.HALF);
 		mMainMenuListBox.layoutFillType(FILLTYPE.TAKE_WHATS_NEEDED);
-		mMainMenuListBox.setDrawBackground(true, new Color(0.02f, 0.12f, 0.15f, 0.13f));
+		mMainMenuListBox.setDrawBackground(true, new Color(0.02f, 0.12f, 0.15f, 0.8f));
 
 		// As we know the game canvas size
 		final float lDesiredEntryWidth = 300.f;
@@ -90,7 +92,7 @@ public class TimeTrailLandingScreen extends MenuScreen {
 		mSelectedLayoutIndex = 0;
 		mSelectedEntryIndex = 6;
 
-		mMenuScreenWidthScaleFactor = 0.5f;
+		mPaddingTopNormalized = 30.f;
 		mLayoutAlignment = LAYOUT_ALIGNMENT.RIGHT;
 
 		mIsPopup = false;

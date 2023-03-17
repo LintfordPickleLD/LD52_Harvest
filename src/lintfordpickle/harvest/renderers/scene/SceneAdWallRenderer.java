@@ -138,7 +138,7 @@ public class SceneAdWallRenderer extends BaseRenderer {
 		if (adWall == null)
 			return;
 
-		final var lTextureBatch = mRendererManager.uiTextureBatch();
+		final var lTextureBatch = mRendererManager.uiSpriteBatch();
 
 		final var lTexture = core.resources().textureManager().getTexture(adWall.adWallTextureName, ConstantsGame.GAME_RESOURCE_GROUP_ID);
 		if (lTexture == null)
