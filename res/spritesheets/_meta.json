@@ -4,6 +4,8 @@
 		"res/spritesheets/spritesheetHud.json",
 
 		"res/spritesheets/spritesheetProps.json",
-		"res/spritesheets/spritesheetScene.json"
+		"res/spritesheets/spritesheetScene.json",
+
+		"res/spritesheets/spritesheetAdWallSoup.json"
 	]
 }

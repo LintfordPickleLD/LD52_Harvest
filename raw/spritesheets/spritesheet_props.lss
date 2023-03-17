@@ -56,6 +56,17 @@
         "TEXTUREWHEATFULL2",
         "TEXTUREWHEATFULL3"
       ]
+    },
+    "aircond": {
+      "loopAnimation": true,
+      "frameDuration": 100,
+      "animationSprites": [
+        "AIRCOND_00",
+        "AIRCOND_01",
+        "AIRCOND_02",
+        "AIRCOND_03",
+        "AIRCOND_04"
+      ]
     }
   }
 }

@@ -3,9 +3,33 @@
   "textureName": "TEXTURE_PROPS",
   "spriteFrames": [
     {
-      "name": "TEXTUREWAREHOUSE",
+      "name": "TEXTURE_UPPER_RED_00_GLASS",
       "x": 0,
-      "y": 36,
+      "y": 109,
+      "w": 83,
+      "h": 43,
+      "pivotX": 0,
+      "pivotY": 0,
+      "scaleX": 1.0,
+      "scaleY": 1.0,
+      "anchorPoints": []
+    },
+    {
+      "name": "TEXTURE_UPPER_RED_00",
+      "x": 85,
+      "y": 109,
+      "w": 83,
+      "h": 43,
+      "pivotX": 0,
+      "pivotY": 0,
+      "scaleX": 1.0,
+      "scaleY": 1.0,
+      "anchorPoints": []
+    },
+    {
+      "name": "TEXTUREWAREHOUSE",
+      "x": 170,
+      "y": 127,
       "w": 80,
       "h": 24,
       "pivotX": 0,
@@ -16,8 +40,8 @@
     },
     {
       "name": "TEXTUREWATEREMPTY",
-      "x": 82,
-      "y": 36,
+      "x": 0,
+      "y": 154,
       "w": 80,
       "h": 24,
       "pivotX": 0,
@@ -28,8 +52,8 @@
     },
     {
       "name": "TEXTUREWATERFULL",
-      "x": 164,
-      "y": 36,
+      "x": 82,
+      "y": 154,
       "w": 80,
       "h": 24,
       "pivotX": 0,
@@ -40,8 +64,8 @@
     },
     {
       "name": "TEXTUREWHEATEMPTY",
-      "x": 0,
-      "y": 62,
+      "x": 164,
+      "y": 154,
       "w": 80,
       "h": 24,
       "pivotX": 0,
@@ -52,8 +76,8 @@
     },
     {
       "name": "TEXTUREWHEATFULL1",
-      "x": 82,
-      "y": 62,
+      "x": 0,
+      "y": 180,
       "w": 80,
       "h": 24,
       "pivotX": 0,
@@ -64,8 +88,8 @@
     },
     {
       "name": "TEXTUREWHEATFULL2",
-      "x": 164,
-      "y": 62,
+      "x": 82,
+      "y": 180,
       "w": 80,
       "h": 24,
       "pivotX": 0,
@@ -76,8 +100,8 @@
     },
     {
       "name": "TEXTUREWHEATFULL3",
-      "x": 0,
-      "y": 88,
+      "x": 164,
+      "y": 180,
       "w": 80,
       "h": 24,
       "pivotX": 0,
@@ -88,8 +112,8 @@
     },
     {
       "name": "TEXTUREWHEATHALF",
-      "x": 82,
-      "y": 88,
+      "x": 0,
+      "y": 206,
       "w": 80,
       "h": 24,
       "pivotX": 0,
@@ -100,8 +124,8 @@
     },
     {
       "name": "TEXTURE_CAR_STREAM_00",
-      "x": 164,
-      "y": 88,
+      "x": 82,
+      "y": 206,
       "w": 80,
       "h": 24,
       "pivotX": 0,
@@ -111,9 +135,213 @@
       "anchorPoints": []
     },
     {
-      "name": "HARVESTER",
-      "x": 180,
+      "name": "TEXTURE_UPPER_GREEN_00_GLASS",
+      "x": 0,
+      "y": 79,
+      "w": 54,
+      "h": 28,
+      "pivotX": 0,
+      "pivotY": 0,
+      "scaleX": 1.0,
+      "scaleY": 1.0,
+      "anchorPoints": []
+    },
+    {
+      "name": "TEXTURE_UPPER_GREEN_00",
+      "x": 56,
+      "y": 79,
+      "w": 54,
+      "h": 28,
+      "pivotX": 0,
+      "pivotY": 0,
+      "scaleX": 1.0,
+      "scaleY": 1.0,
+      "anchorPoints": []
+    },
+    {
+      "name": "AIRCOND_00",
+      "x": 0,
       "y": 0,
+      "w": 40,
+      "h": 32,
+      "pivotX": 0,
+      "pivotY": 0,
+      "scaleX": 1.0,
+      "scaleY": 1.0,
+      "anchorPoints": []
+    },
+    {
+      "name": "AIRCOND_01",
+      "x": 42,
+      "y": 0,
+      "w": 40,
+      "h": 32,
+      "pivotX": 0,
+      "pivotY": 0,
+      "scaleX": 1.0,
+      "scaleY": 1.0,
+      "anchorPoints": []
+    },
+    {
+      "name": "AIRCOND_02",
+      "x": 84,
+      "y": 0,
+      "w": 40,
+      "h": 32,
+      "pivotX": 0,
+      "pivotY": 0,
+      "scaleX": 1.0,
+      "scaleY": 1.0,
+      "anchorPoints": []
+    },
+    {
+      "name": "AIRCOND_03",
+      "x": 126,
+      "y": 0,
+      "w": 40,
+      "h": 32,
+      "pivotX": 0,
+      "pivotY": 0,
+      "scaleX": 1.0,
+      "scaleY": 1.0,
+      "anchorPoints": []
+    },
+    {
+      "name": "AIRCOND_04",
+      "x": 168,
+      "y": 0,
+      "w": 40,
+      "h": 32,
+      "pivotX": 0,
+      "pivotY": 0,
+      "scaleX": 1.0,
+      "scaleY": 1.0,
+      "anchorPoints": []
+    },
+    {
+      "name": "TEXTURE_LOWER_RED_00_GLASS",
+      "x": 0,
+      "y": 52,
+      "w": 48,
+      "h": 25,
+      "pivotX": 0,
+      "pivotY": 0,
+      "scaleX": 1.0,
+      "scaleY": 1.0,
+      "anchorPoints": []
+    },
+    {
+      "name": "TEXTURE_LOWER_RED_00",
+      "x": 50,
+      "y": 52,
+      "w": 48,
+      "h": 25,
+      "pivotX": 0,
+      "pivotY": 0,
+      "scaleX": 1.0,
+      "scaleY": 1.0,
+      "anchorPoints": []
+    },
+    {
+      "name": "TEXTURE_UPPER_RED_02_GLASS",
+      "x": 112,
+      "y": 79,
+      "w": 54,
+      "h": 19,
+      "pivotX": 0,
+      "pivotY": 0,
+      "scaleX": 1.0,
+      "scaleY": 1.0,
+      "anchorPoints": []
+    },
+    {
+      "name": "TEXTURE_UPPER_RED_02",
+      "x": 168,
+      "y": 79,
+      "w": 54,
+      "h": 19,
+      "pivotX": 0,
+      "pivotY": 0,
+      "scaleX": 1.0,
+      "scaleY": 1.0,
+      "anchorPoints": []
+    },
+    {
+      "name": "TEXTURE_UPPER_RED_01_GLASS",
+      "x": 174,
+      "y": 52,
+      "w": 39,
+      "h": 17,
+      "pivotX": 0,
+      "pivotY": 0,
+      "scaleX": 1.0,
+      "scaleY": 1.0,
+      "anchorPoints": []
+    },
+    {
+      "name": "TEXTURE_UPPER_RED_01",
+      "x": 215,
+      "y": 52,
+      "w": 39,
+      "h": 17,
+      "pivotX": 0,
+      "pivotY": 0,
+      "scaleX": 1.0,
+      "scaleY": 1.0,
+      "anchorPoints": []
+    },
+    {
+      "name": "TEXTURE_LOWER_GREEN_00_GLASS",
+      "x": 210,
+      "y": 18,
+      "w": 46,
+      "h": 14,
+      "pivotX": 0,
+      "pivotY": 0,
+      "scaleX": 1.0,
+      "scaleY": 1.0,
+      "anchorPoints": []
+    },
+    {
+      "name": "TEXTURE_LOWER_GREEN_00",
+      "x": 178,
+      "y": 34,
+      "w": 46,
+      "h": 14,
+      "pivotX": 0,
+      "pivotY": 0,
+      "scaleX": 1.0,
+      "scaleY": 1.0,
+      "anchorPoints": []
+    },
+    {
+      "name": "TEXTURE_UPPER_GREEN_01_GLASS",
+      "x": 100,
+      "y": 52,
+      "w": 35,
+      "h": 17,
+      "pivotX": 0,
+      "pivotY": 0,
+      "scaleX": 1.0,
+      "scaleY": 1.0,
+      "anchorPoints": []
+    },
+    {
+      "name": "TEXTURE_UPPER_GREEN_01",
+      "x": 137,
+      "y": 52,
+      "w": 35,
+      "h": 17,
+      "pivotX": 0,
+      "pivotY": 0,
+      "scaleX": 1.0,
+      "scaleY": 1.0,
+      "anchorPoints": []
+    },
+    {
+      "name": "HARVESTER",
+      "x": 144,
+      "y": 34,
       "w": 32,
       "h": 16,
       "pivotX": 0,
@@ -124,7 +352,7 @@
     },
     {
       "name": "ENGINE_LEFT1",
-      "x": 0,
+      "x": 210,
       "y": 0,
       "w": 16,
       "h": 16,
@@ -136,7 +364,7 @@
     },
     {
       "name": "ENGINE_LEFT2",
-      "x": 18,
+      "x": 228,
       "y": 0,
       "w": 16,
       "h": 16,
@@ -148,8 +376,8 @@
     },
     {
       "name": "ENGINE_LEFT3",
-      "x": 36,
-      "y": 0,
+      "x": 0,
+      "y": 34,
       "w": 16,
       "h": 16,
       "pivotX": 0,
@@ -160,8 +388,8 @@
     },
     {
       "name": "ENGINE_LEFT4",
-      "x": 54,
-      "y": 0,
+      "x": 18,
+      "y": 34,
       "w": 16,
       "h": 16,
       "pivotX": 0,
@@ -172,8 +400,8 @@
     },
     {
       "name": "ENGINE_LEFT5",
-      "x": 72,
-      "y": 0,
+      "x": 36,
+      "y": 34,
       "w": 16,
       "h": 16,
       "pivotX": 0,
@@ -184,8 +412,8 @@
     },
     {
       "name": "ENGINE_RIGHT1",
-      "x": 90,
-      "y": 0,
+      "x": 54,
+      "y": 34,
       "w": 16,
       "h": 16,
       "pivotX": 0,
@@ -196,8 +424,8 @@
     },
     {
       "name": "ENGINE_RIGHT2",
-      "x": 108,
-      "y": 0,
+      "x": 72,
+      "y": 34,
       "w": 16,
       "h": 16,
       "pivotX": 0,
@@ -208,8 +436,8 @@
     },
     {
       "name": "ENGINE_RIGHT3",
-      "x": 126,
-      "y": 0,
+      "x": 90,
+      "y": 34,
       "w": 16,
       "h": 16,
       "pivotX": 0,
@@ -220,8 +448,8 @@
     },
     {
       "name": "ENGINE_RIGHT4",
-      "x": 144,
-      "y": 0,
+      "x": 108,
+      "y": 34,
       "w": 16,
       "h": 16,
       "pivotX": 0,
@@ -232,8 +460,8 @@
     },
     {
       "name": "ENGINE_RIGHT5",
-      "x": 162,
-      "y": 0,
+      "x": 126,
+      "y": 34,
       "w": 16,
       "h": 16,
       "pivotX": 0,
@@ -244,8 +472,8 @@
     },
     {
       "name": "TEXTUREENGINEFLARE",
-      "x": 0,
-      "y": 18,
+      "x": 224,
+      "y": 79,
       "w": 16,
       "h": 16,
       "pivotX": 0,
@@ -256,8 +484,56 @@
     },
     {
       "name": "TEXTURELIGHTGLOW",
-      "x": 18,
-      "y": 18,
+      "x": 170,
+      "y": 109,
+      "w": 16,
+      "h": 16,
+      "pivotX": 0,
+      "pivotY": 0,
+      "scaleX": 1.0,
+      "scaleY": 1.0,
+      "anchorPoints": []
+    },
+    {
+      "name": "VEHICLE_GREEN_LOWER_00",
+      "x": 188,
+      "y": 109,
+      "w": 16,
+      "h": 16,
+      "pivotX": 0,
+      "pivotY": 0,
+      "scaleX": 1.0,
+      "scaleY": 1.0,
+      "anchorPoints": []
+    },
+    {
+      "name": "VEHICLE_GREEN_UPPER_00",
+      "x": 206,
+      "y": 109,
+      "w": 16,
+      "h": 16,
+      "pivotX": 0,
+      "pivotY": 0,
+      "scaleX": 1.0,
+      "scaleY": 1.0,
+      "anchorPoints": []
+    },
+    {
+      "name": "VEHICLE_RED_LOWER_00",
+      "x": 224,
+      "y": 109,
+      "w": 16,
+      "h": 16,
+      "pivotX": 0,
+      "pivotY": 0,
+      "scaleX": 1.0,
+      "scaleY": 1.0,
+      "anchorPoints": []
+    },
+    {
+      "name": "VEHICLE_RED_UPPER_00",
+      "x": 164,
+      "y": 206,
       "w": 16,
       "h": 16,
       "pivotX": 0,
@@ -268,8 +544,8 @@
     },
     {
       "name": "WHITE",
-      "x": 36,
-      "y": 18,
+      "x": 182,
+      "y": 206,
       "w": 16,
       "h": 16,
       "pivotX": 0,
@@ -280,7 +556,7 @@
     },
     {
       "name": "TEXTURECARGOWATER",
-      "x": 214,
+      "x": 246,
       "y": 0,
       "w": 5,
       "h": 7,
@@ -292,8 +568,8 @@
     },
     {
       "name": "TEXTURECARGOWHEAT",
-      "x": 221,
-      "y": 0,
+      "x": 246,
+      "y": 9,
       "w": 5,
       "h": 7,
       "pivotX": 0,
@@ -304,8 +580,8 @@
     },
     {
       "name": "TEXTUREENGINEGLOW",
-      "x": 228,
-      "y": 0,
+      "x": 226,
+      "y": 34,
       "w": 4,
       "h": 2,
       "pivotX": 0,
@@ -322,11 +598,11 @@
       "frameDuration": 100,
       "minimumViableRuntime": 0,
       "animationSpriteIndices": [
-        10,
-        11,
-        12,
-        13,
-        14
+        29,
+        30,
+        31,
+        32,
+        33
       ]
     },
     "engineRight": {
@@ -335,11 +611,11 @@
       "frameDuration": 100,
       "minimumViableRuntime": 0,
       "animationSpriteIndices": [
-        15,
-        16,
-        17,
-        18,
-        19
+        34,
+        35,
+        36,
+        37,
+        38
       ]
     },
     "textureWheatFull": {
@@ -348,9 +624,22 @@
       "frameDuration": 120,
       "minimumViableRuntime": 0,
       "animationSpriteIndices": [
-        4,
-        5,
-        6
+        6,
+        7,
+        8
+      ]
+    },
+    "aircond": {
+      "animationName": "aircond",
+      "loopAnimation": true,
+      "frameDuration": 100,
+      "minimumViableRuntime": 0,
+      "animationSpriteIndices": [
+        13,
+        14,
+        15,
+        16,
+        17
       ]
     }
   }
