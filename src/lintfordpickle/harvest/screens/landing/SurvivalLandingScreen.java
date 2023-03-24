@@ -41,7 +41,7 @@ public class SurvivalLandingScreen extends MenuScreen {
 		super(pScreenManager, TITLE);
 
 		mMainMenuListBox = new ListLayout(this);
-		mMainMenuListBox.layoutWidth(LAYOUT_WIDTH.FULL);
+		mMainMenuListBox.layoutWidth(LAYOUT_WIDTH.HALF);
 		mMainMenuListBox.layoutFillType(FILLTYPE.TAKE_WHATS_NEEDED);
 		mMainMenuListBox.setDrawBackground(true, new Color(0.02f, 0.12f, 0.15f, 0.8f));
 

@@ -1,5 +1,7 @@
 package lintfordpickle.harvest.renderers;
 
+import org.lwjgl.opengl.GL11;
+
 import lintfordpickle.harvest.ConstantsGame;
 import lintfordpickle.harvest.controllers.ShipController;
 import lintfordpickle.harvest.data.cargo.CargoType;

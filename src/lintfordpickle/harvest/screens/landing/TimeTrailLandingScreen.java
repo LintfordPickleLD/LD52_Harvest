@@ -51,6 +51,8 @@ public class TimeTrailLandingScreen extends MenuScreen {
 		mMainMenuListBox.layoutWidth(LAYOUT_WIDTH.HALF);
 		mMainMenuListBox.layoutFillType(FILLTYPE.TAKE_WHATS_NEEDED);
 		mMainMenuListBox.setDrawBackground(true, new Color(0.02f, 0.12f, 0.15f, 0.8f));
+		mMainMenuListBox.title("Time-Trial");
+		mMainMenuListBox.showTitle(true);
 
 		// As we know the game canvas size
 		final float lDesiredEntryWidth = 300.f;

@@ -1,7 +1,6 @@
 package lintfordpickle.harvest;
 
 import net.lintford.library.ResourceLoader;
-import net.lintford.library.core.LintfordCore;
 import net.lintford.library.core.ResourceManager;
 import net.lintford.library.core.debug.Debug;
 import net.lintford.library.options.DisplayManager;
@@ -30,10 +29,13 @@ public class HarvestResourceLoader extends ResourceLoader {
 
 		mResourceManager.textureManager().loadTexturesFromMetafile("res/textures/_meta.json", ConstantsGame.GAME_RESOURCE_GROUP_ID);
 
-		mResourceManager.spriteSheetManager().loadSpriteSheet("/res/spritesheets/core/spritesheetCore.json", LintfordCore.CORE_ENTITY_GROUP_ID);
+		// TODO: This needs to be updated, the only way currently to 'reload' the core spritesheet is to manually reload the texture and then the new spritesheet
+//		mResourceManager.textureManager().loadTexture("TEXTURE_CORE", "res/textures/textureCore.png", GL11.GL_NEAREST, true, LintfordCore.CORE_ENTITY_GROUP_ID);
+//		mResourceManager.spriteSheetManager().loadSpriteSheet("res/spritesheets/spritesheetCore.json", LintfordCore.CORE_ENTITY_GROUP_ID);
 		mResourceManager.spriteSheetManager().loadSpriteSheetFromMeta("res/spritesheets/_meta.json", ConstantsGame.GAME_RESOURCE_GROUP_ID);
 
-		mResourceManager.fontManager().loadBitmapFont("FONT_NULSCHOCK_12", "res/fonts/fontNulshock12.json");
-		mResourceManager.fontManager().loadBitmapFont("FONT_NULSCHOCK_22", "res/fonts/fontNulshock22.json");
+		mResourceManager.fontManager().loadBitmapFont("FONT_NULSHOCK_12", "res/fonts/fontNulshock12.json");
+		mResourceManager.fontManager().loadBitmapFont("FONT_NULSHOCK_16", "res/fonts/fontNulshock16.json");
+		mResourceManager.fontManager().loadBitmapFont("FONT_NULSHOCK_22", "res/fonts/fontNulshock22.json");
 	}
 }

@@ -8,3 +8,5 @@ Call "D:\dev\tools\spritepacker\SpritePacker.exe" "D:\dev\java\ludumdare\52 - Ha
 
 
 Call "D:\dev\tools\spritepacker\SpritePacker.exe" "D:\dev\java\ludumdare\52 - Harvest\projects\LD52_Harvest\raw\spritesheets\spritesheet_AdWallSoup.lss"
+
+pause

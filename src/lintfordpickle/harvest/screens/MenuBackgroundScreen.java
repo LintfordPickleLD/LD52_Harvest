@@ -10,10 +10,8 @@ import lintfordpickle.harvest.ConstantsGame;
 import net.lintford.library.GameVersion;
 import net.lintford.library.core.LintfordCore;
 import net.lintford.library.core.ResourceManager;
-import net.lintford.library.core.debug.Debug;
 import net.lintford.library.core.geometry.Rectangle;
 import net.lintford.library.core.graphics.ColorConstants;
-import net.lintford.library.core.graphics.fonts.FontUnit;
 import net.lintford.library.core.graphics.sprites.SpriteInstance;
 import net.lintford.library.core.graphics.sprites.spritesheet.SpriteSheetDefinition;
 import net.lintford.library.core.graphics.textures.Texture;
@@ -108,9 +106,6 @@ public class MenuBackgroundScreen extends Screen {
 	private VehicleStream mUpperGreen;
 	private VehicleStream mLowerGreen;
 
-	private Texture mMenuLogoBannerTexture;
-	private Texture mMenuLogoTexture;
-
 	private Texture mBackgroundTextureSky;
 	private Texture mBackgroundTexture;
 	private Texture mForegroundLeftTexture;
@@ -118,6 +113,7 @@ public class MenuBackgroundScreen extends Screen {
 
 	private final List<Vector2f> points = new ArrayList<>(); // DEBUG
 	private final Rectangle srcRect = new Rectangle();// DEBUG
+	private final Vector3f tempColor = new Vector3f();
 
 	private SpriteSheetDefinition mPropsSpritesheet;
 	private SpriteSheetDefinition mAdWallSpritesheet;
@@ -132,6 +128,7 @@ public class MenuBackgroundScreen extends Screen {
 	public MenuBackgroundScreen(ScreenManager screenManager) {
 		super(screenManager);
 
+		mScreenManager.core().createNewGameCamera();
 	}
 
 	// ---------------------------------------------
@@ -201,9 +198,6 @@ public class MenuBackgroundScreen extends Screen {
 		mForegroundLeftTexture = resourceManager.textureManager().loadTexture("TEXTURE_MENU_FOREGROUND_LEFT", "res/textures/textureMenuForegroundLeft.png", entityGroupUid());
 		mForegroundRightTexture = resourceManager.textureManager().loadTexture("TEXTURE_MENU_FOREGROUND_RIGHT", "res/textures/textureMenuForegroundRight.png", entityGroupUid());
 
-		mMenuLogoBannerTexture = resourceManager.textureManager().loadTexture("TEXTURE_MENU_LOGO_BANNER", "res/textures/textureLogoBackgroundBanner.png", entityGroupUid());
-		mMenuLogoTexture = resourceManager.textureManager().loadTexture("TEXTURE_MENU_LOGO", "res/textures/textureMenuLogo.png", entityGroupUid());
-
 		mPropsSpritesheet = resourceManager.spriteSheetManager().getSpriteSheet("SPRITESHEET_PROPS", ConstantsGame.GAME_RESOURCE_GROUP_ID);
 		mAdWallSpritesheet = resourceManager.spriteSheetManager().getSpriteSheet("SPRITESHEET_ADWALLSOUP", ConstantsGame.GAME_RESOURCE_GROUP_ID);
 
@@ -226,17 +220,17 @@ public class MenuBackgroundScreen extends Screen {
 	public void draw(LintfordCore core) {
 		super.draw(core);
 
-		GL11.glClearColor(0.12f, 0.14f, 0.01f, 1.0f);
-		GL11.glClear(GL11.GL_COLOR_BUFFER_BIT | GL11.GL_DEPTH_BUFFER_BIT);
-
-		final var lHudBoundingBox = core.HUD().boundingRectangle();
+		final var lCanvasBox = core.gameCamera().boundingRectangle();
 		final var lTextureBatch = rendererManager().uiSpriteBatch();
 
 		GL11.glEnable(GL11.GL_DEPTH_TEST);
+		
+		core.gameCamera().update(core);
+		core.config().display().reapplyGlViewport();
 
-		lTextureBatch.begin(core.HUD());
-		lTextureBatch.draw(mBackgroundTextureSky, 0, 0, 960, 540, lHudBoundingBox.left(), lHudBoundingBox.top(), lHudBoundingBox.width(), lHudBoundingBox.height(), -0.9f, ColorConstants.WHITE);
-		lTextureBatch.draw(mBackgroundTexture, 0, 0, 960, 540, lHudBoundingBox.left(), lHudBoundingBox.top(), lHudBoundingBox.width(), lHudBoundingBox.height(), -0.85f, ColorConstants.WHITE);
+		lTextureBatch.begin(core.gameCamera());
+		lTextureBatch.draw(mBackgroundTextureSky, 0, 0, 960, 540, lCanvasBox.left(), lCanvasBox.top(), lCanvasBox.width(), lCanvasBox.height(), -0.9f, ColorConstants.WHITE);
+		lTextureBatch.draw(mBackgroundTexture, 0, 0, 960, 540, lCanvasBox.left(), lCanvasBox.top(), lCanvasBox.width(), lCanvasBox.height(), -0.85f, ColorConstants.WHITE);
 		lTextureBatch.end();
 
 		drawVehicleStream(core, true, false, mUpperRed);
@@ -244,16 +238,15 @@ public class MenuBackgroundScreen extends Screen {
 		drawVehicleStream(core, false, false, mUpperGreen);
 		drawVehicleStream(core, false, false, mLowerGreen);
 
-		lTextureBatch.begin(core.HUD());
+		lTextureBatch.begin(core.gameCamera());
 
 		final var lRightWidth = mForegroundRightTexture.getTextureWidth();
 		final var lRightHeight = mForegroundRightTexture.getTextureHeight();
 		final var lLeftWidth = mForegroundLeftTexture.getTextureWidth();
 		final var lLeftHeight = mForegroundLeftTexture.getTextureHeight();
 
-		lTextureBatch.draw(mForegroundRightTexture, 0, 0, lRightWidth, lRightHeight, lHudBoundingBox.right() - lRightWidth, lHudBoundingBox.top(), lRightWidth, lRightHeight, -0.75f, ColorConstants.WHITE);
-		lTextureBatch.draw(mForegroundLeftTexture, 0, 0, lLeftWidth, lLeftHeight, lHudBoundingBox.left(), lHudBoundingBox.top(), lLeftWidth, lLeftHeight, -0.75f, ColorConstants.WHITE);
-//		lTextureBatch.draw(mMenuLogoBannerTexture, 0, 0, 960, 84, lHudBoundingBox.left(), lHudBoundingBox.top(), 960, 84, -0.5f, ColorConstants.WHITE);
+		lTextureBatch.draw(mForegroundRightTexture, 0, 0, lRightWidth, lRightHeight, lCanvasBox.right() - lRightWidth, lCanvasBox.top(), lRightWidth, lRightHeight, -0.75f, ColorConstants.WHITE);
+		lTextureBatch.draw(mForegroundLeftTexture, 0, 0, lLeftWidth, lLeftHeight, lCanvasBox.left(), lCanvasBox.top(), lLeftWidth, lLeftHeight, -0.75f, ColorConstants.WHITE);
 		lTextureBatch.end();
 
 		drawWallAd(core);
@@ -263,23 +256,9 @@ public class MenuBackgroundScreen extends Screen {
 		drawVehicleStream(core, true, true, mUpperGreen);
 		drawVehicleStream(core, true, true, mLowerGreen);
 
-		if (mMenuLogoTexture != null) {
-			lTextureBatch.begin(core.HUD());
-
-			final float logoWidth = mMenuLogoTexture.getTextureWidth();
-			final float logoHeight = mMenuLogoTexture.getTextureHeight();
-
-			lTextureBatch.draw(mMenuLogoTexture, 0, 0, logoWidth, logoHeight, -logoWidth * .5f, lHudBoundingBox.top() + 5.f, logoWidth, logoHeight, -0.01f, screenColor);
-			lTextureBatch.end();
-		}
-
 		GL11.glDisable(GL11.GL_DEPTH_TEST);
 
-		GL11.glPointSize(4);
-		Debug.debugManager().drawers().drawPointImmediate(core.HUD(), 0.f, 0.f);
-
 		drawVersion(core);
-
 	}
 
 	private void drawVersion(LintfordCore core) {
@@ -303,7 +282,7 @@ public class MenuBackgroundScreen extends Screen {
 		srcRect.width(128);
 		srcRect.height(128);
 
-		lSpriteBatch.begin(core.HUD());
+		lSpriteBatch.begin(core.gameCamera());
 		mAdWallSoup.update(core);
 		mAirCondAnim.update(core);
 		mAirCondAnim.setPosition(-297, 167);
@@ -323,7 +302,7 @@ public class MenuBackgroundScreen extends Screen {
 		final var ey = vs.endPoint.screenPositionY;
 		final var es = vs.endPoint.scale;
 
-		lSpriteBatch.begin(core.HUD());
+		lSpriteBatch.begin(core.gameCamera());
 		final int lNumVehicles = vs.vehicles.size();
 		for (int i = 0; i < lNumVehicles; i++) {
 			final var v = vs.vehicles.get(i);
@@ -354,8 +333,6 @@ public class MenuBackgroundScreen extends Screen {
 	private String getRandomVehicleName(List<String> names) {
 		return names.get(RandomNumbers.random(0, names.size()));
 	}
-
-	private final Vector3f tempColor = new Vector3f();
 
 	private Vector3f getRandomVehicleColor() {
 		final var lMinBrightness = .1f;

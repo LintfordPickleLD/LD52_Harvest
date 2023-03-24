@@ -58,35 +58,29 @@ public class TestMenuScreen extends DualMenuScreen {
 		super(pScreenManager, "TEST SCREEN");
 
 		final var lLeftLayout = new ListLayout(this);
-		lLeftLayout.setDrawBackground(true, ColorConstants.MenuPanelSecondaryColor);
+		lLeftLayout.setDrawBackground(true, ColorConstants.WHITE);
 		lLeftLayout.title("Left Column");
-		lLeftLayout.setEntryOffsetY(32.f);
 		lLeftLayout.showTitle(true);
-		lLeftLayout.cropPaddingTop(10.f);
-		lLeftLayout.cropPaddingBottom(10.f);
+		lLeftLayout.cropPaddingTop(0.f);
 		lLeftLayout.layoutWidth(LAYOUT_WIDTH.FULL);
 		lLeftLayout.layoutFillType(FILLTYPE.TAKE_WHATS_NEEDED);
 
 		createLeftLayout(lLeftLayout);
 
 		final var lRightLayout = new ListLayout(this);
-		lRightLayout.setDrawBackground(true, ColorConstants.MenuPanelSecondaryColor);
+		lRightLayout.setDrawBackground(true, ColorConstants.WHITE);
+		lRightLayout.layoutWidth(LAYOUT_WIDTH.FULL);
 		lRightLayout.title("Right Column");
-		lRightLayout.setEntryOffsetY(32.f);
 		lRightLayout.showTitle(true);
-		lRightLayout.cropPaddingTop(10.f);
-		lRightLayout.cropPaddingBottom(10.f);
-
+		lRightLayout.cropPaddingBottom(6.f);
 		createRightLayout(lRightLayout);
 
 		final var lRightBottomLayout = new ListLayout(this);
-		lRightBottomLayout.setDrawBackground(true, ColorConstants.MenuPanelSecondaryColor);
+		lRightBottomLayout.setDrawBackground(true, ColorConstants.WHITE);
 		lRightBottomLayout.title("Right Column");
 		lRightBottomLayout.setEntryOffsetY(32.f);
 		lRightBottomLayout.showTitle(true);
-		lRightBottomLayout.cropPaddingTop(10.f);
-		lRightBottomLayout.cropPaddingBottom(10.f);
-
+		lRightBottomLayout.cropPaddingBottom(6.f);
 		createRightLayout(lRightBottomLayout);
 
 		// footer

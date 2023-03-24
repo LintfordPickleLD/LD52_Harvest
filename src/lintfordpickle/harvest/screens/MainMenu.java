@@ -4,7 +4,10 @@ import lintfordpickle.harvest.ConstantsGame;
 import lintfordpickle.harvest.controllers.replays.ReplayController;
 import lintfordpickle.harvest.screens.landing.SurvivalLandingScreen;
 import lintfordpickle.harvest.screens.landing.TimeTrailLandingScreen;
-import net.lintford.library.core.graphics.Color;
+import net.lintford.library.core.LintfordCore;
+import net.lintford.library.core.ResourceManager;
+import net.lintford.library.core.graphics.ColorConstants;
+import net.lintford.library.core.graphics.textures.Texture;
 import net.lintford.library.screenmanager.MenuEntry;
 import net.lintford.library.screenmanager.MenuScreen;
 import net.lintford.library.screenmanager.ScreenManager;
@@ -35,6 +38,8 @@ public class MainMenu extends MenuScreen {
 	private ReplayController mReplayController;
 	private ListLayout mMainMenuListBox;
 
+	private Texture mMenuLogoTexture;
+
 	// ---------------------------------------------
 	// Constructors
 	// ---------------------------------------------
@@ -43,12 +48,11 @@ public class MainMenu extends MenuScreen {
 		super(pScreenManager, TITLE);
 
 		mMainMenuListBox = new ListLayout(this);
-		mMainMenuListBox.setDrawBackground(true, new Color(.4f, .4f, .4f, .8f));
-		mMainMenuListBox.setDrawBackground(true, new Color(0.02f, 0.12f, 0.15f, 0.8f));
+		mMainMenuListBox.setDrawBackground(true, ColorConstants.WHITE);
 		mMainMenuListBox.layoutWidth(LAYOUT_WIDTH.HALF);
 		mMainMenuListBox.layoutFillType(FILLTYPE.TAKE_WHATS_NEEDED);
 
-		final float lDesiredEntryHeight = 17.f;
+		final float lDesiredEntryHeight = 32.f;
 
 		// ---
 		final var lPlaySurvivaEntry = new MenuEntry(mScreenManager, this, "Survival");
@@ -63,7 +67,7 @@ public class MainMenu extends MenuScreen {
 		lPlayTimeEntry.registerClickListener(this, SCREEN_BUTTON_PLAY_TIME_TRIAL);
 		lPlayTimeEntry.setToolTip("You need to harvest and deliver food from each of the farms. Fastest time wins.");
 
-		final var lTestEntry = new MenuEntry(mScreenManager, this, "Test");
+		final var lTestEntry = new MenuEntry(mScreenManager, this, "Test Menu");
 		lTestEntry.desiredHeight(lDesiredEntryHeight);
 		lTestEntry.horizontalFillType(FILLTYPE.FILL_CONTAINER);
 		lTestEntry.registerClickListener(this, SCREEN_BUTTON_PLAY_TEST);
@@ -119,6 +123,20 @@ public class MainMenu extends MenuScreen {
 
 		final var lReplayManager = mReplayController.replayManager();
 		lReplayManager.loadRecordedGame();
+	}
+
+	@Override
+	public void loadResources(ResourceManager resourceManager) {
+		super.loadResources(resourceManager);
+
+		mMenuLogoTexture = resourceManager.textureManager().loadTexture("TEXTURE_MENU_LOGO", "res/textures/textureMenuLogo.png", entityGroupUid());
+	}
+
+	@Override
+	public void unloadResources() {
+		super.unloadResources();
+
+		mMenuLogoTexture = null;
 	}
 
 	@Override
@@ -182,6 +200,24 @@ public class MainMenu extends MenuScreen {
 		case SCREEN_BUTTON_EXIT:
 			screenManager().exitGame();
 			break;
+		}
+	}
+
+	@Override
+	public void draw(LintfordCore core) {
+		super.draw(core);
+
+		final var lCanvasBox = core.gameCamera().boundingRectangle();
+		final var lTextureBatch = rendererManager().uiSpriteBatch();
+
+		if (mMenuLogoTexture != null) {
+			lTextureBatch.begin(core.gameCamera());
+
+			final float logoWidth = mMenuLogoTexture.getTextureWidth();
+			final float logoHeight = mMenuLogoTexture.getTextureHeight();
+
+			lTextureBatch.draw(mMenuLogoTexture, 0, 0, logoWidth, logoHeight, -logoWidth * .5f, lCanvasBox.top() + 5.f, logoWidth, logoHeight, -0.01f, screenColor);
+			lTextureBatch.end();
 		}
 	}
 }

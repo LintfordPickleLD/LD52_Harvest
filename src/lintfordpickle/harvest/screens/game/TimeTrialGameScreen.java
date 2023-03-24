@@ -197,7 +197,7 @@ public class TimeTrialGameScreen extends BaseGameScreen {
 	@Override
 	public void draw(LintfordCore core) {
 		final var lGameCam = mGameCamera; // orig
-
+		lGameCam.setZoomFactor(6f);
 		mRenderTarget.bind();
 
 		GL11.glClearColor(0.06f, 0.18f, 0.31f, 1.0f);
@@ -213,7 +213,9 @@ public class TimeTrialGameScreen extends BaseGameScreen {
 		core.setActiveGameCamera(lGameCam);
 		core.config().display().reapplyGlViewport();
 
-		Debug.debugManager().drawers().drawRenderTargetImmediate(core, 0, 0, 960, 540, -0.001f, mRenderTarget);
+		var lHudBounds = core.HUD().boundingRectangle();
+		
+		Debug.debugManager().drawers().drawRenderTargetImmediate(core, 0, 0, lHudBounds.width(), lHudBounds.height(), -0.001f, mRenderTarget);
 	}
 
 	// ---------------------------------------------

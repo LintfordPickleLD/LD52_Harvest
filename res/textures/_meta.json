@@ -1,6 +1,13 @@
 {
 	"textureDefinitions" : [
 		{
+			"textureName":"TEXTURE_CORE",
+			"filepath":"res/textures/textureCore.png",
+			"filterIndex":1,
+			"wrapSIndex":1,
+			"wrapTIndex":1
+		},
+		{
 			"textureName":"TEXTURE_MINIMAP",
 			"filepath":"res/textures/scene/textureSceneMinimap.png",
 			"filterIndex":1,
@@ -10,13 +17,6 @@
 		{
 			"textureName":"TEXTURE_ADWALLSOUP",
 			"filepath":"res/textures/textureAdWallSoup.png",
-			"filterIndex":1,
-			"wrapSIndex":1,
-			"wrapTIndex":1
-		},
-		{
-			"textureName":"TEXTURE_CORE",
-			"filepath":"res/textures/textureCore.png",
 			"filterIndex":1,
 			"wrapSIndex":1,
 			"wrapTIndex":1
