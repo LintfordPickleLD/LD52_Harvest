@@ -153,7 +153,7 @@ public class TimeTrialGameScreen extends BaseGameScreen {
 	public void handleInput(LintfordCore core) {
 		super.handleInput(core);
 
-		if (core.input().keyboard().isKeyDownTimed(GLFW.GLFW_KEY_ESCAPE, this)) {
+		if (core.input().keyboard().isKeyDownTimed(GLFW.GLFW_KEY_ESCAPE, this) || core.input().gamepads().isGamepadButtonDownTimed(GLFW.GLFW_GAMEPAD_BUTTON_START, this) ) {
 			mGameActionEventController.onExitingGame();
 
 			if (ConstantsGame.ESCAPE_RESTART_MAIN_SCENE) {
@@ -197,7 +197,6 @@ public class TimeTrialGameScreen extends BaseGameScreen {
 	@Override
 	public void draw(LintfordCore core) {
 		final var lGameCam = mGameCamera; // orig
-		lGameCam.setZoomFactor(6f);
 		mRenderTarget.bind();
 
 		GL11.glClearColor(0.06f, 0.18f, 0.31f, 1.0f);
@@ -214,7 +213,7 @@ public class TimeTrialGameScreen extends BaseGameScreen {
 		core.config().display().reapplyGlViewport();
 
 		var lHudBounds = core.HUD().boundingRectangle();
-		
+
 		Debug.debugManager().drawers().drawRenderTargetImmediate(core, 0, 0, lHudBounds.width(), lHudBounds.height(), -0.001f, mRenderTarget);
 	}
 
