@@ -161,8 +161,8 @@ public class GameActionEventController extends ActionEventController<ActionFrame
 	}
 
 	@Override
-	public void onExitingGame() {
-		super.onExitingGame();
+	public void finalizeInputFile() {
+		super.finalizeInputFile();
 
 		mFastestTimeOnExitReached = false;
 
@@ -196,7 +196,6 @@ public class GameActionEventController extends ActionEventController<ActionFrame
 					actionManager.saveToFile();
 
 					Debug.debugManager().logger().i(getClass().getSimpleName(), "  done saving replay");
-
 				}
 
 				return;
