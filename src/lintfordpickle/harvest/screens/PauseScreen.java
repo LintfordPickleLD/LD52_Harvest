@@ -55,6 +55,10 @@ public class PauseScreen extends MenuScreen {
 
 		mIsPopup = true;
 		mShowBackgroundScreens = true;
+
+		mBlockGamepadInputInBackground = true;
+		mBlockKeyboardInputInBackground = true;
+		mBlockMouseInputInBackground = true;
 	}
 
 	@Override

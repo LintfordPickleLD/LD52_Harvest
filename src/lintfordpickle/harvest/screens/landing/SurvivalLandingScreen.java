@@ -79,7 +79,9 @@ public class SurvivalLandingScreen extends MenuScreen {
 
 		mIsPopup = false;
 		mShowBackgroundScreens = true;
-		mBlockInputInBackground = false;
+
+		mBlockMouseInputInBackground = false;
+
 	}
 
 	// ---------------------------------------------

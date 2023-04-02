@@ -109,7 +109,6 @@ public class TimeTrialGameScreen extends BaseGameScreen {
 
 	@Override
 	public void initialize() {
-
 		mGameState = new GameState();
 		mGameState.startNewGame(GameMode.TimeTrial);
 
@@ -153,9 +152,7 @@ public class TimeTrialGameScreen extends BaseGameScreen {
 	public void handleInput(LintfordCore core) {
 		super.handleInput(core);
 
-		if (core.input().keyboard().isKeyDownTimed(GLFW.GLFW_KEY_ESCAPE, this) || core.input().gamepads().isGamepadButtonDownTimed(GLFW.GLFW_GAMEPAD_BUTTON_START, this) ) {
-			mGameActionEventController.onExitingGame();
-
+		if (core.input().keyboard().isKeyDownTimed(GLFW.GLFW_KEY_ESCAPE, this) || core.input().gamepads().isGamepadButtonDownTimed(GLFW.GLFW_GAMEPAD_BUTTON_START, this)) {
 			if (ConstantsGame.ESCAPE_RESTART_MAIN_SCENE) {
 				final var lLoadingScreen = new LoadingScreen(screenManager(), true, new TimeTrialGameScreen(screenManager(), mPlayerManager));
 				screenManager().createLoadingScreen(new LoadingScreen(screenManager(), true, lLoadingScreen));
@@ -174,7 +171,7 @@ public class TimeTrialGameScreen extends BaseGameScreen {
 			final var lPlayerScoreCard = mGameState.getScoreCard(0);
 
 			if (lPlayerScoreCard.allPlatformsDelivered()) {
-				mGameActionEventController.onExitingGame();
+				mGameActionEventController.finalizeInputFile();
 
 				mGameState.isGameRunning = false;
 				screenManager().addScreen(new TimeTrialEndScreen(mScreenManager, mPlayerManager, mGameState.timeAliveInMs, mGameActionEventController.fastestTimeOnExitReached()));
@@ -182,7 +179,7 @@ public class TimeTrialGameScreen extends BaseGameScreen {
 			}
 
 			if (lPlayerScoreCard.isPlayerDead && mGameStateController.gameState().isGameRunning) {
-				mGameActionEventController.onExitingGame();
+				mGameActionEventController.finalizeInputFile();
 
 				mGameState.isGameRunning = false;
 				screenManager().addScreen(new SurvivalEndScreen(mScreenManager, mPlayerManager, true, lPlayerScoreCard.foodDelivered));
@@ -289,6 +286,13 @@ public class TimeTrialGameScreen extends BaseGameScreen {
 		mPlatformsRenderer.loadResources(resourceManager);
 		mHudRenderer.loadResources(resourceManager);
 		mMinimapRenderer.loadResources(resourceManager);
+	}
+
+	@Override
+	public void exitScreen() {
+		super.exitScreen();
+
+		mGameActionEventController.finalizeInputFile();
 	}
 
 }

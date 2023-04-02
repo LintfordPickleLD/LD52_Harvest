@@ -14,6 +14,7 @@ import net.lintford.library.core.geometry.Rectangle;
 import net.lintford.library.core.graphics.ColorConstants;
 import net.lintford.library.core.graphics.sprites.SpriteInstance;
 import net.lintford.library.core.graphics.sprites.spritesheet.SpriteSheetDefinition;
+import net.lintford.library.core.graphics.textures.CoreTextureNames;
 import net.lintford.library.core.graphics.textures.Texture;
 import net.lintford.library.core.maths.RandomNumbers;
 import net.lintford.library.core.maths.Vector2f;
@@ -115,6 +116,7 @@ public class MenuBackgroundScreen extends Screen {
 	private final Rectangle srcRect = new Rectangle();// DEBUG
 	private final Vector3f tempColor = new Vector3f();
 
+	private SpriteSheetDefinition mCoreSpritesheet;
 	private SpriteSheetDefinition mPropsSpritesheet;
 	private SpriteSheetDefinition mAdWallSpritesheet;
 
@@ -198,6 +200,7 @@ public class MenuBackgroundScreen extends Screen {
 		mForegroundLeftTexture = resourceManager.textureManager().loadTexture("TEXTURE_MENU_FOREGROUND_LEFT", "res/textures/textureMenuForegroundLeft.png", entityGroupUid());
 		mForegroundRightTexture = resourceManager.textureManager().loadTexture("TEXTURE_MENU_FOREGROUND_RIGHT", "res/textures/textureMenuForegroundRight.png", entityGroupUid());
 
+		mCoreSpritesheet = resourceManager.spriteSheetManager().coreSpritesheet();
 		mPropsSpritesheet = resourceManager.spriteSheetManager().getSpriteSheet("SPRITESHEET_PROPS", ConstantsGame.GAME_RESOURCE_GROUP_ID);
 		mAdWallSpritesheet = resourceManager.spriteSheetManager().getSpriteSheet("SPRITESHEET_ADWALLSOUP", ConstantsGame.GAME_RESOURCE_GROUP_ID);
 
@@ -208,6 +211,15 @@ public class MenuBackgroundScreen extends Screen {
 	@Override
 	public void update(LintfordCore core, boolean otherScreenHasFocus, boolean coveredByOtherScreen) {
 		super.update(core, otherScreenHasFocus, coveredByOtherScreen);
+
+		mLowerRed.startPoint.scale = 0.1f;
+		mLowerRed.endPoint.scale = 2.0f;
+
+		mUpperRed.startPoint.scale = 2.f;
+		mUpperRed.endPoint.scale = .1f;
+
+		mLowerGreen.startPoint.scale = 0.9f;
+		mLowerGreen.endPoint.scale = .6f;
 
 		mUpperRed.update(core);
 		mLowerRed.update(core);
@@ -224,7 +236,7 @@ public class MenuBackgroundScreen extends Screen {
 		final var lTextureBatch = rendererManager().uiSpriteBatch();
 
 		GL11.glEnable(GL11.GL_DEPTH_TEST);
-		
+
 		core.gameCamera().update(core);
 		core.config().display().reapplyGlViewport();
 
@@ -264,8 +276,15 @@ public class MenuBackgroundScreen extends Screen {
 	private void drawVersion(LintfordCore core) {
 		final var lHudBounds = core.HUD().boundingRectangle();
 		final var lVersionFont = mRendererManager.uiTextFont();
-
 		final var lVersionText = GameVersion.GAME_VERSION;
+
+		final var lVersionTextHeight = lVersionFont.fontHeight();
+
+		final var lSpriteBatch = mRendererManager.uiSpriteBatch();
+
+		lSpriteBatch.begin(core.HUD());
+		lSpriteBatch.draw(mCoreSpritesheet, CoreTextureNames.TEXTURE_WHITE, lHudBounds.left(), lHudBounds.bottom() - lVersionTextHeight - 2, lHudBounds.width(), lVersionTextHeight + 2, -0.01f, ColorConstants.GREY_DARK);
+		lSpriteBatch.end();
 
 		lVersionFont.begin(core.HUD());
 		lVersionFont.drawText(lVersionText, lHudBounds.left() + 5.f, lHudBounds.bottom() - lVersionFont.fontHeight(), -0.01f, 1.f);

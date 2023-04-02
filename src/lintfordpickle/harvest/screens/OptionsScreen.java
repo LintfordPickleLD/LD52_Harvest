@@ -35,7 +35,7 @@ public class OptionsScreen extends MenuScreen {
 		lLayout.setDrawBackground(true, ColorConstants.WHITE);
 		lLayout.layoutWidth(LAYOUT_WIDTH.HALF);
 		lLayout.layoutFillType(FILLTYPE.TAKE_WHATS_NEEDED);
-		
+
 		lLayout.showTitle(true);
 		lLayout.title("Options");
 		lLayout.cropPaddingTop(10.f);
@@ -80,7 +80,6 @@ public class OptionsScreen extends MenuScreen {
 		mLayoutAlignment = LAYOUT_ALIGNMENT.LEFT;
 
 		mShowBackgroundScreens = false;
-		mBlockInputInBackground = true;
 
 		mLayouts.add(lLayout);
 

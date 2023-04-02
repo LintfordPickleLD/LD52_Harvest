@@ -99,7 +99,8 @@ public class TimeTrailLandingScreen extends MenuScreen {
 
 		mIsPopup = false;
 		mShowBackgroundScreens = true;
-		mBlockInputInBackground = false;
+
+		mBlockMouseInputInBackground = false;
 	}
 
 	// ---------------------------------------------

@@ -5,11 +5,11 @@ import org.lwjgl.opengl.GL11;
 
 import lintfordpickle.harvest.ConstantsGame;
 import lintfordpickle.harvest.controllers.CargoController;
-import lintfordpickle.harvest.controllers.SurvivalGameStateController;
 import lintfordpickle.harvest.controllers.LevelController;
 import lintfordpickle.harvest.controllers.PlatformController;
 import lintfordpickle.harvest.controllers.SceneController;
 import lintfordpickle.harvest.controllers.ShipController;
+import lintfordpickle.harvest.controllers.SurvivalGameStateController;
 import lintfordpickle.harvest.controllers.actionevents.GameActionEventController;
 import lintfordpickle.harvest.controllers.camera.CameraShipChaseController;
 import lintfordpickle.harvest.data.CollisionHandler;
@@ -152,15 +152,17 @@ public class SurvivalGameScreen extends BaseGameScreen {
 	public void handleInput(LintfordCore core) {
 		super.handleInput(core);
 
-		if (core.input().keyboard().isKeyDownTimed(GLFW.GLFW_KEY_ESCAPE, this)) {
-			mGameActionEventController.onExitingGame();
+		if (core.input().keyboard().isKeyDownTimed(GLFW.GLFW_KEY_ESCAPE, this) || core.input().gamepads().isGamepadButtonDownTimed(GLFW.GLFW_GAMEPAD_BUTTON_START, this)) {
+			mGameActionEventController.finalizeInputFile();
 
 			if (ConstantsGame.ESCAPE_RESTART_MAIN_SCENE) {
 				final var lLoadingScreen = new LoadingScreen(screenManager(), true, new SurvivalGameScreen(screenManager(), mPlayerManager));
 				screenManager().createLoadingScreen(new LoadingScreen(screenManager(), true, lLoadingScreen));
 				return;
 			}
+
 			screenManager().addScreen(new PauseScreen(screenManager(), mPlayerManager));
+
 			return;
 		}
 	}
@@ -176,7 +178,7 @@ public class SurvivalGameScreen extends BaseGameScreen {
 
 				screenManager().addScreen(new SurvivalEndScreen(mScreenManager, mPlayerManager, true, lPlayerScoreCard.foodDelivered));
 
-				mGameActionEventController.onExitingGame();
+				mGameActionEventController.finalizeInputFile();
 			}
 
 			if (mGameStateController.hasPlayerLostThroughTime() && mGameStateController.gameState().isGameRunning) {
@@ -185,7 +187,7 @@ public class SurvivalGameScreen extends BaseGameScreen {
 
 				screenManager().addScreen(new SurvivalEndScreen(mScreenManager, mPlayerManager, false, lPlayerScoreCard.foodDelivered));
 
-				mGameActionEventController.onExitingGame();
+				mGameActionEventController.finalizeInputFile();
 			}
 		}
 

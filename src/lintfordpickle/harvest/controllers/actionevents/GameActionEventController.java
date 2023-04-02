@@ -142,16 +142,16 @@ public class GameActionEventController extends ActionEventController<ActionFrame
 		player.currentActionEvents.isThrottleLeftDown = lEventActionManager.getCurrentControlActionState(GameActionEventMap.INPUT_ACTION_EVENT_THRUSTER_LEFT);
 		player.currentActionEvents.isThrottleRightDown = lEventActionManager.getCurrentControlActionState(GameActionEventMap.INPUT_ACTION_EVENT_THRUSTER_RIGHT);
 
-		final var lGamepadManager = core.input().gamepads();
-		final var lGamepad = lGamepadManager.getGamepad(player.playerUid);
-
-		if (lGamepad != null) {
-			final float lValue = lGamepad.getLeftAxisX();
-			player.currentActionEvents.isThrottleLeftDown |= lValue < -0.4f;
-			player.currentActionEvents.isThrottleRightDown |= lValue > 0.4f;
-
-			player.currentActionEvents.isThrottleDown |= lGamepad.getIsButtonDown(GLFW.GLFW_GAMEPAD_BUTTON_A);
-		}
+//		final var lGamepadManager = core.input().gamepads();
+//		final var lGamepad = lGamepadManager.getGamepad(player.playerUid);
+//
+//		if (lGamepad != null) {
+//			final float lValue = lGamepad.getLeftAxisX();
+//			player.currentActionEvents.isThrottleLeftDown |= lValue < -0.4f;
+//			player.currentActionEvents.isThrottleRightDown |= lValue > 0.4f;
+//
+//			player.currentActionEvents.isThrottleDown |= lGamepad.getIsButtonDown(GLFW.GLFW_GAMEPAD_BUTTON_A);
+//		}
 
 		// detect changes in keyboard / mouse / gamepad and set the flags
 		// (n.b. we don't consider the mouse movement as input by default - but we record the mouse position when the player clicks a mouse button.)
