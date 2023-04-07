@@ -54,14 +54,8 @@ public class TimeTrailLandingScreen extends MenuScreen {
 		mMainMenuListBox.title("Time-Trial");
 		mMainMenuListBox.showTitle(true);
 
-		// As we know the game canvas size
-		final float lDesiredEntryWidth = 300.f;
-		final float lDesiredEntryHeight = 17.f;
-
 		// ---
 		final var lPlayTimeEntry = new MenuEntry(mScreenManager, this, "Start");
-		lPlayTimeEntry.desiredWidth(lDesiredEntryWidth);
-		lPlayTimeEntry.desiredHeight(lDesiredEntryHeight);
 		lPlayTimeEntry.registerClickListener(this, SCREEN_BUTTON_PLAY_TIME_TRIAL);
 		lPlayTimeEntry.setToolTip("You need ot harvest and deliver food from each of the farms. Fastest time wins.");
 
@@ -75,8 +69,6 @@ public class TimeTrailLandingScreen extends MenuScreen {
 		mGhostEnabled.horizontalFillType(FILLTYPE.TAKE_DESIRED_SIZE);
 		mGhostEnabled.showInfoButton(true);
 		mGhostEnabled.setToolTip("The ghost ship replays the actions of the fastest time, but doesn't interfere with the gameplay");
-		mGhostEnabled.desiredWidth(lDesiredEntryWidth);
-		mGhostEnabled.desiredHeight(lDesiredEntryHeight);
 
 		mNoFastestTime = new MenuLabelEntry(pScreenManager, this);
 		mNoFastestTime.label("No fastest time");

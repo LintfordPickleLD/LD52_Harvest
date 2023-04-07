@@ -43,14 +43,9 @@ public class SurvivalLandingScreen extends MenuScreen {
 		mMainMenuListBox = new ListLayout(this);
 		mMainMenuListBox.layoutWidth(LAYOUT_WIDTH.HALF);
 		mMainMenuListBox.layoutFillType(FILLTYPE.TAKE_WHATS_NEEDED);
-		mMainMenuListBox.setDrawBackground(true, new Color(0.02f, 0.12f, 0.15f, 0.8f));
-
-		final var lDesiredEntryWidth = 56.f;
-		final var lDesiredEntryHeight = 17.f;
+		mMainMenuListBox.setDrawBackground(true, new Color(0.02f, 0.12f, 0.15f, .8f));
 
 		final var lPlaySurvivaEntry = new MenuEntry(mScreenManager, this, "Start");
-		lPlaySurvivaEntry.desiredWidth(lDesiredEntryWidth);
-		lPlaySurvivaEntry.desiredHeight(lDesiredEntryHeight);
 		lPlaySurvivaEntry.registerClickListener(this, SCREEN_BUTTON_PLAY_SURVIVAL);
 
 		mHighScore = new MenuInputEntry(pScreenManager, this);
