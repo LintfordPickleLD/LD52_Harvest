@@ -51,7 +51,7 @@ public class TimeTrailLandingScreen extends MenuScreen {
 		mMainMenuListBox.layoutWidth(LAYOUT_WIDTH.HALF);
 		mMainMenuListBox.layoutFillType(FILLTYPE.TAKE_WHATS_NEEDED);
 		mMainMenuListBox.setDrawBackground(true, new Color(0.02f, 0.12f, 0.15f, 0.8f));
-		mMainMenuListBox.title("Time-Trial");
+		mMainMenuListBox.title("Time-Trial Mode");
 		mMainMenuListBox.showTitle(true);
 
 		// ---
@@ -60,9 +60,9 @@ public class TimeTrailLandingScreen extends MenuScreen {
 		lPlayTimeEntry.setToolTip("You need ot harvest and deliver food from each of the farms. Fastest time wins.");
 
 		mGhostFatestTime = new MenuInputEntry(pScreenManager, this);
-		mGhostFatestTime.label("Time");
+		mGhostFatestTime.label("Fastest Time");
 		mGhostFatestTime.horizontalFillType(FILLTYPE.THIRD_PARENT);
-		mGhostFatestTime.enabled(false);
+		mGhostFatestTime.readOnly(true);
 
 		mGhostEnabled = new MenuToggleEntry(pScreenManager, this);
 		mGhostEnabled.label("Ghost");
@@ -86,8 +86,10 @@ public class TimeTrailLandingScreen extends MenuScreen {
 		mSelectedLayoutIndex = 0;
 		mSelectedEntryIndex = 6;
 
-		mPaddingTopNormalized = 30.f;
+		mScreenPaddingTop = 30.f;
+
 		mLayoutAlignment = LAYOUT_ALIGNMENT.RIGHT;
+		mLayoutPaddingHorizontal = 50.f;
 
 		mIsPopup = false;
 		mShowBackgroundScreens = true;

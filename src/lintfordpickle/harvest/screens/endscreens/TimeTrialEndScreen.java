@@ -114,7 +114,7 @@ public class TimeTrialEndScreen extends MenuScreen {
 		lFont.drawText(lGameOverText1, -lTextWidth1 / 2, -80, -0.01f, 1.f);
 		lFont.end();
 
-		mPaddingTopNormalized = 370.f;
+		mScreenPaddingTop = 370.f;
 
 	}
 }

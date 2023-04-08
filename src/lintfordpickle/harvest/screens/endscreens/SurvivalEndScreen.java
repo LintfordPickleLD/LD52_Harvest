@@ -110,7 +110,7 @@ public class SurvivalEndScreen extends MenuScreen {
 		lFont.drawText(lGameOverText1, -lTextWidth1 / 2, -80, -0.01f, 1.f);
 		lFont.end();
 
-		mPaddingTopNormalized = 250.f;
+		mScreenPaddingTop = 250.f;
 
 	}
 }

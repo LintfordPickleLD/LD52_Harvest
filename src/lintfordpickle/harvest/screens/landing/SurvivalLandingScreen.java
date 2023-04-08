@@ -44,6 +44,8 @@ public class SurvivalLandingScreen extends MenuScreen {
 		mMainMenuListBox.layoutWidth(LAYOUT_WIDTH.HALF);
 		mMainMenuListBox.layoutFillType(FILLTYPE.TAKE_WHATS_NEEDED);
 		mMainMenuListBox.setDrawBackground(true, new Color(0.02f, 0.12f, 0.15f, .8f));
+		mMainMenuListBox.title("Survival Mode");
+		mMainMenuListBox.showTitle(true);
 
 		final var lPlaySurvivaEntry = new MenuEntry(mScreenManager, this, "Start");
 		lPlaySurvivaEntry.registerClickListener(this, SCREEN_BUTTON_PLAY_SURVIVAL);
@@ -51,7 +53,7 @@ public class SurvivalLandingScreen extends MenuScreen {
 		mHighScore = new MenuInputEntry(pScreenManager, this);
 		mHighScore.label("HighScore");
 		mHighScore.horizontalFillType(FILLTYPE.THIRD_PARENT);
-		mHighScore.enabled(false);
+		mHighScore.readOnly(true);
 
 		mNoHighScore = new MenuLabelEntry(pScreenManager, this);
 		mNoHighScore.label("No fastest time");
@@ -69,8 +71,9 @@ public class SurvivalLandingScreen extends MenuScreen {
 		mSelectedLayoutIndex = 0;
 		mSelectedEntryIndex = 5;
 
-		mPaddingTopNormalized = 30.f;
+		mScreenPaddingTop = 30.f;
 		mLayoutAlignment = LAYOUT_ALIGNMENT.RIGHT;
+		mLayoutPaddingHorizontal = 50.f;
 
 		mIsPopup = false;
 		mShowBackgroundScreens = true;

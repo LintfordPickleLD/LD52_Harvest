@@ -41,31 +41,19 @@ public class OptionsScreen extends MenuScreen {
 		lLayout.cropPaddingTop(10.f);
 		lLayout.cropPaddingBottom(10.f);
 
-		final float lDesiredEntryWidth = 56.f;
-		final float lDesiredEntryHeight = 17.f;
-
-		// ---
 		final var lKeyBindsEntry = new MenuEntry(mScreenManager, this, "Key Binds");
-		lKeyBindsEntry.desiredWidth(lDesiredEntryWidth);
-		lKeyBindsEntry.desiredHeight(lDesiredEntryHeight);
 		lKeyBindsEntry.horizontalFillType(FILLTYPE.FILL_CONTAINER);
 		lKeyBindsEntry.registerClickListener(this, BUTTON_KEY_BINDS);
 
 		final var lGraphicsEntry = new MenuEntry(mScreenManager, this, "Graphics");
-		lGraphicsEntry.desiredWidth(lDesiredEntryWidth);
-		lGraphicsEntry.desiredHeight(lDesiredEntryHeight);
 		lGraphicsEntry.horizontalFillType(FILLTYPE.FILL_CONTAINER);
 		lGraphicsEntry.registerClickListener(this, BUTTON_GRAPHICS);
 
 		final var lAudioSettingsEntry = new MenuEntry(mScreenManager, this, "Audio");
-		lAudioSettingsEntry.desiredWidth(lDesiredEntryWidth);
-		lAudioSettingsEntry.desiredHeight(lDesiredEntryHeight);
 		lAudioSettingsEntry.horizontalFillType(FILLTYPE.FILL_CONTAINER);
 		lAudioSettingsEntry.registerClickListener(this, BUTTON_AUDIO);
 
 		final var lBackEntry = new MenuEntry(mScreenManager, this, "Back");
-		lBackEntry.desiredWidth(lDesiredEntryWidth);
-		lBackEntry.desiredHeight(lDesiredEntryHeight);
 		lBackEntry.horizontalFillType(FILLTYPE.FILL_CONTAINER);
 		lBackEntry.registerClickListener(this, BUTTON_BACK);
 
@@ -75,8 +63,8 @@ public class OptionsScreen extends MenuScreen {
 		lLayout.addMenuEntry(MenuEntry.menuSeparator());
 		lLayout.addMenuEntry(lBackEntry);
 
-		mPaddingTopNormalized = 30.f;
-		INNER_PADDING_W = 50.f;
+		mScreenPaddingTop = 30.f;
+		mLayoutPaddingHorizontal = 50.f;
 		mLayoutAlignment = LAYOUT_ALIGNMENT.LEFT;
 
 		mShowBackgroundScreens = false;
