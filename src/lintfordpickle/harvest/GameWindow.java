@@ -1,17 +1,15 @@
 package lintfordpickle.harvest;
 
-import org.lwjgl.glfw.GLFW;
-
-import lintfordpickle.harvest.data.actionevents.SatActionEventMap;
-import lintfordpickle.harvest.data.players.PlayerManager;
-import lintfordpickle.harvest.screens.MainMenu;
-import lintfordpickle.harvest.screens.MenuBackgroundScreen;
-import lintfordpickle.harvest.screens.game.SurvivalGameScreen;
 import net.lintford.library.GameInfo;
+import net.lintford.library.GameVersion;
 import net.lintford.library.core.debug.Debug.DebugLogLevel;
-import net.lintford.library.core.input.KeyEventActionManager;
 
-public class GameWindow extends BaseHarvestApp {
+public class GameWindow extends HarvestGame {
+
+	private final int APP_VERSION_MAJ = 0;
+	private final int APP_VERSION_MIN = 1;
+	private final int APP_VERSION_BUILD = 1;
+	private final String APP_POSTFIX = "10042023";
 
 	// ---------------------------------------------
 	// Entry Point
@@ -76,47 +74,16 @@ public class GameWindow extends BaseHarvestApp {
 
 	public GameWindow(GameInfo pGameInfo, String[] pArgs) {
 		super(pGameInfo, pArgs);
+
+		setGameVersion();
 	}
 
 	// ---------------------------------------------
-	// Core-Methods
+	// Methods
 	// ---------------------------------------------
 
-	@Override
-	protected void onInitializeApp() {
-		super.onInitializeApp();
-
-		if (ConstantsGame.SKIP_MAIN_MENU_ON_STARTUP) {
-			final var lPlayerManager = new PlayerManager();
-			final var lGhostPlayer = lPlayerManager.addNewPlayer();
-			lGhostPlayer.setPlayback("ghost.lms");
-
-			mScreenManager.addScreen(new SurvivalGameScreen(screenManager(), lPlayerManager));
-
-			mScreenManager.initialize();
-			return;
-		}
-
-		mScreenManager.addScreen(new MenuBackgroundScreen(mScreenManager));
-		mScreenManager.addScreen(new MainMenu(mScreenManager));
-		mScreenManager.initialize();
+	private void setGameVersion() {
+		GameVersion.setGameVersion(APP_VERSION_MAJ, APP_VERSION_MIN, APP_VERSION_BUILD, APP_POSTFIX);
 	}
 
-	@Override
-	protected void onInitializeInputActions(KeyEventActionManager eventActionManager) {
-
-		eventActionManager.registerNewKeyboardEventAction(SatActionEventMap.INPUT_ACTION_EVENT_THRUSTER_UP, GLFW.GLFW_KEY_W);
-		eventActionManager.registerNewGamepadEventAction(SatActionEventMap.INPUT_ACTION_EVENT_THRUSTER_UP, GLFW.GLFW_GAMEPAD_BUTTON_DPAD_UP);
-
-		eventActionManager.registerNewKeyboardEventAction(SatActionEventMap.INPUT_ACTION_EVENT_THRUSTER_LEFT, GLFW.GLFW_KEY_A);
-		eventActionManager.registerNewGamepadEventAction(SatActionEventMap.INPUT_ACTION_EVENT_THRUSTER_LEFT, GLFW.GLFW_HAT_LEFT);
-
-		eventActionManager.registerNewKeyboardEventAction(SatActionEventMap.INPUT_ACTION_EVENT_THRUSTER_RIGHT, GLFW.GLFW_KEY_D);
-		eventActionManager.registerNewGamepadEventAction(SatActionEventMap.INPUT_ACTION_EVENT_THRUSTER_RIGHT, GLFW.GLFW_HAT_RIGHT);
-
-		eventActionManager.registerNewKeyboardEventAction(SatActionEventMap.INPUT_ACTION_EVENT_THRUSTER_DOWN, GLFW.GLFW_KEY_S);
-		eventActionManager.registerNewGamepadEventAction(SatActionEventMap.INPUT_ACTION_EVENT_THRUSTER_DOWN, GLFW.GLFW_HAT_DOWN);
-
-		super.onInitializeInputActions(eventActionManager);
-	}
 }

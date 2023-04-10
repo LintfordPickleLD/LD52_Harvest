@@ -24,6 +24,8 @@ public class MenuHelpScreen extends MenuScreen {
 	public MenuHelpScreen(ScreenManager screenManager) {
 		super(screenManager, "");
 
+		mShowContextualFooterBar = false;
+
 	}
 
 	// ---------------------------------------------

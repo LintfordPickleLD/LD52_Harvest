@@ -7,14 +7,12 @@ import java.util.List;
 import org.lwjgl.opengl.GL11;
 
 import lintfordpickle.harvest.ConstantsGame;
-import net.lintford.library.GameVersion;
 import net.lintford.library.core.LintfordCore;
 import net.lintford.library.core.ResourceManager;
 import net.lintford.library.core.geometry.Rectangle;
 import net.lintford.library.core.graphics.ColorConstants;
 import net.lintford.library.core.graphics.sprites.SpriteInstance;
 import net.lintford.library.core.graphics.sprites.spritesheet.SpriteSheetDefinition;
-import net.lintford.library.core.graphics.textures.CoreTextureNames;
 import net.lintford.library.core.graphics.textures.Texture;
 import net.lintford.library.core.maths.RandomNumbers;
 import net.lintford.library.core.maths.Vector2f;
@@ -23,6 +21,8 @@ import net.lintford.library.screenmanager.Screen;
 import net.lintford.library.screenmanager.ScreenManager;
 
 public class MenuBackgroundScreen extends Screen {
+
+	private static final float VECHILE_SPAWN_CHANCE = 16.f;
 
 	public List<String> lowerGreen = Arrays.asList("TEXTURE_LOWER_GREEN_00");
 	public List<String> upperRed = Arrays.asList("TEXTURE_UPPER_RED_00", "TEXTURE_UPPER_RED_01");
@@ -71,11 +71,12 @@ public class MenuBackgroundScreen extends Screen {
 			final int lNumVehicles = vehicles.size();
 			for (int i = 0; i < lNumVehicles; i++) {
 				final var v = vehicles.get(i);
-				v.t += core.gameTime().elapsedTimeMilli() * .0002f * v.s;
+				v.t += core.gameTime().elapsedTimeMilli() * .0002f * Math.max(v.s, .5f);
 
-				if (v.t > 1.f)
+				if (v.t > 1.f) {
+					v.draw = RandomNumbers.getRandomChance(VECHILE_SPAWN_CHANCE);
 					v.t = 0.f;
-
+				}
 			}
 		}
 	}
@@ -86,6 +87,7 @@ public class MenuBackgroundScreen extends Screen {
 		public float oy;
 		public String n;
 		public float r, g, b;
+		public boolean draw;
 
 		public Vehicle(float t, float oy, String spritesheetName, Vector3f colorMod) {
 			this.t = t;
@@ -116,7 +118,6 @@ public class MenuBackgroundScreen extends Screen {
 	private final Rectangle srcRect = new Rectangle();// DEBUG
 	private final Vector3f tempColor = new Vector3f();
 
-	private SpriteSheetDefinition mCoreSpritesheet;
 	private SpriteSheetDefinition mPropsSpritesheet;
 	private SpriteSheetDefinition mAdWallSpritesheet;
 
@@ -174,14 +175,18 @@ public class MenuBackgroundScreen extends Screen {
 		final float stepSize = 1.f / (float) maxNumVehilcesPerStream;
 		for (int i = 0; i < maxNumVehilcesPerStream; i++) {
 			float t = (float) i;
-			if (RandomNumbers.getRandomChance(16.f))
-				mUpperRed.vehicles.add(new Vehicle(t * stepSize, RandomNumbers.random(-5, 5), getRandomVehicleName(upperRed), getRandomVehicleColor()));
 
-			if (RandomNumbers.getRandomChance(16.f))
-				mLowerRed.vehicles.add(new Vehicle(t * stepSize, RandomNumbers.random(-5, 5), getRandomVehicleName(lowerRed), getRandomVehicleColor()));
+			final var vehicle00 = new Vehicle(t * stepSize, RandomNumbers.random(-5, 5), getRandomVehicleName(upperRed), getRandomVehicleColor());
+			vehicle00.draw = RandomNumbers.getRandomChance(VECHILE_SPAWN_CHANCE);
+			mUpperRed.vehicles.add(vehicle00);
 
-			if (RandomNumbers.getRandomChance(16.f))
-				mLowerGreen.vehicles.add(new Vehicle(t * stepSize, RandomNumbers.random(-5, 5), getRandomVehicleName(lowerGreen), getRandomVehicleColor()));
+			final var vehicle01 = new Vehicle(t * stepSize, RandomNumbers.random(-5, 5), getRandomVehicleName(lowerRed), getRandomVehicleColor());
+			vehicle01.draw = RandomNumbers.getRandomChance(VECHILE_SPAWN_CHANCE);
+			mLowerRed.vehicles.add(vehicle01);
+
+			final var vehicle02 = new Vehicle(t * stepSize, RandomNumbers.random(-5, 5), getRandomVehicleName(lowerGreen), getRandomVehicleColor());
+			vehicle02.draw = RandomNumbers.getRandomChance(VECHILE_SPAWN_CHANCE);
+			mLowerGreen.vehicles.add(vehicle02);
 		}
 
 		points.add(new Vector2f(-100.f, 75.f));
@@ -269,26 +274,6 @@ public class MenuBackgroundScreen extends Screen {
 		drawVehicleStream(core, true, true, mLowerGreen);
 
 		GL11.glDisable(GL11.GL_DEPTH_TEST);
-
-		drawVersion(core);
-	}
-
-	private void drawVersion(LintfordCore core) {
-		final var lHudBounds = core.HUD().boundingRectangle();
-		final var lVersionFont = mRendererManager.uiTextFont();
-		final var lVersionText = GameVersion.GAME_VERSION;
-
-		final var lVersionTextHeight = 32;// lVersionFont.fontHeight();
-
-		final var lSpriteBatch = mRendererManager.uiSpriteBatch();
-
-		lSpriteBatch.begin(core.HUD());
-		lSpriteBatch.draw(mCoreSpritesheet, CoreTextureNames.TEXTURE_FOOTER_32X32, lHudBounds.left(), lHudBounds.bottom() - lVersionTextHeight, lHudBounds.width(), lVersionTextHeight + 2, -0.01f, ColorConstants.GREY_DARK);
-		lSpriteBatch.end();
-
-		lVersionFont.begin(core.HUD());
-		lVersionFont.drawText(lVersionText, lHudBounds.left() + 5.f, lHudBounds.bottom() - lVersionFont.fontHeight(), -0.01f, 1.f);
-		lVersionFont.end();
 	}
 
 	// ---
@@ -325,6 +310,8 @@ public class MenuBackgroundScreen extends Screen {
 		final int lNumVehicles = vs.vehicles.size();
 		for (int i = 0; i < lNumVehicles; i++) {
 			final var v = vs.vehicles.get(i);
+			if (v.draw == false)
+				continue;
 
 			final var posX = sx + ((ex - sx) * v.t);
 

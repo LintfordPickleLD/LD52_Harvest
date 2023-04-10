@@ -3,20 +3,27 @@ package lintfordpickle.harvest;
 import static org.lwjgl.glfw.GLFW.glfwSwapBuffers;
 import static org.lwjgl.opengl.GL11.glClearColor;
 
+import org.lwjgl.glfw.GLFW;
 import org.lwjgl.opengl.GL11;
 
 import lintfordpickle.harvest.controllers.replays.ReplayController;
+import lintfordpickle.harvest.data.actionevents.SatActionEventMap;
+import lintfordpickle.harvest.data.players.PlayerManager;
 import lintfordpickle.harvest.data.players.ReplayManager;
+import lintfordpickle.harvest.screens.MainMenu;
+import lintfordpickle.harvest.screens.MenuBackgroundScreen;
+import lintfordpickle.harvest.screens.game.SurvivalGameScreen;
 import net.lintford.library.GameInfo;
 import net.lintford.library.ResourceLoader;
 import net.lintford.library.core.LintfordCore;
 import net.lintford.library.core.graphics.fonts.BitmapFontManager;
+import net.lintford.library.core.input.KeyEventActionManager;
 import net.lintford.library.core.maths.RandomNumbers;
 import net.lintford.library.renderers.RendererManager;
 import net.lintford.library.screenmanager.ScreenManager;
 import net.lintford.library.screenmanager.toast.ToastManager;
 
-public abstract class BaseHarvestApp extends LintfordCore {
+public abstract class HarvestGame extends LintfordCore {
 
 	// ---------------------------------------------
 	// Variables
@@ -39,7 +46,7 @@ public abstract class BaseHarvestApp extends LintfordCore {
 	// Constructor
 	// ---------------------------------------------
 
-	public BaseHarvestApp(GameInfo pGameInfo, String[] pArgs) {
+	public HarvestGame(GameInfo pGameInfo, String[] pArgs) {
 		super(pGameInfo, pArgs, false);
 
 		mEntityGroupID = RandomNumbers.RANDOM.nextInt();
@@ -86,6 +93,39 @@ public abstract class BaseHarvestApp extends LintfordCore {
 		final var lBestReplayManager = new ReplayManager();
 		final var lReplayController = new ReplayController(mControllerManager, lBestReplayManager, ConstantsGame.GAME_RESOURCE_GROUP_ID);
 		lReplayController.initialize(this);
+
+		if (ConstantsGame.SKIP_MAIN_MENU_ON_STARTUP) {
+			final var lPlayerManager = new PlayerManager();
+			final var lGhostPlayer = lPlayerManager.addNewPlayer();
+			lGhostPlayer.setPlayback("ghost.lms");
+
+			mScreenManager.addScreen(new SurvivalGameScreen(screenManager(), lPlayerManager));
+
+			mScreenManager.initialize();
+			return;
+		}
+
+		mScreenManager.addScreen(new MenuBackgroundScreen(mScreenManager));
+		mScreenManager.addScreen(new MainMenu(mScreenManager));
+		mScreenManager.initialize();
+	}
+
+	@Override
+	protected void onInitializeInputActions(KeyEventActionManager eventActionManager) {
+
+		eventActionManager.registerNewKeyboardEventAction(SatActionEventMap.INPUT_ACTION_EVENT_THRUSTER_UP, GLFW.GLFW_KEY_W);
+		eventActionManager.registerNewGamepadEventAction(SatActionEventMap.INPUT_ACTION_EVENT_THRUSTER_UP, GLFW.GLFW_GAMEPAD_BUTTON_DPAD_UP);
+
+		eventActionManager.registerNewKeyboardEventAction(SatActionEventMap.INPUT_ACTION_EVENT_THRUSTER_LEFT, GLFW.GLFW_KEY_A);
+		eventActionManager.registerNewGamepadEventAction(SatActionEventMap.INPUT_ACTION_EVENT_THRUSTER_LEFT, GLFW.GLFW_HAT_LEFT);
+
+		eventActionManager.registerNewKeyboardEventAction(SatActionEventMap.INPUT_ACTION_EVENT_THRUSTER_RIGHT, GLFW.GLFW_KEY_D);
+		eventActionManager.registerNewGamepadEventAction(SatActionEventMap.INPUT_ACTION_EVENT_THRUSTER_RIGHT, GLFW.GLFW_HAT_RIGHT);
+
+		eventActionManager.registerNewKeyboardEventAction(SatActionEventMap.INPUT_ACTION_EVENT_THRUSTER_DOWN, GLFW.GLFW_KEY_S);
+		eventActionManager.registerNewGamepadEventAction(SatActionEventMap.INPUT_ACTION_EVENT_THRUSTER_DOWN, GLFW.GLFW_HAT_DOWN);
+
+		super.onInitializeInputActions(eventActionManager);
 	}
 
 	@Override
