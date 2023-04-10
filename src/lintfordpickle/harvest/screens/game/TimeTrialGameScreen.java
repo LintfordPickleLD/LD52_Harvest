@@ -158,6 +158,7 @@ public class TimeTrialGameScreen extends BaseGameScreen {
 				screenManager().createLoadingScreen(new LoadingScreen(screenManager(), true, lLoadingScreen));
 				return;
 			}
+
 			screenManager().addScreen(new PauseScreen(screenManager(), mPlayerManager));
 			return;
 		}
@@ -210,8 +211,7 @@ public class TimeTrialGameScreen extends BaseGameScreen {
 		core.config().display().reapplyGlViewport();
 
 		var lHudBounds = core.HUD().boundingRectangle();
-
-		Debug.debugManager().drawers().drawRenderTargetImmediate(core, 0, 0, lHudBounds.width(), lHudBounds.height(), -0.001f, mRenderTarget);
+		Debug.debugManager().drawers().drawRenderTargetImmediate(core, 0, 0, lHudBounds.width(), lHudBounds.height(), -0.5f, mRenderTarget);
 	}
 
 	// ---------------------------------------------

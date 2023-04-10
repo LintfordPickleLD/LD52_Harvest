@@ -94,6 +94,8 @@ public class MainMenu extends MenuScreen {
 		mIsPopup = false;
 		mShowBackgroundScreens = true;
 		mESCBackEnabled = false;
+
+		mScreenManager.contextHintManager().drawContextBackground(true);
 	}
 
 	// ---------------------------------------------

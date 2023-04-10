@@ -17,8 +17,6 @@ public class OptionsScreen extends MenuScreen {
 	// Constants
 	// ---------------------------------------------
 
-	private static final String SCREEN_TITLE = "Options";
-
 	private static final int BUTTON_AUDIO = 10;
 	private static final int BUTTON_GRAPHICS = 11;
 	private static final int BUTTON_KEY_BINDS = 12;
@@ -29,7 +27,7 @@ public class OptionsScreen extends MenuScreen {
 	// ---------------------------------------------
 
 	public OptionsScreen(ScreenManager pScreenManager) {
-		super(pScreenManager, SCREEN_TITLE);
+		super(pScreenManager, null);
 
 		final var lLayout = new ListLayout(this);
 		lLayout.setDrawBackground(true, ColorConstants.WHITE);

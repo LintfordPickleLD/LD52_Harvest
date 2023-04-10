@@ -278,12 +278,12 @@ public class MenuBackgroundScreen extends Screen {
 		final var lVersionFont = mRendererManager.uiTextFont();
 		final var lVersionText = GameVersion.GAME_VERSION;
 
-		final var lVersionTextHeight = lVersionFont.fontHeight();
+		final var lVersionTextHeight = 32;// lVersionFont.fontHeight();
 
 		final var lSpriteBatch = mRendererManager.uiSpriteBatch();
 
 		lSpriteBatch.begin(core.HUD());
-		lSpriteBatch.draw(mCoreSpritesheet, CoreTextureNames.TEXTURE_WHITE, lHudBounds.left(), lHudBounds.bottom() - lVersionTextHeight - 2, lHudBounds.width(), lVersionTextHeight + 2, -0.01f, ColorConstants.GREY_DARK);
+		lSpriteBatch.draw(mCoreSpritesheet, CoreTextureNames.TEXTURE_FOOTER_32X32, lHudBounds.left(), lHudBounds.bottom() - lVersionTextHeight, lHudBounds.width(), lVersionTextHeight + 2, -0.01f, ColorConstants.GREY_DARK);
 		lSpriteBatch.end();
 
 		lVersionFont.begin(core.HUD());

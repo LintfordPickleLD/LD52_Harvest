@@ -213,7 +213,8 @@ public class SurvivalGameScreen extends BaseGameScreen {
 		core.setActiveGameCamera(lGameCam);
 		core.config().display().reapplyGlViewport();
 
-		Debug.debugManager().drawers().drawRenderTargetImmediate(core, 0, 0, 960, 540, -0.001f, mRenderTarget);
+		var lHudBounds = core.HUD().boundingRectangle();
+		Debug.debugManager().drawers().drawRenderTargetImmediate(core, 0, 0, lHudBounds.width(), lHudBounds.height(), -0.5f, mRenderTarget);
 	}
 
 	// ---------------------------------------------
