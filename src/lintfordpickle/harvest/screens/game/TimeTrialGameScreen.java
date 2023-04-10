@@ -25,6 +25,7 @@ import lintfordpickle.harvest.renderers.ShipRenderer;
 import lintfordpickle.harvest.renderers.hud.MinimapRenderer;
 import lintfordpickle.harvest.renderers.hud.TimeTrialHudRenderer;
 import lintfordpickle.harvest.renderers.scene.SceneAdWallRenderer;
+import lintfordpickle.harvest.renderers.scene.SceneForegroundRenderer;
 import lintfordpickle.harvest.renderers.scene.SceneRenderer;
 import lintfordpickle.harvest.screens.PauseScreen;
 import lintfordpickle.harvest.screens.endscreens.SurvivalEndScreen;
@@ -34,7 +35,6 @@ import net.lintford.library.controllers.core.ControllerManager;
 import net.lintford.library.controllers.core.PhysicsController;
 import net.lintford.library.core.LintfordCore;
 import net.lintford.library.core.ResourceManager;
-import net.lintford.library.core.debug.Debug;
 import net.lintford.library.core.graphics.rendertarget.RenderTarget;
 import net.lintford.library.core.physics.PhysicsWorld;
 import net.lintford.library.core.physics.resolvers.CollisionResolverRotationAndFriction;
@@ -85,6 +85,7 @@ public class TimeTrialGameScreen extends BaseGameScreen {
 	private DebugPhysicsGridRenderer mPhysicsDebugGridRenderer;
 	private ShipRenderer mShipRenderer;
 	private SceneRenderer mSceneRenderer;
+	private SceneForegroundRenderer mSceneForegroundRenderer;
 	private SceneAdWallRenderer mSceneAdWallRenderer;
 	private PlatformsRenderer mPlatformsRenderer;
 	private TimeTrialHudRenderer mHudRenderer;
@@ -171,7 +172,7 @@ public class TimeTrialGameScreen extends BaseGameScreen {
 		if (otherScreenHasFocus == false) {
 			final var lPlayerScoreCard = mGameState.getScoreCard(0);
 
-			if (lPlayerScoreCard.allPlatformsDelivered()) {
+			if (lPlayerScoreCard.allPlatformsDelivered() || core.input().keyboard().isKeyDownTimed(GLFW.GLFW_KEY_K, this)) {
 				mGameActionEventController.finalizeInputFile();
 
 				mGameState.isGameRunning = false;
@@ -194,24 +195,10 @@ public class TimeTrialGameScreen extends BaseGameScreen {
 
 	@Override
 	public void draw(LintfordCore core) {
-		final var lGameCam = mGameCamera; // orig
-		mRenderTarget.bind();
-
 		GL11.glClearColor(0.06f, 0.18f, 0.31f, 1.0f);
 		GL11.glClear(GL11.GL_COLOR_BUFFER_BIT | GL11.GL_DEPTH_BUFFER_BIT);
 
 		super.draw(core);
-
-		mRenderTarget.unbind();
-
-		GL11.glClearColor(0.06f, 0.18f, 0.11f, 1.0f);
-		GL11.glClear(GL11.GL_COLOR_BUFFER_BIT | GL11.GL_DEPTH_BUFFER_BIT);
-
-		core.setActiveGameCamera(lGameCam);
-		core.config().display().reapplyGlViewport();
-
-		var lHudBounds = core.HUD().boundingRectangle();
-		Debug.debugManager().drawers().drawRenderTargetImmediate(core, 0, 0, lHudBounds.width(), lHudBounds.height(), -0.5f, mRenderTarget);
 	}
 
 	// ---------------------------------------------
@@ -255,6 +242,7 @@ public class TimeTrialGameScreen extends BaseGameScreen {
 		mShipRenderer = new ShipRenderer(mRendererManager, entityGroupUid());
 		mSceneAdWallRenderer = new SceneAdWallRenderer(mRendererManager, entityGroupUid());
 		mPlatformsRenderer = new PlatformsRenderer(mRendererManager, entityGroupUid());
+		mSceneForegroundRenderer = new SceneForegroundRenderer(mRendererManager, entityGroupUid());
 		mHudRenderer = new TimeTrialHudRenderer(mRendererManager, entityGroupUid());
 		mMinimapRenderer = new MinimapRenderer(mRendererManager, entityGroupUid());
 	}
@@ -270,6 +258,7 @@ public class TimeTrialGameScreen extends BaseGameScreen {
 		mSceneRenderer.initialize(core);
 		mSceneAdWallRenderer.initialize(core);
 		mPlatformsRenderer.initialize(core);
+		mSceneForegroundRenderer.initialize(core);
 		mHudRenderer.initialize(core);
 		mMinimapRenderer.initialize(core);
 	}
@@ -278,12 +267,15 @@ public class TimeTrialGameScreen extends BaseGameScreen {
 	protected void loadRendererResources(ResourceManager resourceManager) {
 		mSceneRenderer.loadResources(resourceManager);
 		mShipRenderer.loadResources(resourceManager);
+
 		mSceneAdWallRenderer.loadResources(resourceManager);
 		if (ConstantsGame.PHYICS_DEBUG_MODE) {
 			mPhysicsRenderer.loadResources(resourceManager);
 			mPhysicsDebugGridRenderer.loadResources(resourceManager);
 		}
+
 		mPlatformsRenderer.loadResources(resourceManager);
+		mSceneForegroundRenderer.loadResources(resourceManager);
 		mHudRenderer.loadResources(resourceManager);
 		mMinimapRenderer.loadResources(resourceManager);
 	}

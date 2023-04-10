@@ -64,6 +64,13 @@
 			"wrapTIndex":1
 		},
 		{
+			"textureName":"TEXTURE_SCENE_FOREGROUND",
+			"filepath":"res/textures/scene/textureSceneForeground.png",
+			"filterIndex":1,
+			"wrapSIndex":1,
+			"wrapTIndex":1
+		},
+		{
 			"textureName":"TEXTURE_ADWALL_VERT",
 			"filepath":"res/textures/textureVerticalAdWall.png",
 			"filterIndex":1,

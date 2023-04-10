@@ -108,7 +108,7 @@ public class PlatformsRenderer extends BaseRenderer {
 		final var lSpriteBatch = mRendererManager.uiSpriteBatch();
 		lSpriteBatch.begin(core.gameCamera());
 
-		final var lWhiteWithAlpha = ColorConstants.getColor(0.95f, 0.12f, 0.03f, 0.6f);
+		final var lWhiteWithAlpha = ColorConstants.getColor(1.f, 1.f, 1.f, 1.f);
 		lSpriteBatch.draw(mPlatformsSpritesheet, lSpriteFrame, platform, -0.01f, lWhiteWithAlpha);
 
 		if (platform.isStockFull) {

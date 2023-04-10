@@ -59,7 +59,7 @@ public class MinimapRenderer extends BaseRenderer implements IInputProcessor {
 
 	// ---------------------------------------------
 	// Core-Methods
-	// ---------------------------------------------
+	// ---------------------------------------------ww
 
 	@Override
 	public void initialize(LintfordCore core) {
@@ -157,6 +157,10 @@ public class MinimapRenderer extends BaseRenderer implements IInputProcessor {
 		lSpriteBatch.end();
 
 	}
+
+	// ---------------------------------------------
+	// Methods
+	// ---------------------------------------------
 
 	@Override
 	public boolean isCoolDownElapsed() {

@@ -116,7 +116,6 @@ public class TimeTrialHudRenderer extends BaseRenderer {
 		lFontUnit.begin(core.HUD());
 		lSpriteBatch.draw(mHudSpritesheet, mHudSpritesheet.getSpriteFrame("TEXTURE_CLOCK"), lHudBoundingBox.left() + 5.f, lHudBoundingBox.top() + 5.0f, 32, 32, -0.01f, ColorConstants.WHITE);
 		lFontUnit.drawText(": " + lTimeFormatted, lHudBoundingBox.left() + 38.f, lHudBoundingBox.top() + 5.0f, -0.01f, 1.f);
-
 		float lGridPositionY = lHudBoundingBox.top() + 16.0f;
 
 		// Player Stats

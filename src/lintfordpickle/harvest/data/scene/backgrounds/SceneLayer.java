@@ -13,6 +13,7 @@ public class SceneLayer {
 	public float centerY;
 	public float widthInPx;
 	public float heightInPx;
+	public boolean isForeground;
 
 	public float translation_speed = 1.f;
 

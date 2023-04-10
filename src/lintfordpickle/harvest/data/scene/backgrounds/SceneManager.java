@@ -48,6 +48,7 @@ public class SceneManager {
 		final var lBackgroundBackgroundFarLayer = new SceneLayer();
 		final var lBackgroundBackgroundMidLayer = new SceneLayer();
 		final var lBackgroundCollidableLayer = new SceneLayer();
+		final var lBackgroundForegroundLayer = new SceneLayer();
 
 		lBackgroundOutsideLayer.textureName = "TEXTURE_SCENE_SKY";
 		lBackgroundOutsideLayer.translation_speed = 1.f;
@@ -55,6 +56,7 @@ public class SceneManager {
 		lBackgroundOutsideLayer.centerY = 0.f;
 		lBackgroundOutsideLayer.widthInPx = mSceneWidthInPx;
 		lBackgroundOutsideLayer.heightInPx = mSceneHeightInPx;
+		lBackgroundOutsideLayer.isForeground = false;
 
 		lBackgroundBackgroundFarLayer.textureName = "TEXTURE_SCENE_BACKGROUND_FAR";
 		lBackgroundBackgroundFarLayer.translation_speed = 1.f;
@@ -62,6 +64,7 @@ public class SceneManager {
 		lBackgroundBackgroundFarLayer.centerY = 0.f;
 		lBackgroundBackgroundFarLayer.widthInPx = mSceneWidthInPx;
 		lBackgroundBackgroundFarLayer.heightInPx = mSceneHeightInPx;
+		lBackgroundBackgroundFarLayer.isForeground = false;
 
 		lBackgroundBackgroundMidLayer.textureName = "TEXTURE_SCENE_BACKGROUND_MID";
 		lBackgroundBackgroundMidLayer.translation_speed = 1.f;
@@ -69,6 +72,7 @@ public class SceneManager {
 		lBackgroundBackgroundMidLayer.centerY = 0.f;
 		lBackgroundBackgroundMidLayer.widthInPx = mSceneWidthInPx;
 		lBackgroundBackgroundMidLayer.heightInPx = mSceneHeightInPx;
+		lBackgroundBackgroundMidLayer.isForeground = false;
 
 		lBackgroundCollidableLayer.textureName = "TEXTURE_SCENE_COLLIDABLE";
 		lBackgroundCollidableLayer.translation_speed = 1.f;
@@ -76,11 +80,21 @@ public class SceneManager {
 		lBackgroundCollidableLayer.centerY = 0.f;
 		lBackgroundCollidableLayer.widthInPx = mSceneWidthInPx;
 		lBackgroundCollidableLayer.heightInPx = mSceneHeightInPx;
+		lBackgroundCollidableLayer.isForeground = false;
+
+		lBackgroundForegroundLayer.textureName = "TEXTURE_SCENE_FOREGROUND";
+		lBackgroundForegroundLayer.translation_speed = 1.f;
+		lBackgroundForegroundLayer.centerX = 0.f;
+		lBackgroundForegroundLayer.centerY = 0.f;
+		lBackgroundForegroundLayer.widthInPx = mSceneWidthInPx;
+		lBackgroundForegroundLayer.heightInPx = mSceneHeightInPx;
+		lBackgroundForegroundLayer.isForeground = true;
 
 		layers.add(lBackgroundOutsideLayer);
 		layers.add(lBackgroundBackgroundFarLayer);
 		layers.add(lBackgroundBackgroundMidLayer);
 		layers.add(lBackgroundCollidableLayer);
+		layers.add(lBackgroundForegroundLayer);
 	}
 
 }

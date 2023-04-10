@@ -13,7 +13,7 @@ import net.lintford.library.core.graphics.sprites.spritesheet.SpriteSheetDefinit
 import net.lintford.library.renderers.BaseRenderer;
 import net.lintford.library.renderers.RendererManager;
 
-public class SceneRenderer extends BaseRenderer {
+public class SceneForegroundRenderer extends BaseRenderer {
 
 	public class CarStream {
 		public float x;
@@ -30,7 +30,7 @@ public class SceneRenderer extends BaseRenderer {
 	// Constants
 	// ---------------------------------------------
 
-	public static final String RENDERER_NAME = "Scene Renderer";
+	public static final String RENDERER_NAME = "Scene Foreground Renderer";
 
 	// ---------------------------------------------
 	// Variables
@@ -55,7 +55,7 @@ public class SceneRenderer extends BaseRenderer {
 	// Constructor
 	// ---------------------------------------------
 
-	public SceneRenderer(RendererManager rendererManager, int entityGroupID) {
+	public SceneForegroundRenderer(RendererManager rendererManager, int entityGroupID) {
 		super(rendererManager, RENDERER_NAME, entityGroupID);
 	}
 
@@ -105,13 +105,11 @@ public class SceneRenderer extends BaseRenderer {
 		for (int i = 0; i < lNumLayers; i++) {
 			final var lLayer = lLayers.get(i);
 
-			if (lLayer.isForeground == true)
+			if (lLayer.isForeground == false)
 				continue;
 
 			drawScene(core, lLayers.get(i));
 		}
-
-		drawCarStreams(core);
 	}
 
 	// ---------------------------------------------
@@ -146,33 +144,4 @@ public class SceneRenderer extends BaseRenderer {
 		lTextureBatch.end();
 	}
 
-	private void drawCarStreams(LintfordCore core) {
-		final var lTextureBatch = mRendererManager.uiSpriteBatch();
-
-		lTextureBatch.begin(core.gameCamera());
-
-		final var lNumCarStreams = carStreams.size();
-		for (int i = 0; i < lNumCarStreams; i++) {
-			final var lCarStream = carStreams.get(i);
-			final var lSpriteFrame = mPropsSpritesheetDefintion.getSpriteFrame(lCarStream.spriteStreamName);
-			if (lSpriteFrame == null)
-				continue;
-
-			lCarStream.intSrcPositionX += lCarStream.speedX;
-
-			final float srcX = lCarStream.intSrcPositionX;
-			final float srcY = lCarStream.intSrcPositionY;
-			final int srcW = (int) lSpriteFrame.width();
-			final int srcH = (int) lSpriteFrame.height();
-
-			final float lDstX = 0;
-			final float lDstY = 0;
-			final float lDstW = srcW;
-			final float lDstH = srcH;
-
-			lTextureBatch.draw(mPropsSpritesheetDefintion.texture(), srcX, srcY, srcW, srcH, lDstX, lDstY, lDstW, lDstH, -0.01f, ColorConstants.WHITE);
-		}
-
-		lTextureBatch.end();
-	}
 }
