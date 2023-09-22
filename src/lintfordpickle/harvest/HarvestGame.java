@@ -15,12 +15,16 @@ import lintfordpickle.harvest.screens.MenuBackgroundScreen;
 import lintfordpickle.harvest.screens.game.SurvivalGameScreen;
 import net.lintford.library.GameInfo;
 import net.lintford.library.ResourceLoader;
+import net.lintford.library.controllers.music.MusicController;
 import net.lintford.library.core.LintfordCore;
 import net.lintford.library.core.graphics.fonts.BitmapFontManager;
 import net.lintford.library.core.input.KeyEventActionManager;
 import net.lintford.library.core.maths.RandomNumbers;
 import net.lintford.library.renderers.RendererManager;
+import net.lintford.library.screenmanager.IMenuAction;
+import net.lintford.library.screenmanager.Screen;
 import net.lintford.library.screenmanager.ScreenManager;
+import net.lintford.library.screenmanager.screens.TimedIntroScreen;
 import net.lintford.library.screenmanager.toast.ToastManager;
 
 public abstract class HarvestGame extends LintfordCore {
@@ -94,19 +98,26 @@ public abstract class HarvestGame extends LintfordCore {
 		final var lReplayController = new ReplayController(mControllerManager, lBestReplayManager, ConstantsGame.GAME_RESOURCE_GROUP_ID);
 		lReplayController.initialize(this);
 
-		if (ConstantsGame.SKIP_MAIN_MENU_ON_STARTUP) {
+		if (ConstantsGame.QUICK_LAUNCH_GAME) {
 			final var lPlayerManager = new PlayerManager();
 			final var lGhostPlayer = lPlayerManager.addNewPlayer();
 			lGhostPlayer.setPlayback("ghost.lms");
-
 			mScreenManager.addScreen(new SurvivalGameScreen(screenManager(), lPlayerManager));
-
-			mScreenManager.initialize();
-			return;
 		}
 
-		mScreenManager.addScreen(new MenuBackgroundScreen(mScreenManager));
-		mScreenManager.addScreen(new MainMenu(mScreenManager));
+		final var lSplashScreen = new TimedIntroScreen(mScreenManager, "res/textures/textureHud.png", 4f);
+		lSplashScreen.stretchBackgroundToFit(true);
+
+		lSplashScreen.setTimerFinishedCallback(new IMenuAction() {
+			@Override
+			public void TimerFinished(Screen pScreen) {
+				mScreenManager.addScreen(new MenuBackgroundScreen(mScreenManager));
+				mScreenManager.addScreen(new MainMenu(mScreenManager));
+			}
+		});
+		
+		mScreenManager.addScreen(lSplashScreen);
+
 		mScreenManager.initialize();
 	}
 
@@ -137,6 +148,15 @@ public abstract class HarvestGame extends LintfordCore {
 		mGameResourceLoader.loadResources(mResourceManager);
 		mGameResourceLoader.setMinimumTimeToShowLogosMs(ConstantsGame.IS_DEBUG_MODE ? 0 : 2000);
 		mGameResourceLoader.loadResourcesInBackground(this);
+
+		mResourceManager.audioManager().loadAudioFilesFromMetafile("res/audio/_meta.json");
+		mResourceManager.musicManager().loadMusicFromMetaFile("res/music/meta.json");
+		
+		var lMusic = new MusicController(mControllerManager, mResourceManager.musicManager(), LintfordCore.CORE_ENTITY_GROUP_ID);
+		// lMusic.play();
+		// TODO: Music management
+		lMusic.nextSong();
+// 		lMusic.nextSong();
 
 		mScreenManager.loadResources(mResourceManager);
 	}

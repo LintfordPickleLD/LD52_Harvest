@@ -1,0 +1,38 @@
+{
+	"AudioMetaDefinitions" : [
+	
+		{
+			"soundname":"SOUNDGRAINPICKUP1",
+			"filepath":"res/audio/soundGrainPickupStation1.ogg"
+		},
+		{
+			"soundname":"SOUNDGRAINPICKUP2",
+			"filepath":"res/audio/soundGrainPickupStation2.ogg"
+		},
+		{
+			"soundname":"SOUNDGRAINPICKUP3",
+			"filepath":"res/audio/soundGrainPickupStation3.ogg"
+		},
+		{
+			"soundname":"SOUNDGRAINPICKUP4",
+			"filepath":"res/audio/soundGrainPickupStation4.ogg"
+		},
+		{
+			"soundname":"SOUNDWATERPICKUP1",
+			"filepath":"res/audio/soundWaterPickupStation1.ogg"
+		},
+		{
+			"soundname":"SOUNDWATERPICKUP2",
+			"filepath":"res/audio/soundWaterPickupStation2.ogg"
+		},
+		{
+			"soundname":"SOUNDWATERPICKUP3",
+			"filepath":"res/audio/soundWaterPickupStation3.ogg"
+		},
+		{
+			"soundname":"SOUNDWATERPICKUP4",
+			"filepath":"res/audio/soundWaterPickupStation4.ogg"
+		}
+		
+	]
+}

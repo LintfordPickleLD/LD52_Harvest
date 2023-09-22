@@ -52,6 +52,6 @@ public class ConstantsGame {
 	public static final boolean DEBUG_OUTPUT_ACTIONEVENT_LOGS = false;
 
 	public static final boolean WRAP_OBJECTS_AROUND_SCREEN_EDGE = false;
-	public static final boolean SKIP_MAIN_MENU_ON_STARTUP = false;
+	public static final boolean QUICK_LAUNCH_GAME = false;
 	public static final boolean ESCAPE_RESTART_MAIN_SCENE = false;
 }

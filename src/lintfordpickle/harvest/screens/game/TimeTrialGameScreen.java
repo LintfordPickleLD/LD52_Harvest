@@ -4,6 +4,7 @@ import org.lwjgl.glfw.GLFW;
 import org.lwjgl.opengl.GL11;
 
 import lintfordpickle.harvest.ConstantsGame;
+import lintfordpickle.harvest.controllers.AudioController;
 import lintfordpickle.harvest.controllers.CargoController;
 import lintfordpickle.harvest.controllers.LevelController;
 import lintfordpickle.harvest.controllers.PlatformController;
@@ -70,6 +71,7 @@ public class TimeTrialGameScreen extends BaseGameScreen {
 	private PlatformManager mPlatformManager;
 
 	// Controllers
+	private AudioController mAudioController;
 	private GameActionEventController mGameActionEventController;
 	private CameraShipChaseController mCameraShipChaseController;
 	private CargoController mCargoController;
@@ -207,6 +209,7 @@ public class TimeTrialGameScreen extends BaseGameScreen {
 
 	@Override
 	protected void createControllers(ControllerManager controllerManager) {
+		mAudioController = new AudioController(controllerManager, screenManager().core().resources().audioManager(), entityGroupUid());
 		mGameActionEventController = new GameActionEventController(controllerManager, mPlayerManager, inputCounter(), entityGroupUid());
 		mPhysicsController = new PhysicsController(controllerManager, world, entityGroupUid());
 		mLevelController = new LevelController(controllerManager, entityGroupUid());
@@ -220,6 +223,7 @@ public class TimeTrialGameScreen extends BaseGameScreen {
 
 	@Override
 	protected void initializeControllers(LintfordCore core) {
+		mAudioController.initialize(core);
 		mGameActionEventController.initialize(core);
 		mPhysicsController.initialize(core);
 		mLevelController.initialize(core);

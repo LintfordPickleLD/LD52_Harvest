@@ -28,6 +28,7 @@ public class PlatformController extends BaseController {
 	private ShipController mShipController;
 
 	private PlatformManager mPlatformManager;
+	private AudioController mAudioController;
 
 	// ---------------------------------------------
 	// Properties
@@ -60,6 +61,7 @@ public class PlatformController extends BaseController {
 		mShipController = (ShipController) lControllerManager.getControllerByNameRequired(ShipController.CONTROLLER_NAME, entityGroupUid());
 		mCargoController = (CargoController) lControllerManager.getControllerByNameRequired(CargoController.CONTROLLER_NAME, entityGroupUid());
 		mGameStateController = (GameStateController) lControllerManager.getControllerByNameRequired(GameStateController.CONTROLLER_NAME, entityGroupUid());
+		mAudioController = (AudioController) lControllerManager.getControllerByNameRequired(AudioController.CONTROLLER_NAME, entityGroupUid());
 	}
 
 	@Override
@@ -153,7 +155,7 @@ public class PlatformController extends BaseController {
 		if (!platform.isRefillingStock && !platform.isStockFull && lIsPlayerAtPlatform) {
 			platform.timeUntilRefillStarts = 200;
 		} else {
-			if (!platform.isRefillingStock) {
+			if (!platform.isRefillingStock && !platform.isStockFull) {
 				platform.timeUntilRefillStarts -= core.gameTime().elapsedTimeMilli();
 				if (platform.timeUntilRefillStarts <= 0) {
 					platform.isRefillingStock = true;
@@ -167,11 +169,12 @@ public class PlatformController extends BaseController {
 			if (platform.stockValueF >= 1.f) {
 				platform.stockValueF = 1.f;
 
+				mAudioController.playSound("SOUNDWATERPICKUP1");
+
 				platform.isRefillingStock = false;
 				platform.isStockFull = true;
 			}
 		}
-
 	}
 
 	private void updateFarmPlatform(LintfordCore core, Platform platform) {
