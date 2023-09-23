@@ -4,6 +4,7 @@ import org.lwjgl.glfw.GLFW;
 import org.lwjgl.opengl.GL11;
 
 import lintfordpickle.harvest.ConstantsGame;
+import lintfordpickle.harvest.controllers.AudioController;
 import lintfordpickle.harvest.controllers.CargoController;
 import lintfordpickle.harvest.controllers.LevelController;
 import lintfordpickle.harvest.controllers.PlatformController;
@@ -30,7 +31,8 @@ import lintfordpickle.harvest.screens.PauseScreen;
 import lintfordpickle.harvest.screens.endscreens.SurvivalEndScreen;
 import net.lintford.library.ConstantsPhysics;
 import net.lintford.library.controllers.core.ControllerManager;
-import net.lintford.library.controllers.core.PhysicsController;
+import net.lintford.library.controllers.physics.IPhysicsControllerCallback;
+import net.lintford.library.controllers.physics.PhysicsController;
 import net.lintford.library.core.LintfordCore;
 import net.lintford.library.core.ResourceManager;
 import net.lintford.library.core.debug.Debug;
@@ -57,7 +59,6 @@ public class SurvivalGameScreen extends BaseGameScreen {
 
 	private RenderTarget mRenderTarget;
 
-	private PhysicsWorld world;
 	private CollisionHandler mCollisionHandler;
 
 	// Data
@@ -69,6 +70,7 @@ public class SurvivalGameScreen extends BaseGameScreen {
 	private PlatformManager mPlatformManager;
 
 	// Controllers
+	private AudioController mAudioController;
 	private LevelController mLevelController;
 	private GameActionEventController mGameActionEventController;
 	private CameraShipChaseController mCameraShipChaseController;
@@ -119,14 +121,8 @@ public class SurvivalGameScreen extends BaseGameScreen {
 
 		mCollisionHandler = new CollisionHandler();
 
-		world = new PhysicsWorld();
-		world.setGravity(0, 5.87f);
-		world.setContactResolver(new CollisionResolverRotationAndFriction());
-
-		world.addCollisionCallback(mCollisionHandler);
-		world.initialize();
-
 		super.initialize();
+
 		mGameCamera.setPosition(ConstantsPhysics.toPixels(-1.2f), ConstantsPhysics.toPixels(13.1f));
 	}
 
@@ -190,8 +186,6 @@ public class SurvivalGameScreen extends BaseGameScreen {
 				mGameActionEventController.finalizeInputFile();
 			}
 		}
-
-		world.stepWorld((float) core.gameTime().elapsedTimeMilli() * 0.001f, NUM_PHYSICS_ITERATIONS);
 	}
 
 	@Override
@@ -223,26 +217,40 @@ public class SurvivalGameScreen extends BaseGameScreen {
 
 	@Override
 	protected void createControllers(ControllerManager controllerManager) {
+		var lPhysicsCallback = new IPhysicsControllerCallback() {
+			@Override
+			public PhysicsWorld createPhysicsWorld() {
+				final var lPhysicsWorld = new PhysicsWorld(400, 400, 5, 5);
+				lPhysicsWorld.initialize();
+				lPhysicsWorld.setGravity(0.f,  5.87f);
+				
+				lPhysicsWorld.setContactResolver(new CollisionResolverRotationAndFriction());
+				lPhysicsWorld.addCollisionCallback(mCollisionHandler);
+				return lPhysicsWorld;
+			}
+		};
+
+		mAudioController = new AudioController(controllerManager, screenManager().core().resources().audioManager(), entityGroupUid());
 		mGameActionEventController = new GameActionEventController(controllerManager, mPlayerManager, inputCounter(), entityGroupUid());
-		mCargoController = new CargoController(controllerManager, mCargoManager, entityGroupUid());
-		mPhysicsController = new PhysicsController(controllerManager, world, entityGroupUid());
+		mPhysicsController = new PhysicsController(controllerManager, lPhysicsCallback, entityGroupUid());
 		mLevelController = new LevelController(controllerManager, entityGroupUid());
 		mCameraShipChaseController = new CameraShipChaseController(controllerManager, mGameCamera, null, entityGroupUid());
 		mGameStateController = new SurvivalGameStateController(controllerManager, mGameState, mPlayerManager, entityGroupUid());
 		mSceneController = new SceneController(controllerManager, mSceneManager, entityGroupUid());
-
+		mCargoController = new CargoController(controllerManager, mCargoManager, entityGroupUid());
 		mShipController = new ShipController(controllerManager, mShipManager, mPlayerManager, entityGroupUid());
 		mPlatformsController = new PlatformController(controllerManager, mPlatformManager, entityGroupUid());
 	}
 
 	@Override
 	protected void initializeControllers(LintfordCore core) {
-		mLevelController.initialize(core);
+		mAudioController.initialize(core);
 		mGameActionEventController.initialize(core);
 		mPhysicsController.initialize(core);
-		mCargoController.initialize(core);
+		mLevelController.initialize(core);
 		mCameraShipChaseController.initialize(core);
 		mSceneController.initialize(core);
+		mCargoController.initialize(core);
 		mShipController.initialize(core);
 		mPlatformsController.initialize(core);
 		mGameStateController.initialize(core);
@@ -252,9 +260,10 @@ public class SurvivalGameScreen extends BaseGameScreen {
 	protected void createRenderers(LintfordCore core) {
 		mSceneRenderer = new SceneRenderer(mRendererManager, entityGroupUid());
 		if (ConstantsGame.PHYICS_DEBUG_MODE) {
-			mPhysicsRenderer = new DebugPhysicsRenderer(mRendererManager, world, entityGroupUid());
-			mPhysicsDebugGridRenderer = new DebugPhysicsGridRenderer(mRendererManager, world, entityGroupUid());
+			mPhysicsRenderer = new DebugPhysicsRenderer(mRendererManager, entityGroupUid());
+			mPhysicsDebugGridRenderer = new DebugPhysicsGridRenderer(mRendererManager, entityGroupUid());
 		}
+		
 		mShipRenderer = new ShipRenderer(mRendererManager, entityGroupUid());
 		mSceneAdWallRenderer = new SceneAdWallRenderer(mRendererManager, entityGroupUid());
 		mPlatformsRenderer = new PlatformsRenderer(mRendererManager, entityGroupUid());

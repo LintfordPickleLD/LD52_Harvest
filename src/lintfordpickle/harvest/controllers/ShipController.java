@@ -9,7 +9,7 @@ import lintfordpickle.harvest.data.ships.Ship;
 import lintfordpickle.harvest.data.ships.ShipManager;
 import net.lintford.library.controllers.BaseController;
 import net.lintford.library.controllers.core.ControllerManager;
-import net.lintford.library.controllers.core.PhysicsController;
+import net.lintford.library.controllers.physics.PhysicsController;
 import net.lintford.library.core.LintfordCore;
 import net.lintford.library.core.geometry.partitioning.GridEntity;
 import net.lintford.library.core.maths.Vector2f;
@@ -50,7 +50,7 @@ public class ShipController extends BaseController {
 		final var lShips = mShipManager.ships();
 		final int lNumShips = lShips.size();
 		for (int i = 0; i < lNumShips; i++) {
-			if (lShips.get(i).entityUid == entityUid)
+			if (lShips.get(i).uid == entityUid)
 				return lShips.get(i);
 		}
 

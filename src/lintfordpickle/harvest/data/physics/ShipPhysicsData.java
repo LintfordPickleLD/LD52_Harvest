@@ -1,11 +1,14 @@
 package lintfordpickle.harvest.data.physics;
 
-import net.lintford.library.core.entity.BaseInstanceData;
+import net.lintford.library.core.entities.Entity;
 
-public class ShipPhysicsData extends BaseInstanceData {
+public class ShipPhysicsData extends Entity {
 
-	private static final long serialVersionUID = 6525771337467313372L;
+	public ShipPhysicsData(int uid) {
+		super(uid);
 
+	}
+	
 	public int shipEntityUid;
 
 	public int lastCollisionObjectHash;

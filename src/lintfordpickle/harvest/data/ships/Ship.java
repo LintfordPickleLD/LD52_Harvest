@@ -91,12 +91,6 @@ public class Ship extends RigidBodyEntity {
 	}
 
 	// ---------------------------------------------
-	// Constants
-	// ---------------------------------------------
-
-	private static final long serialVersionUID = 1971639550782581754L;
-
-	// ---------------------------------------------
 	// Variables
 	// ---------------------------------------------
 
@@ -150,7 +144,7 @@ public class Ship extends RigidBodyEntity {
 
 		// these are in meters
 		body = RigidBody.createPolygonBody(64.f * lPixelsToUnits, 32.f * lPixelsToUnits, lDensity, .1f, .8f, .5f, false);
-		body.userData(new ShipPhysicsData());
+		body.userData(new ShipPhysicsData(entityUid));
 
 		health = maxHealth;
 	}

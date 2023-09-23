@@ -33,7 +33,8 @@ import lintfordpickle.harvest.screens.endscreens.SurvivalEndScreen;
 import lintfordpickle.harvest.screens.endscreens.TimeTrialEndScreen;
 import net.lintford.library.ConstantsPhysics;
 import net.lintford.library.controllers.core.ControllerManager;
-import net.lintford.library.controllers.core.PhysicsController;
+import net.lintford.library.controllers.physics.IPhysicsControllerCallback;
+import net.lintford.library.controllers.physics.PhysicsController;
 import net.lintford.library.core.LintfordCore;
 import net.lintford.library.core.ResourceManager;
 import net.lintford.library.core.graphics.rendertarget.RenderTarget;
@@ -48,18 +49,11 @@ import net.lintford.library.screenmanager.screens.LoadingScreen;
 public class TimeTrialGameScreen extends BaseGameScreen {
 
 	// ---------------------------------------------
-	// Constants
-	// ---------------------------------------------
-
-	public static final int NUM_PHYSICS_ITERATIONS = 7;
-
-	// ---------------------------------------------
 	// Variables
 	// ---------------------------------------------
 
 	private RenderTarget mRenderTarget;
 
-	private PhysicsWorld world;
 	private CollisionHandler mCollisionHandler;
 
 	// Data
@@ -122,14 +116,8 @@ public class TimeTrialGameScreen extends BaseGameScreen {
 
 		mCollisionHandler = new CollisionHandler();
 
-		world = new PhysicsWorld();
-		world.setGravity(0, 5.87f);
-		world.setContactResolver(new CollisionResolverRotationAndFriction());
-
-		world.addCollisionCallback(mCollisionHandler);
-		world.initialize();
-
 		super.initialize();
+
 		mGameCamera.setPosition(ConstantsPhysics.toPixels(-1.2f), ConstantsPhysics.toPixels(13.1f));
 	}
 
@@ -192,7 +180,6 @@ public class TimeTrialGameScreen extends BaseGameScreen {
 			}
 		}
 
-		world.stepWorld((float) core.gameTime().elapsedTimeMilli() * 0.001f, NUM_PHYSICS_ITERATIONS);
 	}
 
 	@Override
@@ -209,9 +196,22 @@ public class TimeTrialGameScreen extends BaseGameScreen {
 
 	@Override
 	protected void createControllers(ControllerManager controllerManager) {
+		var lPhysicsCallback = new IPhysicsControllerCallback() {
+			@Override
+			public PhysicsWorld createPhysicsWorld() {
+				final var lPhysicsWorld = new PhysicsWorld(400, 400, 5, 5);
+				lPhysicsWorld.initialize();
+				lPhysicsWorld.setGravity(0.f,  5.87f);
+
+				lPhysicsWorld.setContactResolver(new CollisionResolverRotationAndFriction());
+				lPhysicsWorld.addCollisionCallback(mCollisionHandler);
+				return lPhysicsWorld;
+			}
+		};
+
 		mAudioController = new AudioController(controllerManager, screenManager().core().resources().audioManager(), entityGroupUid());
 		mGameActionEventController = new GameActionEventController(controllerManager, mPlayerManager, inputCounter(), entityGroupUid());
-		mPhysicsController = new PhysicsController(controllerManager, world, entityGroupUid());
+		mPhysicsController = new PhysicsController(controllerManager, lPhysicsCallback, entityGroupUid());
 		mLevelController = new LevelController(controllerManager, entityGroupUid());
 		mCameraShipChaseController = new CameraShipChaseController(controllerManager, mGameCamera, null, entityGroupUid());
 		mGameStateController = new TimeTrialGameStateController(controllerManager, mGameState, mPlayerManager, entityGroupUid());
@@ -239,8 +239,8 @@ public class TimeTrialGameScreen extends BaseGameScreen {
 	protected void createRenderers(LintfordCore core) {
 		mSceneRenderer = new SceneRenderer(mRendererManager, entityGroupUid());
 		if (ConstantsGame.PHYICS_DEBUG_MODE) {
-			mPhysicsRenderer = new DebugPhysicsRenderer(mRendererManager, world, entityGroupUid());
-			mPhysicsDebugGridRenderer = new DebugPhysicsGridRenderer(mRendererManager, world, entityGroupUid());
+			mPhysicsRenderer = new DebugPhysicsRenderer(mRendererManager, entityGroupUid());
+			mPhysicsDebugGridRenderer = new DebugPhysicsGridRenderer(mRendererManager, entityGroupUid());
 		}
 
 		mShipRenderer = new ShipRenderer(mRendererManager, entityGroupUid());
