@@ -20,7 +20,7 @@ public class GameWindow extends HarvestGame {
 		final var lGameInfo = new GameInfo() {
 			@Override
 			public DebugLogLevel debugLogLevel() {
-				return DebugLogLevel.info;
+				return DebugLogLevel.off;
 			}
 
 			@Override
