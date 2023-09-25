@@ -115,7 +115,7 @@ public abstract class HarvestGame extends LintfordCore {
 				mScreenManager.addScreen(new MainMenu(mScreenManager));
 			}
 		});
-		
+
 		mScreenManager.addScreen(lSplashScreen);
 
 		mScreenManager.initialize();
@@ -151,12 +151,9 @@ public abstract class HarvestGame extends LintfordCore {
 
 		mResourceManager.audioManager().loadAudioFilesFromMetafile("res/audio/_meta.json");
 		mResourceManager.musicManager().loadMusicFromMetaFile("res/music/meta.json");
-		
+
 		var lMusic = new MusicController(mControllerManager, mResourceManager.musicManager(), LintfordCore.CORE_ENTITY_GROUP_ID);
-		// lMusic.play();
-		// TODO: Music management
-		lMusic.nextSong();
-// 		lMusic.nextSong();
+		lMusic.playFromGroup(0, "menu");
 
 		mScreenManager.loadResources(mResourceManager);
 	}

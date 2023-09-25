@@ -3,11 +3,13 @@
 	
 		{
 			"soundname":"SOUND_MUSIC_SONG1",
-			"filepath":"res/music/musicTitle00.ogg"
+			"filepath":"res/music/musicTitle00.ogg",
+			"group":"menu"
 		},
 		{
 			"soundname":"SOUND_MUSIC_GAME00",
-			"filepath":"res/music/musicAmbientTrack00.ogg"
+			"filepath":"res/music/musicAmbientTrack00.ogg",
+			"group":"game"
 		}
 		
 	]
