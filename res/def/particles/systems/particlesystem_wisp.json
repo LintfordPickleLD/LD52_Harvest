@@ -1,0 +1,51 @@
+{
+	"name":"PARTICLESYSTEM_WISP",
+	"maxParticleCount":64,
+	"textureName":"TEXTURE_PARTICLES",
+	"textureFilename":"res/textures/particles/textureParticles.png",
+	"textureFilterMode":"0",
+	"particleLife":"5000",
+	
+	"initializers" : [ 
+	
+		{ 
+			"className":"ParticleSourceRegionInitializer",
+			"srcX":32,
+			"srcY":0,
+			"srcW":4,
+			"srcH":4
+		}, 
+
+		{ 
+			"className":"ParticleDestinationRegionInitializer",
+			"width":1,
+			"height":1
+		}, 
+		
+		{ 
+			"className":"ParticleRandomSizeInitializer",
+			"minValue":1,
+			"maxValue":2
+		}, 
+		
+		{
+			"className":"ParticleWispColorInitializer"
+		}
+	
+	],
+	
+	"modifiers" : [
+	
+		{
+			"className":"ParticleLifetimeAlphaFadeInOutModifier"
+		}, 
+		{
+			"className":"ParticleWispMovementModifier"
+		}, 
+		{
+			"className":"ParticlePhysicsModifier"
+		}
+	
+	]
+	
+}

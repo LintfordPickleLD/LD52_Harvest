@@ -1,0 +1,16 @@
+{
+	"rootDirectory":"res//def//particles//systems//",
+	"itemFileLocations" : [
+	
+		"particlesystem_wisp",
+		"particlesystem_fire",
+		"particlesystem_fire_intense",
+		"particlesystem_jet",
+		"particlesystem_jet_intense",
+		"particlesystem_smoke",
+		"particlesystem_spark",
+		"particlesystem_healeffect",
+		"particlesystem_enginespark",
+		"particlesystem_engineair"
+	]
+}

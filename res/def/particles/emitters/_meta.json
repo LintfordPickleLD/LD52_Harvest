@@ -1,0 +1,9 @@
+{
+	"rootDirectory":"res//def//particles//emitters//",
+	"itemFileLocations": [
+		"emitter_fire",
+		"emitter_global_wisp",
+		"emitter_smoke",
+		"emitter_sparks"
+	]
+}

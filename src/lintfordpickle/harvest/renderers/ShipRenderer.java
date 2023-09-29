@@ -1,7 +1,5 @@
 package lintfordpickle.harvest.renderers;
 
-import org.lwjgl.opengl.GL11;
-
 import lintfordpickle.harvest.ConstantsGame;
 import lintfordpickle.harvest.controllers.ShipController;
 import lintfordpickle.harvest.data.cargo.CargoType;
@@ -147,31 +145,10 @@ public class ShipRenderer extends BaseRenderer {
 		// Engine Glow
 		final var lBody = ship.body();
 
-		if (leftEngine) {
-			if (ship.leftEngineSprite == null) {
-				ship.leftEngineSprite = mShipSpritesheet.getSpriteInstance("engineLeft");
-			}
-		} else {
-			if (ship.rightEngineSprite == null) {
-				ship.rightEngineSprite = mShipSpritesheet.getSpriteInstance("engineRight");
-			}
-		}
-
 		final var lUnitsToPixels = ConstantsPhysics.UnitsToPixels();
 
 		final var shipPosX = enginePostion.x * lUnitsToPixels;
 		final var shipPosY = enginePostion.y * lUnitsToPixels;
-		final var shipRot = lBody.angle;
-
-		if (ship.leftEngineSprite != null) {
-			ship.leftEngineSprite.update(core);
-
-			var lShipColor = ColorConstants.getWhiteWithAlpha(0.8f);
-			if (ship.isGhostShip)
-				lShipColor = ColorConstants.getBlackWithAlpha(0f);
-
-			spriteBatch.drawAroundCenter(mShipSpritesheet, ship.leftEngineSprite.currentSpriteFrame(), shipPosX, shipPosY, 16.f * 2, 16.f * 2, shipRot, 0, 0, -0.01f, lShipColor);
-		}
 
 		final var r = ship.engineColorR * 2f;
 		final var g = ship.engineColorG * 2f;
@@ -182,6 +159,8 @@ public class ShipRenderer extends BaseRenderer {
 
 		final float lShipSpeed = (float) Math.abs(lBody.vx * lBody.vx + lBody.vy * lBody.vy) * 20.f;
 		final float lSpeedSizeMod = 2.0f + lShipSpeed * .02f + lPulse;
+
+		// engien lens flare/ glow effect
 
 		final var lSpriteFrameFlare = mShipSpritesheet.getSpriteFrame("TEXTUREENGINEGLOW");
 

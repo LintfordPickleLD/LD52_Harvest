@@ -1,0 +1,21 @@
+{
+	"name":"EMITTER_SPARKS",
+	"displayName":"EMITTER_SPARKS", 
+	
+	"childEmitters" :
+	[
+	    {
+	  		"name":"EMITTER_SPARKS",
+	  		"displayName":"EMITTER_SPARKS_CHILD_SPARK",
+			"particleSystemName":"PARTICLESYSTEM_SPARK",
+			"emitTimeMin":40,
+			"emitTimeMax":80,
+			"emitAmountMin":1,
+			"emitAmountMax":3,
+			"PositionRelOffsetX":0,
+			"PositionRelOffsetY":-10
+	  	}
+	  	
+	]
+	
+}

@@ -1,0 +1,45 @@
+{
+	"name":"PARTICLESYSTEM_SPARK",
+	"maxParticleCount":16,
+	"textureName":"TEXTURE_PARTICLES",
+	"textureFilename":"res/textures/particles/textureParticles.png",
+	"textureFilterMode":"0",
+	"particleLife":500,
+	
+	"initializers" : [ 
+	
+		{ 
+			"className":"ParticleSourceRegionInitializer",
+			"srcX":0,
+			"srcY":0,
+			"srcW":8,
+			"srcH":1
+		},
+		{ 
+			"className":"ParticleDestinationRegionInitializer",
+			"width":8,
+			"height":1
+		},
+		{
+			"className":"ParticleRandomOffsetInitializer",
+			"minValue0":-2,
+			"maxValue0":2,
+			"minValue1":2,
+			"maxValue1":2
+		}
+	
+	],
+	"modifiers" : [
+		{
+			"className":"ParticleLifetimeAlphaFadeOutModifier"
+		}, 
+		{
+			"className":"ParticlePhysicsModifier"
+		},
+		{
+			"className":"ParticleTurnToFaceModifier"
+		}
+	
+	]
+	
+}

@@ -1,0 +1,51 @@
+{
+	"name":"PARTICLESYSTEM_ENGINESPARK",
+	"maxParticleCount":160,
+	"textureName":"TEXTURE_PARTICLES",
+	"textureFilename":"res/textures/particles/textureParticles.png",
+	"textureFilterMode":"0",
+	"particleLife":1500,
+	
+	"initializers" : [ 
+	
+		{ 
+			"className":"ParticleSourceRegionInitializer",
+			"srcX":31,
+			"srcY":0,
+			"srcW":2,
+			"srcH":2
+		},
+		{ 
+			"className":"ParticleDestinationRegionInitializer",
+			"width":2,
+			"height":2
+		},
+		{
+			"className":"ParticleRandomOffsetInitializer",
+			"minValue0":-2,
+			"maxValue0":2,
+			"minValue1":2,
+			"maxValue1":2
+		},
+		{
+			"className":"ParticleFireColorInitializer",
+			"redMin":"20",
+			"redMax":"70",
+			"greenMin":"20",
+			"greenMax":"70",
+			"blueMin":"100",
+			"blueMax":"220"
+		}
+	
+	],
+	"modifiers" : [
+		{
+			"className":"ParticleLifetimeAlphaFadeOutModifier"
+		}, 
+		{
+			"className":"ParticlePhysicsModifier"
+		}
+	
+	]
+	
+}

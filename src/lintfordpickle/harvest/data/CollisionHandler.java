@@ -42,6 +42,9 @@ public class CollisionHandler implements ICollisionCallback {
 
 				lUserData.lastCollisionNormalX = manifold.normal.x;
 				lUserData.lastCollisionNormalY = manifold.normal.y;
+
+				lUserData.lastCollisionContactX = manifold.contact1.x;
+				lUserData.lastCollisionContactY = manifold.contact1.y;
 			}
 		}
 
@@ -55,6 +58,9 @@ public class CollisionHandler implements ICollisionCallback {
 
 				lUserData.lastCollisionNormalX = manifold.normal.x;
 				lUserData.lastCollisionNormalY = manifold.normal.y;
+
+				lUserData.lastCollisionContactX = manifold.contact1.x;
+				lUserData.lastCollisionContactY = manifold.contact1.y;
 			}
 		}
 	}

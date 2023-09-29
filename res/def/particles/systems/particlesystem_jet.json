@@ -1,0 +1,54 @@
+{
+	"name":"PARTICLESYSTEM_JET",
+	"maxParticleCount":128,
+	"textureName":"TEXTURE_PARTICLES",
+	"textureFilename":"res/textures/particles/textureParticles.png",
+	"textureFilterMode":"0",
+	"particleLife":"120",
+	
+	"initializers" : [ 
+	
+		{ 
+			"className":"ParticleSourceRegionInitializer",
+			"srcX":14,
+			"srcY":19,
+			"srcW":14,
+			"srcH":14
+		}, 
+		
+		{ 
+			"className":"ParticleDestinationRegionInitializer",
+			"width":14,
+			"height":14
+		},
+		{
+			"className":"ParticleFireColorInitializer",
+			"redMin":"75",
+			"redMax":"125",
+			"greenMin":"75",
+			"greenMax":"125",
+			"blueMin":"185",
+			"blueMax":"225"
+		},
+		{
+			"className":"ParticleRandomOffsetInitializer",
+			"minValue0":-1,
+			"maxValue0":1,
+			"minValue1":-1,
+			"maxValue1":1
+		}
+	
+	],
+	
+	"modifiers" : [
+	
+		{
+			"className":"ParticleLifetimeAlphaFadeOutModifier"
+		}, 
+		{
+			"className":"ParticlePhysicsModifier"
+		}
+	
+	]
+	
+}

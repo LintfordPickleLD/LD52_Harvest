@@ -11,7 +11,6 @@ import lintfordpickle.harvest.data.physics.ShipPhysicsData;
 import lintfordpickle.harvest.renderers.trails.TrailRendererComponent;
 import net.lintford.library.ConstantsPhysics;
 import net.lintford.library.core.LintfordCore;
-import net.lintford.library.core.graphics.sprites.SpriteInstance;
 import net.lintford.library.core.maths.Vector2f;
 import net.lintford.library.core.physics.dynamics.RigidBody;
 import net.lintford.library.core.physics.dynamics.RigidBodyEntity;
@@ -119,9 +118,6 @@ public class Ship extends RigidBodyEntity {
 	public final Inventory cargo = new Inventory();
 	public final int maxHealth = 100;
 	public int health;
-
-	public SpriteInstance leftEngineSprite;
-	public SpriteInstance rightEngineSprite;
 
 	// ---------------------------------------------
 	// Properties

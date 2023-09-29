@@ -1,0 +1,45 @@
+{
+	"name":"PARTICLESYSTEM_ENGINEAIR",
+	"maxParticleCount":16,
+	"textureName":"TEXTURE_PARTICLES",
+	"textureFilename":"res/textures/particles/textureParticles.png",
+	"textureFilterMode":"0",
+	"particleLife":1500,
+	
+	"initializers" : [ 
+	
+		{ 
+			"className":"ParticleSourceRegionInitializer",
+			"srcX":31,
+			"srcY":0,
+			"srcW":2,
+			"srcH":2
+		},
+		{ 
+			"className":"ParticleDestinationRegionInitializer",
+			"width":2,
+			"height":2
+		},
+		{
+			"className":"ParticleRandomOffsetInitializer",
+			"minValue0":-2,
+			"maxValue0":2,
+			"minValue1":2,
+			"maxValue1":2
+		}
+	
+	],
+	"modifiers" : [
+		{
+			"className":"ParticleLifetimeAlphaFadeOutModifier"
+		}, 
+		{
+			"className":"ParticlePhysicsModifier"
+		},
+		{
+			"className":"ParticleTurnToFaceModifier"
+		}
+	
+	]
+	
+}

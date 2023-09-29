@@ -1,0 +1,21 @@
+{
+	"name":"EMITTER_HEALEFFECT",
+	"displayName":"EMITTER_HEALEFFECT", 
+	
+	"childEmitters" :
+	[
+	    {
+	  		"name":"EMITTER_HEALEFFECT",
+	  		"displayName":"EMITTER_HEAL_CHILD_HEALEFFECT",
+			"particleSystemName":"PARTICLESYSTEM_SMOKE",
+			"emitTimeMin":40,
+			"emitTimeMax":80,
+			"emitAmountMin":1,
+			"emitAmountMax":3,
+			"PositionRelOffsetX":0,
+			"PositionRelOffsetY":-10
+	  	}
+	  	
+	]
+	
+}

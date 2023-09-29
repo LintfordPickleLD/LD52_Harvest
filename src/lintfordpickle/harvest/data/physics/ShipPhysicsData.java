@@ -8,7 +8,7 @@ public class ShipPhysicsData extends Entity {
 		super(uid);
 
 	}
-	
+
 	public int shipEntityUid;
 
 	public int lastCollisionObjectHash;
@@ -17,4 +17,7 @@ public class ShipPhysicsData extends Entity {
 	public float lastCollisionMagnitude2;
 	public float lastCollisionNormalX;
 	public float lastCollisionNormalY;
+
+	public float lastCollisionContactX;
+	public float lastCollisionContactY;
 }

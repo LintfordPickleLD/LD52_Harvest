@@ -1,0 +1,64 @@
+{
+	"name":"PARTICLESYSTEM_FIRE_INTENSE",
+	"maxParticleCount":128,
+	"textureName":"TEXTURE_PARTICLES",
+	"textureFilename":"res/textures/particles/textureParticles.png",
+	"textureFilterMode":"0",
+	"particleLife":"250",
+	
+	"initializers" : [ 
+	
+		{ 
+			"className":"ParticleSourceRegionInitializer",
+			"srcX":16,
+			"srcY":9,
+			"srcW":7,
+			"srcH":7
+		}, 
+		
+		{ 
+			"className":"ParticleDestinationRegionInitializer",
+			"width":7,
+			"height":7
+		}, 
+		
+		{
+			"className":"ParticleRandomSizeInitializer",
+			"minValue":0.8,
+			"maxValue":1.2
+		},
+		
+		{
+			"className":"ParticleFireColorInitializer",
+			"redMin":"255",
+			"redMax":"255",
+			"greenMin":"128",
+			"greenMax":"255",
+			"blueMin":"0",
+			"blueMax":"30"
+		},
+		{
+			"className":"ParticleRandomOffsetInitializer",
+			"minValue0":-4,
+			"maxValue0":4,
+			"minValue1":-4,
+			"maxValue1":4
+		}
+	
+	],
+	
+	"modifiers" : [
+	
+		{
+			"className":"ParticleLifetimeAlphaFadeOutModifier"
+		}, 
+		{
+			"className":"ParticleGravityModifier",
+			"gravity": -0.98
+		}, 
+		{
+			"className":"ParticlePhysicsModifier"
+		}
+
+	]
+}

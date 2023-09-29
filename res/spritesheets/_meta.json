@@ -6,6 +6,8 @@
 		"res/spritesheets/spritesheetProps.json",
 		"res/spritesheets/spritesheetScene.json",
 
+		"res/spritesheets/spritesheetParticles.json",
+
 		"res/spritesheets/spritesheetAdWallSoup.json"
 	]
 }

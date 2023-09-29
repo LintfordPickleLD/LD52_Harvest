@@ -1,0 +1,79 @@
+{
+  "spriteSheetName": "SPRITESHEET_PARTICLES",
+  "textureName": "TEXTURE_PARTICLES",
+  "spriteFrames": [
+    {
+      "name": "TEXTUREFIRE",
+      "x": 0,
+      "y": 1,
+      "w": 16,
+      "h": 16,
+      "pivotX": 0,
+      "pivotY": 0,
+      "scaleX": 1.0,
+      "scaleY": 1.0,
+      "anchorPoints": []
+    },
+    {
+      "name": "TEXTURESMOKE",
+      "x": 0,
+      "y": 17,
+      "w": 16,
+      "h": 16,
+      "pivotX": 0,
+      "pivotY": 0,
+      "scaleX": 1.0,
+      "scaleY": 1.0,
+      "anchorPoints": []
+    },
+    {
+      "name": "TEXTUREHEAL",
+      "x": 16,
+      "y": 1,
+      "w": 16,
+      "h": 8,
+      "pivotX": 0,
+      "pivotY": 0,
+      "scaleX": 1.0,
+      "scaleY": 1.0,
+      "anchorPoints": []
+    },
+    {
+      "name": "TEXTURECANNON",
+      "x": 0,
+      "y": 0,
+      "w": 8,
+      "h": 1,
+      "pivotX": 0,
+      "pivotY": 0,
+      "scaleX": 1.0,
+      "scaleY": 1.0,
+      "anchorPoints": []
+    },
+    {
+      "name": "TEXTURESHELL",
+      "x": 8,
+      "y": 0,
+      "w": 8,
+      "h": 1,
+      "pivotX": 0,
+      "pivotY": 0,
+      "scaleX": 1.0,
+      "scaleY": 1.0,
+      "anchorPoints": []
+    },
+    {
+      "name": "TEXTURESPARK",
+      "x": 16,
+      "y": 0,
+      "w": 8,
+      "h": 1,
+      "pivotX": 0,
+      "pivotY": 0,
+      "scaleX": 1.0,
+      "scaleY": 1.0,
+      "anchorPoints": []
+    }
+  ],
+  "animationFramesMap": {}
+}
