@@ -6,6 +6,7 @@ import org.lwjgl.opengl.GL11;
 import lintfordpickle.harvest.ConstantsGame;
 import lintfordpickle.harvest.controllers.AudioController;
 import lintfordpickle.harvest.controllers.CargoController;
+import lintfordpickle.harvest.controllers.EnvironmentController;
 import lintfordpickle.harvest.controllers.LevelController;
 import lintfordpickle.harvest.controllers.PlatformController;
 import lintfordpickle.harvest.controllers.SceneController;
@@ -80,6 +81,7 @@ public class TimeTrialGameScreen extends BaseGameScreen {
 	private TimeTrialGameStateController mGameStateController;
 	private PhysicsController mPhysicsController;
 	private ParticleFrameworkController mParticleFrameworkController;
+	private EnvironmentController mEnvironmentController;
 
 	// Renderers
 	private DebugPhysicsRenderer mPhysicsRenderer;
@@ -119,7 +121,7 @@ public class TimeTrialGameScreen extends BaseGameScreen {
 		mCargoManager = new CargoManager();
 		mSceneManager = new SceneManager();
 		mPlatformManager = new PlatformManager();
-		
+
 		mParticleFrameworkData = new ParticleFrameworkData();
 
 		mCollisionHandler = new CollisionHandler();
@@ -138,7 +140,7 @@ public class TimeTrialGameScreen extends BaseGameScreen {
 		final var lCanvasHeight = lDisplaySettings.gameResolutionHeight();
 
 		mRenderTarget = mRendererManager.createRenderTarget("RT_MAIN", lCanvasWidth, lCanvasHeight, 1.f, GL11.GL_NEAREST, false);
-		
+
 		// TODO: Change this!
 		resourceManager.textureManager().loadTexture("TEXTURE_PARTICLES", "res/textures/textureParticles.png", entityGroupUid());
 	}
@@ -212,7 +214,7 @@ public class TimeTrialGameScreen extends BaseGameScreen {
 			public PhysicsWorld createPhysicsWorld() {
 				final var lPhysicsWorld = new PhysicsWorld(400, 400, 5, 5);
 				lPhysicsWorld.initialize();
-				lPhysicsWorld.setGravity(0.f,  5.87f);
+				lPhysicsWorld.setGravity(0.f, 5.87f);
 
 				lPhysicsWorld.setContactResolver(new CollisionResolverRotationAndFriction());
 				lPhysicsWorld.addCollisionCallback(mCollisionHandler);
@@ -231,6 +233,7 @@ public class TimeTrialGameScreen extends BaseGameScreen {
 		mShipController = new ShipController(controllerManager, mShipManager, mPlayerManager, entityGroupUid());
 		mPlatformsController = new PlatformController(controllerManager, mPlatformManager, entityGroupUid());
 		mParticleFrameworkController = new ParticleFrameworkController(controllerManager, mParticleFrameworkData, entityGroupUid());
+		mEnvironmentController = new EnvironmentController(controllerManager, mGameCamera, entityGroupUid());
 	}
 
 	@Override
@@ -246,7 +249,8 @@ public class TimeTrialGameScreen extends BaseGameScreen {
 		mShipController.initialize(core);
 		mPlatformsController.initialize(core);
 		mGameStateController.initialize(core);
-		
+		mEnvironmentController.initialize(core);
+
 	}
 
 	@Override

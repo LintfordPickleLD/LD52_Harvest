@@ -13,6 +13,7 @@ import net.lintford.library.core.graphics.ColorConstants;
 import net.lintford.library.core.graphics.batching.SpriteBatch;
 import net.lintford.library.core.graphics.sprites.SpriteFrame;
 import net.lintford.library.core.graphics.sprites.spritesheet.SpriteSheetDefinition;
+import net.lintford.library.core.maths.MathHelper;
 import net.lintford.library.core.maths.Vector2f;
 import net.lintford.library.renderers.BaseRenderer;
 import net.lintford.library.renderers.RendererManager;
@@ -158,7 +159,7 @@ public class ShipRenderer extends BaseRenderer {
 		final float lPulse = 1.0f + (float) Math.cos(core.gameTime().totalTimeMilli()) * 2.f;
 
 		final float lShipSpeed = (float) Math.abs(lBody.vx * lBody.vx + lBody.vy * lBody.vy) * 20.f;
-		final float lSpeedSizeMod = 2.0f + lShipSpeed * .02f + lPulse;
+		final float lSpeedSizeMod = MathHelper.clamp(2.0f + lShipSpeed * .02f + lPulse, 0.f, 24.f);
 
 		// engien lens flare/ glow effect
 

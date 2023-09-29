@@ -10,7 +10,7 @@
 	
 		{ 
 			"className":"ParticleSourceRegionInitializer",
-			"srcX":32,
+			"srcX":35,
 			"srcY":0,
 			"srcW":4,
 			"srcH":4
@@ -21,15 +21,19 @@
 			"width":1,
 			"height":1
 		}, 
-		
 		{ 
 			"className":"ParticleRandomSizeInitializer",
 			"minValue":1,
 			"maxValue":2
 		}, 
-		
 		{
-			"className":"ParticleWispColorInitializer"
+			"className":"ParticleWispColorInitializer",
+			"redMin":"75",
+			"redMax":"125",
+			"greenMin":"75",
+			"greenMax":"125",
+			"blueMin":"185",
+			"blueMax":"225"
 		}
 	
 	],
@@ -44,8 +48,6 @@
 		}, 
 		{
 			"className":"ParticlePhysicsModifier"
-		}
-	
+		}	
 	]
-	
 }
