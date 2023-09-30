@@ -28,7 +28,7 @@
 			"maxValue1":2
 		},
 		{
-			"className":"ParticleFireColorInitializer",
+			"className":"ParticleRGBColorInitializer",
 			"redMin":"20",
 			"redMax":"70",
 			"greenMin":"20",

@@ -22,7 +22,7 @@
 			"height":14
 		},
 		{
-			"className":"ParticleFireColorInitializer",
+			"className":"ParticleRGBColorInitializer",
 			"redMin":"75",
 			"redMax":"125",
 			"greenMin":"75",
