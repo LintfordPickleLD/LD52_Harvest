@@ -2,7 +2,6 @@ package lintfordpickle.harvest.screens;
 
 import lintfordpickle.harvest.ConstantsGame;
 import lintfordpickle.harvest.controllers.replays.ReplayController;
-import lintfordpickle.harvest.screens.landing.SurvivalLandingScreen;
 import lintfordpickle.harvest.screens.landing.TimeTrailLandingScreen;
 import net.lintford.library.core.LintfordCore;
 import net.lintford.library.core.ResourceManager;
@@ -24,8 +23,7 @@ public class MainMenu extends MenuScreen {
 
 	private static final String TITLE = null;
 
-	private static final int SCREEN_BUTTON_PLAY_SURVIVAL = 10;
-	private static final int SCREEN_BUTTON_PLAY_TIME_TRIAL = 11;
+	private static final int SCREEN_BUTTON_PLAY = 11;
 	private static final int SCREEN_BUTTON_HELP = 12;
 	private static final int SCREEN_BUTTON_OPTIONS = 13;
 	private static final int SCREEN_BUTTON_EXIT = 15;
@@ -53,15 +51,10 @@ public class MainMenu extends MenuScreen {
 		mMainMenuListBox.layoutWidth(LAYOUT_WIDTH.HALF);
 		mMainMenuListBox.layoutFillType(FILLTYPE.TAKE_WHATS_NEEDED);
 
-		final var lPlaySurvivaEntry = new MenuEntry(mScreenManager, this, "Survival");
-		lPlaySurvivaEntry.horizontalFillType(FILLTYPE.FILL_CONTAINER);
-		lPlaySurvivaEntry.registerClickListener(this, SCREEN_BUTTON_PLAY_SURVIVAL);
-		lPlaySurvivaEntry.setToolTip("Starts a new survival game. You need to deliver as much food to the HQ before the time runs out.");
-
-		final var lPlayTimeEntry = new MenuEntry(mScreenManager, this, "Time-Trial");
-		lPlayTimeEntry.horizontalFillType(FILLTYPE.FILL_CONTAINER);
-		lPlayTimeEntry.registerClickListener(this, SCREEN_BUTTON_PLAY_TIME_TRIAL);
-		lPlayTimeEntry.setToolTip("You need to harvest and deliver food from each of the farms. Fastest time wins.");
+		final var lStartGameEntry = new MenuEntry(mScreenManager, this, "Start Game");
+		lStartGameEntry.horizontalFillType(FILLTYPE.FILL_CONTAINER);
+		lStartGameEntry.registerClickListener(this, SCREEN_BUTTON_PLAY);
+		lStartGameEntry.setToolTip("Harvest and deliver food from each of the farms in the fastest time.");
 
 		final var lHelpButton = new MenuEntry(mScreenManager, this, "Instructions");
 		lHelpButton.horizontalFillType(FILLTYPE.FILL_CONTAINER);
@@ -75,8 +68,7 @@ public class MainMenu extends MenuScreen {
 		lExitEntry.horizontalFillType(FILLTYPE.FILL_CONTAINER);
 		lExitEntry.registerClickListener(this, SCREEN_BUTTON_EXIT);
 
-		mMainMenuListBox.addMenuEntry(lPlaySurvivaEntry);
-		mMainMenuListBox.addMenuEntry(lPlayTimeEntry);
+		mMainMenuListBox.addMenuEntry(lStartGameEntry);
 		mMainMenuListBox.addMenuEntry(MenuEntry.menuSeparator());
 		mMainMenuListBox.addMenuEntry(lHelpButton);
 		mMainMenuListBox.addMenuEntry(lOptionsEntry);
@@ -131,21 +123,7 @@ public class MainMenu extends MenuScreen {
 	protected void handleOnClick() {
 
 		switch (mClickAction.consume()) {
-		case SCREEN_BUTTON_PLAY_SURVIVAL: {
-			final var lTopMostScreen = mScreenManager.getTopScreen();
-			if (lTopMostScreen instanceof SurvivalLandingScreen) {
-				return;
-			}
-
-			if (!(lTopMostScreen instanceof MainMenu)) {
-				mScreenManager.removeScreen(lTopMostScreen);
-			}
-
-			screenManager().addScreen(new SurvivalLandingScreen(mScreenManager));
-			break;
-		}
-
-		case SCREEN_BUTTON_PLAY_TIME_TRIAL: {
+		case SCREEN_BUTTON_PLAY: {
 			final var lTopMostScreen = mScreenManager.getTopScreen();
 
 			if (lTopMostScreen instanceof TimeTrailLandingScreen) {

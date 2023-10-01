@@ -4,11 +4,11 @@ import lintfordpickle.harvest.data.players.PlayerManager;
 import lintfordpickle.harvest.screens.MainMenu;
 import lintfordpickle.harvest.screens.MenuBackgroundScreen;
 import lintfordpickle.harvest.screens.game.TimeTrialGameScreen;
+import net.lintford.library.core.LintfordCore;
 import net.lintford.library.core.time.TimeConstants;
 import net.lintford.library.screenmanager.MenuEntry;
 import net.lintford.library.screenmanager.MenuScreen;
 import net.lintford.library.screenmanager.ScreenManager;
-import net.lintford.library.screenmanager.entries.MenuPanelEntry;
 import net.lintford.library.screenmanager.layouts.ListLayout;
 import net.lintford.library.screenmanager.screens.LoadingScreen;
 
@@ -27,18 +27,20 @@ public class TimeTrialEndScreen extends MenuScreen {
 
 	private PlayerManager mPlayerManager;
 	private float mTotalTimeInMs;
-	private boolean mFastestTimeRecorded;
+	private boolean mSurvived;
 
 	// ---------------------------------------------
 	// Constructor
 	// ---------------------------------------------
 
-	public TimeTrialEndScreen(ScreenManager screenManager, PlayerManager playerManager, float totalTimeInMs, boolean fastestTimeRecorded) {
-		super(screenManager, "run complete");
+	public TimeTrialEndScreen(ScreenManager screenManager, PlayerManager playerManager, boolean survived, float totalTimeInMs, boolean fastestTimeRecorded) {
+		super(screenManager, "");
+
+		mSurvived = survived;
+		mMenuTitle = mSurvived ? "Run Complete" : "Wrecked";
 
 		mPlayerManager = playerManager;
 		mTotalTimeInMs = totalTimeInMs;
-		mFastestTimeRecorded = fastestTimeRecorded;
 
 		final var lLayout = new ListLayout(this);
 
@@ -50,25 +52,12 @@ public class TimeTrialEndScreen extends MenuScreen {
 		final var lTotalSeconds = (int) tempTime / TimeConstants.MillisPerSecond;
 		tempTime -= lTotalSeconds * TimeConstants.MillisPerSecond;
 
-		var lGameOverText1 = "You made the full delivery!\nYour total time was: " + lTotalMinutes + ":" + lTotalSeconds + ":" + tempTime;
-
-		final var lPanelEntry = new MenuPanelEntry(screenManager, this);
-		lPanelEntry.text(lGameOverText1);
-		lPanelEntry.desiredHeight(64.f + 10.f);
-		lPanelEntry.readOnly(true);
-		lPanelEntry.canHaveFocus(false);
-
 		final var lRetryButton = new MenuEntry(mScreenManager, this, "Go Again");
 		lRetryButton.registerClickListener(this, SCREEN_BUTTON_RESTART);
 
 		final var lExitToMenuButton = new MenuEntry(mScreenManager, this, "Back to Menu");
 		lExitToMenuButton.registerClickListener(this, SCREEN_BUTTON_EXIT);
 
-		lLayout.addMenuEntry(lPanelEntry);
-		lLayout.addMenuEntry(MenuEntry.menuSeparator());
-		lLayout.addMenuEntry(MenuEntry.menuSeparator());
-		lLayout.addMenuEntry(MenuEntry.menuSeparator());
-		lLayout.addMenuEntry(MenuEntry.menuSeparator());
 		lLayout.addMenuEntry(lRetryButton);
 		lLayout.addMenuEntry(lExitToMenuButton);
 
@@ -93,6 +82,58 @@ public class TimeTrialEndScreen extends MenuScreen {
 			screenManager().createLoadingScreen(new LoadingScreen(screenManager(), false, new MenuBackgroundScreen(mScreenManager), new MainMenu(screenManager())));
 			break;
 		}
+	}
+
+	@Override
+	public void draw(LintfordCore core) {
+
+		final var lTitleFont = mRendererManager.uiTitleFont();
+		final var lFont = mRendererManager.uiTextFont();
+
+		super.draw(core);
+
+		lFont.begin(core.HUD());
+		if (mSurvived) {
+			final var lHeaderText = "All Food Delivered";
+			final var lHeaderTextWidth = lTitleFont.getStringWidth(lHeaderText);
+			final var lScreenHeight = core.config().display().windowHeight();
+
+			final var lTextTitleHeight = -lScreenHeight / 4.f;
+			mMenuHeaderPadding = lScreenHeight / 20.f;
+
+			lTitleFont.begin(core.HUD());
+			lTitleFont.drawText(lHeaderText, -lHeaderTextWidth / 2, lTextTitleHeight, -0.01f, 1.f);
+			lTitleFont.end();
+
+			final var lGameOverText0 = "Despite your efforts";
+			final var lTextWidth0 = lFont.getStringWidth(lGameOverText0);
+			lFont.drawText(lGameOverText0, -lTextWidth0 / 2, lTextTitleHeight + 50, -0.01f, 1.f);
+
+			final var lGameOverText1 = "the city has succumbed to famine!";
+			final var lTextWidth1 = lFont.getStringWidth(lGameOverText1);
+			lFont.drawText(lGameOverText1, -lTextWidth1 / 2, lTextTitleHeight + 75, -0.01f, 1.f);
+
+		} else {
+			final var lHeaderText = "Failed to deliver food";
+			final var lHeaderTextWidth = lTitleFont.getStringWidth(lHeaderText);
+			final var lScreenHeight = core.config().display().windowHeight();
+
+			final var lTextTitleHeight = -lScreenHeight / 4.f;
+			mMenuHeaderPadding = lScreenHeight / 20.f;
+
+			lTitleFont.begin(core.HUD());
+			lTitleFont.drawText(lHeaderText, -lHeaderTextWidth / 2, lTextTitleHeight, -0.01f, 1.f);
+			lTitleFont.end();
+
+			final var lGameOverText0 = "You totaled your ship!";
+			final var lTextWidth0 = lFont.getStringWidth(lGameOverText0);
+			lFont.drawText(lGameOverText0, -lTextWidth0 / 2, lTextTitleHeight + 50, -0.01f, 1.f);
+
+		}
+
+		lFont.end();
+
+		mScreenPaddingTop = 250.f;
 	}
 
 }

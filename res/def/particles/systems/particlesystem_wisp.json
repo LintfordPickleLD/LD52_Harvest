@@ -28,12 +28,12 @@
 		}, 
 		{
 			"className":"ParticleRGBColorInitializer",
-			"redMin":"75",
-			"redMax":"125",
-			"greenMin":"75",
-			"greenMax":"125",
-			"blueMin":"185",
-			"blueMax":"225"
+			"redMin":"200",
+			"redMax":"245",
+			"greenMin":"200",
+			"greenMax":"245",
+			"blueMin":"200",
+			"blueMax":"245"
 		}
 	
 	],

@@ -1,7 +1,7 @@
 package lintfordpickle.harvest.screens;
 
 import lintfordpickle.harvest.data.players.PlayerManager;
-import lintfordpickle.harvest.screens.game.SurvivalGameScreen;
+import lintfordpickle.harvest.screens.game.TimeTrialGameScreen;
 import net.lintford.library.core.graphics.ColorConstants;
 import net.lintford.library.screenmanager.MenuEntry;
 import net.lintford.library.screenmanager.MenuScreen;
@@ -76,7 +76,7 @@ public class PauseScreen extends MenuScreen {
 			return;
 
 		case SCREEN_BUTTON_RESTART:
-			final var lLoadingScreen = new LoadingScreen(screenManager(), true, new SurvivalGameScreen(screenManager(), mPlayerManager));
+			final var lLoadingScreen = new LoadingScreen(screenManager(), true, new TimeTrialGameScreen(screenManager(), mPlayerManager));
 			screenManager().createLoadingScreen(new LoadingScreen(screenManager(), true, lLoadingScreen));
 			break;
 

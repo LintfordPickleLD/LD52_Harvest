@@ -4,7 +4,7 @@
 	"textureName":"TEXTURE_PARTICLES",
 	"textureFilename":"res/textures/particles/textureParticles.png",
 	"textureFilterMode":"0",
-	"particleLife":750,
+	"particleLife":1050,
 	
 	"initializers" : [ 
 	
@@ -29,10 +29,15 @@
 		},
 		{
 			"className":"ParticleRandomOffsetInitializer",
-			"minValue0":-2,
-			"maxValue0":2,
-			"minValue1":2,
-			"maxValue1":2
+			"minValue0":-20,
+			"maxValue0":20,
+			"minValue1":5,
+			"maxValue1":5
+		},
+		{
+			"className":"ParticleRandomRotationInitializer",
+			"minValue":"0.0",
+			"maxValue":"5.0"
 		}
 	
 	],
@@ -44,6 +49,15 @@
 		},
 		{
 			"className":"ParticlePhysicsModifier"
+		},
+		{
+			"className":"ParticleGravityModifier",
+			"gravity": -0.098
+		},
+		{
+			"className":"ParticleScaleModifier",
+			"minScaleAmount":"1.0",
+			"maxScaleAmount":"3.0"
 		}
 	
 	]

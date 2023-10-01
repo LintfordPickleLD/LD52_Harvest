@@ -30,7 +30,6 @@ import lintfordpickle.harvest.renderers.scene.SceneAdWallRenderer;
 import lintfordpickle.harvest.renderers.scene.SceneForegroundRenderer;
 import lintfordpickle.harvest.renderers.scene.SceneRenderer;
 import lintfordpickle.harvest.screens.PauseScreen;
-import lintfordpickle.harvest.screens.endscreens.SurvivalEndScreen;
 import lintfordpickle.harvest.screens.endscreens.TimeTrialEndScreen;
 import net.lintford.library.ConstantsPhysics;
 import net.lintford.library.controllers.core.ControllerManager;
@@ -175,19 +174,11 @@ public class TimeTrialGameScreen extends BaseGameScreen {
 		if (otherScreenHasFocus == false) {
 			final var lPlayerScoreCard = mGameState.getScoreCard(0);
 
-			if (lPlayerScoreCard.allPlatformsDelivered() || core.input().keyboard().isKeyDownTimed(GLFW.GLFW_KEY_K, this)) {
-				mGameActionEventController.finalizeInputFile();
-
-				mGameState.isGameRunning = false;
-				screenManager().addScreen(new TimeTrialEndScreen(mScreenManager, mPlayerManager, mGameState.timeAliveInMs, mGameActionEventController.fastestTimeOnExitReached()));
-				return;
-			}
-
 			if (lPlayerScoreCard.isPlayerDead && mGameStateController.gameState().isGameRunning) {
 				mGameActionEventController.finalizeInputFile();
 
 				mGameState.isGameRunning = false;
-				screenManager().addScreen(new SurvivalEndScreen(mScreenManager, mPlayerManager, true, lPlayerScoreCard.foodDelivered));
+				screenManager().addScreen(new TimeTrialEndScreen(mScreenManager, mPlayerManager, false, mGameState.timeAliveInMs, mGameActionEventController.fastestTimeOnExitReached()));
 
 				return;
 			}
@@ -197,6 +188,22 @@ public class TimeTrialGameScreen extends BaseGameScreen {
 
 	@Override
 	public void draw(LintfordCore core) {
+
+//		final var lGameCam = mGameCamera; // orig
+//
+//		final var lPlayerSessions = mPlayerSessions.playerSessions();
+//		final int lNumViewports = lPlayerSessions.size();
+//		for (int i = 0; i < lNumViewports; i++) {
+//			final var lPlayerSession = lPlayerSessions.get(i);
+//
+//			// TODO: Should be able to limit the number of player sessions to only the number of players (i.e. not always 4)
+//			if (lPlayerSession.isPlayerEnabled() == false)
+//				continue;
+//
+//			final var lPlayerViewContainer = lPlayerSession.getViewContainer();
+//			drawPlayerViewport(core, lPlayerSession, lPlayerViewContainer.renderTarget(), lPlayerViewContainer.playerCamera());
+//		}
+
 		GL11.glClearColor(0.06f, 0.18f, 0.31f, 1.0f);
 		GL11.glClear(GL11.GL_COLOR_BUFFER_BIT | GL11.GL_DEPTH_BUFFER_BIT);
 

@@ -12,7 +12,7 @@ import lintfordpickle.harvest.data.players.PlayerManager;
 import lintfordpickle.harvest.data.players.ReplayManager;
 import lintfordpickle.harvest.screens.MainMenu;
 import lintfordpickle.harvest.screens.MenuBackgroundScreen;
-import lintfordpickle.harvest.screens.game.SurvivalGameScreen;
+import lintfordpickle.harvest.screens.game.TimeTrialGameScreen;
 import net.lintford.library.GameInfo;
 import net.lintford.library.ResourceLoader;
 import net.lintford.library.controllers.music.MusicController;
@@ -102,7 +102,7 @@ public abstract class HarvestGame extends LintfordCore {
 			final var lPlayerManager = new PlayerManager();
 			final var lGhostPlayer = lPlayerManager.addNewPlayer();
 			lGhostPlayer.setPlayback("ghost.lms");
-			mScreenManager.addScreen(new SurvivalGameScreen(screenManager(), lPlayerManager));
+			mScreenManager.addScreen(new TimeTrialGameScreen(screenManager(), lPlayerManager));
 		}
 
 		final var lSplashScreen = new TimedIntroScreen(mScreenManager, "res/textures/textureHud.png", 4f);

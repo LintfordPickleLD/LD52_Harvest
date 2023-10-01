@@ -44,9 +44,12 @@ public class ShipController extends BaseController {
 	private PlayerManager mPlayerManager;
 	private ShipManager mShipManager;
 
+	private ParticleSystemInstance mFireParticleSystem;
+	private ParticleSystemInstance mSmokeParticleSystem;
+
 	private ParticleSystemInstance mJetParticleSystem;
 	private ParticleSystemInstance mJetIntenseParticleSystem;
-	
+
 	private ParticleSystemInstance mSparkParticleSystem;
 	private ParticleSystemInstance mEngineSparkParticleSystem;
 
@@ -102,9 +105,13 @@ public class ShipController extends BaseController {
 
 	private void setupParticleSystems(LintfordCore core, final ControllerManager lControllerManager) {
 		final var lParticleController = (ParticleFrameworkController) lControllerManager.getControllerByNameRequired(ParticleFrameworkController.CONTROLLER_NAME, entityGroupUid());
+
+		mFireParticleSystem = lParticleController.particleFrameworkData().particleSystemManager().createNewParticleSystemFromDefinitionName("PARTICLESYSTEM_FIRE");
+		mSmokeParticleSystem = lParticleController.particleFrameworkData().particleSystemManager().createNewParticleSystemFromDefinitionName("PARTICLESYSTEM_SMOKE");
+
 		mJetParticleSystem = lParticleController.particleFrameworkData().particleSystemManager().createNewParticleSystemFromDefinitionName("PARTICLESYSTEM_JET");
 		mJetIntenseParticleSystem = lParticleController.particleFrameworkData().particleSystemManager().createNewParticleSystemFromDefinitionName("PARTICLESYSTEM_JET_INTENSE");
-		
+
 		mSparkParticleSystem = lParticleController.particleFrameworkData().particleSystemManager().createNewParticleSystemFromDefinitionName("PARTICLESYSTEM_SPARK");
 		mEngineSparkParticleSystem = lParticleController.particleFrameworkData().particleSystemManager().createNewParticleSystemFromDefinitionName("PARTICLESYSTEM_ENGINESPARK");
 	}
@@ -241,13 +248,11 @@ public class ShipController extends BaseController {
 					if (RandomNumbers.getRandomChance(lSparkChange)) {
 						final float lMaxAngle = 10.f;
 						final float lAngleOffset = RandomNumbers.random(-lMaxAngle, lMaxAngle);
-						
+
 						final float lSparkAngleX = (float) Math.cos(lAngle + lAngleOffset);
 						final float lSparkAngleY = (float) Math.sin(lAngle + lAngleOffset);
-						
-						mEngineSparkParticleSystem.spawnParticle(lFrontEnginePositionX, lFrontEnginePositionY, 
-								( lSparkAngleX) * lSparkForce,
-								( lSparkAngleY) * lSparkForce);
+
+						mEngineSparkParticleSystem.spawnParticle(lFrontEnginePositionX, lFrontEnginePositionY, (lSparkAngleX) * lSparkForce, (lSparkAngleY) * lSparkForce);
 					}
 
 				}
@@ -261,13 +266,11 @@ public class ShipController extends BaseController {
 					if (RandomNumbers.getRandomChance(lSparkChange)) {
 						final float lMaxAngle = 10.f;
 						final float lAngleOffset = RandomNumbers.random(-lMaxAngle, lMaxAngle);
-						
+
 						final float lSparkAngleX = (float) Math.cos(lAngle + lAngleOffset);
 						final float lSparkAngleY = (float) Math.sin(lAngle + lAngleOffset);
-						
-						mEngineSparkParticleSystem.spawnParticle(lRearEnginePositionX, lRearEnginePositionY, 
-								( lSparkAngleX) * lSparkForce,
-								( lSparkAngleY) * lSparkForce);
+
+						mEngineSparkParticleSystem.spawnParticle(lRearEnginePositionX, lRearEnginePositionY, (lSparkAngleX) * lSparkForce, (lSparkAngleY) * lSparkForce);
 					}
 				}
 			}
@@ -288,13 +291,11 @@ public class ShipController extends BaseController {
 					if (RandomNumbers.getRandomChance(lSparkChange)) {
 						final float lMaxAngle = 10.f;
 						final float lAngleOffset = RandomNumbers.random(-lMaxAngle, lMaxAngle);
-						
+
 						final float lSparkAngleX = (float) Math.cos(lAngle + lAngleOffset);
 						final float lSparkAngleY = (float) Math.sin(lAngle + lAngleOffset);
-						
-						mEngineSparkParticleSystem.spawnParticle(lFrontEnginePositionX, lFrontEnginePositionY, 
-								( lSparkAngleX) * lSparkForce,
-								( lSparkAngleY) * lSparkForce);
+
+						mEngineSparkParticleSystem.spawnParticle(lFrontEnginePositionX, lFrontEnginePositionY, (lSparkAngleX) * lSparkForce, (lSparkAngleY) * lSparkForce);
 					}
 				}
 			}
@@ -314,15 +315,38 @@ public class ShipController extends BaseController {
 					if (RandomNumbers.getRandomChance(lSparkChange)) {
 						final float lMaxAngle = 10.f;
 						final float lAngleOffset = RandomNumbers.random(-lMaxAngle, lMaxAngle);
-						
+
 						final float lSparkAngleX = (float) Math.cos(lAngle + lAngleOffset);
 						final float lSparkAngleY = (float) Math.sin(lAngle + lAngleOffset);
-						
-						mEngineSparkParticleSystem.spawnParticle(lRearEnginePositionX, lRearEnginePositionY, 
-								( lSparkAngleX) * lSparkForce,
-								( lSparkAngleY) * lSparkForce);
+
+						mEngineSparkParticleSystem.spawnParticle(lRearEnginePositionX, lRearEnginePositionY, (lSparkAngleX) * lSparkForce, (lSparkAngleY) * lSparkForce);
 					}
 				}
+			}
+		}
+
+		// TODO: Particles in graphics options
+		if (DEBUG_DISABLE_PARTICLES == false) {
+			final var lStep = ship.maxHealth / 10.f;
+			final var lLowSmokeLevel = ship.maxHealth - lStep;
+			final var lMidSmokeLevel = ship.maxHealth - lStep * 2;
+			final var lHighSmokeLevel = ship.maxHealth - lStep * 3;
+
+			final float lWorldX = body.x * lUnitsToPixels;
+			final float lWorldY = body.y * lUnitsToPixels;
+
+			if (ship.health < lHighSmokeLevel && RandomNumbers.getRandomChance(30.f)) {
+				mSmokeParticleSystem.spawnParticle(lWorldX, lWorldY, 0, 0);
+				mFireParticleSystem.spawnParticle(lWorldX, lWorldY, 0, 0);
+			}
+
+			else if (ship.health < lMidSmokeLevel && RandomNumbers.getRandomChance(20.f)) {
+				mSmokeParticleSystem.spawnParticle(lWorldX, lWorldY, 0, 0);
+				mFireParticleSystem.spawnParticle(lWorldX, lWorldY, 0, 0);
+			}
+
+			else if (ship.health < lLowSmokeLevel && RandomNumbers.getRandomChance(10.f)) {
+				mSmokeParticleSystem.spawnParticle(lWorldX, lWorldY, 0, 0);
 			}
 		}
 
