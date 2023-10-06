@@ -153,7 +153,7 @@ public abstract class HarvestGame extends LintfordCore {
 		mResourceManager.musicManager().loadMusicFromMetaFile("res/music/meta.json");
 
 		var lMusic = new MusicController(mControllerManager, mResourceManager.musicManager(), LintfordCore.CORE_ENTITY_GROUP_ID);
-		lMusic.playFromGroup(0, "menu");
+		lMusic.playFromGroup(0, "game");
 
 		mScreenManager.loadResources(mResourceManager);
 	}

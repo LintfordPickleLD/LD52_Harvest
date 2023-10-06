@@ -18,6 +18,7 @@ public class AudioController extends BaseController {
 	// Variables
 	// ---------------------------------------------
 
+	private AudioManager mAudioManager;
 	private AudioFireAndForgetManager mAudioFireAndForgetManager;
 
 	// ---------------------------------------------
@@ -29,6 +30,10 @@ public class AudioController extends BaseController {
 		return mAudioFireAndForgetManager != null;
 	}
 
+	public AudioManager audioManager() {
+		return mAudioManager;
+	}
+
 	// ---------------------------------------------
 	// Constructor
 	// ---------------------------------------------
@@ -36,6 +41,7 @@ public class AudioController extends BaseController {
 	public AudioController(ControllerManager controllerManager, AudioManager audioManager, int entityGroupUid) {
 		super(controllerManager, CONTROLLER_NAME, entityGroupUid);
 
+		mAudioManager = audioManager;
 		mAudioFireAndForgetManager = new AudioFireAndForgetManager(audioManager);
 	}
 

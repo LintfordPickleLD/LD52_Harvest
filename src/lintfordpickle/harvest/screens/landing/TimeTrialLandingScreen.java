@@ -19,7 +19,7 @@ import net.lintford.library.screenmanager.entries.MenuToggleEntry;
 import net.lintford.library.screenmanager.layouts.ListLayout;
 import net.lintford.library.screenmanager.screens.LoadingScreen;
 
-public class TimeTrailLandingScreen extends MenuScreen {
+public class TimeTrialLandingScreen extends MenuScreen {
 
 	// ---------------------------------------------
 	// Constants
@@ -44,7 +44,7 @@ public class TimeTrailLandingScreen extends MenuScreen {
 	// Constructors
 	// ---------------------------------------------
 
-	public TimeTrailLandingScreen(ScreenManager pScreenManager) {
+	public TimeTrialLandingScreen(ScreenManager pScreenManager) {
 		super(pScreenManager, TITLE);
 
 		mMainMenuListBox = new ListLayout(this);

@@ -13,6 +13,7 @@ import net.lintford.library.controllers.core.ControllerManager;
 import net.lintford.library.controllers.core.particles.ParticleFrameworkController;
 import net.lintford.library.controllers.physics.PhysicsController;
 import net.lintford.library.core.LintfordCore;
+import net.lintford.library.core.debug.Debug;
 import net.lintford.library.core.geometry.partitioning.GridEntity;
 import net.lintford.library.core.maths.RandomNumbers;
 import net.lintford.library.core.maths.Vector2f;
@@ -40,6 +41,7 @@ public class ShipController extends BaseController {
 	private GameStateController mGameStateController;
 	private GameActionEventController mActionEventController;
 	private PhysicsController mPhysicsController;
+	private AudioController mAudioController;
 
 	private PlayerManager mPlayerManager;
 	private ShipManager mShipManager;
@@ -95,6 +97,7 @@ public class ShipController extends BaseController {
 		mGameStateController = (GameStateController) lControllerManager.getControllerByNameRequired(GameStateController.CONTROLLER_NAME, entityGroupUid());
 		mActionEventController = (GameActionEventController) lControllerManager.getControllerByNameRequired(GameActionEventController.CONTROLLER_NAME, entityGroupUid());
 		mPhysicsController = (PhysicsController) lControllerManager.getControllerByNameRequired(PhysicsController.CONTROLLER_NAME, entityGroupUid());
+		mAudioController = (AudioController) lControllerManager.getControllerByNameRequired(AudioController.CONTROLLER_NAME, entityGroupUid());
 
 		createShipsFromPlayerManager();
 
@@ -152,15 +155,42 @@ public class ShipController extends BaseController {
 			} else {
 				lShip.body().categoryBits(ConstantsGame.PHYSICS_WORLD_MASK_SHIP);
 				lShip.body().maskBits(ConstantsGame.PHYSICS_WORLD_MASK_WALL);
+
+				initializeShipAudio(lShip);
 			}
 
 			lPhysicsWorld.addBody(lShip.body());
+
 		}
+
+	}
+
+	private void initializeShipAudio(Ship ship) {
+		if (mAudioController == null) {
+			Debug.debugManager().logger().e(getClass().getSimpleName(), "Couldn't load ship audio - no AudioController found");
+			return;
+		}
+
+		final var lAudioManager = mAudioController.audioManager();
+		ship.audio.initialize(lAudioManager);
+
 	}
 
 	@Override
 	public void unloadController() {
+		final var lPhysicsWorld = mPhysicsController.world();
 
+		final var lShips = mShipManager.ships();
+		final var lShipCount = lShips.size();
+		for (int i = 0; i < lShipCount; i++) {
+			final var lShipInstance = lShips.get(0);
+			if (lShipInstance == null)
+				continue;
+
+			lShipInstance.audio.unloadResources();
+			lShipInstance.unloadPhysicsBody();
+
+		}
 	}
 
 	@Override
@@ -175,6 +205,20 @@ public class ShipController extends BaseController {
 			lShip.inputs.isLeftThrottle = lInputFrame.currentActionEvents.isThrottleLeftDown;
 			lShip.inputs.isRightThrottle = lInputFrame.currentActionEvents.isThrottleRightDown;
 			lShip.inputs.isUpThrottle = lInputFrame.currentActionEvents.isThrottleDown;
+
+			final float lThrottleRollingAmt = 0.5f;
+			if (lShip.inputs.isUpThrottle) {
+				lShip.rollingThrottle += core.gameTime().elapsedTimeMilli() * lThrottleRollingAmt;
+				if (lShip.rollingThrottle >= lShip.rollingThrottleMax)
+					lShip.rollingThrottle = lShip.rollingThrottleMax;
+
+			} else {
+				lShip.rollingThrottle -= core.gameTime().elapsedTimeMilli() * lThrottleRollingAmt;
+				if (lShip.rollingThrottle <= lShip.rollingThrottleMin)
+					lShip.rollingThrottle = lShip.rollingThrottleMin;
+
+			}
+
 		}
 
 		return super.handleInput(core);
@@ -193,7 +237,11 @@ public class ShipController extends BaseController {
 
 			if (lShip.isDead() && lShip.isPlayerControlled) {
 				mGameStateController.setPlayerDied(lShip.owningPlayerSessionUid);
+				continue;
 			}
+
+			if (lShip.audio.audioEnabled())
+				lShip.audio.update(core, lShip);
 		}
 	}
 

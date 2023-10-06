@@ -38,6 +38,8 @@ import net.lintford.library.controllers.physics.IPhysicsControllerCallback;
 import net.lintford.library.controllers.physics.PhysicsController;
 import net.lintford.library.core.LintfordCore;
 import net.lintford.library.core.ResourceManager;
+import net.lintford.library.core.camera.ICamera;
+import net.lintford.library.core.debug.Debug;
 import net.lintford.library.core.graphics.rendertarget.RenderTarget;
 import net.lintford.library.core.particles.ParticleFrameworkData;
 import net.lintford.library.core.physics.PhysicsWorld;
@@ -176,6 +178,8 @@ public class TimeTrialGameScreen extends BaseGameScreen {
 
 			if (lPlayerScoreCard.isPlayerDead && mGameStateController.gameState().isGameRunning) {
 				mGameActionEventController.finalizeInputFile();
+				
+				mMinimapRenderer.isActive(false);
 
 				mGameState.isGameRunning = false;
 				screenManager().addScreen(new TimeTrialEndScreen(mScreenManager, mPlayerManager, false, mGameState.timeAliveInMs, mGameActionEventController.fastestTimeOnExitReached()));
@@ -188,26 +192,35 @@ public class TimeTrialGameScreen extends BaseGameScreen {
 
 	@Override
 	public void draw(LintfordCore core) {
+		final var lGameCam = mGameCamera; // orig
 
-//		final var lGameCam = mGameCamera; // orig
+//		drawPlayerViewport(core, mRenderTarget, lGameCam);
 //
-//		final var lPlayerSessions = mPlayerSessions.playerSessions();
-//		final int lNumViewports = lPlayerSessions.size();
-//		for (int i = 0; i < lNumViewports; i++) {
-//			final var lPlayerSession = lPlayerSessions.get(i);
+//		GL11.glClearColor(0.06f, 0.18f, 0.31f, 1.0f);
+//		GL11.glClear(GL11.GL_COLOR_BUFFER_BIT | GL11.GL_DEPTH_BUFFER_BIT);
 //
-//			// TODO: Should be able to limit the number of player sessions to only the number of players (i.e. not always 4)
-//			if (lPlayerSession.isPlayerEnabled() == false)
-//				continue;
+//		// restore core
+//		core.setActiveGameCamera(lGameCam);
+//		core.config().display().reapplyGlViewport();
 //
-//			final var lPlayerViewContainer = lPlayerSession.getViewContainer();
-//			drawPlayerViewport(core, lPlayerSession, lPlayerViewContainer.renderTarget(), lPlayerViewContainer.playerCamera());
-//		}
+//		Debug.debugManager().drawers().drawRenderTargetImmediate(core, core.HUD().boundingRectangle(), -0.001f, mRenderTarget);
+
+		super.draw(core);
+		mRendererManager.drawWindowRenderers(core);
+	}
+
+	private void drawPlayerViewport(LintfordCore core, RenderTarget renderTarget, ICamera camera) {
+		renderTarget.bind();
+
+		core.setActiveGameCamera(camera);
 
 		GL11.glClearColor(0.06f, 0.18f, 0.31f, 1.0f);
 		GL11.glClear(GL11.GL_COLOR_BUFFER_BIT | GL11.GL_DEPTH_BUFFER_BIT);
 
-		super.draw(core);
+		mGameDrawLogicalCounter.incrementCounter();
+		mRendererManager.drawRenderers(core);
+
+		renderTarget.unbind();
 	}
 
 	// ---------------------------------------------
@@ -273,6 +286,7 @@ public class TimeTrialGameScreen extends BaseGameScreen {
 		mPlatformsRenderer = new PlatformsRenderer(mRendererManager, entityGroupUid());
 		mParticleFrameworkRenderer = new ParticleFrameworkRenderer(mRendererManager, entityGroupUid());
 		mSceneForegroundRenderer = new SceneForegroundRenderer(mRendererManager, entityGroupUid());
+		
 		mHudRenderer = new TimeTrialHudRenderer(mRendererManager, entityGroupUid());
 		mMinimapRenderer = new MinimapRenderer(mRendererManager, entityGroupUid());
 	}

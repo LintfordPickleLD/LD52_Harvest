@@ -2,6 +2,35 @@
 	"AudioMetaDefinitions" : [
 	
 		{
+			"soundname":"ENGINE00_TO",
+			"filepath":"res/audio/engine00/sfxEngine00_TO.ogg"
+		},
+		{
+			"soundname":"ENGINE00_00",
+			"filepath":"res/audio/engine00/sfxEngine00_00.ogg"
+		},
+		{
+			"soundname":"ENGINE00_20",
+			"filepath":"res/audio/engine00/sfxEngine00_20.ogg"
+		},
+		{
+			"soundname":"ENGINE00_40",
+			"filepath":"res/audio/engine00/sfxEngine00_40.ogg"
+		},
+		{
+			"soundname":"ENGINE00_60",
+			"filepath":"res/audio/engine00/sfxEngine00_60.ogg"
+		},
+		{
+			"soundname":"ENGINE00_80",
+			"filepath":"res/audio/engine00/sfxEngine00_80.ogg"
+		},
+		{
+			"soundname":"ENGINE00_100",
+			"filepath":"res/audio/engine00/sfxEngine00_100.ogg"
+		},
+
+		{
 			"soundname":"SOUNDGRAINPICKUP1",
 			"filepath":"res/audio/soundGrainPickupStation1.ogg"
 		},

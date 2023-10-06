@@ -16,16 +16,16 @@ import net.lintford.library.core.graphics.sprites.spritesheet.SpriteSheetManager
 import net.lintford.library.core.graphics.textures.Texture;
 import net.lintford.library.core.input.mouse.IInputProcessor;
 import net.lintford.library.core.maths.MathHelper;
-import net.lintford.library.renderers.BaseRenderer;
 import net.lintford.library.renderers.RendererManager;
+import net.lintford.library.renderers.windows.UiWindow;
 
-public class MinimapRenderer extends BaseRenderer implements IInputProcessor {
+public class MinimapRenderer extends UiWindow implements IInputProcessor {
 
 	// ---------------------------------------------
 	// Constants
 	// ---------------------------------------------
 
-	public static final String RENDERER_NAME = "Minimap Renderer";
+	public static final String RENDERER_NAME = "Minimap UiWindow";
 
 	// ---------------------------------------------
 	// Variables
@@ -55,6 +55,8 @@ public class MinimapRenderer extends BaseRenderer implements IInputProcessor {
 
 	public MinimapRenderer(RendererManager rendererManager, int entityGroupID) {
 		super(rendererManager, RENDERER_NAME, entityGroupID);
+
+		mIsOpen = true;
 	}
 
 	// ---------------------------------------------
@@ -85,9 +87,8 @@ public class MinimapRenderer extends BaseRenderer implements IInputProcessor {
 
 	@Override
 	public boolean handleInput(LintfordCore core) {
-
 		if (core.input().keyboard().isKeyDownTimed(GLFW.GLFW_KEY_M, this)) {
-			// TODO: Toggle minimap
+			mIsOpen = !mIsOpen;
 		}
 
 		return super.handleInput(core);
@@ -97,6 +98,8 @@ public class MinimapRenderer extends BaseRenderer implements IInputProcessor {
 	public void update(LintfordCore core) {
 		super.update(core);
 
+		if (mInputTimer > 0.f)
+			mInputTimer -= core.gameTime().elapsedTimeMilli();
 	}
 
 	@Override

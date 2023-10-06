@@ -2,7 +2,7 @@ package lintfordpickle.harvest.screens;
 
 import lintfordpickle.harvest.ConstantsGame;
 import lintfordpickle.harvest.controllers.replays.ReplayController;
-import lintfordpickle.harvest.screens.landing.TimeTrailLandingScreen;
+import lintfordpickle.harvest.screens.landing.TimeTrialLandingScreen;
 import net.lintford.library.core.LintfordCore;
 import net.lintford.library.core.ResourceManager;
 import net.lintford.library.core.graphics.ColorConstants;
@@ -109,7 +109,7 @@ public class MainMenu extends MenuScreen {
 	public void loadResources(ResourceManager resourceManager) {
 		super.loadResources(resourceManager);
 
-		mMenuLogoTexture = resourceManager.textureManager().loadTexture("TEXTURE_MENU_LOGO", "res/textures/textureMenuLogo.png", entityGroupUid());
+		mMenuLogoTexture = resourceManager.textureManager().loadTexture("TEXTURE_MENU_LOGO", "res/textures/textureTextHarvester.png", entityGroupUid());
 	}
 
 	@Override
@@ -126,7 +126,7 @@ public class MainMenu extends MenuScreen {
 		case SCREEN_BUTTON_PLAY: {
 			final var lTopMostScreen = mScreenManager.getTopScreen();
 
-			if (lTopMostScreen instanceof TimeTrailLandingScreen) {
+			if (lTopMostScreen instanceof TimeTrialLandingScreen) {
 				return;
 			}
 
@@ -134,7 +134,7 @@ public class MainMenu extends MenuScreen {
 				mScreenManager.removeScreen(lTopMostScreen);
 			}
 
-			screenManager().addScreen(new TimeTrailLandingScreen(mScreenManager));
+			screenManager().addScreen(new TimeTrialLandingScreen(mScreenManager));
 			break;
 		}
 
@@ -168,16 +168,21 @@ public class MainMenu extends MenuScreen {
 	public void draw(LintfordCore core) {
 		super.draw(core);
 
-		final var lCanvasBox = core.gameCamera().boundingRectangle();
+		final var lUiStructureController = mScreenManager.UiStructureController();
+		final var lHeaderRect = lUiStructureController.menuTitleRectangle();
+		final var lMenuRect = lUiStructureController.menuMainRectangle();
+
 		final var lTextureBatch = rendererManager().uiSpriteBatch();
 
+		mScreenPaddingTop = lMenuRect.height() / 6.f;
+
 		if (mMenuLogoTexture != null) {
-			lTextureBatch.begin(core.gameCamera());
+			lTextureBatch.begin(core.HUD());
 
 			final float logoWidth = mMenuLogoTexture.getTextureWidth();
 			final float logoHeight = mMenuLogoTexture.getTextureHeight();
 
-			lTextureBatch.draw(mMenuLogoTexture, 0, 0, logoWidth, logoHeight, -logoWidth * .5f, lCanvasBox.top() + 5.f, logoWidth, logoHeight, -0.01f, screenColor);
+			lTextureBatch.draw(mMenuLogoTexture, 0, 0, logoWidth, logoHeight, -logoWidth * .5f, lHeaderRect.top() + 5, logoWidth, logoHeight, -0.01f, screenColor);
 			lTextureBatch.end();
 		}
 	}

@@ -24,8 +24,13 @@ public class TimeTrialGameStateController extends GameStateController {
 		super.update(core);
 
 		final var lDelta = (float) core.gameTime().elapsedTimeMilli();
-		mGameState.gameTimer += lDelta;
-		mGameState.timeAliveInMs += lDelta;
+
+		if (mGameState.isGameRunning) {
+			mGameState.gameTimer += lDelta;
+			mGameState.timeAliveInMs += lDelta;
+
+		}
+
 	}
 
 	// ---------------------------------------------
