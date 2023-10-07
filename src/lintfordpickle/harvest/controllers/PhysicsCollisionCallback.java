@@ -1,7 +1,7 @@
 package lintfordpickle.harvest.controllers;
 
-import net.lintford.library.core.physics.collisions.ContactManifold;
-import net.lintford.library.core.physics.interfaces.ICollisionCallback;
+import net.lintfordlib.core.physics.collisions.ContactManifold;
+import net.lintfordlib.core.physics.interfaces.ICollisionCallback;
 
 public class PhysicsCollisionCallback implements ICollisionCallback {
 

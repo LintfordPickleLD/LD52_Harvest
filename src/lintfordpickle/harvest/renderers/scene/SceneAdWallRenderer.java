@@ -5,12 +5,12 @@ import org.lwjgl.opengl.GL20;
 import lintfordpickle.harvest.ConstantsGame;
 import lintfordpickle.harvest.controllers.SceneController;
 import lintfordpickle.harvest.data.scene.AdWall;
-import net.lintford.library.core.LintfordCore;
-import net.lintford.library.core.ResourceManager;
-import net.lintford.library.core.graphics.ColorConstants;
-import net.lintford.library.core.graphics.shaders.ShaderMVP_PCT;
-import net.lintford.library.renderers.BaseRenderer;
-import net.lintford.library.renderers.RendererManager;
+import net.lintfordlib.core.LintfordCore;
+import net.lintfordlib.core.ResourceManager;
+import net.lintfordlib.core.graphics.ColorConstants;
+import net.lintfordlib.core.graphics.shaders.ShaderMVP_PCT;
+import net.lintfordlib.renderers.BaseRenderer;
+import net.lintfordlib.renderers.RendererManager;
 
 public class SceneAdWallRenderer extends BaseRenderer {
 

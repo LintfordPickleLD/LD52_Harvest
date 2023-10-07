@@ -1,8 +1,8 @@
 package lintfordpickle.harvest;
 
-import net.lintford.library.GameInfo;
-import net.lintford.library.GameVersion;
-import net.lintford.library.core.debug.Debug.DebugLogLevel;
+import net.lintfordlib.GameInfo;
+import net.lintfordlib.GameVersion;
+import net.lintfordlib.core.debug.Debug.DebugLogLevel;
 
 public class GameWindow extends HarvestGame {
 

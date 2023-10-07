@@ -1,7 +1,7 @@
 package lintfordpickle.harvest.renderers.trails;
 
-import net.lintford.library.core.LintfordCore;
-import net.lintford.library.core.maths.MathHelper;
+import net.lintfordlib.core.LintfordCore;
+import net.lintfordlib.core.maths.MathHelper;
 
 public class TrailRendererComponent {
 

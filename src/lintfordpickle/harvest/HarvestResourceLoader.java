@@ -1,9 +1,9 @@
 package lintfordpickle.harvest;
 
-import net.lintford.library.ResourceLoader;
-import net.lintford.library.core.ResourceManager;
-import net.lintford.library.core.debug.Debug;
-import net.lintford.library.options.DisplayManager;
+import net.lintfordlib.ResourceLoader;
+import net.lintfordlib.core.ResourceManager;
+import net.lintfordlib.core.debug.Debug;
+import net.lintfordlib.options.DisplayManager;
 
 public class HarvestResourceLoader extends ResourceLoader {
 

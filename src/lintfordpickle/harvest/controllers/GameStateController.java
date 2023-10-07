@@ -2,9 +2,9 @@ package lintfordpickle.harvest.controllers;
 
 import lintfordpickle.harvest.data.game.GameState;
 import lintfordpickle.harvest.data.players.PlayerManager;
-import net.lintford.library.controllers.BaseController;
-import net.lintford.library.controllers.core.ControllerManager;
-import net.lintford.library.core.LintfordCore;
+import net.lintfordlib.controllers.BaseController;
+import net.lintfordlib.controllers.core.ControllerManager;
+import net.lintfordlib.core.LintfordCore;
 
 public abstract class GameStateController extends BaseController {
 

@@ -1,6 +1,6 @@
 package lintfordpickle.harvest.data.physics;
 
-import net.lintford.library.core.entities.Entity;
+import net.lintfordlib.core.entities.Entity;
 
 public class CargoPhysicsData extends Entity {
 

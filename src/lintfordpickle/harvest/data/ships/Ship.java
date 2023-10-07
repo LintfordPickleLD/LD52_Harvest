@@ -9,14 +9,16 @@ import lintfordpickle.harvest.data.cargo.CargoType;
 import lintfordpickle.harvest.data.input.ShipInput;
 import lintfordpickle.harvest.data.physics.ShipPhysicsData;
 import lintfordpickle.harvest.renderers.trails.TrailRendererComponent;
-import net.lintford.library.ConstantsPhysics;
-import net.lintford.library.core.LintfordCore;
-import net.lintford.library.core.audio.AudioManager;
-import net.lintford.library.core.audio.AudioSource;
-import net.lintford.library.core.audio.data.AudioData;
-import net.lintford.library.core.maths.MathHelper;
-import net.lintford.library.core.maths.Vector2f;
-import net.lintford.library.core.physics.dynamics.RigidBodyEntity;
+import net.lintfordlib.ConstantsPhysics;
+import net.lintfordlib.core.LintfordCore;
+import net.lintfordlib.core.audio.AudioManager;
+import net.lintfordlib.core.audio.AudioSource;
+import net.lintfordlib.core.audio.data.AudioData;
+import net.lintfordlib.core.maths.MathHelper;
+import net.lintfordlib.core.maths.Vector2f;
+import net.lintfordlib.core.physics.dynamics.RigidBody;
+import net.lintfordlib.core.physics.dynamics.RigidBodyEntity;
+import net.lintfordlib.core.physics.dynamics.ShapeType;
 
 public class Ship extends RigidBodyEntity {
 
@@ -185,7 +187,7 @@ public class Ship extends RigidBodyEntity {
 			final float lInAmt = MathHelper.scaleToRange(ship.rollingThrottle, ship.rollingThrottleMin, ship.rollingThrottleMax, 0, 100);
 			final float lStepSize = 20.f; // distance between samples on RPM scale
 
-			mPitch = MathHelper.scaleToRange(ship.rollingThrottle*.5f, ship.rollingThrottleMin, ship.rollingThrottleMax, 0.2f, 0.5f);
+			mPitch = MathHelper.scaleToRange(ship.rollingThrottle * .5f, ship.rollingThrottleMin, ship.rollingThrottleMax, 0.2f, 0.5f);
 
 			mCrossFade00Amt = getCrossFadeAmt(lInAmt, 00, lStepSize);
 			mCrossFade20Amt = getCrossFadeAmt(lInAmt, 20, lStepSize);
@@ -285,6 +287,8 @@ public class Ship extends RigidBodyEntity {
 	public float rollingThrottleMin = 0.f;
 	public float rollingThrottleMax = 100.f;
 
+	public RigidBody bodyTwo;
+
 	// ---------------------------------------------
 	// Properties
 	// ---------------------------------------------
@@ -303,8 +307,40 @@ public class Ship extends RigidBodyEntity {
 		final var lPixelsToUnits = ConstantsPhysics.PixelsToUnits();
 		final var lDensity = 2.f;
 
-		createPhysicsBodyPolygonBody(64.f * lPixelsToUnits, 32.f * lPixelsToUnits, lDensity);
+		// createPhysicsBodyPolygonBody(64.f * lPixelsToUnits, 32.f * lPixelsToUnits, lDensity);
+
+		final var width = 64.f * lPixelsToUnits;
+		final var height = 32.f * lPixelsToUnits;
+
+		final var lArea = width * height;
+		final var lMass = lArea * lDensity;
+		final var restitution = .1f;
+
+		final var staticFriction = .8f;
+		final var dynamicFriction = .5f;
+
+		final float lRadius = (float) Math.sqrt(width * width + height * height) * .5f;
+
+		// I = (1/12)m(h^2+w^2)
+		final float lInertia = (1.f / 12.f) * lMass * (height * height + width * width);
+
+		body = new RigidBody(RigidBody.getNewRigidBodyUid(), lDensity, restitution, staticFriction, dynamicFriction, lMass, lInertia, lArea, false, width, height, lRadius, ShapeType.Polygon);
+
 		body.userData(new ShipPhysicsData(entityUid));
+
+//		bodyTwo = RigidBody.createPolygonBody(16.f * lPixelsToUnits, 16.f * lPixelsToUnits, 0.03f, .1f, .8f, .5f, false);
+//
+//		final var lJoint = new StickJoint();
+//		lJoint.allowRotationA = false;
+//		lJoint.allowRotationB = false;
+//
+//		// TODO: double adds
+//
+//		lJoint.bodyA = body;
+//		lJoint.bodyB = bodyTwo;
+//
+//		body.joints.add(lJoint);
+//		bodyTwo.joints.add(lJoint);
 
 		health = maxHealth;
 	}

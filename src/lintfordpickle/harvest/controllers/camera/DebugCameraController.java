@@ -3,11 +3,11 @@ package lintfordpickle.harvest.controllers.camera;
 import org.lwjgl.glfw.GLFW;
 
 import lintfordpickle.harvest.data.ships.Ship;
-import net.lintford.library.controllers.BaseController;
-import net.lintford.library.controllers.core.ControllerManager;
-import net.lintford.library.core.LintfordCore;
-import net.lintford.library.core.camera.ICamera;
-import net.lintford.library.core.maths.Vector2f;
+import net.lintfordlib.controllers.BaseController;
+import net.lintfordlib.controllers.core.ControllerManager;
+import net.lintfordlib.core.LintfordCore;
+import net.lintfordlib.core.camera.ICamera;
+import net.lintfordlib.core.maths.Vector2f;
 
 public class DebugCameraController extends BaseController {
 

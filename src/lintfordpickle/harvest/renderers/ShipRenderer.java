@@ -6,17 +6,17 @@ import lintfordpickle.harvest.data.cargo.CargoType;
 import lintfordpickle.harvest.data.ships.Ship;
 import lintfordpickle.harvest.data.ships.Ship.Inventory;
 import lintfordpickle.harvest.renderers.trails.TrailBatchRenderer;
-import net.lintford.library.ConstantsPhysics;
-import net.lintford.library.core.LintfordCore;
-import net.lintford.library.core.ResourceManager;
-import net.lintford.library.core.graphics.ColorConstants;
-import net.lintford.library.core.graphics.batching.SpriteBatch;
-import net.lintford.library.core.graphics.sprites.SpriteFrame;
-import net.lintford.library.core.graphics.sprites.spritesheet.SpriteSheetDefinition;
-import net.lintford.library.core.maths.MathHelper;
-import net.lintford.library.core.maths.Vector2f;
-import net.lintford.library.renderers.BaseRenderer;
-import net.lintford.library.renderers.RendererManager;
+import net.lintfordlib.ConstantsPhysics;
+import net.lintfordlib.core.LintfordCore;
+import net.lintfordlib.core.ResourceManager;
+import net.lintfordlib.core.graphics.ColorConstants;
+import net.lintfordlib.core.graphics.batching.SpriteBatch;
+import net.lintfordlib.core.graphics.sprites.SpriteFrame;
+import net.lintfordlib.core.graphics.sprites.spritesheet.SpriteSheetDefinition;
+import net.lintfordlib.core.maths.MathHelper;
+import net.lintfordlib.core.maths.Vector2f;
+import net.lintfordlib.renderers.BaseRenderer;
+import net.lintfordlib.renderers.RendererManager;
 
 public class ShipRenderer extends BaseRenderer {
 

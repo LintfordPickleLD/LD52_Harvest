@@ -12,14 +12,14 @@ import lintfordpickle.harvest.data.actionevents.GameActionEventMap;
 import lintfordpickle.harvest.data.actionevents.ActionFrame;
 import lintfordpickle.harvest.data.players.PlayerManager;
 import lintfordpickle.harvest.data.players.ReplayManager;
-import net.lintford.library.controllers.actionevents.ActionEventController;
-import net.lintford.library.controllers.core.ControllerManager;
-import net.lintford.library.core.LintfordCore;
-import net.lintford.library.core.actionevents.ActionEventManager.PlaybackMode;
-import net.lintford.library.core.debug.Debug;
-import net.lintford.library.core.input.gamepad.IGamepadListener;
-import net.lintford.library.core.input.gamepad.InputGamepad;
-import net.lintford.library.core.time.LogicialCounter;
+import net.lintfordlib.controllers.actionevents.ActionEventController;
+import net.lintfordlib.controllers.core.ControllerManager;
+import net.lintfordlib.core.LintfordCore;
+import net.lintfordlib.core.actionevents.ActionEventManager.PlaybackMode;
+import net.lintfordlib.core.debug.Debug;
+import net.lintfordlib.core.input.gamepad.IGamepadListener;
+import net.lintfordlib.core.input.gamepad.InputGamepad;
+import net.lintfordlib.core.time.LogicialCounter;
 
 public class GameActionEventController extends ActionEventController<ActionFrame> implements IGamepadListener {
 

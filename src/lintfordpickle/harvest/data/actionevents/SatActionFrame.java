@@ -1,6 +1,6 @@
 package lintfordpickle.harvest.data.actionevents;
 
-import net.lintford.library.core.actionevents.IActionFrame;
+import net.lintfordlib.core.actionevents.IActionFrame;
 
 public class SatActionFrame implements IActionFrame {
 

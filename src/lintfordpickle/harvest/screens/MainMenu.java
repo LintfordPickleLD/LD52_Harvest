@@ -3,17 +3,17 @@ package lintfordpickle.harvest.screens;
 import lintfordpickle.harvest.ConstantsGame;
 import lintfordpickle.harvest.controllers.replays.ReplayController;
 import lintfordpickle.harvest.screens.landing.TimeTrialLandingScreen;
-import net.lintford.library.core.LintfordCore;
-import net.lintford.library.core.ResourceManager;
-import net.lintford.library.core.graphics.ColorConstants;
-import net.lintford.library.core.graphics.textures.Texture;
-import net.lintford.library.screenmanager.MenuEntry;
-import net.lintford.library.screenmanager.MenuScreen;
-import net.lintford.library.screenmanager.ScreenManager;
-import net.lintford.library.screenmanager.ScreenManagerConstants.FILLTYPE;
-import net.lintford.library.screenmanager.ScreenManagerConstants.LAYOUT_ALIGNMENT;
-import net.lintford.library.screenmanager.ScreenManagerConstants.LAYOUT_WIDTH;
-import net.lintford.library.screenmanager.layouts.ListLayout;
+import net.lintfordlib.core.LintfordCore;
+import net.lintfordlib.core.ResourceManager;
+import net.lintfordlib.core.graphics.ColorConstants;
+import net.lintfordlib.core.graphics.textures.Texture;
+import net.lintfordlib.screenmanager.MenuEntry;
+import net.lintfordlib.screenmanager.MenuScreen;
+import net.lintfordlib.screenmanager.ScreenManager;
+import net.lintfordlib.screenmanager.ScreenManagerConstants.FILLTYPE;
+import net.lintfordlib.screenmanager.ScreenManagerConstants.LAYOUT_ALIGNMENT;
+import net.lintfordlib.screenmanager.ScreenManagerConstants.LAYOUT_WIDTH;
+import net.lintfordlib.screenmanager.layouts.ListLayout;
 
 public class MainMenu extends MenuScreen {
 

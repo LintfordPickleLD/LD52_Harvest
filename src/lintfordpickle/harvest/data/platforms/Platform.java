@@ -1,7 +1,7 @@
 package lintfordpickle.harvest.data.platforms;
 
-import net.lintford.library.core.geometry.Rectangle;
-import net.lintford.library.core.graphics.sprites.SpriteInstance;
+import net.lintfordlib.core.geometry.Rectangle;
+import net.lintfordlib.core.graphics.sprites.SpriteInstance;
 
 public class Platform extends Rectangle {
 

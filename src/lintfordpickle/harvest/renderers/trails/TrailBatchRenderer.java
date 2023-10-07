@@ -10,13 +10,13 @@ import org.lwjgl.opengl.GL20;
 import org.lwjgl.opengl.GL30;
 import org.lwjgl.system.MemoryUtil;
 
-import net.lintford.library.core.LintfordCore;
-import net.lintford.library.core.ResourceManager;
-import net.lintford.library.core.camera.ICamera;
-import net.lintford.library.core.debug.Debug;
-import net.lintford.library.core.debug.stats.DebugStats;
-import net.lintford.library.core.graphics.textures.Texture;
-import net.lintford.library.core.maths.Matrix4f;
+import net.lintfordlib.core.LintfordCore;
+import net.lintfordlib.core.ResourceManager;
+import net.lintfordlib.core.camera.ICamera;
+import net.lintfordlib.core.debug.Debug;
+import net.lintfordlib.core.debug.stats.DebugStats;
+import net.lintfordlib.core.graphics.textures.Texture;
+import net.lintfordlib.core.maths.Matrix4f;
 
 public class TrailBatchRenderer {
 

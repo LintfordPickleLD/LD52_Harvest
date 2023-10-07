@@ -3,8 +3,8 @@ package lintfordpickle.harvest.controllers;
 import lintfordpickle.harvest.data.cargo.Cargo;
 import lintfordpickle.harvest.data.cargo.CargoManager;
 import lintfordpickle.harvest.data.cargo.CargoType;
-import net.lintford.library.controllers.BaseController;
-import net.lintford.library.controllers.core.ControllerManager;
+import net.lintfordlib.controllers.BaseController;
+import net.lintfordlib.controllers.core.ControllerManager;
 
 public class CargoController extends BaseController {
 

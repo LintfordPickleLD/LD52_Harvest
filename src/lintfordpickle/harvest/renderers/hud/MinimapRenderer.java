@@ -7,17 +7,17 @@ import lintfordpickle.harvest.controllers.GameStateController;
 import lintfordpickle.harvest.controllers.PlatformController;
 import lintfordpickle.harvest.controllers.ShipController;
 import lintfordpickle.harvest.data.platforms.PlatformType;
-import net.lintford.library.ConstantsPhysics;
-import net.lintford.library.core.LintfordCore;
-import net.lintford.library.core.ResourceManager;
-import net.lintford.library.core.graphics.ColorConstants;
-import net.lintford.library.core.graphics.sprites.spritesheet.SpriteSheetDefinition;
-import net.lintford.library.core.graphics.sprites.spritesheet.SpriteSheetManager;
-import net.lintford.library.core.graphics.textures.Texture;
-import net.lintford.library.core.input.mouse.IInputProcessor;
-import net.lintford.library.core.maths.MathHelper;
-import net.lintford.library.renderers.RendererManager;
-import net.lintford.library.renderers.windows.UiWindow;
+import net.lintfordlib.ConstantsPhysics;
+import net.lintfordlib.core.LintfordCore;
+import net.lintfordlib.core.ResourceManager;
+import net.lintfordlib.core.graphics.ColorConstants;
+import net.lintfordlib.core.graphics.sprites.spritesheet.SpriteSheetDefinition;
+import net.lintfordlib.core.graphics.sprites.spritesheet.SpriteSheetManager;
+import net.lintfordlib.core.graphics.textures.Texture;
+import net.lintfordlib.core.input.mouse.IInputProcessor;
+import net.lintfordlib.core.maths.MathHelper;
+import net.lintfordlib.renderers.RendererManager;
+import net.lintfordlib.renderers.windows.UiWindow;
 
 public class MinimapRenderer extends UiWindow implements IInputProcessor {
 

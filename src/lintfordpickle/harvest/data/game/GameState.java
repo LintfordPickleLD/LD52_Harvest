@@ -4,7 +4,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 import lintfordpickle.harvest.ConstantsGame;
-import net.lintford.library.core.debug.Debug;
+import net.lintfordlib.core.debug.Debug;
 
 public class GameState {
 

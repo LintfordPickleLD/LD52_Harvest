@@ -2,8 +2,8 @@ package lintfordpickle.harvest.controllers;
 
 import lintfordpickle.harvest.data.scene.AdWall;
 import lintfordpickle.harvest.data.scene.backgrounds.SceneManager;
-import net.lintford.library.controllers.BaseController;
-import net.lintford.library.controllers.core.ControllerManager;
+import net.lintfordlib.controllers.BaseController;
+import net.lintfordlib.controllers.core.ControllerManager;
 
 public class SceneController extends BaseController {
 

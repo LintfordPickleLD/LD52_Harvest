@@ -4,12 +4,12 @@ import org.lwjgl.glfw.GLFW;
 
 import lintfordpickle.harvest.controllers.SceneController;
 import lintfordpickle.harvest.data.ships.Ship;
-import net.lintford.library.ConstantsPhysics;
-import net.lintford.library.controllers.BaseController;
-import net.lintford.library.controllers.core.ControllerManager;
-import net.lintford.library.core.LintfordCore;
-import net.lintford.library.core.camera.ICamera;
-import net.lintford.library.core.maths.Vector2f;
+import net.lintfordlib.ConstantsPhysics;
+import net.lintfordlib.controllers.BaseController;
+import net.lintfordlib.controllers.core.ControllerManager;
+import net.lintfordlib.core.LintfordCore;
+import net.lintfordlib.core.camera.ICamera;
+import net.lintfordlib.core.maths.Vector2f;
 
 public class CameraShipChaseController extends BaseController {
 

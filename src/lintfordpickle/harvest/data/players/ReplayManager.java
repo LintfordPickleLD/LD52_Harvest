@@ -9,7 +9,7 @@ import java.nio.ByteBuffer;
 import org.lwjgl.system.MemoryUtil;
 
 import lintfordpickle.harvest.data.actionevents.ActionEventFileHeader;
-import net.lintford.library.core.debug.Debug;
+import net.lintfordlib.core.debug.Debug;
 
 public class ReplayManager {
 

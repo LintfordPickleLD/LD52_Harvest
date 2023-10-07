@@ -5,19 +5,19 @@ import lintfordpickle.harvest.controllers.replays.ReplayController;
 import lintfordpickle.harvest.data.players.PlayerManager;
 import lintfordpickle.harvest.data.players.ReplayManager;
 import lintfordpickle.harvest.screens.game.TimeTrialGameScreen;
-import net.lintford.library.core.graphics.Color;
-import net.lintford.library.core.time.TimeConstants;
-import net.lintford.library.screenmanager.MenuEntry;
-import net.lintford.library.screenmanager.MenuScreen;
-import net.lintford.library.screenmanager.ScreenManager;
-import net.lintford.library.screenmanager.ScreenManagerConstants.FILLTYPE;
-import net.lintford.library.screenmanager.ScreenManagerConstants.LAYOUT_ALIGNMENT;
-import net.lintford.library.screenmanager.ScreenManagerConstants.LAYOUT_WIDTH;
-import net.lintford.library.screenmanager.entries.MenuInputEntry;
-import net.lintford.library.screenmanager.entries.MenuLabelEntry;
-import net.lintford.library.screenmanager.entries.MenuToggleEntry;
-import net.lintford.library.screenmanager.layouts.ListLayout;
-import net.lintford.library.screenmanager.screens.LoadingScreen;
+import net.lintfordlib.core.graphics.Color;
+import net.lintfordlib.core.time.TimeConstants;
+import net.lintfordlib.screenmanager.MenuEntry;
+import net.lintfordlib.screenmanager.MenuScreen;
+import net.lintfordlib.screenmanager.ScreenManager;
+import net.lintfordlib.screenmanager.ScreenManagerConstants.FILLTYPE;
+import net.lintfordlib.screenmanager.ScreenManagerConstants.LAYOUT_ALIGNMENT;
+import net.lintfordlib.screenmanager.ScreenManagerConstants.LAYOUT_WIDTH;
+import net.lintfordlib.screenmanager.entries.MenuInputEntry;
+import net.lintfordlib.screenmanager.entries.MenuLabelEntry;
+import net.lintfordlib.screenmanager.entries.MenuToggleEntry;
+import net.lintfordlib.screenmanager.layouts.ListLayout;
+import net.lintfordlib.screenmanager.screens.LoadingScreen;
 
 public class TimeTrialLandingScreen extends MenuScreen {
 

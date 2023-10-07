@@ -2,8 +2,8 @@ package lintfordpickle.harvest.renderers.trails;
 
 import org.lwjgl.opengl.GL20;
 
-import net.lintford.library.core.LintfordCore;
-import net.lintford.library.core.graphics.shaders.ShaderMVP_PCT;
+import net.lintfordlib.core.LintfordCore;
+import net.lintfordlib.core.graphics.shaders.ShaderMVP_PCT;
 
 public class TrailShader extends ShaderMVP_PCT {
 

@@ -4,10 +4,10 @@ import java.nio.ByteBuffer;
 
 import lintfordpickle.harvest.data.actionevents.SatActionEventMap;
 import lintfordpickle.harvest.data.actionevents.SatActionFrame;
-import net.lintford.library.controllers.actionevents.ActionEventController;
-import net.lintford.library.controllers.core.ControllerManager;
-import net.lintford.library.core.LintfordCore;
-import net.lintford.library.core.time.LogicialCounter;
+import net.lintfordlib.controllers.actionevents.ActionEventController;
+import net.lintfordlib.controllers.core.ControllerManager;
+import net.lintfordlib.core.LintfordCore;
+import net.lintfordlib.core.time.LogicialCounter;
 
 public class SatActionEventController extends ActionEventController<SatActionFrame> {
 

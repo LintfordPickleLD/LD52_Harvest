@@ -1,10 +1,10 @@
 package lintfordpickle.harvest.controllers;
 
-import net.lintford.library.controllers.BaseController;
-import net.lintford.library.controllers.core.ControllerManager;
-import net.lintford.library.core.LintfordCore;
-import net.lintford.library.core.audio.AudioFireAndForgetManager;
-import net.lintford.library.core.audio.AudioManager;
+import net.lintfordlib.controllers.BaseController;
+import net.lintfordlib.controllers.core.ControllerManager;
+import net.lintfordlib.core.LintfordCore;
+import net.lintfordlib.core.audio.AudioFireAndForgetManager;
+import net.lintfordlib.core.audio.AudioManager;
 
 public class AudioController extends BaseController {
 

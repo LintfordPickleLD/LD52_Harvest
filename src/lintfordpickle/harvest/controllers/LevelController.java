@@ -4,13 +4,13 @@ import lintfordpickle.harvest.ConstantsGame;
 import lintfordpickle.harvest.data.platforms.Platform;
 import lintfordpickle.harvest.data.platforms.PlatformManager;
 import lintfordpickle.harvest.data.platforms.PlatformType;
-import net.lintford.library.ConstantsPhysics;
-import net.lintford.library.controllers.BaseController;
-import net.lintford.library.controllers.core.ControllerManager;
-import net.lintford.library.controllers.physics.PhysicsController;
-import net.lintford.library.core.LintfordCore;
-import net.lintford.library.core.physics.PhysicsWorld;
-import net.lintford.library.core.physics.dynamics.RigidBody;
+import net.lintfordlib.ConstantsPhysics;
+import net.lintfordlib.controllers.BaseController;
+import net.lintfordlib.controllers.core.ControllerManager;
+import net.lintfordlib.controllers.physics.PhysicsController;
+import net.lintfordlib.core.LintfordCore;
+import net.lintfordlib.core.physics.PhysicsWorld;
+import net.lintfordlib.core.physics.dynamics.RigidBody;
 
 public class LevelController extends BaseController {
 

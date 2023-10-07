@@ -4,16 +4,16 @@ import lintfordpickle.harvest.ConstantsGame;
 import lintfordpickle.harvest.controllers.GameStateController;
 import lintfordpickle.harvest.controllers.ShipController;
 import lintfordpickle.harvest.data.game.GameState;
-import net.lintford.library.core.LintfordCore;
-import net.lintford.library.core.ResourceManager;
-import net.lintford.library.core.graphics.ColorConstants;
-import net.lintford.library.core.graphics.batching.SpriteBatch;
-import net.lintford.library.core.graphics.fonts.FontUnit;
-import net.lintford.library.core.graphics.sprites.spritesheet.SpriteSheetDefinition;
-import net.lintford.library.core.time.TimeConstants;
-import net.lintford.library.renderers.RendererManager;
-import net.lintford.library.renderers.windows.UiWindow;
-import net.lintford.library.renderers.windows.components.UiBar;
+import net.lintfordlib.core.LintfordCore;
+import net.lintfordlib.core.ResourceManager;
+import net.lintfordlib.core.graphics.ColorConstants;
+import net.lintfordlib.core.graphics.batching.SpriteBatch;
+import net.lintfordlib.core.graphics.fonts.FontUnit;
+import net.lintfordlib.core.graphics.sprites.spritesheet.SpriteSheetDefinition;
+import net.lintfordlib.core.time.TimeConstants;
+import net.lintfordlib.renderers.RendererManager;
+import net.lintfordlib.renderers.windows.UiWindow;
+import net.lintfordlib.renderers.windows.components.UiBar;
 
 public class TimeTrialHudRenderer extends UiWindow {
 

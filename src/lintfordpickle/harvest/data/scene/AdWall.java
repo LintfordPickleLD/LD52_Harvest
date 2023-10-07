@@ -1,6 +1,6 @@
 package lintfordpickle.harvest.data.scene;
 
-import net.lintford.library.core.geometry.Rectangle;
+import net.lintfordlib.core.geometry.Rectangle;
 
 public class AdWall extends Rectangle {
 

@@ -4,15 +4,15 @@ import lintfordpickle.harvest.data.players.PlayerManager;
 import lintfordpickle.harvest.screens.MainMenu;
 import lintfordpickle.harvest.screens.MenuBackgroundScreen;
 import lintfordpickle.harvest.screens.game.TimeTrialGameScreen;
-import net.lintford.library.core.LintfordCore;
-import net.lintford.library.core.ResourceManager;
-import net.lintford.library.core.graphics.textures.Texture;
-import net.lintford.library.core.time.TimeConstants;
-import net.lintford.library.screenmanager.MenuEntry;
-import net.lintford.library.screenmanager.MenuScreen;
-import net.lintford.library.screenmanager.ScreenManager;
-import net.lintford.library.screenmanager.layouts.ListLayout;
-import net.lintford.library.screenmanager.screens.LoadingScreen;
+import net.lintfordlib.core.LintfordCore;
+import net.lintfordlib.core.ResourceManager;
+import net.lintfordlib.core.graphics.textures.Texture;
+import net.lintfordlib.core.time.TimeConstants;
+import net.lintfordlib.screenmanager.MenuEntry;
+import net.lintfordlib.screenmanager.MenuScreen;
+import net.lintfordlib.screenmanager.ScreenManager;
+import net.lintfordlib.screenmanager.layouts.ListLayout;
+import net.lintfordlib.screenmanager.screens.LoadingScreen;
 
 public class TimeTrialEndScreen extends MenuScreen {
 

@@ -1,6 +1,6 @@
 package lintfordpickle.harvest;
 
-import net.lintford.library.core.ResourceGroupProvider;
+import net.lintfordlib.core.ResourceGroupProvider;
 
 public class ConstantsGame {
 
@@ -45,7 +45,7 @@ public class ConstantsGame {
 
 	public static final boolean IS_DEBUG_MODE = false;
 	public static final boolean CAMERA_DEBUG_MODE = false;
-	public static final boolean PHYICS_DEBUG_MODE = false;
+	public static final boolean PHYICS_DEBUG_MODE = true;
 	public static final boolean SHIP_DEBUG_MODE = false;
 
 	// produces a lot of log data

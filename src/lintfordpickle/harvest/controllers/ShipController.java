@@ -7,17 +7,17 @@ import lintfordpickle.harvest.data.physics.ShipPhysicsData;
 import lintfordpickle.harvest.data.players.PlayerManager;
 import lintfordpickle.harvest.data.ships.Ship;
 import lintfordpickle.harvest.data.ships.ShipManager;
-import net.lintford.library.ConstantsPhysics;
-import net.lintford.library.controllers.BaseController;
-import net.lintford.library.controllers.core.ControllerManager;
-import net.lintford.library.controllers.core.particles.ParticleFrameworkController;
-import net.lintford.library.controllers.physics.PhysicsController;
-import net.lintford.library.core.LintfordCore;
-import net.lintford.library.core.debug.Debug;
-import net.lintford.library.core.geometry.partitioning.GridEntity;
-import net.lintford.library.core.maths.RandomNumbers;
-import net.lintford.library.core.maths.Vector2f;
-import net.lintford.library.core.particles.particlesystems.ParticleSystemInstance;
+import net.lintfordlib.ConstantsPhysics;
+import net.lintfordlib.controllers.BaseController;
+import net.lintfordlib.controllers.core.ControllerManager;
+import net.lintfordlib.controllers.core.particles.ParticleFrameworkController;
+import net.lintfordlib.controllers.physics.PhysicsController;
+import net.lintfordlib.core.LintfordCore;
+import net.lintfordlib.core.debug.Debug;
+import net.lintfordlib.core.geometry.partitioning.GridEntity;
+import net.lintfordlib.core.maths.RandomNumbers;
+import net.lintfordlib.core.maths.Vector2f;
+import net.lintfordlib.core.particles.particlesystems.ParticleSystemInstance;
 
 public class ShipController extends BaseController {
 
@@ -146,6 +146,7 @@ public class ShipController extends BaseController {
 			final float lShipPositionY = 13.1f;
 
 			lShip.body().moveTo(lShipPositionX, lShipPositionY);
+			lShip.bodyTwo.moveTo(lShipPositionX, lShipPositionY);
 
 			mShipManager.ships().add(lShip);
 
@@ -160,7 +161,7 @@ public class ShipController extends BaseController {
 			}
 
 			lPhysicsWorld.addBody(lShip.body());
-
+			lPhysicsWorld.addBody(lShip.bodyTwo);
 		}
 
 	}

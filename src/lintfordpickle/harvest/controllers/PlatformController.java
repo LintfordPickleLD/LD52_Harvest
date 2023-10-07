@@ -5,11 +5,11 @@ import lintfordpickle.harvest.data.game.GameState.GameMode;
 import lintfordpickle.harvest.data.platforms.Platform;
 import lintfordpickle.harvest.data.platforms.PlatformManager;
 import lintfordpickle.harvest.data.ships.Ship;
-import net.lintford.library.ConstantsPhysics;
-import net.lintford.library.controllers.BaseController;
-import net.lintford.library.controllers.core.ControllerManager;
-import net.lintford.library.core.LintfordCore;
-import net.lintford.library.core.debug.Debug;
+import net.lintfordlib.ConstantsPhysics;
+import net.lintfordlib.controllers.BaseController;
+import net.lintfordlib.controllers.core.ControllerManager;
+import net.lintfordlib.core.LintfordCore;
+import net.lintfordlib.core.debug.Debug;
 
 public class PlatformController extends BaseController {
 

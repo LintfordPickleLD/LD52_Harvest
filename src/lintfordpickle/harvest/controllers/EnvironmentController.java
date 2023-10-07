@@ -1,12 +1,12 @@
 package lintfordpickle.harvest.controllers;
 
-import net.lintford.library.controllers.BaseController;
-import net.lintford.library.controllers.core.ControllerManager;
-import net.lintford.library.controllers.core.particles.ParticleFrameworkController;
-import net.lintford.library.core.LintfordCore;
-import net.lintford.library.core.camera.ICamera;
-import net.lintford.library.core.maths.RandomNumbers;
-import net.lintford.library.core.particles.particlesystems.ParticleSystemInstance;
+import net.lintfordlib.controllers.BaseController;
+import net.lintfordlib.controllers.core.ControllerManager;
+import net.lintfordlib.controllers.core.particles.ParticleFrameworkController;
+import net.lintfordlib.core.LintfordCore;
+import net.lintfordlib.core.camera.ICamera;
+import net.lintfordlib.core.maths.RandomNumbers;
+import net.lintfordlib.core.particles.particlesystems.ParticleSystemInstance;
 
 public class EnvironmentController extends BaseController {
 

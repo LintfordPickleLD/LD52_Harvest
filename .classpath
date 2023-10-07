@@ -7,6 +7,6 @@
 		</attributes>
 	</classpathentry>
 	<classpathentry kind="con" path="org.eclipse.jdt.USER_LIBRARY/LWJGL3"/>
-	<classpathentry combineaccessrules="false" kind="src" path="/LDLibrary"/>
+	<classpathentry combineaccessrules="false" kind="src" path="/LintfordLib"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>

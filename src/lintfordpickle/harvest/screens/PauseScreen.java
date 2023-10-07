@@ -2,13 +2,13 @@ package lintfordpickle.harvest.screens;
 
 import lintfordpickle.harvest.data.players.PlayerManager;
 import lintfordpickle.harvest.screens.game.TimeTrialGameScreen;
-import net.lintford.library.core.graphics.ColorConstants;
-import net.lintford.library.screenmanager.MenuEntry;
-import net.lintford.library.screenmanager.MenuScreen;
-import net.lintford.library.screenmanager.ScreenManager;
-import net.lintford.library.screenmanager.ScreenManagerConstants.FILLTYPE;
-import net.lintford.library.screenmanager.layouts.ListLayout;
-import net.lintford.library.screenmanager.screens.LoadingScreen;
+import net.lintfordlib.core.graphics.ColorConstants;
+import net.lintfordlib.screenmanager.MenuEntry;
+import net.lintfordlib.screenmanager.MenuScreen;
+import net.lintfordlib.screenmanager.ScreenManager;
+import net.lintfordlib.screenmanager.ScreenManagerConstants.FILLTYPE;
+import net.lintfordlib.screenmanager.layouts.ListLayout;
+import net.lintfordlib.screenmanager.screens.LoadingScreen;
 
 public class PauseScreen extends MenuScreen {
 
