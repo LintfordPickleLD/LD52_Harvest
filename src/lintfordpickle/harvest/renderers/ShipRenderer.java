@@ -130,9 +130,9 @@ public class ShipRenderer extends BaseRenderer {
 
 			final var lBody = ship.body();
 
-			final var shipPosX = lBody.x * lUnitsToPixels;
-			final var shipPosY = lBody.y * lUnitsToPixels;
-			final var shipPosRot = lBody.angle;
+			final var shipPosX = lBody.transform.p.x * lUnitsToPixels;
+			final var shipPosY = lBody.transform.p.y * lUnitsToPixels;
+			final var shipPosRot = lBody.transform.angle;
 
 			var lShipColor = ColorConstants.WHITE;
 			if (ship.isGhostShip)
@@ -201,9 +201,9 @@ public class ShipRenderer extends BaseRenderer {
 				lSpriteFrameFlare = mShipSpritesheet.getSpriteFrame("TEXTURECARGOWHEAT");
 			}
 
-			final var shipPosX = lBody.x * lUnitsToPixels;
-			final var shipPosY = lBody.y * lUnitsToPixels;
-			final var shipRot = lBody.angle;
+			final var shipPosX = lBody.transform.p.x * lUnitsToPixels;
+			final var shipPosY = lBody.transform.p.y * lUnitsToPixels;
+			final var shipRot = lBody.transform.angle;
 
 			float lLocalHalfX = xx - i * 11;
 			float lLocalHalfY = yy;
@@ -234,12 +234,12 @@ public class ShipRenderer extends BaseRenderer {
 			final var shipVX = String.format(java.util.Locale.US, "%.1f", lBody.vx);
 			final var shipVY = String.format(java.util.Locale.US, "%.1f", lBody.vy);
 
-			final var shipX = String.format(java.util.Locale.US, "%.1f", lBody.x);
-			final var shipY = String.format(java.util.Locale.US, "%.1f", lBody.y);
+			final var shipX = String.format(java.util.Locale.US, "%.1f", lBody.transform.p.x);
+			final var shipY = String.format(java.util.Locale.US, "%.1f", lBody.transform.p.y);
 
 			final var shipTorque = String.format(java.util.Locale.US, "%.1f", lBody.torque);
-			final var shipAV = String.format(java.util.Locale.US, "%.1f", lBody.angularVelocity);
-			final var shipR = String.format(java.util.Locale.US, "%.3f", lBody.angle);
+			final var shipAV = String.format(java.util.Locale.US, "%.1f", lBody.angularVelocity());
+			final var shipR = String.format(java.util.Locale.US, "%.3f", lBody.transform.angle);
 
 			final var lFontScale = 1.0f;
 			final var lLineHeight = 18.f;

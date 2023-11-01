@@ -18,7 +18,7 @@ import net.lintfordlib.core.maths.MathHelper;
 import net.lintfordlib.core.maths.Vector2f;
 import net.lintfordlib.core.physics.dynamics.RigidBody;
 import net.lintfordlib.core.physics.dynamics.RigidBodyEntity;
-import net.lintfordlib.core.physics.dynamics.ShapeType;
+import net.lintfordlib.core.physics.shapes.PolygonShape;
 
 public class Ship extends RigidBodyEntity {
 
@@ -287,8 +287,6 @@ public class Ship extends RigidBodyEntity {
 	public float rollingThrottleMin = 0.f;
 	public float rollingThrottleMax = 100.f;
 
-	public RigidBody bodyTwo;
-
 	// ---------------------------------------------
 	// Properties
 	// ---------------------------------------------
@@ -324,8 +322,8 @@ public class Ship extends RigidBodyEntity {
 		// I = (1/12)m(h^2+w^2)
 		final float lInertia = (1.f / 12.f) * lMass * (height * height + width * width);
 
-		body = new RigidBody(RigidBody.getNewRigidBodyUid(), lDensity, restitution, staticFriction, dynamicFriction, lMass, lInertia, lArea, false, width, height, lRadius, ShapeType.Polygon);
-
+		body = new RigidBody(false);
+		body.addShape(PolygonShape.createBoxShape(width, height, 0.f, lDensity, restitution, staticFriction, staticFriction));
 		body.userData(new ShipPhysicsData(entityUid));
 
 //		bodyTwo = RigidBody.createPolygonBody(16.f * lPixelsToUnits, 16.f * lPixelsToUnits, 0.03f, .1f, .8f, .5f, false);
@@ -353,8 +351,8 @@ public class Ship extends RigidBodyEntity {
 
 		final var lPixelsToUnits = ConstantsPhysics.PixelsToUnits();
 
-		final float s = (float) Math.sin(body.angle);
-		final float c = (float) Math.cos(body.angle);
+		final float s = (float) Math.sin(body.transform.angle);
+		final float c = (float) Math.cos(body.transform.angle);
 
 		final float axleLengthHalf = 24f * lPixelsToUnits;
 		final float leftThrottleAmt = (inputs.isRightThrottle || inputs.isUpThrottle) ? 1.f : 0.f;
@@ -368,8 +366,8 @@ public class Ship extends RigidBodyEntity {
 		final float lFrontX = axleLengthHalf * c - axleHeightHalfR * s;
 		final float lFrontY = axleLengthHalf * s + axleHeightHalfR * c;
 
-		rearEngine.set(body.x + lRearX, body.y + lRearY);
-		frontEngine.set(body.x + lFrontX, body.y + lFrontY);
+		rearEngine.set(body.transform.p.x + lRearX, body.transform.p.y + lRearY);
+		frontEngine.set(body.transform.p.x + lFrontX, body.transform.p.y + lFrontY);
 
 		updateEngineTrails(core);
 
@@ -385,10 +383,10 @@ public class Ship extends RigidBodyEntity {
 		final float frontWorldY = frontEngine.y * lUnitsToPixels;
 
 		mFrontTrailRendererComponent.color(engineColorR, engineColorG, engineColorB, .5f);
-		mFrontTrailRendererComponent.updateTrail(core, rearWorldX, rearWorldY, body().angle);
+		mFrontTrailRendererComponent.updateTrail(core, rearWorldX, rearWorldY, body().transform.angle);
 
 		mRearTrailRendererComponent.color(engineColorR, engineColorG, engineColorB, .5f);
-		mRearTrailRendererComponent.updateTrail(core, frontWorldX, frontWorldY, body().angle);
+		mRearTrailRendererComponent.updateTrail(core, frontWorldX, frontWorldY, body().transform.angle);
 	}
 
 	public void applyDamage(int amt) {

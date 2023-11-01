@@ -82,8 +82,8 @@ public class CameraShipChaseController extends BaseController {
 		if (trackedShip != null) {
 			mTrackedEntity = trackedShip;
 			final var lBody = trackedShip.body();
-			mPosition.x = lBody.x;
-			mPosition.y = lBody.y;
+			mPosition.x = lBody.transform.p.x;
+			mPosition.y = lBody.transform.p.y;
 			mIsTrackingPlayer = true;
 		}
 
@@ -155,8 +155,8 @@ public class CameraShipChaseController extends BaseController {
 			final var lSceneManager = mSceneController.sceneManager();
 
 			if (mTrackedEntity != null) {
-				mPosition.x = mTrackedEntity.body().x * ConstantsPhysics.UnitsToPixels();
-				mPosition.y = mTrackedEntity.body().y * ConstantsPhysics.UnitsToPixels();
+				mPosition.x = mTrackedEntity.body().transform.p.x * ConstantsPhysics.UnitsToPixels();
+				mPosition.y = mTrackedEntity.body().transform.p.y * ConstantsPhysics.UnitsToPixels();
 			}
 
 			final var lCamWidth = mGameCamera.getWidth();

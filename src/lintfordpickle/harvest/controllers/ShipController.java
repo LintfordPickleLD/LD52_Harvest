@@ -146,7 +146,6 @@ public class ShipController extends BaseController {
 			final float lShipPositionY = 13.1f;
 
 			lShip.body().moveTo(lShipPositionX, lShipPositionY);
-			lShip.bodyTwo.moveTo(lShipPositionX, lShipPositionY);
 
 			mShipManager.ships().add(lShip);
 
@@ -161,7 +160,6 @@ public class ShipController extends BaseController {
 			}
 
 			lPhysicsWorld.addBody(lShip.body());
-			lPhysicsWorld.addBody(lShip.bodyTwo);
 		}
 
 	}
@@ -254,7 +252,7 @@ public class ShipController extends BaseController {
 		ship.update(core);
 
 		if (ship.isDead()) {
-			ship.body().angularVelocity *= 0.99f;
+			ship.body().setAngularVelocity(ship.body().angularVelocity() * .99f);
 			return;
 		}
 
@@ -269,11 +267,11 @@ public class ShipController extends BaseController {
 
 		final float lUnitsToPixels = ConstantsPhysics.UnitsToPixels();
 
-		final float lAngle = body.angle;
-		final float lUpAngleX = (float) Math.cos(lAngle);
-		final float lUpAngleY = (float) Math.sin(lAngle);
+		final float lAngle = body.transform.angle;
+		final float lUpAngleX = body.transform.q.c;
+		final float lUpAngleY = body.transform.q.s;
 
-		final float lAdjustedAngle = ship.body().angle + (float) Math.toRadians(90.f);
+		final float lAdjustedAngle = body.transform.angle + (float) Math.toRadians(90.f);
 		final float lAdjustedAngleX = (float) Math.cos(lAdjustedAngle);
 		final float lAdjustedAngleY = (float) Math.sin(lAdjustedAngle);
 
@@ -283,9 +281,9 @@ public class ShipController extends BaseController {
 		final float lSparkChange = 32.8f;
 
 		if (lShipInput.isUpThrottle) {
-			ship.body().accX += -lUpAngleY * -lThrustUpForce * body.invMass();
-			ship.body().accY += lUpAngleX * -lThrustUpForce * body.invMass();
-			body.angularVelocity *= 0.99f;
+			body.accX += -lUpAngleY * -lThrustUpForce * body.invMass();
+			body.accY += lUpAngleX * -lThrustUpForce * body.invMass();
+			body.setAngularVelocity(ship.body().angularVelocity() * .99f);
 
 			if (DEBUG_DISABLE_PARTICLES == false) {
 				final var lFrontEnginePositionX = ship.frontEngine.x * lUnitsToPixels;
@@ -327,9 +325,9 @@ public class ShipController extends BaseController {
 
 		{
 			if (lShipInput.isLeftThrottle) {
-				body.angle -= lAngularTorque * core.gameTime().elapsedTimeMilli();
-				if (body.angularVelocity > 0.f)
-					body.angularVelocity *= 0.9f;
+				body.transform.angle -= lAngularTorque * core.gameTime().elapsedTimeMilli();
+				if (body.angularVelocity() > 0.f)
+					body.setAngularVelocity(body.angularVelocity() * .9f);
 
 				if (DEBUG_DISABLE_PARTICLES == false) {
 					final var lFrontEnginePositionX = ship.frontEngine.x * lUnitsToPixels;
@@ -351,9 +349,9 @@ public class ShipController extends BaseController {
 
 			if (lShipInput.isRightThrottle) {
 
-				body.angle += lAngularTorque * core.gameTime().elapsedTimeMilli();
-				if (body.angularVelocity < 0.f)
-					body.angularVelocity *= 0.9f;
+				body.transform.angle += lAngularTorque * core.gameTime().elapsedTimeMilli();
+				if (body.angularVelocity() > 0.f)
+					body.setAngularVelocity(body.angularVelocity() * .9f);
 
 				if (DEBUG_DISABLE_PARTICLES == false) {
 					final var lRearEnginePositionX = ship.rearEngine.x * lUnitsToPixels;
@@ -381,8 +379,8 @@ public class ShipController extends BaseController {
 			final var lMidSmokeLevel = ship.maxHealth - lStep * 2;
 			final var lHighSmokeLevel = ship.maxHealth - lStep * 3;
 
-			final float lWorldX = body.x * lUnitsToPixels;
-			final float lWorldY = body.y * lUnitsToPixels;
+			final float lWorldX = body.transform.p.x * lUnitsToPixels;
+			final float lWorldY = body.transform.p.y * lUnitsToPixels;
 
 			if (ship.health < lHighSmokeLevel && RandomNumbers.getRandomChance(30.f)) {
 				mSmokeParticleSystem.spawnParticle(lWorldX, lWorldY, 0, 0);

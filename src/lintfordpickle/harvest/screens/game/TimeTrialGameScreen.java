@@ -34,18 +34,19 @@ import lintfordpickle.harvest.screens.endscreens.TimeTrialEndScreen;
 import net.lintfordlib.ConstantsPhysics;
 import net.lintfordlib.controllers.core.ControllerManager;
 import net.lintfordlib.controllers.core.particles.ParticleFrameworkController;
+import net.lintfordlib.controllers.debug.physics.DebugPhysicsWorldWatcher;
 import net.lintfordlib.controllers.physics.IPhysicsControllerCallback;
 import net.lintfordlib.controllers.physics.PhysicsController;
 import net.lintfordlib.core.LintfordCore;
 import net.lintfordlib.core.ResourceManager;
 import net.lintfordlib.core.camera.ICamera;
-import net.lintfordlib.core.debug.Debug;
 import net.lintfordlib.core.graphics.rendertarget.RenderTarget;
 import net.lintfordlib.core.particles.ParticleFrameworkData;
+import net.lintfordlib.core.physics.PhysicsSettings;
 import net.lintfordlib.core.physics.PhysicsWorld;
 import net.lintfordlib.core.physics.resolvers.CollisionResolverRotationAndFriction;
-import net.lintfordlib.renderers.debug.DebugPhysicsGridRenderer;
-import net.lintfordlib.renderers.debug.DebugPhysicsRenderer;
+import net.lintfordlib.renderers.debug.physics.DebugPhysicsGridRenderer;
+import net.lintfordlib.renderers.debug.physics.DebugPhysicsRenderer;
 import net.lintfordlib.renderers.particles.ParticleFrameworkRenderer;
 import net.lintfordlib.screenmanager.ScreenManager;
 import net.lintfordlib.screenmanager.screens.BaseGameScreen;
@@ -85,6 +86,7 @@ public class TimeTrialGameScreen extends BaseGameScreen {
 	private EnvironmentController mEnvironmentController;
 
 	// Renderers
+	private DebugPhysicsWorldWatcher mPhysicsWorldDebugWatcher;
 	private DebugPhysicsRenderer mPhysicsRenderer;
 	private DebugPhysicsGridRenderer mPhysicsDebugGridRenderer;
 	private ShipRenderer mShipRenderer;
@@ -173,12 +175,14 @@ public class TimeTrialGameScreen extends BaseGameScreen {
 	public void update(LintfordCore core, boolean otherScreenHasFocus, boolean coveredByOtherScreen) {
 		super.update(core, otherScreenHasFocus, coveredByOtherScreen);
 
+		mGameCamera.setZoomFactor(1.f);
+
 		if (otherScreenHasFocus == false) {
 			final var lPlayerScoreCard = mGameState.getScoreCard(0);
 
 			if (lPlayerScoreCard.isPlayerDead && mGameStateController.gameState().isGameRunning) {
 				mGameActionEventController.finalizeInputFile();
-				
+
 				mMinimapRenderer.isActive(false);
 
 				mGameState.isGameRunning = false;
@@ -229,10 +233,19 @@ public class TimeTrialGameScreen extends BaseGameScreen {
 
 	@Override
 	protected void createControllers(ControllerManager controllerManager) {
+		final float lToUnits = ConstantsPhysics.PixelsToUnits();
+
 		var lPhysicsCallback = new IPhysicsControllerCallback() {
 			@Override
 			public PhysicsWorld createPhysicsWorld() {
-				final var lPhysicsWorld = new PhysicsWorld(400, 400, 5, 5);
+				final var lPhysicsWorldSettings = new PhysicsSettings();
+				lPhysicsWorldSettings.hashGridWidthInUnits = (int) (2048.f * lToUnits);
+				lPhysicsWorldSettings.hashGridHeightInUnits = (int) (2048.f * lToUnits);
+				lPhysicsWorldSettings.hashGridCellsWide = 5;
+				lPhysicsWorldSettings.hashGridCellsHigh = 5;
+
+				final var lPhysicsWorld = new PhysicsWorld(lPhysicsWorldSettings);
+
 				lPhysicsWorld.initialize();
 				lPhysicsWorld.setGravity(0.f, 5.87f);
 
@@ -254,6 +267,7 @@ public class TimeTrialGameScreen extends BaseGameScreen {
 		mPlatformsController = new PlatformController(controllerManager, mPlatformManager, entityGroupUid());
 		mParticleFrameworkController = new ParticleFrameworkController(controllerManager, mParticleFrameworkData, entityGroupUid());
 		mEnvironmentController = new EnvironmentController(controllerManager, mGameCamera, entityGroupUid());
+		mPhysicsWorldDebugWatcher = new DebugPhysicsWorldWatcher(controllerManager, entityGroupUid());
 	}
 
 	@Override
@@ -270,6 +284,8 @@ public class TimeTrialGameScreen extends BaseGameScreen {
 		mPlatformsController.initialize(core);
 		mGameStateController.initialize(core);
 		mEnvironmentController.initialize(core);
+		mPhysicsWorldDebugWatcher.initialize(core);
+		mPhysicsWorldDebugWatcher.physicsWorld(mPhysicsController.world());
 
 	}
 
@@ -286,7 +302,7 @@ public class TimeTrialGameScreen extends BaseGameScreen {
 		mPlatformsRenderer = new PlatformsRenderer(mRendererManager, entityGroupUid());
 		mParticleFrameworkRenderer = new ParticleFrameworkRenderer(mRendererManager, entityGroupUid());
 		mSceneForegroundRenderer = new SceneForegroundRenderer(mRendererManager, entityGroupUid());
-		
+
 		mHudRenderer = new TimeTrialHudRenderer(mRendererManager, entityGroupUid());
 		mMinimapRenderer = new MinimapRenderer(mRendererManager, entityGroupUid());
 	}

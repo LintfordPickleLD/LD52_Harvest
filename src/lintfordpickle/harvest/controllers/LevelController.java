@@ -11,6 +11,7 @@ import net.lintfordlib.controllers.physics.PhysicsController;
 import net.lintfordlib.core.LintfordCore;
 import net.lintfordlib.core.physics.PhysicsWorld;
 import net.lintfordlib.core.physics.dynamics.RigidBody;
+import net.lintfordlib.core.physics.shapes.PolygonShape;
 
 public class LevelController extends BaseController {
 
@@ -165,7 +166,8 @@ public class LevelController extends BaseController {
 		final float staticFriction = 0.8f;
 		final float dynamicFriction = 0.5f;
 
-		final var lPolygon = RigidBody.createPolygonBody(w * lPxToUts, h * lPxToUts, 1.f, staticFriction, dynamicFriction, .4f, true);
+		final var lPolygon = new RigidBody(true);
+		lPolygon.addShape(PolygonShape.createBoxShape(w * lPxToUts, h * lPxToUts, 0.f, 1.f, .3f, staticFriction, dynamicFriction));
 
 		lPolygon.categoryBits(ConstantsGame.PHYSICS_WORLD_MASK_WALL);
 		lPolygon.maskBits(ConstantsGame.PHYSICS_WORLD_MASK_SHIP | ConstantsGame.PHYSICS_WORLD_MASK_GHOST);

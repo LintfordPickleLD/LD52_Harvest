@@ -146,8 +146,8 @@ public class MinimapRenderer extends UiWindow implements IInputProcessor {
 		final var lNumShips = lShips.size();
 		for (int i = 0; i < lNumShips; i++) {
 			final var lShip = lShips.get(i);
-			final var lWorldPositionX = lShip.body().x * ConstantsPhysics.UnitsToPixels();
-			final var lWorldPositionY = lShip.body().y * ConstantsPhysics.UnitsToPixels();
+			final var lWorldPositionX = lShip.body().transform.p.x * ConstantsPhysics.UnitsToPixels();
+			final var lWorldPositionY = lShip.body().transform.p.y * ConstantsPhysics.UnitsToPixels();
 
 			final var lScaledPositionX = MathHelper.scaleToRange(lWorldPositionX, -1024, 1024, 0, lSize);
 			final var lScaledPositionY = MathHelper.scaleToRange(lWorldPositionY, -1024, 1024, 0, lSize);

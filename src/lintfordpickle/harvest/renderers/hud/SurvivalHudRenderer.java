@@ -1,6 +1,7 @@
 package lintfordpickle.harvest.renderers.hud;
 
 import lintfordpickle.harvest.ConstantsGame;
+import lintfordpickle.harvest.controllers.ShipController;
 import lintfordpickle.harvest.controllers.SurvivalGameStateController;
 import net.lintfordlib.core.LintfordCore;
 import net.lintfordlib.core.ResourceManager;
@@ -9,7 +10,6 @@ import net.lintfordlib.core.graphics.sprites.spritesheet.SpriteSheetDefinition;
 import net.lintfordlib.renderers.BaseRenderer;
 import net.lintfordlib.renderers.RendererManager;
 import net.lintfordlib.renderers.windows.components.UiBar;
-import lintfordpickle.harvest.controllers.ShipController;
 
 public class SurvivalHudRenderer extends BaseRenderer {
 
