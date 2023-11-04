@@ -249,6 +249,11 @@ public class ShipController extends BaseController {
 	// ---------------------------------------------
 
 	private void updateShip(LintfordCore core, Ship ship) {
+		if (ship.isPlayerControlled == false)
+			return;
+
+		System.out.println("angular velocity: " + ship.body().angularVelocity());
+
 		ship.update(core);
 
 		if (ship.isDead()) {
@@ -348,9 +353,8 @@ public class ShipController extends BaseController {
 			}
 
 			if (lShipInput.isRightThrottle) {
-
 				body.transform.angle += lAngularTorque * core.gameTime().elapsedTimeMilli();
-				if (body.angularVelocity() > 0.f)
+				if (body.angularVelocity() < 0.f)
 					body.setAngularVelocity(body.angularVelocity() * .9f);
 
 				if (DEBUG_DISABLE_PARTICLES == false) {
@@ -379,8 +383,15 @@ public class ShipController extends BaseController {
 			final var lMidSmokeLevel = ship.maxHealth - lStep * 2;
 			final var lHighSmokeLevel = ship.maxHealth - lStep * 3;
 
-			final float lWorldX = body.transform.p.x * lUnitsToPixels;
-			final float lWorldY = body.transform.p.y * lUnitsToPixels;
+//			final float lWorldX = body.transform.p.x * lUnitsToPixels;
+//			final float lWorldY = body.transform.p.y * lUnitsToPixels;
+
+			var lWorldX = ship.rearEngine.x * lUnitsToPixels;
+			var lWorldY = ship.rearEngine.y * lUnitsToPixels;
+			if (RandomNumbers.getRandomChance(50)) {
+				lWorldX = ship.frontEngine.x * lUnitsToPixels;
+				lWorldY = ship.frontEngine.y * lUnitsToPixels;
+			}
 
 			if (ship.health < lHighSmokeLevel && RandomNumbers.getRandomChance(30.f)) {
 				mSmokeParticleSystem.spawnParticle(lWorldX, lWorldY, 0, 0);
