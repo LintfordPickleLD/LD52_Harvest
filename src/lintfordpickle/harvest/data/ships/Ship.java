@@ -305,40 +305,17 @@ public class Ship extends RigidBodyEntity {
 		final var lPixelsToUnits = ConstantsPhysics.PixelsToUnits();
 		final var lDensity = 2.f;
 
-		// createPhysicsBodyPolygonBody(64.f * lPixelsToUnits, 32.f * lPixelsToUnits, lDensity);
-
 		final var width = 64.f * lPixelsToUnits;
 		final var height = 32.f * lPixelsToUnits;
 
-		final var lArea = width * height;
-		final var lMass = lArea * lDensity;
 		final var restitution = .1f;
 
 		final var staticFriction = .8f;
 		final var dynamicFriction = .5f;
 
-		final float lRadius = (float) Math.sqrt(width * width + height * height) * .5f;
-
-		// I = (1/12)m(h^2+w^2)
-		final float lInertia = (1.f / 12.f) * lMass * (height * height + width * width);
-
 		body = new RigidBody(false);
-		body.addShape(PolygonShape.createBoxShape(width, height, 0.f, lDensity, restitution, staticFriction, staticFriction));
+		body.addShape(PolygonShape.createBoxShape(width, height, 0.f, lDensity, restitution, staticFriction, dynamicFriction));
 		body.userData(new ShipPhysicsData(entityUid));
-
-//		bodyTwo = RigidBody.createPolygonBody(16.f * lPixelsToUnits, 16.f * lPixelsToUnits, 0.03f, .1f, .8f, .5f, false);
-//
-//		final var lJoint = new StickJoint();
-//		lJoint.allowRotationA = false;
-//		lJoint.allowRotationB = false;
-//
-//		// TODO: double adds
-//
-//		lJoint.bodyA = body;
-//		lJoint.bodyB = bodyTwo;
-//
-//		body.joints.add(lJoint);
-//		bodyTwo.joints.add(lJoint);
 
 		health = maxHealth;
 	}

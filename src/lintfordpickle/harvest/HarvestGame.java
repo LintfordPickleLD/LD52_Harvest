@@ -105,7 +105,7 @@ public abstract class HarvestGame extends LintfordCore {
 			mScreenManager.addScreen(new TimeTrialGameScreen(screenManager(), lPlayerManager));
 		}
 
-		final var lSplashScreen = new TimedIntroScreen(mScreenManager, "res/textures/textureHud.png", 4f);
+		final var lSplashScreen = new TimedIntroScreen(mScreenManager, "res/textures/textureSplashGame.png", 4f);
 		lSplashScreen.stretchBackgroundToFit(true);
 
 		lSplashScreen.setTimerFinishedCallback(new IMenuAction() {
@@ -153,7 +153,7 @@ public abstract class HarvestGame extends LintfordCore {
 		mResourceManager.musicManager().loadMusicFromMetaFile("res/music/meta.json");
 
 		var lMusic = new MusicController(mControllerManager, mResourceManager.musicManager(), LintfordCore.CORE_ENTITY_GROUP_ID);
-		lMusic.playFromGroup(0, "game");
+		lMusic.playFromGroup(0, "menu");
 
 		mScreenManager.loadResources(mResourceManager);
 	}
