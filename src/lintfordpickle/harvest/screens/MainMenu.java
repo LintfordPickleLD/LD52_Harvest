@@ -7,7 +7,6 @@ import net.lintfordlib.core.LintfordCore;
 import net.lintfordlib.core.ResourceManager;
 import net.lintfordlib.core.graphics.ColorConstants;
 import net.lintfordlib.core.graphics.textures.Texture;
-import net.lintfordlib.core.maths.MathHelper;
 import net.lintfordlib.screenmanager.MenuEntry;
 import net.lintfordlib.screenmanager.MenuScreen;
 import net.lintfordlib.screenmanager.ScreenManager;
@@ -81,7 +80,7 @@ public class MainMenu extends MenuScreen {
 		mSelectedLayoutIndex = mLayouts.size() - 1;
 		mSelectedEntryIndex = 0;
 
-		mScreenPaddingTop = 30.f;
+		mScreenPaddingTop = 40.f;
 		mLayoutPaddingHorizontal = 50.f;
 
 		mIsPopup = false;
@@ -171,23 +170,19 @@ public class MainMenu extends MenuScreen {
 
 		final var lUiStructureController = mScreenManager.UiStructureController();
 		final var lHeaderRect = lUiStructureController.menuTitleRectangle();
-		final var lMenuRect = lUiStructureController.menuMainRectangle();
 
 		final var lTextureBatch = rendererManager().uiSpriteBatch();
 
-		mScreenPaddingTop = lMenuRect.height() / 6.f;
-
 		if (mMenuLogoTexture != null) {
 			lTextureBatch.begin(core.HUD());
-			
+
 			final var s_w = core.HUD().boundingRectangle().width() / 800.f;
 			final var s_h = core.HUD().boundingRectangle().height() / 600.f;
-					
 
 			final float logoWidth = mMenuLogoTexture.getTextureWidth() * s_w;
 			final float logoHeight = mMenuLogoTexture.getTextureHeight() * s_h;
 
-			lTextureBatch.draw(mMenuLogoTexture, 0, 0, logoWidth/s_w, logoHeight / s_h, -logoWidth * .5f, lHeaderRect.top() + 5, logoWidth, logoHeight, -0.01f, screenColor);
+			lTextureBatch.draw(mMenuLogoTexture, 0, 0, logoWidth / s_w, logoHeight / s_h, -logoWidth * .5f, lHeaderRect.top() + 5, logoWidth, logoHeight, -0.01f, screenColor);
 			lTextureBatch.end();
 		}
 	}

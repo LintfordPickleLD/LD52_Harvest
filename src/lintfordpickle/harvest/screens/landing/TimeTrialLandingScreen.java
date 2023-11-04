@@ -86,7 +86,7 @@ public class TimeTrialLandingScreen extends MenuScreen {
 		mSelectedLayoutIndex = 0;
 		mSelectedEntryIndex = 6;
 
-		mScreenPaddingTop = 30.f;
+		mScreenPaddingTop = 40.f;
 
 		mLayoutAlignment = LAYOUT_ALIGNMENT.RIGHT;
 		mLayoutPaddingHorizontal = 50.f;

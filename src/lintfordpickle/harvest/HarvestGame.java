@@ -105,7 +105,7 @@ public abstract class HarvestGame extends LintfordCore {
 			mScreenManager.addScreen(new TimeTrialGameScreen(screenManager(), lPlayerManager));
 		}
 
-		final var lSplashScreen = new TimedIntroScreen(mScreenManager, "res/textures/textureSplashGame.png", 4f);
+		final var lSplashScreen = new TimedIntroScreen(mScreenManager, "res/textures/textureSplashGame.png");
 		lSplashScreen.stretchBackgroundToFit(true);
 
 		lSplashScreen.setTimerFinishedCallback(new IMenuAction() {
