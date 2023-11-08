@@ -39,7 +39,6 @@ import net.lintfordlib.controllers.physics.IPhysicsControllerCallback;
 import net.lintfordlib.controllers.physics.PhysicsController;
 import net.lintfordlib.core.LintfordCore;
 import net.lintfordlib.core.ResourceManager;
-import net.lintfordlib.core.camera.ICamera;
 import net.lintfordlib.core.graphics.rendertarget.RenderTarget;
 import net.lintfordlib.core.particles.ParticleFrameworkData;
 import net.lintfordlib.core.physics.PhysicsSettings;
@@ -126,6 +125,7 @@ public class TimeTrialGameScreen extends BaseGameScreen {
 		mPlatformManager = new PlatformManager();
 
 		mParticleFrameworkData = new ParticleFrameworkData();
+		mParticleFrameworkData.loadFromMetaFiles();
 
 		mCollisionHandler = new CollisionHandler();
 
@@ -145,7 +145,7 @@ public class TimeTrialGameScreen extends BaseGameScreen {
 		mRenderTarget = mRendererManager.createRenderTarget("RT_MAIN", lCanvasWidth, lCanvasHeight, 1.f, GL11.GL_NEAREST, false);
 
 		// TODO: Change this!
-		resourceManager.textureManager().loadTexture("TEXTURE_PARTICLES", "res/textures/textureParticles.png", entityGroupUid());
+		resourceManager.textureManager().loadTexture("TEXTURE_PARTICLES", "res/textureParticles.png", entityGroupUid());
 	}
 
 	@Override
@@ -196,35 +196,8 @@ public class TimeTrialGameScreen extends BaseGameScreen {
 
 	@Override
 	public void draw(LintfordCore core) {
-		final var lGameCam = mGameCamera; // orig
-
-//		drawPlayerViewport(core, mRenderTarget, lGameCam);
-//
-//		GL11.glClearColor(0.06f, 0.18f, 0.31f, 1.0f);
-//		GL11.glClear(GL11.GL_COLOR_BUFFER_BIT | GL11.GL_DEPTH_BUFFER_BIT);
-//
-//		// restore core
-//		core.setActiveGameCamera(lGameCam);
-//		core.config().display().reapplyGlViewport();
-//
-//		Debug.debugManager().drawers().drawRenderTargetImmediate(core, core.HUD().boundingRectangle(), -0.001f, mRenderTarget);
-
 		super.draw(core);
 		mRendererManager.drawWindowRenderers(core);
-	}
-
-	private void drawPlayerViewport(LintfordCore core, RenderTarget renderTarget, ICamera camera) {
-		renderTarget.bind();
-
-		core.setActiveGameCamera(camera);
-
-		GL11.glClearColor(0.06f, 0.18f, 0.31f, 1.0f);
-		GL11.glClear(GL11.GL_COLOR_BUFFER_BIT | GL11.GL_DEPTH_BUFFER_BIT);
-
-		mGameDrawLogicalCounter.incrementCounter();
-		mRendererManager.drawRenderers(core);
-
-		renderTarget.unbind();
 	}
 
 	// ---------------------------------------------

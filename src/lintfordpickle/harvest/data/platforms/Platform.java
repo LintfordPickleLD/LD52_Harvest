@@ -35,7 +35,8 @@ public class Platform extends Rectangle {
 	public float stockValueF;
 
 	public String spriteName;
-	public SpriteInstance sprite;
+	public SpriteInstance platformSprite;
+	public SpriteInstance containerSprite;
 
 	public final int uid;
 

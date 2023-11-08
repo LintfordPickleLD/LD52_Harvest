@@ -8,23 +8,14 @@ import lintfordpickle.harvest.controllers.SceneController;
 import lintfordpickle.harvest.data.scene.backgrounds.SceneLayer;
 import net.lintfordlib.core.LintfordCore;
 import net.lintfordlib.core.ResourceManager;
+import net.lintfordlib.core.debug.Debug;
 import net.lintfordlib.core.graphics.ColorConstants;
+import net.lintfordlib.core.graphics.sprites.SpriteInstance;
 import net.lintfordlib.core.graphics.sprites.spritesheet.SpriteSheetDefinition;
 import net.lintfordlib.renderers.BaseRenderer;
 import net.lintfordlib.renderers.RendererManager;
 
 public class SceneRenderer extends BaseRenderer {
-
-	public class CarStream {
-		public float x;
-		public float y;
-
-		public float intSrcPositionX;
-		public float intSrcPositionY;
-		public float speedX;
-
-		public String spriteStreamName;
-	}
 
 	// ---------------------------------------------
 	// Constants
@@ -32,11 +23,13 @@ public class SceneRenderer extends BaseRenderer {
 
 	public static final String RENDERER_NAME = "Scene Renderer";
 
+	public static final int WORLD_WIDTH_IN_PX = 1024; // TODO: This has to be removed into a data file.
+
 	// ---------------------------------------------
 	// Variables
 	// ---------------------------------------------
 
-	private final List<CarStream> carStreams = new ArrayList<>();
+	private final List<SpriteInstance> sceneAnimationSprites = new ArrayList<>();
 
 	private SceneController mSceneController;
 	private SpriteSheetDefinition mPropsSpritesheetDefintion;
@@ -82,12 +75,8 @@ public class SceneRenderer extends BaseRenderer {
 			lLayer.texture = resourceManager.textureManager().getTexture(lLayer.textureName, ConstantsGame.GAME_RESOURCE_GROUP_ID);
 		}
 
-		final var lCarStream = new CarStream();
-		lCarStream.x = 0;
-		lCarStream.y = 0;
-		lCarStream.spriteStreamName = "TEXTURE_CAR_STREAM_00";
-
-		carStreams.add(lCarStream);
+		addCarStream("carstream", 256);
+		addCarStream("carstream", 610);
 
 	}
 
@@ -98,20 +87,45 @@ public class SceneRenderer extends BaseRenderer {
 	}
 
 	@Override
+	public void update(LintfordCore core) {
+		super.update(core);
+
+		final var lNumAnimations = sceneAnimationSprites.size();
+		for (int i = 0; i < lNumAnimations; i++) {
+			sceneAnimationSprites.get(i).update(core);
+		}
+	}
+
+	@Override
 	public void draw(LintfordCore core) {
 		final var lSceneManager = mSceneController.sceneManager();
 		final var lLayers = lSceneManager.layers();
 		final var lNumLayers = lLayers.size();
-		for (int i = 0; i < lNumLayers; i++) {
-			final var lLayer = lLayers.get(i);
+		for (int i = 0; i < lNumLayers + 1; i++) {
+			
 
-			if (lLayer.isForeground == true)
+			// TODO: Animations on custom layers
+
+			// TODO: Cloud layer / smoke layer
+
+			// TODO HACK for now
+			if (i < 3) {
+				final var lLayer = lLayers.get(i);
+
+				if (lLayer.isForeground == true)
+					continue;
+				
+				drawScene(core, lLayers.get(i));
 				continue;
+			} else if (i == 3) {
+				drawAnimations(core);
+				continue;
+			}
 
-			drawScene(core, lLayers.get(i));
+			drawScene(core, lLayers.get(i - 1));
+
 		}
 
-		drawCarStreams(core);
 	}
 
 	// ---------------------------------------------
@@ -132,7 +146,7 @@ public class SceneRenderer extends BaseRenderer {
 		// TODO: Should come from the scene layer definition
 		final int srcX = 0;
 		final int srcY = 0;
-		final int srcW = 1024;
+		final int srcW = WORLD_WIDTH_IN_PX;
 		final int srcH = 1024;
 
 		final float lDstW = sceneLayer.widthInPx;
@@ -146,33 +160,43 @@ public class SceneRenderer extends BaseRenderer {
 		lTextureBatch.end();
 	}
 
-	private void drawCarStreams(LintfordCore core) {
-		final var lTextureBatch = mRendererManager.uiSpriteBatch();
-
-		lTextureBatch.begin(core.gameCamera());
-
-		final var lNumCarStreams = carStreams.size();
-		for (int i = 0; i < lNumCarStreams; i++) {
-			final var lCarStream = carStreams.get(i);
-			final var lSpriteFrame = mPropsSpritesheetDefintion.getSpriteFrame(lCarStream.spriteStreamName);
-			if (lSpriteFrame == null)
-				continue;
-
-			lCarStream.intSrcPositionX += lCarStream.speedX;
-
-			final float srcX = lCarStream.intSrcPositionX;
-			final float srcY = lCarStream.intSrcPositionY;
-			final int srcW = (int) lSpriteFrame.width();
-			final int srcH = (int) lSpriteFrame.height();
-
-			final float lDstX = 0;
-			final float lDstY = 0;
-			final float lDstW = srcW;
-			final float lDstH = srcH;
-
-			lTextureBatch.draw(mPropsSpritesheetDefintion.texture(), srcX, srcY, srcW, srcH, lDstX, lDstY, lDstW, lDstH, -0.01f, ColorConstants.WHITE);
+	// mPropsSpritesheetDefintion
+	private void addCarStream(String animationSpriteName, float positionY) {
+		final var lSpriteFrameDef = mPropsSpritesheetDefintion.getSpriteDefinition(animationSpriteName);
+		if (lSpriteFrameDef == null) {
+			Debug.debugManager().logger().w(getClass().getSimpleName(), "Couldn't find carstream sprite definition in SpriteSheetDefinition: " + animationSpriteName);
+			return;
 		}
 
-		lTextureBatch.end();
+		final var lSpriteFrame = lSpriteFrameDef.frames().get(0);
+		final var lSpriteWidth = lSpriteFrame.width();
+		final var lSpriteHeight = lSpriteFrame.height();
+
+		float posX = -512;
+		float posY = -512 + positionY;
+
+		for (int i = 0; i <= WORLD_WIDTH_IN_PX; i += lSpriteWidth) {
+			final var lNewAnimationSprite = mPropsSpritesheetDefintion.getSpriteInstance(lSpriteFrameDef);
+			lNewAnimationSprite.set(posX, posY, lSpriteWidth * 2, lSpriteHeight * 2);
+			sceneAnimationSprites.add(lNewAnimationSprite);
+
+			posX += lSpriteWidth;
+		}
+
+	}
+
+	private void drawAnimations(LintfordCore core) {
+		final var lSpriteBatch = mRendererManager.uiSpriteBatch();
+
+		lSpriteBatch.begin(core.gameCamera());
+
+		final var lNumAnimations = sceneAnimationSprites.size();
+		for (int i = 0; i < lNumAnimations; i++) {
+			final var lCarStream = sceneAnimationSprites.get(i);
+
+			lSpriteBatch.draw(mPropsSpritesheetDefintion, lCarStream, lCarStream, 2.f, -0.01f, ColorConstants.WHITE);
+		}
+
+		lSpriteBatch.end();
 	}
 }

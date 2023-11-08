@@ -1,0 +1,9 @@
+{
+	"rootDirectory":"res//def//particles//systems//",
+	"itemFileLocations" : [
+	
+		"particlesystem_jet",
+		"particlesystem_jet_intense",
+		"particlesystem_engineair"
+	]
+}

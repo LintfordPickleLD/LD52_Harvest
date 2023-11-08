@@ -153,8 +153,8 @@ public class LevelController extends BaseController {
 		createPlatform(4, 1343, 888, 160, 48, PlatformType.Farm);
 
 		// Water Platforms
-		createPlatform(5, 529, 1813, 160, 48, PlatformType.Water);
-		createPlatform(6, 1470, 1820, 160, 48, PlatformType.Water);
+		createPlatform(5, 529, 1768, 160, 96, PlatformType.Water);
+		createPlatform(6, 1470, 1774, 160, 96, PlatformType.Water);
 	}
 
 	private void createStaticPolygon(float x, float y, float w, float h, float r) {

@@ -252,8 +252,6 @@ public class ShipController extends BaseController {
 		if (ship.isPlayerControlled == false)
 			return;
 
-		System.out.println("angular velocity: " + ship.body().angularVelocity());
-
 		ship.update(core);
 
 		if (ship.isDead()) {
@@ -293,8 +291,8 @@ public class ShipController extends BaseController {
 			if (DEBUG_DISABLE_PARTICLES == false) {
 				final var lFrontEnginePositionX = ship.frontEngine.x * lUnitsToPixels;
 				final var lFrontEnginePositionY = ship.frontEngine.y * lUnitsToPixels;
-				mJetParticleSystem.spawnParticle(lFrontEnginePositionX, lFrontEnginePositionY, lAdjustedVx + lAdjustedAngleX * lJetForce, lAdjustedVy + lAdjustedAngleY * lJetForce);
-				mJetIntenseParticleSystem.spawnParticle(lFrontEnginePositionX, lFrontEnginePositionY, lAdjustedVx + lAdjustedAngleX * lJetForce, lAdjustedVy + lAdjustedAngleY * lJetForce);
+				mJetParticleSystem.spawnParticle(lFrontEnginePositionX, lFrontEnginePositionY, -.2f, lAdjustedVx + lAdjustedAngleX * lJetForce, lAdjustedVy + lAdjustedAngleY * lJetForce);
+				mJetIntenseParticleSystem.spawnParticle(lFrontEnginePositionX, lFrontEnginePositionY, -.2f, lAdjustedVx + lAdjustedAngleX * lJetForce, lAdjustedVy + lAdjustedAngleY * lJetForce);
 
 				{
 					if (RandomNumbers.getRandomChance(lSparkChange)) {
@@ -304,15 +302,15 @@ public class ShipController extends BaseController {
 						final float lSparkAngleX = (float) Math.cos(lAngle + lAngleOffset);
 						final float lSparkAngleY = (float) Math.sin(lAngle + lAngleOffset);
 
-						mEngineSparkParticleSystem.spawnParticle(lFrontEnginePositionX, lFrontEnginePositionY, (lSparkAngleX) * lSparkForce, (lSparkAngleY) * lSparkForce);
+						mEngineSparkParticleSystem.spawnParticle(lFrontEnginePositionX, lFrontEnginePositionY, -.2f, (lSparkAngleX) * lSparkForce, (lSparkAngleY) * lSparkForce);
 					}
 
 				}
 
 				final var lRearEnginePositionX = ship.rearEngine.x * lUnitsToPixels;
 				final var lRearEnginePositionY = ship.rearEngine.y * lUnitsToPixels;
-				mJetParticleSystem.spawnParticle(lRearEnginePositionX, lRearEnginePositionY, lAdjustedVx + lAdjustedAngleX * lJetForce, lAdjustedVy + lAdjustedAngleY * lJetForce);
-				mJetIntenseParticleSystem.spawnParticle(lRearEnginePositionX, lRearEnginePositionY, lAdjustedVx + lAdjustedAngleX * lJetForce, lAdjustedVy + lAdjustedAngleY * lJetForce);
+				mJetParticleSystem.spawnParticle(lRearEnginePositionX, lRearEnginePositionY, -.2f, lAdjustedVx + lAdjustedAngleX * lJetForce, lAdjustedVy + lAdjustedAngleY * lJetForce);
+				mJetIntenseParticleSystem.spawnParticle(lRearEnginePositionX, lRearEnginePositionY, -.2f, lAdjustedVx + lAdjustedAngleX * lJetForce, lAdjustedVy + lAdjustedAngleY * lJetForce);
 
 				{
 					if (RandomNumbers.getRandomChance(lSparkChange)) {
@@ -322,7 +320,7 @@ public class ShipController extends BaseController {
 						final float lSparkAngleX = (float) Math.cos(lAngle + lAngleOffset);
 						final float lSparkAngleY = (float) Math.sin(lAngle + lAngleOffset);
 
-						mEngineSparkParticleSystem.spawnParticle(lRearEnginePositionX, lRearEnginePositionY, (lSparkAngleX) * lSparkForce, (lSparkAngleY) * lSparkForce);
+						mEngineSparkParticleSystem.spawnParticle(lRearEnginePositionX, lRearEnginePositionY, -.2f, (lSparkAngleX) * lSparkForce, (lSparkAngleY) * lSparkForce);
 					}
 				}
 			}
@@ -337,8 +335,8 @@ public class ShipController extends BaseController {
 				if (DEBUG_DISABLE_PARTICLES == false) {
 					final var lFrontEnginePositionX = ship.frontEngine.x * lUnitsToPixels;
 					final var lFrontEnginePositionY = ship.frontEngine.y * lUnitsToPixels;
-					mJetParticleSystem.spawnParticle(lFrontEnginePositionX, lFrontEnginePositionY, lAdjustedVx + lAdjustedAngleX * lJetForce, lAdjustedVy + lAdjustedAngleY * lJetForce);
-					mJetIntenseParticleSystem.spawnParticle(lFrontEnginePositionX, lFrontEnginePositionY, lAdjustedVx + lAdjustedAngleX * lJetForce, lAdjustedVy + lAdjustedAngleY * lJetForce);
+					mJetParticleSystem.spawnParticle(lFrontEnginePositionX, lFrontEnginePositionY, -.2f, lAdjustedVx + lAdjustedAngleX * lJetForce, lAdjustedVy + lAdjustedAngleY * lJetForce);
+					mJetIntenseParticleSystem.spawnParticle(lFrontEnginePositionX, lFrontEnginePositionY, -.2f, lAdjustedVx + lAdjustedAngleX * lJetForce, lAdjustedVy + lAdjustedAngleY * lJetForce);
 
 					if (RandomNumbers.getRandomChance(lSparkChange)) {
 						final float lMaxAngle = 10.f;
@@ -347,7 +345,7 @@ public class ShipController extends BaseController {
 						final float lSparkAngleX = (float) Math.cos(lAngle + lAngleOffset);
 						final float lSparkAngleY = (float) Math.sin(lAngle + lAngleOffset);
 
-						mEngineSparkParticleSystem.spawnParticle(lFrontEnginePositionX, lFrontEnginePositionY, (lSparkAngleX) * lSparkForce, (lSparkAngleY) * lSparkForce);
+						mEngineSparkParticleSystem.spawnParticle(lFrontEnginePositionX, lFrontEnginePositionY, -.2f, (lSparkAngleX) * lSparkForce, (lSparkAngleY) * lSparkForce);
 					}
 				}
 			}
@@ -360,8 +358,8 @@ public class ShipController extends BaseController {
 				if (DEBUG_DISABLE_PARTICLES == false) {
 					final var lRearEnginePositionX = ship.rearEngine.x * lUnitsToPixels;
 					final var lRearEnginePositionY = ship.rearEngine.y * lUnitsToPixels;
-					mJetParticleSystem.spawnParticle(lRearEnginePositionX, lRearEnginePositionY, lAdjustedVx + lAdjustedAngleX * lJetForce, lAdjustedVy + lAdjustedAngleY * lJetForce);
-					mJetIntenseParticleSystem.spawnParticle(lRearEnginePositionX, lRearEnginePositionY, lAdjustedVx + lAdjustedAngleX * lJetForce, lAdjustedVy + lAdjustedAngleY * lJetForce);
+					mJetParticleSystem.spawnParticle(lRearEnginePositionX, lRearEnginePositionY, -.2f, lAdjustedVx + lAdjustedAngleX * lJetForce, lAdjustedVy + lAdjustedAngleY * lJetForce);
+					mJetIntenseParticleSystem.spawnParticle(lRearEnginePositionX, lRearEnginePositionY, -.2f, lAdjustedVx + lAdjustedAngleX * lJetForce, lAdjustedVy + lAdjustedAngleY * lJetForce);
 
 					if (RandomNumbers.getRandomChance(lSparkChange)) {
 						final float lMaxAngle = 10.f;
@@ -370,7 +368,7 @@ public class ShipController extends BaseController {
 						final float lSparkAngleX = (float) Math.cos(lAngle + lAngleOffset);
 						final float lSparkAngleY = (float) Math.sin(lAngle + lAngleOffset);
 
-						mEngineSparkParticleSystem.spawnParticle(lRearEnginePositionX, lRearEnginePositionY, (lSparkAngleX) * lSparkForce, (lSparkAngleY) * lSparkForce);
+						mEngineSparkParticleSystem.spawnParticle(lRearEnginePositionX, lRearEnginePositionY, -.2f, (lSparkAngleX) * lSparkForce, (lSparkAngleY) * lSparkForce);
 					}
 				}
 			}
@@ -394,17 +392,17 @@ public class ShipController extends BaseController {
 			}
 
 			if (ship.health < lHighSmokeLevel && RandomNumbers.getRandomChance(30.f)) {
-				mSmokeParticleSystem.spawnParticle(lWorldX, lWorldY, 0, 0);
-				mFireParticleSystem.spawnParticle(lWorldX, lWorldY, 0, 0);
+				mSmokeParticleSystem.spawnParticle(lWorldX, lWorldY, -.2f, 0, 0);
+				mFireParticleSystem.spawnParticle(lWorldX, lWorldY, -.2f, 0, 0);
 			}
 
 			else if (ship.health < lMidSmokeLevel && RandomNumbers.getRandomChance(20.f)) {
-				mSmokeParticleSystem.spawnParticle(lWorldX, lWorldY, 0, 0);
-				mFireParticleSystem.spawnParticle(lWorldX, lWorldY, 0, 0);
+				mSmokeParticleSystem.spawnParticle(lWorldX, lWorldY, -.2f, 0, 0);
+				mFireParticleSystem.spawnParticle(lWorldX, lWorldY, -.2f, 0, 0);
 			}
 
 			else if (ship.health < lLowSmokeLevel && RandomNumbers.getRandomChance(10.f)) {
-				mSmokeParticleSystem.spawnParticle(lWorldX, lWorldY, 0, 0);
+				mSmokeParticleSystem.spawnParticle(lWorldX, lWorldY, -.2f, 0, 0);
 			}
 		}
 
@@ -436,7 +434,7 @@ public class ShipController extends BaseController {
 				final float lOffsetX = RandomNumbers.random(-t, t);
 				final float lOffsetY = RandomNumbers.random(-t, t);
 
-				mSparkParticleSystem.spawnParticle(lWorldX, lWorldY, (lShipUserData.lastCollisionNormalX + lOffsetX) * lLen, (lShipUserData.lastCollisionNormalY + lOffsetY) * lLen);
+				mSparkParticleSystem.spawnParticle(lWorldX, lWorldY, -.2f, (lShipUserData.lastCollisionNormalX + lOffsetX) * lLen, (lShipUserData.lastCollisionNormalY + lOffsetY) * lLen);
 			}
 
 			lShipUserData.lastCollisionHandled = true;

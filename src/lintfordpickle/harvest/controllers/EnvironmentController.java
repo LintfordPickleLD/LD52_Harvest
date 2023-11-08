@@ -64,7 +64,7 @@ public class EnvironmentController extends BaseController {
 				final var lGenX = RandomNumbers.random(lMinX, lMaxX);
 				final var lGenY = RandomNumbers.random(lMinY, lMaxY);
 
-				mWispParticles.spawnParticle(lGenX, lGenY, 0, 0);
+				mWispParticles.spawnParticle(lGenX, lGenY, -0.2f, 0, 0);
 
 			}
 		}

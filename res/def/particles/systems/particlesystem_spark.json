@@ -2,7 +2,7 @@
 	"name":"PARTICLESYSTEM_SPARK",
 	"maxParticleCount":16,
 	"textureName":"TEXTURE_PARTICLES",
-	"textureFilename":"res/textures/particles/textureParticles.png",
+	"textureFilename":"res/textures/textureParticles.png",
 	"textureFilterMode":"0",
 	"particleLife":500,
 	

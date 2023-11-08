@@ -7,6 +7,7 @@ import java.util.List;
 import org.lwjgl.opengl.GL11;
 
 import lintfordpickle.harvest.ConstantsGame;
+import net.lintfordlib.controllers.core.particles.ParticleFrameworkController;
 import net.lintfordlib.core.LintfordCore;
 import net.lintfordlib.core.ResourceManager;
 import net.lintfordlib.core.geometry.Rectangle;
@@ -17,6 +18,9 @@ import net.lintfordlib.core.graphics.textures.Texture;
 import net.lintfordlib.core.maths.RandomNumbers;
 import net.lintfordlib.core.maths.Vector2f;
 import net.lintfordlib.core.maths.Vector3f;
+import net.lintfordlib.core.particles.ParticleFrameworkData;
+import net.lintfordlib.core.particles.particlesystems.ParticleSystemInstance;
+import net.lintfordlib.renderers.particles.ParticleFrameworkRenderer;
 import net.lintfordlib.screenmanager.Screen;
 import net.lintfordlib.screenmanager.ScreenManager;
 
@@ -124,6 +128,13 @@ public class MenuBackgroundScreen extends Screen {
 	private SpriteInstance mAdWallSoup;
 	private SpriteInstance mAirCondAnim;
 
+	private ParticleFrameworkData mParticleFrameworkData;
+	private ParticleFrameworkController mParticleFrameworkController;
+	private ParticleFrameworkRenderer mParticleFrameworkRenderer;
+
+	private ParticleSystemInstance mJetParticleSystem;
+	private ParticleSystemInstance mJetIntenseParticleSystem;
+
 	// ---------------------------------------------
 	// Constructor
 	// ---------------------------------------------
@@ -141,6 +152,18 @@ public class MenuBackgroundScreen extends Screen {
 	@Override
 	public void initialize() {
 		super.initialize();
+
+		final var lCore = screenManager().core();
+		final var lControllerManager = lCore.controllerManager();
+
+		mParticleFrameworkData = new ParticleFrameworkData();
+		mParticleFrameworkData.loadFromMetaFiles("res/def/particles/systems/menu_meta.json", ParticleFrameworkData.PARTICLE_EMITTER_META_FILE);
+
+		mParticleFrameworkController = new ParticleFrameworkController(lControllerManager, mParticleFrameworkData, entityGroupUid());
+		mParticleFrameworkController.initialize(lCore);
+
+		mParticleFrameworkRenderer = new ParticleFrameworkRenderer(mRendererManager, entityGroupUid());
+		mParticleFrameworkRenderer.initialize(lCore);
 
 		mUpperRed = new VehicleStream();
 		mUpperRed.init(959.f, 78.f, -50.f, 267.f, SCREEN_WIDTH, SCREEN_HEIGHT);
@@ -194,6 +217,9 @@ public class MenuBackgroundScreen extends Screen {
 		points.add(new Vector2f(0.f, -28.f));
 		points.add(new Vector2f(0.f, 85.f));
 
+		mJetParticleSystem = mParticleFrameworkController.particleFrameworkData().particleSystemManager().createNewParticleSystemFromDefinitionName("PARTICLESYSTEM_JET");
+		mJetIntenseParticleSystem = mParticleFrameworkController.particleFrameworkData().particleSystemManager().createNewParticleSystemFromDefinitionName("PARTICLESYSTEM_JET_INTENSE");
+
 	}
 
 	@Override
@@ -211,6 +237,15 @@ public class MenuBackgroundScreen extends Screen {
 
 		mAdWallSoup = mAdWallSpritesheet.getSpriteInstance("play");
 		mAirCondAnim = mPropsSpritesheet.getSpriteInstance("aircond");
+
+		mParticleFrameworkRenderer.loadResources(resourceManager);
+	}
+
+	@Override
+	public void unloadResources() {
+		super.unloadResources();
+
+		mParticleFrameworkRenderer.unloadResources();
 	}
 
 	@Override
@@ -230,6 +265,9 @@ public class MenuBackgroundScreen extends Screen {
 		mLowerRed.update(core);
 		mUpperGreen.update(core);
 		mLowerGreen.update(core);
+
+		mParticleFrameworkController.update(core);
+		mParticleFrameworkRenderer.update(core);
 
 	}
 
@@ -273,7 +311,10 @@ public class MenuBackgroundScreen extends Screen {
 		drawVehicleStream(core, true, true, mUpperGreen);
 		drawVehicleStream(core, true, true, mLowerGreen);
 
+		mParticleFrameworkRenderer.draw(core);
+
 		GL11.glDisable(GL11.GL_DEPTH_TEST);
+
 	}
 
 	// ---
@@ -331,6 +372,19 @@ public class MenuBackgroundScreen extends Screen {
 			final var lSpriteGlassFrame = mPropsSpritesheet.getSpriteFrame(v.n + "_GLASS");
 			lSpriteBatch.draw(mPropsSpritesheet, lSpriteGlassFrame, posX, posY + v.oy, lSpriteGlassFrame.width() * v.s, lSpriteGlassFrame.height() * v.s, zHigh ? -0.65f : -0.85f, ColorConstants.WHITE);
 
+			final var lPosX_t1 = sx + ((ex - sx) * (v.t - .1f));
+			final var lVehicleDirectionX = Math.signum(posX - lPosX_t1);
+
+			if (RandomNumbers.getRandomChance(40.f)) {
+				if (lVehicleDirectionX < .0f) {
+					mJetParticleSystem.spawnParticle(posX - 4 + lSpriteFrame.width() * v.s, posY + lSpriteGlassFrame.height() * v.s * .5f, zHigh ? -0.55f : -0.75f, 0, 0);
+					mJetParticleSystem.spawnParticle(posX + 4 + lSpriteFrame.width() * v.s, posY + lSpriteGlassFrame.height() * v.s * .5f, zHigh ? -0.55f : -0.75f, 0, 0);
+				} else {
+					mJetParticleSystem.spawnParticle(posX - 4, posY + lSpriteGlassFrame.height() * v.s * .5f, zHigh ? -0.55f : -0.75f, 0, 0);
+					mJetParticleSystem.spawnParticle(posX + 4, posY + lSpriteGlassFrame.height() * v.s * .5f, zHigh ? -0.55f : -0.75f, 0, 0);
+				}
+
+			}
 		}
 
 		lSpriteBatch.end();

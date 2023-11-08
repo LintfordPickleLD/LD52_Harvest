@@ -16,38 +16,16 @@
   "trim": false,
   "allowRotations": false,
   "spritePadding": 2,
-  "textureWidthMax": 256,
-  "textureWidthActual": 256,
-  "textureHeightMax": 256,
-  "textureHeightActual": 256,
+  "textureWidthMax": 512,
+  "textureWidthActual": 512,
+  "textureHeightMax": 512,
+  "textureHeightActual": 512,
   "forcePoTTextures": true,
   "autoSizeTexture": false,
   "itemFilenames": [
     "D:\\dev\\java\\ludumdare\\52 - Harvest\\projects\\LD52_Harvest\\raw\\spritesheets\\props\\*.*"
   ],
   "animationItems": {
-    "engineLeft": {
-      "loopAnimation": true,
-      "frameDuration": 100,
-      "animationSprites": [
-        "ENGINE_LEFT1",
-        "ENGINE_LEFT2",
-        "ENGINE_LEFT3",
-        "ENGINE_LEFT4",
-        "ENGINE_LEFT5"
-      ]
-    },
-    "engineRight": {
-      "loopAnimation": true,
-      "frameDuration": 100,
-      "animationSprites": [
-        "ENGINE_RIGHT1",
-        "ENGINE_RIGHT2",
-        "ENGINE_RIGHT3",
-        "ENGINE_RIGHT4",
-        "ENGINE_RIGHT5"
-      ]
-    },
     "textureWheatFull": {
       "loopAnimation": true,
       "frameDuration": 120,
@@ -66,6 +44,40 @@
         "AIRCOND_02",
         "AIRCOND_03",
         "AIRCOND_04"
+      ]
+    },
+    "waterstation": {
+      "loopAnimation": true,
+      "frameDuration": 150,
+      "animationSprites": [
+        "TEXTUREPUMPSTATION00",
+        "TEXTUREPUMPSTATION01",
+        "TEXTUREPUMPSTATION02",
+        "TEXTUREPUMPSTATION03"
+      ]
+    },
+    "watercontainer": {
+      "loopAnimation": true,
+      "frameDuration": 150,
+      "animationSprites": [
+        "TEXTURECONTAINERWATER00",
+        "TEXTURECONTAINERWATER01",
+        "TEXTURECONTAINERWATER02",
+        "TEXTURECONTAINERWATER03"
+      ]
+    },
+    "carstream": {
+      "loopAnimation": true,
+      "frameDuration": 150,
+      "animationSprites": [
+        "CARS_BACKGROUND1",
+        "CARS_BACKGROUND2",
+        "CARS_BACKGROUND3",
+        "CARS_BACKGROUND4",
+        "CARS_BACKGROUND5",
+        "CARS_BACKGROUND6",
+        "CARS_BACKGROUND7",
+        "CARS_BACKGROUND8"
       ]
     }
   }

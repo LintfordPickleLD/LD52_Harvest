@@ -111,6 +111,12 @@ public class PlatformsRenderer extends BaseRenderer {
 		final var lWhiteWithAlpha = ColorConstants.getColor(1.f, 1.f, 1.f, 1.f);
 		lSpriteBatch.draw(mPlatformsSpritesheet, lSpriteFrame, platform, -0.01f, lWhiteWithAlpha);
 
+		if (platform.containerSprite != null) {
+			platform.containerSprite.update(core);
+			lSpriteBatch.draw(mPlatformsSpritesheet, platform.containerSprite, platform, -0.01f, lWhiteWithAlpha);
+		}
+
+		// texture light
 		if (platform.isStockFull) {
 			lSpriteBatch.draw(mPlatformsSpritesheet, mPlatformsSpritesheet.getSpriteFrame("TEXTURELIGHTGLOW"), platform.x(), platform.y(), 8, 8, -0.01f, ColorConstants.GREEN);
 		} else {
@@ -136,62 +142,58 @@ public class PlatformsRenderer extends BaseRenderer {
 		switch (platform.platformType) {
 		case Farm:
 			if (platform.isStockFull) {
-				if (platform.sprite != null) {
+				if (platform.platformSprite != null) {
 					if (platform.spriteName != null && platform.spriteName.equals(FARM_FULL_NAME))
-						return platform.sprite;
+						return platform.platformSprite;
 				}
 
 				platform.spriteName = FARM_FULL_NAME;
-				platform.sprite = mPlatformsSpritesheet.getSpriteInstance(FARM_FULL_NAME);
-				return platform.sprite;
+				platform.platformSprite = mPlatformsSpritesheet.getSpriteInstance(FARM_FULL_NAME);
+				return platform.platformSprite;
 			}
 
 			if (platform.isRefillingStock) {
-				if (platform.sprite != null) {
+				if (platform.platformSprite != null) {
 					if (platform.spriteName != null && platform.spriteName.equals(FARM_HALF_NAME))
-						return platform.sprite;
+						return platform.platformSprite;
 				}
 
 				platform.spriteName = FARM_HALF_NAME;
-				platform.sprite = mPlatformsSpritesheet.getSpriteInstance(FARM_HALF_NAME);
-				return platform.sprite;
+				platform.platformSprite = mPlatformsSpritesheet.getSpriteInstance(FARM_HALF_NAME);
+				return platform.platformSprite;
 			}
 
-			if (platform.sprite != null) {
+			if (platform.platformSprite != null) {
 				if (platform.spriteName != null && platform.spriteName.equals(FARM_EMPTY_NAME))
-					return platform.sprite;
+					return platform.platformSprite;
 			}
 
 			platform.spriteName = FARM_EMPTY_NAME;
-			platform.sprite = mPlatformsSpritesheet.getSpriteInstance(FARM_EMPTY_NAME);
-			return platform.sprite;
+			platform.platformSprite = mPlatformsSpritesheet.getSpriteInstance(FARM_EMPTY_NAME);
+			return platform.platformSprite;
 
 		case Water:
-			if (platform.isStockFull) {
-				if (platform.sprite != null) {
-					if (platform.spriteName != null && platform.spriteName.equals(WATER_FULL_NAME))
-						return platform.sprite;
-
-					platform.spriteName = WATER_FULL_NAME;
-					platform.sprite = mPlatformsSpritesheet.getSpriteInstance(WATER_FULL_NAME);
-					return platform.sprite;
-				}
+			// Platform sprite is an animation
+			if (platform.platformSprite == null) {
+				platform.spriteName = "waterstation";
+				platform.platformSprite = mPlatformsSpritesheet.getSpriteInstance("waterstation");
 			}
 
-			if (platform.spriteName != null && platform.spriteName.equals(WATER_EMPTY_NAME))
-				return platform.sprite;
+			// TODO: Container sprite
 
-			platform.spriteName = WATER_EMPTY_NAME;
-			platform.sprite = mPlatformsSpritesheet.getSpriteInstance(WATER_EMPTY_NAME);
-			return platform.sprite;
+			if (platform.containerSprite != null) {
+				platform.platformSprite = mPlatformsSpritesheet.getSpriteInstance("watercontainer");
+			}
+
+			return platform.platformSprite;
 
 		default: // warehouse
 			if (platform.spriteName != null && platform.spriteName.equals(WAREHOUSE_NAME))
-				return platform.sprite;
+				return platform.platformSprite;
 
 			platform.spriteName = WAREHOUSE_NAME;
-			platform.sprite = mPlatformsSpritesheet.getSpriteInstance(WAREHOUSE_NAME);
-			return platform.sprite;
+			platform.platformSprite = mPlatformsSpritesheet.getSpriteInstance(WAREHOUSE_NAME);
+			return platform.platformSprite;
 		}
 
 	}

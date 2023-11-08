@@ -2,7 +2,7 @@
 	"name":"PARTICLESYSTEM_ENGINESPARK",
 	"maxParticleCount":160,
 	"textureName":"TEXTURE_PARTICLES",
-	"textureFilename":"res/textures/particles/textureParticles.png",
+	"textureFilename":"res/textures/textureParticles.png",
 	"textureFilterMode":"0",
 	"particleLife":1500,
 	
