@@ -2,7 +2,10 @@ package lintfordpickle.harvest.screens;
 
 import lintfordpickle.harvest.ConstantsGame;
 import lintfordpickle.harvest.controllers.replays.ReplayController;
-import lintfordpickle.harvest.screens.landing.TimeTrialLandingScreen;
+import lintfordpickle.harvest.screens.editor.EditorScreen;
+import lintfordpickle.harvest.screens.menu.MenuHelpScreen;
+import lintfordpickle.harvest.screens.menu.OptionsScreen;
+import lintfordpickle.harvest.screens.menu.TimeTrialLandingScreen;
 import net.lintfordlib.core.LintfordCore;
 import net.lintfordlib.core.ResourceManager;
 import net.lintfordlib.core.graphics.ColorConstants;
@@ -14,6 +17,7 @@ import net.lintfordlib.screenmanager.ScreenManagerConstants.FILLTYPE;
 import net.lintfordlib.screenmanager.ScreenManagerConstants.LAYOUT_ALIGNMENT;
 import net.lintfordlib.screenmanager.ScreenManagerConstants.LAYOUT_WIDTH;
 import net.lintfordlib.screenmanager.layouts.ListLayout;
+import net.lintfordlib.screenmanager.screens.LoadingScreen;
 
 public class MainMenu extends MenuScreen {
 
@@ -24,6 +28,7 @@ public class MainMenu extends MenuScreen {
 	private static final String TITLE = null;
 
 	private static final int SCREEN_BUTTON_PLAY = 11;
+	private static final int SCREEN_BUTTON_EDITOR = 99;
 	private static final int SCREEN_BUTTON_HELP = 12;
 	private static final int SCREEN_BUTTON_OPTIONS = 13;
 	private static final int SCREEN_BUTTON_EXIT = 15;
@@ -56,6 +61,10 @@ public class MainMenu extends MenuScreen {
 		lStartGameEntry.registerClickListener(this, SCREEN_BUTTON_PLAY);
 		lStartGameEntry.setToolTip("Harvest and deliver food from each of the farms in the fastest time.");
 
+		final var lEditorEntry = new MenuEntry(mScreenManager, this, "Editor");
+		lEditorEntry.horizontalFillType(FILLTYPE.FILL_CONTAINER);
+		lEditorEntry.registerClickListener(this, SCREEN_BUTTON_EDITOR);
+
 		final var lHelpButton = new MenuEntry(mScreenManager, this, "Instructions");
 		lHelpButton.horizontalFillType(FILLTYPE.FILL_CONTAINER);
 		lHelpButton.registerClickListener(this, SCREEN_BUTTON_HELP);
@@ -69,6 +78,8 @@ public class MainMenu extends MenuScreen {
 		lExitEntry.registerClickListener(this, SCREEN_BUTTON_EXIT);
 
 		mMainMenuListBox.addMenuEntry(lStartGameEntry);
+		mMainMenuListBox.addMenuEntry(MenuEntry.menuSeparator());
+		mMainMenuListBox.addMenuEntry(lEditorEntry);
 		mMainMenuListBox.addMenuEntry(MenuEntry.menuSeparator());
 		mMainMenuListBox.addMenuEntry(lHelpButton);
 		mMainMenuListBox.addMenuEntry(lOptionsEntry);
@@ -135,6 +146,12 @@ public class MainMenu extends MenuScreen {
 			}
 
 			screenManager().addScreen(new TimeTrialLandingScreen(mScreenManager));
+			break;
+		}
+
+		case SCREEN_BUTTON_EDITOR: {
+			final var lLoadingScreen = new LoadingScreen(screenManager(), true, new EditorScreen(screenManager()));
+			screenManager().createLoadingScreen(new LoadingScreen(screenManager(), true, lLoadingScreen));
 			break;
 		}
 

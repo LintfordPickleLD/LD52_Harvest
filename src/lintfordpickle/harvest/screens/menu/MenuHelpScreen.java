@@ -1,4 +1,4 @@
-package lintfordpickle.harvest.screens;
+package lintfordpickle.harvest.screens.menu;
 
 import org.lwjgl.opengl.GL11;
 

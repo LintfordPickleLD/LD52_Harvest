@@ -11,8 +11,9 @@ import lintfordpickle.harvest.data.actionevents.SatActionEventMap;
 import lintfordpickle.harvest.data.players.PlayerManager;
 import lintfordpickle.harvest.data.players.ReplayManager;
 import lintfordpickle.harvest.screens.MainMenu;
-import lintfordpickle.harvest.screens.MenuBackgroundScreen;
+import lintfordpickle.harvest.screens.editor.EditorScreen;
 import lintfordpickle.harvest.screens.game.TimeTrialGameScreen;
+import lintfordpickle.harvest.screens.menu.MenuBackgroundScreen;
 import net.lintfordlib.GameInfo;
 import net.lintfordlib.ResourceLoader;
 import net.lintfordlib.controllers.music.MusicController;
@@ -94,30 +95,6 @@ public abstract class HarvestGame extends LintfordCore {
 	protected void onInitializeApp() {
 		super.onInitializeApp();
 
-		final var lBestReplayManager = new ReplayManager();
-		final var lReplayController = new ReplayController(mControllerManager, lBestReplayManager, ConstantsGame.GAME_RESOURCE_GROUP_ID);
-		lReplayController.initialize(this);
-
-		if (ConstantsGame.QUICK_LAUNCH_GAME) {
-			final var lPlayerManager = new PlayerManager();
-			final var lGhostPlayer = lPlayerManager.addNewPlayer();
-			lGhostPlayer.setPlayback("ghost.lms");
-			mScreenManager.addScreen(new TimeTrialGameScreen(screenManager(), lPlayerManager));
-		}
-
-		final var lSplashScreen = new TimedIntroScreen(mScreenManager, "res/textures/textureSplashGame.png");
-		lSplashScreen.stretchBackgroundToFit(true);
-
-		lSplashScreen.setTimerFinishedCallback(new IMenuAction() {
-			@Override
-			public void TimerFinished(Screen pScreen) {
-				mScreenManager.addScreen(new MenuBackgroundScreen(mScreenManager));
-				mScreenManager.addScreen(new MainMenu(mScreenManager));
-			}
-		});
-
-		mScreenManager.addScreen(lSplashScreen);
-
 		mScreenManager.initialize();
 	}
 
@@ -156,6 +133,40 @@ public abstract class HarvestGame extends LintfordCore {
 		lMusic.playFromGroup(0, "menu");
 
 		mScreenManager.loadResources(mResourceManager);
+	}
+
+	@Override
+	protected void finializeAppSetup() {
+		final var lBestReplayManager = new ReplayManager();
+		final var lReplayController = new ReplayController(mControllerManager, lBestReplayManager, ConstantsGame.GAME_RESOURCE_GROUP_ID);
+		lReplayController.initialize(this);
+
+		if (ConstantsGame.QUICK_LAUNCH_EDITOR) {
+			mScreenManager.addScreen(new EditorScreen(screenManager()));
+			return;
+		}
+
+		if (ConstantsGame.QUICK_LAUNCH_GAME) {
+			final var lPlayerManager = new PlayerManager();
+			final var lGhostPlayer = lPlayerManager.addNewPlayer();
+			lGhostPlayer.setPlayback("ghost.lms");
+
+			mScreenManager.addScreen(new TimeTrialGameScreen(screenManager(), lPlayerManager));
+			return;
+		}
+
+		final var lSplashScreen = new TimedIntroScreen(mScreenManager, "res/textures/textureSplashGame.png");
+		lSplashScreen.stretchBackgroundToFit(true);
+
+		lSplashScreen.setTimerFinishedCallback(new IMenuAction() {
+			@Override
+			public void TimerFinished(Screen pScreen) {
+				mScreenManager.addScreen(new MenuBackgroundScreen(mScreenManager));
+				mScreenManager.addScreen(new MainMenu(mScreenManager));
+			}
+		});
+
+		mScreenManager.addScreen(lSplashScreen);
 	}
 
 	@Override

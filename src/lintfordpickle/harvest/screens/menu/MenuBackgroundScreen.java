@@ -1,4 +1,4 @@
-package lintfordpickle.harvest.screens;
+package lintfordpickle.harvest.screens.menu;
 
 import java.util.ArrayList;
 import java.util.Arrays;

@@ -1,4 +1,4 @@
-package lintfordpickle.harvest.screens;
+package lintfordpickle.harvest.screens.menu;
 
 import net.lintfordlib.core.LintfordCore;
 import net.lintfordlib.core.graphics.ColorConstants;

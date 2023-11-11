@@ -1,4 +1,4 @@
-package lintfordpickle.harvest.screens.landing;
+package lintfordpickle.harvest.screens.menu;
 
 import lintfordpickle.harvest.ConstantsGame;
 import lintfordpickle.harvest.controllers.replays.ReplayController;

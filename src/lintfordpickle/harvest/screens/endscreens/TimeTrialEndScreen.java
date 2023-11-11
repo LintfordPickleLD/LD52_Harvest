@@ -2,8 +2,8 @@ package lintfordpickle.harvest.screens.endscreens;
 
 import lintfordpickle.harvest.data.players.PlayerManager;
 import lintfordpickle.harvest.screens.MainMenu;
-import lintfordpickle.harvest.screens.MenuBackgroundScreen;
 import lintfordpickle.harvest.screens.game.TimeTrialGameScreen;
+import lintfordpickle.harvest.screens.menu.MenuBackgroundScreen;
 import net.lintfordlib.core.LintfordCore;
 import net.lintfordlib.core.ResourceManager;
 import net.lintfordlib.core.graphics.textures.Texture;

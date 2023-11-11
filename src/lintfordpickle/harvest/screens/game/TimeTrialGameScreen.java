@@ -29,7 +29,6 @@ import lintfordpickle.harvest.renderers.hud.TimeTrialHudRenderer;
 import lintfordpickle.harvest.renderers.scene.SceneAdWallRenderer;
 import lintfordpickle.harvest.renderers.scene.SceneForegroundRenderer;
 import lintfordpickle.harvest.renderers.scene.SceneRenderer;
-import lintfordpickle.harvest.screens.PauseScreen;
 import lintfordpickle.harvest.screens.endscreens.TimeTrialEndScreen;
 import net.lintfordlib.ConstantsPhysics;
 import net.lintfordlib.controllers.core.ControllerManager;
@@ -115,26 +114,6 @@ public class TimeTrialGameScreen extends BaseGameScreen {
 	// ---------------------------------------------
 
 	@Override
-	public void initialize() {
-		mGameState = new GameState();
-		mGameState.startNewGame(GameMode.TimeTrial);
-
-		mShipManager = new ShipManager();
-		mCargoManager = new CargoManager();
-		mSceneManager = new SceneManager();
-		mPlatformManager = new PlatformManager();
-
-		mParticleFrameworkData = new ParticleFrameworkData();
-		mParticleFrameworkData.loadFromMetaFiles();
-
-		mCollisionHandler = new CollisionHandler();
-
-		super.initialize();
-
-		mGameCamera.setPosition(ConstantsPhysics.toPixels(-1.2f), ConstantsPhysics.toPixels(13.1f));
-	}
-
-	@Override
 	public void loadResources(ResourceManager resourceManager) {
 		super.loadResources(resourceManager);
 
@@ -203,6 +182,24 @@ public class TimeTrialGameScreen extends BaseGameScreen {
 	// ---------------------------------------------
 	// Methods
 	// ---------------------------------------------
+
+	@Override
+	protected void createData(LintfordCore core) {
+		mGameState = new GameState();
+		mGameState.startNewGame(GameMode.TimeTrial);
+
+		mShipManager = new ShipManager();
+		mCargoManager = new CargoManager();
+		mSceneManager = new SceneManager();
+		mPlatformManager = new PlatformManager();
+
+		mParticleFrameworkData = new ParticleFrameworkData();
+		mParticleFrameworkData.loadFromMetaFiles();
+
+		mCollisionHandler = new CollisionHandler();
+
+		mGameCamera.setPosition(ConstantsPhysics.toPixels(-1.2f), ConstantsPhysics.toPixels(13.1f));
+	}
 
 	@Override
 	protected void createControllers(ControllerManager controllerManager) {
