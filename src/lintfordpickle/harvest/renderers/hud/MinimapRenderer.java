@@ -6,7 +6,7 @@ import lintfordpickle.harvest.ConstantsGame;
 import lintfordpickle.harvest.controllers.GameStateController;
 import lintfordpickle.harvest.controllers.PlatformController;
 import lintfordpickle.harvest.controllers.ShipController;
-import lintfordpickle.harvest.data.platforms.PlatformType;
+import lintfordpickle.harvest.data.scene.platforms.PlatformType;
 import net.lintfordlib.ConstantsPhysics;
 import net.lintfordlib.core.LintfordCore;
 import net.lintfordlib.core.ResourceManager;

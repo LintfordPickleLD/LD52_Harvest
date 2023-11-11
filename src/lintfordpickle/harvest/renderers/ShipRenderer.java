@@ -2,9 +2,9 @@ package lintfordpickle.harvest.renderers;
 
 import lintfordpickle.harvest.ConstantsGame;
 import lintfordpickle.harvest.controllers.ShipController;
-import lintfordpickle.harvest.data.cargo.CargoType;
-import lintfordpickle.harvest.data.ships.Ship;
-import lintfordpickle.harvest.data.ships.Ship.Inventory;
+import lintfordpickle.harvest.data.scene.cargo.CargoType;
+import lintfordpickle.harvest.data.scene.ships.Ship;
+import lintfordpickle.harvest.data.scene.ships.Ship.Inventory;
 import lintfordpickle.harvest.renderers.trails.TrailBatchRenderer;
 import net.lintfordlib.ConstantsPhysics;
 import net.lintfordlib.core.LintfordCore;

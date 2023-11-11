@@ -1,6 +1,5 @@
 package lintfordpickle.harvest.controllers;
 
-import lintfordpickle.harvest.data.game.GameState;
 import lintfordpickle.harvest.data.players.PlayerManager;
 import net.lintfordlib.controllers.core.ControllerManager;
 import net.lintfordlib.core.LintfordCore;
@@ -8,16 +7,32 @@ import net.lintfordlib.core.LintfordCore;
 public class TimeTrialGameStateController extends GameStateController {
 
 	// ---------------------------------------------
+	// Variables
+	// ---------------------------------------------
+
+	private SceneController mSceneController;
+
+	// ---------------------------------------------
 	// Constructor
 	// ---------------------------------------------
 
-	public TimeTrialGameStateController(ControllerManager controllerManager, GameState gameState, PlayerManager playerManager, int entityGroupUid) {
-		super(controllerManager, gameState, playerManager, entityGroupUid);
+	public TimeTrialGameStateController(ControllerManager controllerManager, PlayerManager playerManager, int entityGroupUid) {
+		super(controllerManager, playerManager, entityGroupUid);
 	}
 
 	// ---------------------------------------------
 	// Core-Methods
 	// ---------------------------------------------
+
+	@Override
+	public void initialize(LintfordCore core) {
+		super.initialize(core);
+
+		final var lControllerManager = core.controllerManager();
+		mSceneController = (SceneController) lControllerManager.getControllerByNameRequired(SceneController.CONTROLLER_NAME, mEntityGroupUid);
+		mGameState = mSceneController.sceneData().gameState();
+		
+	}
 
 	@Override
 	public void update(LintfordCore core) {

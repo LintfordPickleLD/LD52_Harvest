@@ -4,9 +4,11 @@ import java.util.HashMap;
 import java.util.Map;
 
 import lintfordpickle.harvest.ConstantsGame;
+import lintfordpickle.harvest.data.scene.BaseInstanceManager;
+import lintfordpickle.harvest.data.scene.SceneSaveDefinition;
 import net.lintfordlib.core.debug.Debug;
 
-public class GameState {
+public class GameState extends BaseInstanceManager {
 
 	public enum GameMode {
 		TimeTrial, Survival,
@@ -167,4 +169,34 @@ public class GameState {
 
 		return true;
 	}
+
+	
+	@Override
+	public void initializeManager() {
+		// TODO Auto-generated method stub
+		
+	}
+	
+
+	@Override
+	public void storeInTrackDefinition(SceneSaveDefinition sceneSaveDefinition) {
+		// TODO Auto-generated method stub
+		
+	}
+	
+
+	@Override
+	public void loadFromTrackDefinition(SceneSaveDefinition sceneSaveDefinition) {
+		// TODO Auto-generated method stub
+		
+	}
+	
+
+	@Override
+	public void finalizeAfterLoading() {
+		// TODO Auto-generated method stub
+		
+	}
+
+	
 }

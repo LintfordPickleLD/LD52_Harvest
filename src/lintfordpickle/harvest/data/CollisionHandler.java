@@ -1,6 +1,6 @@
 package lintfordpickle.harvest.data;
 
-import lintfordpickle.harvest.data.physics.ShipPhysicsData;
+import lintfordpickle.harvest.data.scene.physics.ShipPhysicsData;
 import net.lintfordlib.core.physics.collisions.ContactManifold;
 import net.lintfordlib.core.physics.interfaces.ICollisionCallback;
 

@@ -33,10 +33,9 @@ public abstract class GameStateController extends BaseController {
 	// Constructor
 	// ---------------------------------------------
 
-	public GameStateController(ControllerManager controllerManager, GameState gameState, PlayerManager playerManager, int entityGroupUid) {
+	public GameStateController(ControllerManager controllerManager, PlayerManager playerManager, int entityGroupUid) {
 		super(controllerManager, CONTROLLER_NAME, entityGroupUid);
 
-		mGameState = gameState;
 		mPlayerManager = playerManager;
 	}
 

@@ -1,10 +1,24 @@
 package lintfordpickle.harvest.controllers;
 
-import lintfordpickle.harvest.data.scene.AdWall;
-import lintfordpickle.harvest.data.scene.backgrounds.SceneManager;
+import java.io.FileWriter;
+import java.io.IOException;
+import java.io.Writer;
+
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
+import com.google.gson.JsonSyntaxException;
+
+import lintfordpickle.harvest.data.game.SceneData;
+import lintfordpickle.harvest.data.scene.SceneSaveDefinition;
+import net.lintfordLib.editor.data.scene.SceneHeader;
 import net.lintfordlib.controllers.BaseController;
 import net.lintfordlib.controllers.core.ControllerManager;
+import net.lintfordlib.core.LintfordCore;
+import net.lintfordlib.core.debug.Debug;
+import net.lintfordlib.core.storage.FileUtils;
 
+// TODO: This is the same as the TrackController in RazerRunnner - consider adding to lib to make setup faster.
+// TODO: I think this can be made 'generic' 
 public class SceneController extends BaseController {
 
 	// ---------------------------------------------
@@ -17,43 +31,41 @@ public class SceneController extends BaseController {
 	// Variables
 	// ---------------------------------------------
 
-	private SceneManager mSceneManager;
-
-	private AdWall mVerticalAdWall;
-	private AdWall mHorizontalAdWall;
+	private final SceneHeader mSceneHeader;
+	private final SceneData mSceneData;
 
 	// ---------------------------------------------
 	// Properties
 	// ---------------------------------------------
 
-	public AdWall verticalAdWall() {
-		return mVerticalAdWall;
+	@Override
+	public boolean isInitialized() {
+		return mSceneData != null;
 	}
 
-	public AdWall horizontalAdWall() {
-		return mHorizontalAdWall;
+	public SceneHeader sceneHeader() {
+		return mSceneHeader;
 	}
 
-	public SceneManager sceneManager() {
-		return mSceneManager;
+	public SceneData sceneData() {
+		return mSceneData;
 	}
 
 	// ---------------------------------------------
 	// Constructor
 	// ---------------------------------------------
 
-	public SceneController(ControllerManager controllerManager, SceneManager sceneManager, int entityGroupID) {
+	public SceneController(ControllerManager controllerManager, SceneHeader sceneHeader, int entityGroupID) {
 		super(controllerManager, CONTROLLER_NAME, entityGroupID);
 
-		mSceneManager = sceneManager;
+		mSceneHeader = sceneHeader;
+		mSceneData = new SceneData(); // We fill *the components* of the SceneData, by deserilizing objects using the SceneHeader.
 
-		mVerticalAdWall = new AdWall();
-		mVerticalAdWall.set(-1028 + 1027, -1028 + 0, 60 * 2, 710 * 2);
-		mVerticalAdWall.adWallTextureName = "TEXTURE_ADWALL_VERT";
-
-		mHorizontalAdWall = new AdWall();
-		mHorizontalAdWall.set(-1028 + 480, -1028 + 430, 402, 137);
-		mHorizontalAdWall.adWallTextureName = "TEXTURE_ADWALL_HORIZONTAL";
+		if (mSceneHeader != null && mSceneHeader.isSceneValid()) {
+			loadTrackDefinitionFromFile(mSceneHeader.sceneFilename());
+		} else {
+			createNewScene();
+		}
 	}
 
 	// ---------------------------------------------
@@ -61,8 +73,51 @@ public class SceneController extends BaseController {
 	// ---------------------------------------------
 
 	@Override
-	public void unloadController() {
-		mSceneManager = null;
+	public void update(LintfordCore core) {
+		super.update(core);
+	}
+
+	// ---------------------------------------------
+	// Methods
+	// ---------------------------------------------
+
+	public void createNewScene() {
+
+	}
+
+	public void loadTrackDefinitionFromFile(String filename) {
+		final var lGson = new GsonBuilder().create();
+
+		String lSceneRawFileContents = null;
+		SceneSaveDefinition lSceneSaveDefinition = null;
+
+		try {
+			lSceneRawFileContents = FileUtils.loadString(filename);
+			lSceneSaveDefinition = lGson.fromJson(lSceneRawFileContents, SceneSaveDefinition.class);
+
+		} catch (JsonSyntaxException ex) {
+			Debug.debugManager().logger().printException(getClass().getSimpleName(), ex);
+		}
+
+		if (lSceneSaveDefinition == null) {
+			Debug.debugManager().logger().e(getClass().getSimpleName(), "There was an error reading the scene save definition file (" + filename + ")");
+			return;
+		}
+
+		mSceneData.createSceneFromSaveDefinition(lSceneSaveDefinition);
+	}
+
+	public void saveToFile(String filename) {
+		final var lSceneSaveDefinition = mSceneData.getSceneDefinitionToSave();
+
+		try (Writer writer = new FileWriter(filename)) {
+			Gson gson = new GsonBuilder().setPrettyPrinting().create();
+			gson.toJson(lSceneSaveDefinition, writer);
+		} catch (IOException e1) {
+			e1.printStackTrace();
+		}
+
+		return;
 	}
 
 }

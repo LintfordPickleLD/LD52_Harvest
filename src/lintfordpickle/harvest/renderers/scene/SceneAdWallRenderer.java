@@ -127,7 +127,7 @@ public class SceneAdWallRenderer extends BaseRenderer {
 		// final var horAds = mSceneController.horizontalAdWall();
 
 		// drawAdWall(core, horAds);
-		drawAdWall(core, mSceneController.verticalAdWall());
+		// drawAdWall(core, mSceneController.verticalAdWall());
 	}
 
 	// ---------------------------------------------

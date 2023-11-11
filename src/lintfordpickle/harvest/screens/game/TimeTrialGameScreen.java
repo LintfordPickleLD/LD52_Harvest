@@ -15,22 +15,14 @@ import lintfordpickle.harvest.controllers.TimeTrialGameStateController;
 import lintfordpickle.harvest.controllers.actionevents.GameActionEventController;
 import lintfordpickle.harvest.controllers.camera.CameraShipChaseController;
 import lintfordpickle.harvest.data.CollisionHandler;
-import lintfordpickle.harvest.data.cargo.CargoManager;
-import lintfordpickle.harvest.data.game.GameState;
-import lintfordpickle.harvest.data.game.GameState.GameMode;
-import lintfordpickle.harvest.data.platforms.PlatformManager;
 import lintfordpickle.harvest.data.players.PlayerManager;
-import lintfordpickle.harvest.data.scene.backgrounds.SceneManager;
-import lintfordpickle.harvest.data.ships.ShipManager;
 import lintfordpickle.harvest.renderers.PlatformsRenderer;
 import lintfordpickle.harvest.renderers.ShipRenderer;
 import lintfordpickle.harvest.renderers.hud.MinimapRenderer;
 import lintfordpickle.harvest.renderers.hud.TimeTrialHudRenderer;
 import lintfordpickle.harvest.renderers.scene.SceneAdWallRenderer;
-import lintfordpickle.harvest.renderers.scene.SceneForegroundRenderer;
 import lintfordpickle.harvest.renderers.scene.SceneRenderer;
-import lintfordpickle.harvest.screens.PauseScreen;
-import lintfordpickle.harvest.screens.endscreens.TimeTrialEndScreen;
+import net.lintfordLib.editor.data.scene.SceneHeader;
 import net.lintfordlib.ConstantsPhysics;
 import net.lintfordlib.controllers.core.ControllerManager;
 import net.lintfordlib.controllers.core.particles.ParticleFrameworkController;
@@ -62,12 +54,10 @@ public class TimeTrialGameScreen extends BaseGameScreen {
 	private CollisionHandler mCollisionHandler;
 
 	// Data
+	private final SceneHeader mSceneHeader;
+
 	private PlayerManager mPlayerManager;
-	private CargoManager mCargoManager;
-	private GameState mGameState;
-	private ShipManager mShipManager;
-	private SceneManager mSceneManager;
-	private PlatformManager mPlatformManager;
+
 	private ParticleFrameworkData mParticleFrameworkData;
 
 	// Controllers
@@ -90,7 +80,6 @@ public class TimeTrialGameScreen extends BaseGameScreen {
 	private DebugPhysicsGridRenderer mPhysicsDebugGridRenderer;
 	private ShipRenderer mShipRenderer;
 	private SceneRenderer mSceneRenderer;
-	private SceneForegroundRenderer mSceneForegroundRenderer;
 	private SceneAdWallRenderer mSceneAdWallRenderer;
 	private PlatformsRenderer mPlatformsRenderer;
 	private TimeTrialHudRenderer mHudRenderer;
@@ -98,14 +87,24 @@ public class TimeTrialGameScreen extends BaseGameScreen {
 	private ParticleFrameworkRenderer mParticleFrameworkRenderer;
 
 	// ---------------------------------------------
+	// Properties
+	// ---------------------------------------------
+
+	public SceneHeader sceneHeader() {
+		return mSceneHeader;
+	}
+
+	// ---------------------------------------------
 	// Constructors
 	// ---------------------------------------------
 
-	public TimeTrialGameScreen(ScreenManager screenManager, PlayerManager playerManager) {
+	public TimeTrialGameScreen(ScreenManager screenManager, SceneHeader sceneHeader, PlayerManager playerManager) {
 		super(screenManager);
 
 		mPlayerManager = playerManager;
 		mPlayerManager.resetSessions();
+
+		mSceneHeader = sceneHeader;
 
 		ConstantsPhysics.setPhysicsWorldConstants(64.f);
 	}
@@ -113,26 +112,6 @@ public class TimeTrialGameScreen extends BaseGameScreen {
 	// ---------------------------------------------
 	// Core-Methods
 	// ---------------------------------------------
-
-	@Override
-	public void initialize() {
-		mGameState = new GameState();
-		mGameState.startNewGame(GameMode.TimeTrial);
-
-		mShipManager = new ShipManager();
-		mCargoManager = new CargoManager();
-		mSceneManager = new SceneManager();
-		mPlatformManager = new PlatformManager();
-
-		mParticleFrameworkData = new ParticleFrameworkData();
-		mParticleFrameworkData.loadFromMetaFiles();
-
-		mCollisionHandler = new CollisionHandler();
-
-		super.initialize();
-
-		mGameCamera.setPosition(ConstantsPhysics.toPixels(-1.2f), ConstantsPhysics.toPixels(13.1f));
-	}
 
 	@Override
 	public void loadResources(ResourceManager resourceManager) {
@@ -161,12 +140,12 @@ public class TimeTrialGameScreen extends BaseGameScreen {
 
 		if (core.input().keyboard().isKeyDownTimed(GLFW.GLFW_KEY_ESCAPE, this) || core.input().gamepads().isGamepadButtonDownTimed(GLFW.GLFW_GAMEPAD_BUTTON_START, this)) {
 			if (ConstantsGame.ESCAPE_RESTART_MAIN_SCENE) {
-				final var lLoadingScreen = new LoadingScreen(screenManager(), true, new TimeTrialGameScreen(screenManager(), mPlayerManager));
+				final var lLoadingScreen = new LoadingScreen(screenManager(), true, new TimeTrialGameScreen(screenManager(), mSceneHeader, mPlayerManager));
 				screenManager().createLoadingScreen(new LoadingScreen(screenManager(), true, lLoadingScreen));
 				return;
 			}
 
-			screenManager().addScreen(new PauseScreen(screenManager(), mPlayerManager));
+			screenManager().addScreen(new PauseScreen(screenManager(), mSceneHeader, mPlayerManager));
 			return;
 		}
 	}
@@ -178,18 +157,18 @@ public class TimeTrialGameScreen extends BaseGameScreen {
 		mGameCamera.setZoomFactor(1.f);
 
 		if (otherScreenHasFocus == false) {
-			final var lPlayerScoreCard = mGameState.getScoreCard(0);
-
-			if (lPlayerScoreCard.isPlayerDead && mGameStateController.gameState().isGameRunning) {
-				mGameActionEventController.finalizeInputFile();
-
-				mMinimapRenderer.isActive(false);
-
-				mGameState.isGameRunning = false;
-				screenManager().addScreen(new TimeTrialEndScreen(mScreenManager, mPlayerManager, false, mGameState.timeAliveInMs, mGameActionEventController.fastestTimeOnExitReached()));
-
-				return;
-			}
+//			final var lPlayerScoreCard = mGameState.getScoreCard(0);
+//
+//			if (lPlayerScoreCard.isPlayerDead && mGameStateController.gameState().isGameRunning) {
+//				mGameActionEventController.finalizeInputFile();
+//
+//				mMinimapRenderer.isActive(false);
+//
+//				mGameState.isGameRunning = false;
+//				screenManager().addScreen(new TimeTrialEndScreen(mScreenManager, mPlayerManager, false, mGameState.timeAliveInMs, mGameActionEventController.fastestTimeOnExitReached()));
+//
+//				return;
+//			}
 		}
 
 	}
@@ -203,6 +182,15 @@ public class TimeTrialGameScreen extends BaseGameScreen {
 	// ---------------------------------------------
 	// Methods
 	// ---------------------------------------------
+
+	@Override
+	protected void createData(LintfordCore core) {
+		mParticleFrameworkData = new ParticleFrameworkData();
+		mParticleFrameworkData.loadFromMetaFiles();
+		mCollisionHandler = new CollisionHandler();
+
+		mGameCamera.setPosition(ConstantsPhysics.toPixels(-1.2f), ConstantsPhysics.toPixels(13.1f));
+	}
 
 	@Override
 	protected void createControllers(ControllerManager controllerManager) {
@@ -233,11 +221,11 @@ public class TimeTrialGameScreen extends BaseGameScreen {
 		mPhysicsController = new PhysicsController(controllerManager, lPhysicsCallback, entityGroupUid());
 		mLevelController = new LevelController(controllerManager, entityGroupUid());
 		mCameraShipChaseController = new CameraShipChaseController(controllerManager, mGameCamera, null, entityGroupUid());
-		mGameStateController = new TimeTrialGameStateController(controllerManager, mGameState, mPlayerManager, entityGroupUid());
-		mSceneController = new SceneController(controllerManager, mSceneManager, entityGroupUid());
-		mCargoController = new CargoController(controllerManager, mCargoManager, entityGroupUid());
-		mShipController = new ShipController(controllerManager, mShipManager, mPlayerManager, entityGroupUid());
-		mPlatformsController = new PlatformController(controllerManager, mPlatformManager, entityGroupUid());
+		mSceneController = new SceneController(controllerManager, mSceneHeader, entityGroupUid());
+		mGameStateController = new TimeTrialGameStateController(controllerManager, mPlayerManager, entityGroupUid());
+		mCargoController = new CargoController(controllerManager, entityGroupUid());
+		mShipController = new ShipController(controllerManager, mPlayerManager, entityGroupUid());
+		mPlatformsController = new PlatformController(controllerManager, entityGroupUid());
 		mParticleFrameworkController = new ParticleFrameworkController(controllerManager, mParticleFrameworkData, entityGroupUid());
 		mEnvironmentController = new EnvironmentController(controllerManager, mGameCamera, entityGroupUid());
 		mPhysicsWorldDebugWatcher = new DebugPhysicsWorldWatcher(controllerManager, entityGroupUid());
@@ -274,7 +262,6 @@ public class TimeTrialGameScreen extends BaseGameScreen {
 		mSceneAdWallRenderer = new SceneAdWallRenderer(mRendererManager, entityGroupUid());
 		mPlatformsRenderer = new PlatformsRenderer(mRendererManager, entityGroupUid());
 		mParticleFrameworkRenderer = new ParticleFrameworkRenderer(mRendererManager, entityGroupUid());
-		mSceneForegroundRenderer = new SceneForegroundRenderer(mRendererManager, entityGroupUid());
 
 		mHudRenderer = new TimeTrialHudRenderer(mRendererManager, entityGroupUid());
 		mMinimapRenderer = new MinimapRenderer(mRendererManager, entityGroupUid());
@@ -292,7 +279,6 @@ public class TimeTrialGameScreen extends BaseGameScreen {
 		mSceneAdWallRenderer.initialize(core);
 		mPlatformsRenderer.initialize(core);
 		mParticleFrameworkRenderer.initialize(core);
-		mSceneForegroundRenderer.initialize(core);
 		mHudRenderer.initialize(core);
 		mMinimapRenderer.initialize(core);
 	}
@@ -310,7 +296,6 @@ public class TimeTrialGameScreen extends BaseGameScreen {
 
 		mPlatformsRenderer.loadResources(resourceManager);
 		mParticleFrameworkRenderer.loadResources(resourceManager);
-		mSceneForegroundRenderer.loadResources(resourceManager);
 		mHudRenderer.loadResources(resourceManager);
 		mMinimapRenderer.loadResources(resourceManager);
 	}

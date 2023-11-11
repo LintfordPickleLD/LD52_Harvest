@@ -3,10 +3,10 @@ package lintfordpickle.harvest.controllers;
 import lintfordpickle.harvest.ConstantsGame;
 import lintfordpickle.harvest.controllers.actionevents.GameActionEventController;
 import lintfordpickle.harvest.controllers.camera.CameraShipChaseController;
-import lintfordpickle.harvest.data.physics.ShipPhysicsData;
 import lintfordpickle.harvest.data.players.PlayerManager;
-import lintfordpickle.harvest.data.ships.Ship;
-import lintfordpickle.harvest.data.ships.ShipManager;
+import lintfordpickle.harvest.data.scene.physics.ShipPhysicsData;
+import lintfordpickle.harvest.data.scene.ships.Ship;
+import lintfordpickle.harvest.data.scene.ships.ShipManager;
 import net.lintfordlib.ConstantsPhysics;
 import net.lintfordlib.controllers.BaseController;
 import net.lintfordlib.controllers.core.ControllerManager;
@@ -38,6 +38,7 @@ public class ShipController extends BaseController {
 	// Variables
 	// ---------------------------------------------
 
+	private SceneController mSceneController;
 	private GameStateController mGameStateController;
 	private GameActionEventController mActionEventController;
 	private PhysicsController mPhysicsController;
@@ -78,11 +79,10 @@ public class ShipController extends BaseController {
 	// Constructor
 	// ---------------------------------------------
 
-	public ShipController(ControllerManager controllerManager, ShipManager shipManager, PlayerManager playerManager, int entityGroupID) {
+	public ShipController(ControllerManager controllerManager, PlayerManager playerManager, int entityGroupID) {
 		super(controllerManager, CONTROLLER_NAME, entityGroupID);
 
 		mPlayerManager = playerManager;
-		mShipManager = shipManager;
 	}
 
 	// ---------------------------------------------
@@ -94,10 +94,14 @@ public class ShipController extends BaseController {
 		super.initialize(core);
 
 		final var lControllerManager = core.controllerManager();
+
+		mSceneController = (SceneController) lControllerManager.getControllerByNameRequired(SceneController.CONTROLLER_NAME, entityGroupUid());
 		mGameStateController = (GameStateController) lControllerManager.getControllerByNameRequired(GameStateController.CONTROLLER_NAME, entityGroupUid());
 		mActionEventController = (GameActionEventController) lControllerManager.getControllerByNameRequired(GameActionEventController.CONTROLLER_NAME, entityGroupUid());
 		mPhysicsController = (PhysicsController) lControllerManager.getControllerByNameRequired(PhysicsController.CONTROLLER_NAME, entityGroupUid());
 		mAudioController = (AudioController) lControllerManager.getControllerByNameRequired(AudioController.CONTROLLER_NAME, entityGroupUid());
+
+		mShipManager = mSceneController.sceneData().shipManager();
 
 		createShipsFromPlayerManager();
 

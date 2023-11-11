@@ -1,0 +1,14 @@
+{
+  "HashGrid": {
+    "Width": 0,
+    "Height": 0,
+    "TilesWide": 0,
+    "TilesHigh": 0
+  },
+  "Layers": {
+    "textureLayers": [],
+    "animationLayers": [],
+    "noiseLayers": [],
+    "physicsLayers": []
+  }
+}

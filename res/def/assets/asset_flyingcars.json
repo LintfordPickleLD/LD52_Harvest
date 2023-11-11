@@ -1,0 +1,8 @@
+{
+    "name": "ASSET_FLYINGCARS",
+    "displayName": "FLYING CARS",
+        
+    "spritesheetDefinitionName": "SPRITESHEET_PROPS",
+    "spritesheetDefinitionFilename": "res/spritesheets/spritesheetProps.json",
+    "spriteName": "carstream" 
+}

@@ -1,0 +1,37 @@
+{
+  "HashGrid": {
+    "Width": 0,
+    "Height": 0,
+    "TilesWide": 0,
+    "TilesHigh": 0
+  },
+  "Layers": {
+    "textureLayers": [
+      {
+        "textureName": "tosh",
+        "texturePath": "res/textures/texturecore.png",
+        "layerUid": 0,
+        "layerZDepth": 0,
+        "layerName": "Tex Layer 0",
+        "translationSpeedModX": 6.796875,
+        "translationSpeedModY": 2.65625,
+        "centerX": 0.0,
+        "centerY": 0.0
+      },
+      {
+        "textureName": "terrs",
+        "texturePath": "res/textures/texturehud.png",
+        "layerUid": 1,
+        "layerZDepth": 1,
+        "layerName": "Tex Layer 1",
+        "translationSpeedModX": 1.953125,
+        "translationSpeedModY": 0.703125,
+        "centerX": 0.0,
+        "centerY": 0.0
+      }
+    ],
+    "animationLayers": [],
+    "noiseLayers": [],
+    "physicsLayers": []
+  }
+}

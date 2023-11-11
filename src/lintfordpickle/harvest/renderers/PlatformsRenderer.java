@@ -2,7 +2,7 @@ package lintfordpickle.harvest.renderers;
 
 import lintfordpickle.harvest.ConstantsGame;
 import lintfordpickle.harvest.controllers.PlatformController;
-import lintfordpickle.harvest.data.platforms.Platform;
+import lintfordpickle.harvest.data.scene.platforms.Platform;
 import net.lintfordlib.core.LintfordCore;
 import net.lintfordlib.core.ResourceManager;
 import net.lintfordlib.core.graphics.ColorConstants;

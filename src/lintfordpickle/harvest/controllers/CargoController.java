@@ -1,10 +1,11 @@
 package lintfordpickle.harvest.controllers;
 
-import lintfordpickle.harvest.data.cargo.Cargo;
-import lintfordpickle.harvest.data.cargo.CargoManager;
-import lintfordpickle.harvest.data.cargo.CargoType;
+import lintfordpickle.harvest.data.scene.cargo.Cargo;
+import lintfordpickle.harvest.data.scene.cargo.CargoManager;
+import lintfordpickle.harvest.data.scene.cargo.CargoType;
 import net.lintfordlib.controllers.BaseController;
 import net.lintfordlib.controllers.core.ControllerManager;
+import net.lintfordlib.core.LintfordCore;
 
 public class CargoController extends BaseController {
 
@@ -18,6 +19,7 @@ public class CargoController extends BaseController {
 	// Variables
 	// ---------------------------------------------
 
+	private SceneController mSceneController;
 	private CargoManager mCargoManager;
 
 	// ---------------------------------------------
@@ -32,10 +34,21 @@ public class CargoController extends BaseController {
 	// Constructor
 	// ---------------------------------------------
 
-	public CargoController(ControllerManager controllerManager, CargoManager cargoManager, int entityGroupID) {
+	public CargoController(ControllerManager controllerManager, int entityGroupID) {
 		super(controllerManager, CONTROLLER_NAME, entityGroupID);
+	}
 
-		mCargoManager = cargoManager;
+	// ---------------------------------------------
+	// Core-Methods
+	// ---------------------------------------------
+
+	@Override
+	public void initialize(LintfordCore core) {
+		super.initialize(core);
+
+		final var lControllerManager = core.controllerManager();
+		mSceneController = (SceneController) lControllerManager.getControllerByNameRequired(SceneController.CONTROLLER_NAME, entityGroupUid());
+		mCargoManager = mSceneController.sceneData().cargoManager();
 	}
 
 	// ---------------------------------------------

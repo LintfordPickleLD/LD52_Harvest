@@ -1,9 +1,9 @@
 package lintfordpickle.harvest.controllers;
 
 import lintfordpickle.harvest.ConstantsGame;
-import lintfordpickle.harvest.data.platforms.Platform;
-import lintfordpickle.harvest.data.platforms.PlatformManager;
-import lintfordpickle.harvest.data.platforms.PlatformType;
+import lintfordpickle.harvest.data.scene.platforms.Platform;
+import lintfordpickle.harvest.data.scene.platforms.PlatformManager;
+import lintfordpickle.harvest.data.scene.platforms.PlatformType;
 import net.lintfordlib.ConstantsPhysics;
 import net.lintfordlib.controllers.BaseController;
 import net.lintfordlib.controllers.core.ControllerManager;

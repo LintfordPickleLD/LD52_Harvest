@@ -3,7 +3,7 @@ package lintfordpickle.harvest.controllers.camera;
 import org.lwjgl.glfw.GLFW;
 
 import lintfordpickle.harvest.controllers.SceneController;
-import lintfordpickle.harvest.data.ships.Ship;
+import lintfordpickle.harvest.data.scene.ships.Ship;
 import net.lintfordlib.ConstantsPhysics;
 import net.lintfordlib.controllers.BaseController;
 import net.lintfordlib.controllers.core.ControllerManager;
@@ -152,7 +152,7 @@ public class CameraShipChaseController extends BaseController {
 		if (mTrackedEntity != null) {
 			// updateSpring(pCore);
 
-			final var lSceneManager = mSceneController.sceneManager();
+			final var lSceneManager = mSceneController.sceneData();
 
 			if (mTrackedEntity != null) {
 				mPosition.x = mTrackedEntity.body().transform.p.x * ConstantsPhysics.UnitsToPixels();

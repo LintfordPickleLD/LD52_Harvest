@@ -1,10 +1,10 @@
 package lintfordpickle.harvest.controllers;
 
-import lintfordpickle.harvest.data.cargo.CargoType;
 import lintfordpickle.harvest.data.game.GameState.GameMode;
-import lintfordpickle.harvest.data.platforms.Platform;
-import lintfordpickle.harvest.data.platforms.PlatformManager;
-import lintfordpickle.harvest.data.ships.Ship;
+import lintfordpickle.harvest.data.scene.cargo.CargoType;
+import lintfordpickle.harvest.data.scene.platforms.Platform;
+import lintfordpickle.harvest.data.scene.platforms.PlatformManager;
+import lintfordpickle.harvest.data.scene.ships.Ship;
 import net.lintfordlib.ConstantsPhysics;
 import net.lintfordlib.controllers.BaseController;
 import net.lintfordlib.controllers.core.ControllerManager;
@@ -26,7 +26,7 @@ public class PlatformController extends BaseController {
 	private GameStateController mGameStateController;
 	private CargoController mCargoController;
 	private ShipController mShipController;
-
+	private SceneController mSceneController;
 	private PlatformManager mPlatformManager;
 	private AudioController mAudioController;
 
@@ -42,10 +42,8 @@ public class PlatformController extends BaseController {
 	// Constructor
 	// ---------------------------------------------
 
-	public PlatformController(ControllerManager controllerManager, PlatformManager platformManager, int entityGroupUid) {
+	public PlatformController(ControllerManager controllerManager, int entityGroupUid) {
 		super(controllerManager, CONTROLLER_NAME, entityGroupUid);
-
-		mPlatformManager = platformManager;
 	}
 
 	// ---------------------------------------------
@@ -58,10 +56,13 @@ public class PlatformController extends BaseController {
 
 		final var lControllerManager = core.controllerManager();
 
+		mSceneController = (SceneController) lControllerManager.getControllerByNameRequired(SceneController.CONTROLLER_NAME, entityGroupUid());
 		mShipController = (ShipController) lControllerManager.getControllerByNameRequired(ShipController.CONTROLLER_NAME, entityGroupUid());
 		mCargoController = (CargoController) lControllerManager.getControllerByNameRequired(CargoController.CONTROLLER_NAME, entityGroupUid());
 		mGameStateController = (GameStateController) lControllerManager.getControllerByNameRequired(GameStateController.CONTROLLER_NAME, entityGroupUid());
 		mAudioController = (AudioController) lControllerManager.getControllerByNameRequired(AudioController.CONTROLLER_NAME, entityGroupUid());
+
+		mPlatformManager = mSceneController.sceneData().platformManager();
 	}
 
 	@Override

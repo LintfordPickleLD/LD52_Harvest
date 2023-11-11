@@ -2,7 +2,7 @@ package lintfordpickle.harvest.controllers.camera;
 
 import org.lwjgl.glfw.GLFW;
 
-import lintfordpickle.harvest.data.ships.Ship;
+import lintfordpickle.harvest.data.scene.ships.Ship;
 import net.lintfordlib.controllers.BaseController;
 import net.lintfordlib.controllers.core.ControllerManager;
 import net.lintfordlib.core.LintfordCore;

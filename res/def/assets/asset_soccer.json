@@ -1,0 +1,8 @@
+{
+    "name": "ASSET_SOCCER",
+    "displayName": "SOCCER",
+        
+    "spritesheetDefinitionName": "SPRITESHEET_PROPS",
+    "spritesheetDefinitionFilename": "res/spritesheets/spritesheetProps.json",
+    "spriteName": "carstream" 
+}
