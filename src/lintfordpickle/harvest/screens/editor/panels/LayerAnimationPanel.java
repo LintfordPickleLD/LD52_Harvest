@@ -62,9 +62,9 @@ public class LayerAnimationPanel extends LayerPanel<SceneAnimationLayer> impleme
 		mAnimationAssetList.desiredHeight(170);
 
 		mAddAnimationButton = new UiButton(parentWindow, "Add");
-		mAddAnimationButton.setClickListener(this, BUTTON_ADD_SPRITE);
+		mAddAnimationButton.setUiWidgetListener(this, BUTTON_ADD_SPRITE);
 		mRemoveAnimationButton = new UiButton(parentWindow, "Delete");
-		mRemoveAnimationButton.setClickListener(this, BUTTON_DEL_SPRITE);
+		mRemoveAnimationButton.setUiWidgetListener(this, BUTTON_DEL_SPRITE);
 
 		final var lHorizontalGroup = new UiHorizontalEntryGroup(parentWindow);
 		lHorizontalGroup.widgets().add(mAddAnimationButton);

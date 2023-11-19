@@ -6,7 +6,6 @@ import lintfordpickle.harvest.data.scene.layers.SceneNoiseLayer;
 import lintfordpickle.harvest.data.scene.layers.SceneTextureLayer;
 import net.lintfordlib.core.LintfordCore;
 import net.lintfordlib.core.ResourceManager;
-import net.lintfordlib.core.graphics.sprites.spritesheet.SpriteSheetDefinition;
 import net.lintfordlib.renderers.BaseRenderer;
 import net.lintfordlib.renderers.RendererManager;
 
@@ -25,8 +24,6 @@ public class SceneRenderer extends BaseRenderer {
 	// ---------------------------------------------
 
 	protected SceneController mSceneController;
-
-	private SpriteSheetDefinition mPropsSpritesheetDefintion;
 
 	// ---------------------------------------------
 	// Properties
@@ -143,7 +140,7 @@ public class SceneRenderer extends BaseRenderer {
 		final var lLayerAnimations = layer.spriteAssets();
 		final var lNumAnimations = lLayerAnimations.size();
 		for (int i = 0; i < lNumAnimations; i++) {
-			final var lSprite = lLayerAnimations.get(i);
+			// final var lSprite = lLayerAnimations.get(i);
 
 			// lSpriteBatch.draw(mPropsSpritesheetDefintion, lSprite, lSprite, 2.f, -0.01f, ColorConstants.WHITE);
 		}

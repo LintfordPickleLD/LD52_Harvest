@@ -5,7 +5,6 @@ import lintfordpickle.harvest.data.scene.layers.LayersManager;
 import lintfordpickle.harvest.data.scene.layers.SceneAnimationLayer;
 import lintfordpickle.harvest.data.scene.layers.SceneBaseLayer;
 import lintfordpickle.harvest.data.scene.layers.SceneNoiseLayer;
-import lintfordpickle.harvest.data.scene.layers.ScenePhysicsLayer;
 import lintfordpickle.harvest.data.scene.layers.SceneTextureLayer;
 import net.lintfordlib.controllers.BaseController;
 import net.lintfordlib.controllers.core.ControllerManager;
@@ -26,10 +25,10 @@ public class EditorLayerController extends BaseController {
 	private LayersManager mLayersManager;
 
 	// TODO: when loading, make sure this is set to highest index + 1;
-	private int LayerIndexCounter;
+	private int mLayerIndexCounter;
 
 	public int getNewLayerUid() {
-		return LayerIndexCounter++;
+		return mLayerIndexCounter++;
 	}
 
 	private SceneBaseLayer mSelectedLayer;
@@ -77,9 +76,19 @@ public class EditorLayerController extends BaseController {
 		super.initialize(core);
 
 		final var lControllerManager = core.controllerManager();
-		final var lSceneController = (SceneController) lControllerManager.getControllerByNameRequired(SceneController.CONTROLLER_NAME, entityGroupUid());
+		final var lSceneController = (EditorSceneController) lControllerManager.getControllerByNameRequired(EditorSceneController.CONTROLLER_NAME, entityGroupUid());
 		mLayersManager = lSceneController.sceneData().layersManager();
 
+		setLayerUidCounter();
+	}
+
+	private void setLayerUidCounter() {
+		final var lLayers = mLayersManager.layers();
+		final var lNumLayers = lLayers.size();
+		for (int i = 0; i < lNumLayers; i++) {
+			if (lLayers.get(i).layerUid >= mLayerIndexCounter)
+				mLayerIndexCounter = lLayers.get(i).layerUid + 1;
+		}
 	}
 
 	// --------------------------------------
@@ -131,14 +140,6 @@ public class EditorLayerController extends BaseController {
 
 		lNoiseLayer.name = "Noise Layer " + lNoiseLayer.layerUid;
 		return lNoiseLayer;
-	}
-
-	public SceneBaseLayer addNewPhysicsLayer() {
-		final var lPhysicsLayer = new ScenePhysicsLayer(getNewLayerUid());
-		mLayersManager.addLayer(lPhysicsLayer);
-
-		lPhysicsLayer.name = "Phys Layer " + lPhysicsLayer.layerUid;
-		return lPhysicsLayer;
 	}
 
 	public void setSelectedLayer(int selectedLayerUid) {

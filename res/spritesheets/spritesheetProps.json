@@ -691,7 +691,7 @@
     "carstream": {
       "animationName": "carstream",
       "loopAnimation": true,
-      "frameDuration": 100,
+      "frameDuration": 150,
       "minimumViableRuntime": 0,
       "animationSpriteIndices": [
         0,

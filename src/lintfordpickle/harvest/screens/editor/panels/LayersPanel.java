@@ -27,7 +27,6 @@ public class LayersPanel extends UiPanel implements IUiListBoxListener {
 	public static final int BUTTON_ADD_TEX_LAYER = 15;
 	public static final int BUTTON_ADD_ANIM_LAYER = 16;
 	public static final int BUTTON_ADD_NOISE_LAYER = 17;
-	public static final int BUTTON_ADD_PHYSICS_LAYER = 18;
 
 	public static final int BUTTON_MOVE_LAYER_UP = 50;
 	public static final int BUTTON_MOVE_LAYER_DOWN = 51;
@@ -42,7 +41,6 @@ public class LayersPanel extends UiPanel implements IUiListBoxListener {
 	private UiButton mAddTextureLayer;
 	private UiButton mAddAnimationLayer;
 	private UiButton mAddNoiseLayer;
-	private UiButton mAddPhysicsLayer;
 
 	private UiButton mMoveUp;
 	private UiButton mMoveDown;
@@ -76,23 +74,21 @@ public class LayersPanel extends UiPanel implements IUiListBoxListener {
 		mLayerListWidget.setHeightMinMax(200, 200);
 
 		mDeleteSelected = new UiButton(parentWindow, "Delete");
-		mDeleteSelected.setClickListener(this, BUTTON_DELETE_LAYER);
+		mDeleteSelected.setUiWidgetListener(this, BUTTON_DELETE_LAYER);
 		mAddTextureLayer = new UiButton(parentWindow, "Add Texture");
-		mAddTextureLayer.setClickListener(this, BUTTON_ADD_TEX_LAYER);
+		mAddTextureLayer.setUiWidgetListener(this, BUTTON_ADD_TEX_LAYER);
 		mAddAnimationLayer = new UiButton(parentWindow, "Add Anim");
-		mAddAnimationLayer.setClickListener(this, BUTTON_ADD_ANIM_LAYER);
+		mAddAnimationLayer.setUiWidgetListener(this, BUTTON_ADD_ANIM_LAYER);
 		mAddNoiseLayer = new UiButton(parentWindow, "Add Noise");
-		mAddNoiseLayer.setClickListener(this, BUTTON_ADD_NOISE_LAYER);
-		mAddPhysicsLayer = new UiButton(parentWindow, "Add Physics");
-		mAddPhysicsLayer.setClickListener(this, BUTTON_ADD_PHYSICS_LAYER);
+		mAddNoiseLayer.setUiWidgetListener(this, BUTTON_ADD_NOISE_LAYER);
 
 		final var lHorizontaGroup = new UiHorizontalEntryGroup(parentWindow);
 
 		mMoveUp = new UiButton(parentWindow, "Up");
-		mMoveUp.setClickListener(this, BUTTON_MOVE_LAYER_UP);
+		mMoveUp.setUiWidgetListener(this, BUTTON_MOVE_LAYER_UP);
 
 		mMoveDown = new UiButton(parentWindow, "Down");
-		mMoveDown.setClickListener(this, BUTTON_MOVE_LAYER_DOWN);
+		mMoveDown.setUiWidgetListener(this, BUTTON_MOVE_LAYER_DOWN);
 
 		lHorizontaGroup.widgets().add(mMoveUp);
 		lHorizontaGroup.widgets().add(mMoveDown);
@@ -103,7 +99,6 @@ public class LayersPanel extends UiPanel implements IUiListBoxListener {
 		addWidget(mAddTextureLayer);
 		addWidget(mAddAnimationLayer);
 		addWidget(mAddNoiseLayer);
-		addWidget(mAddPhysicsLayer);
 
 	}
 
@@ -167,13 +162,6 @@ public class LayersPanel extends UiPanel implements IUiListBoxListener {
 		case BUTTON_ADD_NOISE_LAYER: {
 			final var lNewLayer = mEditorLayerController.addNewNoiseLayer();
 			addLayerToUiList(lNewLayer);
-			break;
-		}
-
-		case BUTTON_ADD_PHYSICS_LAYER: {
-			final var lNewLayer = mEditorLayerController.addNewPhysicsLayer();
-			addLayerToUiList(lNewLayer);
-
 			break;
 		}
 

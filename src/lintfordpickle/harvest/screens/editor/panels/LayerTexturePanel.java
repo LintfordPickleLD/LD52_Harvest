@@ -6,8 +6,9 @@ import net.lintfordlib.core.input.InputManager;
 import net.lintfordlib.core.input.keyboard.IUiInputKeyPressCallback;
 import net.lintfordlib.renderers.windows.UiWindow;
 import net.lintfordlib.renderers.windows.components.UiButton;
-import net.lintfordlib.renderers.windows.components.UiFloatSlider;
 import net.lintfordlib.renderers.windows.components.UiHorizontalEntryGroup;
+import net.lintfordlib.renderers.windows.components.UiInputFloat;
+import net.lintfordlib.renderers.windows.components.UiInputInteger;
 import net.lintfordlib.renderers.windows.components.UiInputText;
 import net.lintfordlib.renderers.windows.components.UiLabel;
 
@@ -46,14 +47,14 @@ public class LayerTexturePanel extends LayerPanel<SceneTextureLayer> implements 
 	private UiInputText mTexturePath;
 	private UiButton mRefreshButton;
 
-	private UiFloatSlider mCenterX;
-	private UiFloatSlider mCenterY;
+	private UiInputInteger mCenterXInput;
+	private UiInputInteger mCenterYInput;
 
-	private UiFloatSlider mTranslationSpeedModX;
-	private UiFloatSlider mTranslationSpeedModY;
+	private UiInputFloat mTranslationSpeedModX;
+	private UiInputFloat mTranslationSpeedModY;
 
-	private UiFloatSlider mScaleX;
-	private UiFloatSlider mScaleY;
+	private UiInputFloat mScaleX;
+	private UiInputFloat mScaleY;
 
 	// --------------------------------------
 	// Properties
@@ -81,43 +82,49 @@ public class LayerTexturePanel extends LayerPanel<SceneTextureLayer> implements 
 		mTexturePath.maxnumInputCharacters(160);
 		mRefreshButton = new UiButton(parentWindow, "Refresh");
 
-		mTextureName.setClickListener(this, BUTTON_TEXTURE_NAME);
-		mTexturePath.setClickListener(this, BUTTON_TEXTURE_PATH);
+		mTextureName.setUiWidgetListener(this, BUTTON_TEXTURE_NAME);
+		mTexturePath.setUiWidgetListener(this, BUTTON_TEXTURE_PATH);
 		mTexturePath.inputString("res/textures/");
 		mTexturePath.emptyString("res/textures/");
-		mRefreshButton.setClickListener(this, BUTTON_REFRESH);
+		mRefreshButton.setUiWidgetListener(this, BUTTON_REFRESH);
 		mLayerName.setKeyUpdateListener(this, INPUT_NAME_KEY_UID);
 
-		mCenterX = new UiFloatSlider(parentWindow);
-		mCenterX.setClickListener(this, SLIDER_CENTER_X);
-		mCenterX.sliderLabel("Center X");
-		mCenterX.setMinMax(0.f, 10.f);
-		mCenterY = new UiFloatSlider(parentWindow);
-		mCenterY.setClickListener(this, SLIDER_CENTER_Y);
-		mCenterY.sliderLabel("Center Y");
-		mCenterY.setMinMax(0.f, 10.f);
+		mCenterXInput = new UiInputInteger(parentWindow);
+		mCenterXInput.setUiWidgetListener(this, SLIDER_CENTER_X);
+		mCenterXInput.label("CenterX");
+		mCenterXInput.setMinMax(0, 0);
 
-		mTranslationSpeedModX = new UiFloatSlider(parentWindow);
-		mTranslationSpeedModX.setClickListener(this, SLIDER_TRANSLATION_SPEED_X);
-		mTranslationSpeedModX.sliderLabel("Mod X");
-		mTranslationSpeedModX.setMinMax(0.f, 10.f);
-		mTranslationSpeedModY = new UiFloatSlider(parentWindow);
-		mTranslationSpeedModY.setClickListener(this, SLIDER_TRANSLATION_SPEED_Y);
-		mTranslationSpeedModY.sliderLabel("Mod Y");
+		mCenterYInput = new UiInputInteger(parentWindow);
+		mCenterYInput.setUiWidgetListener(this, SLIDER_CENTER_Y);
+		mCenterYInput.label("CenterY");
+		mCenterYInput.setMinMax(0, 0);
+
+		mTranslationSpeedModX = new UiInputFloat(parentWindow);
+		mTranslationSpeedModX.setUiWidgetListener(this, SLIDER_TRANSLATION_SPEED_X);
+		mTranslationSpeedModX.label("Mod X");
+		mTranslationSpeedModX.setMinMax(-20.f, 20.f);
+		mTranslationSpeedModX.stepSize(.1f);
+		
+		mTranslationSpeedModY = new UiInputFloat(parentWindow);
+		mTranslationSpeedModY.setUiWidgetListener(this, SLIDER_TRANSLATION_SPEED_Y);
+		mTranslationSpeedModY.label("Mod Y");
 		mTranslationSpeedModY.setMinMax(0.f, 10.f);
+		mTranslationSpeedModY.stepSize(.1f);
 
-		mScaleX = new UiFloatSlider(parentWindow);
-		mScaleX.setClickListener(this, SLIDER_SCALE_X);
-		mScaleX.sliderLabel("Scale X");
+		mScaleX = new UiInputFloat(parentWindow);
+		mScaleX.setUiWidgetListener(this, SLIDER_SCALE_X);
+		mScaleX.label("Scale X");
 		mScaleX.setMinMax(0.f, 10.f);
-		mScaleY = new UiFloatSlider(parentWindow);
-		mScaleY.setClickListener(this, SLIDER_SCALE_Y);
-		mScaleY.sliderLabel("Scale Y");
+		mScaleX.stepSize(.1f);
+		mScaleY = new UiInputFloat(parentWindow);
+		mScaleY.setUiWidgetListener(this, SLIDER_SCALE_Y);
+		mScaleY.label("Scale Y");
 		mScaleY.setMinMax(0.f, 10.f);
+		mScaleY.stepSize(.1f);
 
 		final var lHorizontalGroup0 = new UiHorizontalEntryGroup(parentWindow);
-		lHorizontalGroup0.widgets().add(mCenterX);
-		lHorizontalGroup0.widgets().add(mCenterY);
+		lHorizontalGroup0.widgets().add(mCenterXInput);
+		lHorizontalGroup0.widgets().add(mCenterYInput);
 
 		final var lHorizontalGroup1 = new UiHorizontalEntryGroup(parentWindow);
 		lHorizontalGroup1.widgets().add(mTranslationSpeedModX);
@@ -164,14 +171,15 @@ public class LayerTexturePanel extends LayerPanel<SceneTextureLayer> implements 
 		if (selectedLayer.textureFilepath() != null)
 			mTexturePath.inputString(selectedLayer.textureFilepath());
 
-		mTranslationSpeedModX.currentValue(selectedLayer.translationSpeedModX);
-		mTranslationSpeedModY.currentValue(selectedLayer.translationSpeedModY);
+		mTranslationSpeedModX.inputString(String.valueOf(selectedLayer.translationSpeedModX));
+		mTranslationSpeedModY.inputString(String.valueOf(selectedLayer.translationSpeedModY));
 
-		mScaleX.currentValue(selectedLayer.scaleX);
-		mScaleY.currentValue(selectedLayer.scaleY);
+		mScaleX.inputString(String.valueOf(selectedLayer.scaleX));
+		mScaleY.inputString(String.valueOf(selectedLayer.scaleY));
 
-		mCenterX.currentValue(selectedLayer.centerX);
-		mCenterY.currentValue(selectedLayer.centerY);
+		// TODO:
+//		mCenterX.currentValue(selectedLayer.centerX);
+//		mCenterY.currentValue(selectedLayer.centerY);
 	}
 
 	// --------------------------------------
@@ -218,6 +226,34 @@ public class LayerTexturePanel extends LayerPanel<SceneTextureLayer> implements 
 			mSelectedLayer.setTextureFilepath(mTexturePath.inputString().toString());
 			break;
 
+		case SLIDER_SCALE_X:
+			if (mSelectedLayer == null)
+				return;
+
+			mSelectedLayer.scaleX = mScaleX.currentValue();
+			break;
+			
+		case SLIDER_SCALE_Y:
+			if (mSelectedLayer == null)
+				return;
+
+			mSelectedLayer.scaleY = mScaleY.currentValue();
+			break;
+			
+		case SLIDER_CENTER_X:
+			if (mSelectedLayer == null)
+				return;
+
+			mSelectedLayer.centerX = mCenterXInput.currentValue();
+			break;
+			
+		case SLIDER_CENTER_Y:
+			if (mSelectedLayer == null)
+				return;
+
+			mSelectedLayer.centerY = mCenterYInput.currentValue();
+			break;
+			
 		case SLIDER_TRANSLATION_SPEED_X:
 			if (mSelectedLayer == null)
 				return;

@@ -43,6 +43,19 @@ public class SceneTextureLayerSaveDefinition extends BaseSceneLayerSaveDefinitio
 		lTextureLayer.translationSpeedModX = translationSpeedModX;
 		lTextureLayer.translationSpeedModY = translationSpeedModY;
 
+		lTextureLayer.centerX = centerX;
+		lTextureLayer.centerY = centerY;
+
+		lTextureLayer.scaleX = scaleX;
+		lTextureLayer.scaleY = scaleY;
+
+		// ensure some sane defaults:
+		if (lTextureLayer.scaleX <= 0.f)
+			lTextureLayer.scaleX = 1.f;
+
+		if (lTextureLayer.scaleY <= 0.f)
+			lTextureLayer.scaleY = 1.f;
+
 		return lTextureLayer;
 	}
 }

@@ -32,7 +32,14 @@ public class HashGridDefinition implements Serializable {
 	@SerializedName(value = "TilesHigh")
 	public int hashGridTilesHigh;
 
-	// contents of hashgrid are not serialized here
+	// ---------------------------------------------
+	// Properties
+	// ---------------------------------------------
+
+	public boolean isInitialized() {
+		final var lValuesNotPresent = hashGridWidth == 0 || hashGridHeight == 0 || hashGridTilesWide == 0 || hashGridTilesHigh == 0;
+		return !lValuesNotPresent;
+	}
 
 	// ---------------------------------------------
 	// Methods
@@ -45,4 +52,5 @@ public class HashGridDefinition implements Serializable {
 		hashGridTilesWide = hashgrid.numTilesWide();
 		hashGridTilesHigh = hashgrid.numTilesHigh();
 	}
+
 }

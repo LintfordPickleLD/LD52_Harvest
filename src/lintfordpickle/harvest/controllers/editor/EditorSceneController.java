@@ -1,4 +1,4 @@
-package lintfordpickle.harvest.controllers;
+package lintfordpickle.harvest.controllers.editor;
 
 import java.io.File;
 import java.io.FileWriter;
@@ -8,17 +8,15 @@ import java.io.Writer;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 
-import lintfordpickle.harvest.data.scene.SceneData;
+import lintfordpickle.harvest.data.editor.EditorSceneData;
 import net.lintfordLib.editor.data.scene.SceneHeader;
 import net.lintfordlib.controllers.BaseController;
-import net.lintfordlib.controllers.camera.CameraBoundsController;
 import net.lintfordlib.controllers.core.ControllerManager;
-import net.lintfordlib.core.LintfordCore;
 import net.lintfordlib.core.debug.Debug;
 
 // TODO: This is the same as the TrackController in RazerRunnner - consider adding to lib to make setup faster.
 // TODO: I think this can be made 'generic' 
-public class SceneController extends BaseController {
+public class EditorSceneController extends BaseController {
 
 	// ---------------------------------------------
 	// Constants
@@ -30,10 +28,8 @@ public class SceneController extends BaseController {
 	// Variables
 	// ---------------------------------------------
 
-	private CameraBoundsController mCameraBoundsController;
-
 	private final SceneHeader mSceneHeader;
-	private final SceneData mSceneData;
+	private final EditorSceneData mEditorSceneData;
 
 	// ---------------------------------------------
 	// Properties
@@ -41,39 +37,26 @@ public class SceneController extends BaseController {
 
 	@Override
 	public boolean isInitialized() {
-		return mSceneData != null;
+		return mEditorSceneData != null;
 	}
 
 	public SceneHeader sceneHeader() {
 		return mSceneHeader;
 	}
 
-	public SceneData sceneData() {
-		return mSceneData;
+	public EditorSceneData sceneData() {
+		return mEditorSceneData;
 	}
 
 	// ---------------------------------------------
 	// Constructor
 	// ---------------------------------------------
 
-	public SceneController(ControllerManager controllerManager, SceneHeader header, SceneData data, int entityGroupID) {
+	public EditorSceneController(ControllerManager controllerManager, SceneHeader header, EditorSceneData data, int entityGroupID) {
 		super(controllerManager, CONTROLLER_NAME, entityGroupID);
 
 		mSceneHeader = header;
-		mSceneData = data;
-	}
-
-	// ---------------------------------------------
-	// Core-Methods
-	// ---------------------------------------------
-
-	@Override
-	public void initialize(LintfordCore core) {
-		super.initialize(core);
-
-		final var lControllerManager = core.controllerManager();
-		mCameraBoundsController = (CameraBoundsController) lControllerManager.getControllerByNameRequired(CameraBoundsController.CONTROLLER_NAME, mEntityGroupUid);
-
+		mEditorSceneData = data;
 	}
 
 	// ---------------------------------------------
@@ -81,13 +64,11 @@ public class SceneController extends BaseController {
 	// ---------------------------------------------
 
 	public void setSceneWidth(int widthInPixels) {
-		mSceneData.sceneWidthInPx(widthInPixels);
-		mCameraBoundsController.widthBoundInPx(mSceneData.sceneWidthInPx());
+		mEditorSceneData.sceneWidthInPx(widthInPixels);
 	}
 
 	public void setSceneHeight(int heightInPixels) {
-		mSceneData.sceneHeightInPx(heightInPixels);
-		mCameraBoundsController.heightBoundInPx(mSceneData.sceneHeightInPx());
+		mEditorSceneData.sceneHeightInPx(heightInPixels);
 	}
 
 	public void setSceneBoundary(int widthInPixels, int heightInPixels) {
@@ -115,7 +96,7 @@ public class SceneController extends BaseController {
 
 		// -------
 
-		final var lSceneSaveDefinition = mSceneData.getSceneDefinitionToSave();
+		final var lSceneSaveDefinition = mEditorSceneData.getSceneDefinitionToSave();
 
 		try (Writer writer = new FileWriter(filename)) {
 			Gson gson = new GsonBuilder().setPrettyPrinting().create();

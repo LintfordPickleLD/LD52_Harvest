@@ -1,20 +1,23 @@
 package lintfordpickle.harvest.renderers.editor;
 
+import lintfordpickle.harvest.controllers.editor.EditorSceneController;
 import lintfordpickle.harvest.data.assets.SceneAssetInstance;
 import lintfordpickle.harvest.data.scene.layers.SceneAnimationLayer;
 import lintfordpickle.harvest.data.scene.layers.SceneNoiseLayer;
 import lintfordpickle.harvest.data.scene.layers.SceneTextureLayer;
-import lintfordpickle.harvest.renderers.scene.SceneRenderer;
 import net.lintfordlib.core.LintfordCore;
 import net.lintfordlib.core.ResourceManager;
 import net.lintfordlib.core.graphics.ColorConstants;
+import net.lintfordlib.renderers.BaseRenderer;
 import net.lintfordlib.renderers.RendererManager;
 
-public class EditorSceneRenderer extends SceneRenderer {
+public class EditorSceneRenderer extends BaseRenderer {
 
 	// ---------------------------------------------
 	// Constants
 	// ---------------------------------------------
+
+	public static final String RENDERER_NAME = "Editor Scene Renderer";
 
 	public static final int WORLD_WIDTH_IN_PX = 1024; // TODO: This has to be removed into a data file.
 
@@ -22,6 +25,7 @@ public class EditorSceneRenderer extends SceneRenderer {
 	// Variables
 	// ---------------------------------------------
 
+	private EditorSceneController mSceneController;
 	private ResourceManager mResourceManager;
 
 	// ---------------------------------------------
@@ -39,7 +43,7 @@ public class EditorSceneRenderer extends SceneRenderer {
 	// ---------------------------------------------
 
 	public EditorSceneRenderer(RendererManager rendererManager, int entityGroupID) {
-		super(rendererManager, entityGroupID);
+		super(rendererManager, RENDERER_NAME, entityGroupID);
 	}
 
 	// ---------------------------------------------
@@ -48,7 +52,7 @@ public class EditorSceneRenderer extends SceneRenderer {
 
 	@Override
 	public void initialize(LintfordCore core) {
-		super.initialize(core);
+		mSceneController = (EditorSceneController) core.controllerManager().getControllerByNameRequired(EditorSceneController.CONTROLLER_NAME, entityGroupID());
 	}
 
 	@Override
@@ -129,7 +133,10 @@ public class EditorSceneRenderer extends SceneRenderer {
 		}
 	}
 
-	@Override
+	// ---------------------------------------------
+	// Methods
+	// ---------------------------------------------
+
 	protected void drawTextureLayer(LintfordCore core, SceneTextureLayer layer) {
 		final var lSpriteBatch = mRendererManager.uiSpriteBatch();
 
@@ -137,17 +144,22 @@ public class EditorSceneRenderer extends SceneRenderer {
 			final var aabb = core.HUD().boundingRectangle();
 			final var aabb_c = core.gameCamera().boundingRectangle();
 
-			lSpriteBatch.begin(core.HUD());
-
 			final var lCamOffsetX = aabb_c.centerX() * layer.translationSpeedModX;
 			final var lCamOffsetY = aabb_c.centerY() * layer.translationSpeedModY;
 
-			final var lViewportX = lCamOffsetX - aabb_c.width() * .5f * core.gameCamera().getZoomFactorOverOne();
-			final var lViewportY = lCamOffsetY - aabb_c.height() * .5f * core.gameCamera().getZoomFactorOverOne();
-			final var lViewportWidth = aabb_c.width() * core.gameCamera().getZoomFactorOverOne();
-			final var lViewportHeight = aabb_c.height() * core.gameCamera().getZoomFactorOverOne();
+			lSpriteBatch.begin(core.gameCamera());
 
-			lSpriteBatch.draw(layer.texture, lViewportX, lViewportY, lViewportWidth, lViewportHeight, aabb.left(), aabb.top(), aabb.width(), aabb.height(), -.01f, ColorConstants.WHITE);
+			final var lSrcX = 0;
+			final var lSrcY = 0;
+			final var lSrcW = layer.texture.getTextureWidth();
+			final var lSrcH = layer.texture.getTextureHeight();
+
+			final var lDstX = layer.centerX - layer.texture.getTextureWidth() * layer.scaleX * .5f;
+			final var lDstY = layer.centerY - layer.texture.getTextureHeight() * layer.scaleY * .5f;
+			final var lDstWidth = layer.texture.getTextureWidth() * layer.scaleX;
+			final var lDstHeight = layer.texture.getTextureHeight() * layer.scaleY;
+
+			lSpriteBatch.draw(layer.texture, lSrcX, lSrcY, lSrcW, lSrcH, lDstX, lDstY, lDstWidth, lDstHeight, -.01f, ColorConstants.WHITE);
 
 			lSpriteBatch.end();
 			return;
@@ -168,7 +180,6 @@ public class EditorSceneRenderer extends SceneRenderer {
 
 	}
 
-	@Override
 	protected void drawAnimationLayer(LintfordCore core, SceneAnimationLayer layer) {
 		final var lSpriteBatch = mRendererManager.uiSpriteBatch();
 
@@ -185,13 +196,8 @@ public class EditorSceneRenderer extends SceneRenderer {
 		lSpriteBatch.end();
 	}
 
-	@Override
 	protected void drawNoiseLayer(LintfordCore core, SceneNoiseLayer layer) {
 
 	}
-
-	// ---------------------------------------------
-	// Methods
-	// ---------------------------------------------
 
 }

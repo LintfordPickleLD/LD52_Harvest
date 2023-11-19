@@ -79,6 +79,12 @@ public class SceneTextureLayer extends SceneBaseLayer {
 		lSaveDefinition.translationSpeedModX = translationSpeedModX;
 		lSaveDefinition.translationSpeedModY = translationSpeedModY;
 
+		lSaveDefinition.centerX = centerX;
+		lSaveDefinition.centerY = centerY;
+
+		lSaveDefinition.scaleX = scaleX;
+		lSaveDefinition.scaleY = scaleY;
+
 		return lSaveDefinition;
 	}
 

@@ -1,4 +1,4 @@
-package lintfordpickle.harvest.data.scene;
+package lintfordpickle.harvest.data.scene.savedefinitions;
 
 import java.io.Serializable;
 
@@ -19,8 +19,11 @@ public class SceneSaveDefinition implements Serializable {
 	// Variables
 	// --------------------------------------
 
-	@SerializedName(value = "SceneName")
-	private String mSceneName;
+	@SerializedName(value = "SceneWidth")
+	private int mSceneWidthInPx;
+
+	@SerializedName(value = "SceneHeight")
+	private int mSceneHeightInPx;
 
 	@SerializedName(value = "HashGrid")
 	private final HashGridDefinition mGridSettings = new HashGridDefinition();
@@ -28,16 +31,26 @@ public class SceneSaveDefinition implements Serializable {
 	@SerializedName(value = "Layers")
 	private final LayersManagerSaveDefinition mLayerSaveManager = new LayersManagerSaveDefinition();
 
+	private final ScenePhysicsObjectsSaveManager mPhysicsObjectsSaveManager = new ScenePhysicsObjectsSaveManager();
+
 	// --------------------------------------
 	// Properties
 	// --------------------------------------
 
-	public String sceneName() {
-		return mSceneName;
+	public int widthInPixels() {
+		return mSceneWidthInPx;
 	}
 
-	public void sceneName(String newSceneName) {
-		mSceneName = newSceneName;
+	public void widthInPixels(int width) {
+		mSceneWidthInPx = width;
+	}
+
+	public int heightInPixels() {
+		return mSceneHeightInPx;
+	}
+
+	public void heightInPixels(int height) {
+		mSceneHeightInPx = height;
 	}
 
 	public HashGridDefinition gridSettings() {
@@ -48,13 +61,9 @@ public class SceneSaveDefinition implements Serializable {
 		return mLayerSaveManager;
 	}
 
-	// --------------------------------------
-	// Constructor
-	// --------------------------------------
-
-	// --------------------------------------
-	// Core-Methods
-	// --------------------------------------
+	public ScenePhysicsObjectsSaveManager physicsObjects() {
+		return mPhysicsObjectsSaveManager;
+	}
 
 	// --------------------------------------
 	// Methods

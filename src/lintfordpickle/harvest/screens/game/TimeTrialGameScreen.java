@@ -3,6 +3,9 @@ package lintfordpickle.harvest.screens.game;
 import org.lwjgl.glfw.GLFW;
 import org.lwjgl.opengl.GL11;
 
+import com.google.gson.GsonBuilder;
+import com.google.gson.JsonSyntaxException;
+
 import lintfordpickle.harvest.ConstantsGame;
 import lintfordpickle.harvest.controllers.AudioController;
 import lintfordpickle.harvest.controllers.CargoController;
@@ -16,6 +19,8 @@ import lintfordpickle.harvest.controllers.actionevents.GameActionEventController
 import lintfordpickle.harvest.controllers.camera.CameraShipChaseController;
 import lintfordpickle.harvest.data.CollisionHandler;
 import lintfordpickle.harvest.data.players.PlayerManager;
+import lintfordpickle.harvest.data.scene.SceneData;
+import lintfordpickle.harvest.data.scene.savedefinitions.SceneSaveDefinition;
 import lintfordpickle.harvest.renderers.PlatformsRenderer;
 import lintfordpickle.harvest.renderers.ShipRenderer;
 import lintfordpickle.harvest.renderers.hud.MinimapRenderer;
@@ -31,11 +36,13 @@ import net.lintfordlib.controllers.physics.IPhysicsControllerCallback;
 import net.lintfordlib.controllers.physics.PhysicsController;
 import net.lintfordlib.core.LintfordCore;
 import net.lintfordlib.core.ResourceManager;
+import net.lintfordlib.core.debug.Debug;
 import net.lintfordlib.core.graphics.rendertarget.RenderTarget;
 import net.lintfordlib.core.particles.ParticleFrameworkData;
 import net.lintfordlib.core.physics.PhysicsSettings;
 import net.lintfordlib.core.physics.PhysicsWorld;
 import net.lintfordlib.core.physics.resolvers.CollisionResolverRotationAndFriction;
+import net.lintfordlib.core.storage.FileUtils;
 import net.lintfordlib.renderers.debug.physics.DebugPhysicsGridRenderer;
 import net.lintfordlib.renderers.debug.physics.DebugPhysicsRenderer;
 import net.lintfordlib.renderers.particles.ParticleFrameworkRenderer;
@@ -54,7 +61,8 @@ public class TimeTrialGameScreen extends BaseGameScreen {
 	private CollisionHandler mCollisionHandler;
 
 	// Data
-	private final SceneHeader mSceneHeader;
+	private SceneHeader mSceneHeader;
+	private SceneData mSceneData;
 
 	private PlayerManager mPlayerManager;
 
@@ -183,6 +191,8 @@ public class TimeTrialGameScreen extends BaseGameScreen {
 	// Methods
 	// ---------------------------------------------
 
+	// DATA ----------------------------------------
+
 	@Override
 	protected void createData(LintfordCore core) {
 		mParticleFrameworkData = new ParticleFrameworkData();
@@ -190,7 +200,43 @@ public class TimeTrialGameScreen extends BaseGameScreen {
 		mCollisionHandler = new CollisionHandler();
 
 		mGameCamera.setPosition(ConstantsPhysics.toPixels(-1.2f), ConstantsPhysics.toPixels(13.1f));
+
+		mSceneData = new SceneData(); // We fill *the components* of the SceneData, by deserilizing objects using the SceneHeader.
+
+		if (mSceneHeader != null && mSceneHeader.isSceneValid()) {
+			loadTrackDefinitionFromFile(mSceneHeader.sceneHeaderFilepath());
+		} else {
+			createNewScene();
+		}
 	}
+
+	public void createNewScene() {
+
+	}
+
+	public void loadTrackDefinitionFromFile(String filename) {
+		final var lGson = new GsonBuilder().create();
+
+		String lSceneRawFileContents = null;
+		SceneSaveDefinition lSceneSaveDefinition = null;
+
+		try {
+			lSceneRawFileContents = FileUtils.loadString(filename);
+			lSceneSaveDefinition = lGson.fromJson(lSceneRawFileContents, SceneSaveDefinition.class);
+
+		} catch (JsonSyntaxException ex) {
+			Debug.debugManager().logger().printException(getClass().getSimpleName(), ex);
+		}
+
+		if (lSceneSaveDefinition == null) {
+			Debug.debugManager().logger().e(getClass().getSimpleName(), "There was an error reading the scene save definition file (" + filename + ")");
+			return;
+		}
+
+		mSceneData.createSceneFromSaveDefinition(lSceneSaveDefinition);
+	}
+
+	// CONTROLLERS ---------------------------------
 
 	@Override
 	protected void createControllers(ControllerManager controllerManager) {
@@ -221,7 +267,7 @@ public class TimeTrialGameScreen extends BaseGameScreen {
 		mPhysicsController = new PhysicsController(controllerManager, lPhysicsCallback, entityGroupUid());
 		mLevelController = new LevelController(controllerManager, entityGroupUid());
 		mCameraShipChaseController = new CameraShipChaseController(controllerManager, mGameCamera, null, entityGroupUid());
-		mSceneController = new SceneController(controllerManager, mSceneHeader, entityGroupUid());
+		mSceneController = new SceneController(controllerManager, mSceneHeader, mSceneData, entityGroupUid());
 		mGameStateController = new TimeTrialGameStateController(controllerManager, mPlayerManager, entityGroupUid());
 		mCargoController = new CargoController(controllerManager, entityGroupUid());
 		mShipController = new ShipController(controllerManager, mPlayerManager, entityGroupUid());
@@ -249,6 +295,8 @@ public class TimeTrialGameScreen extends BaseGameScreen {
 		mPhysicsWorldDebugWatcher.physicsWorld(mPhysicsController.world());
 
 	}
+
+	// RENDERERS -----------------------------------
 
 	@Override
 	protected void createRenderers(LintfordCore core) {

@@ -1,10 +1,11 @@
-package lintfordpickle.harvest.data.game;
+package lintfordpickle.harvest.data.scene;
 
+import lintfordpickle.harvest.data.game.GameState;
 import lintfordpickle.harvest.data.game.GameState.GameMode;
-import lintfordpickle.harvest.data.scene.SceneSaveDefinition;
 import lintfordpickle.harvest.data.scene.cargo.CargoManager;
 import lintfordpickle.harvest.data.scene.layers.LayersManager;
 import lintfordpickle.harvest.data.scene.platforms.PlatformManager;
+import lintfordpickle.harvest.data.scene.savedefinitions.SceneSaveDefinition;
 import lintfordpickle.harvest.data.scene.ships.ShipManager;
 
 public class SceneData {
@@ -13,8 +14,8 @@ public class SceneData {
 	// Variables
 	// --------------------------------------
 
-	private float mSceneWidthInPx = 2048.f;
-	private float mSceneHeightInPx = 2048.f;
+	private int mSceneWidthInPx = 2048;
+	private int mSceneHeightInPx = 2048;
 
 	// TODO: Player setup (num players etc.) - in GameState?
 
@@ -52,7 +53,7 @@ public class SceneData {
 		return mSceneWidthInPx;
 	}
 
-	public void sceneWidthInPx(float v) {
+	public void sceneWidthInPx(int v) {
 		mSceneWidthInPx = v;
 	}
 
@@ -60,7 +61,7 @@ public class SceneData {
 		return mSceneHeightInPx;
 	}
 
-	public void sceneHeightInPx(float v) {
+	public void sceneHeightInPx(int v) {
 		mSceneHeightInPx = v;
 	}
 
@@ -85,6 +86,9 @@ public class SceneData {
 	// SAVE
 	public SceneSaveDefinition getSceneDefinitionToSave() {
 		final var lSceneSaveDefinition = new SceneSaveDefinition();
+
+		lSceneSaveDefinition.widthInPixels(mSceneWidthInPx);
+		lSceneSaveDefinition.heightInPixels(mSceneHeightInPx);
 
 		mGameState.storeInTrackDefinition(lSceneSaveDefinition);
 		mLayersManager.storeInTrackDefinition(lSceneSaveDefinition);

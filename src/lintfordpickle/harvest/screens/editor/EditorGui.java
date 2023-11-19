@@ -5,7 +5,9 @@ import lintfordpickle.harvest.screens.editor.panels.LayerNoisePanel;
 import lintfordpickle.harvest.screens.editor.panels.LayerPhysicsPanel;
 import lintfordpickle.harvest.screens.editor.panels.LayerTexturePanel;
 import lintfordpickle.harvest.screens.editor.panels.LayersPanel;
+import lintfordpickle.harvest.screens.editor.panels.ScenePanel;
 import net.lintfordLib.editor.renderers.UiDockedWindow;
+import net.lintfordLib.editor.renderers.panels.CameraPanel;
 import net.lintfordLib.editor.renderers.panels.CursorPanel;
 import net.lintfordLib.editor.renderers.panels.FileInfoPanel;
 import net.lintfordLib.editor.renderers.panels.GridPanel;
@@ -67,6 +69,8 @@ public class EditorGui extends UiDockedWindow {
 		super.createGuiPanels();
 
 		editorPanels().add(new FileInfoPanel(this, mEntityGroupUid));
+		editorPanels().add(new ScenePanel(this, mEntityGroupUid));
+		editorPanels().add(new CameraPanel(this, mEntityGroupUid));
 		editorPanels().add(new CursorPanel(this, mEntityGroupUid));
 		editorPanels().add(new GridPanel(this, mEntityGroupUid));
 		editorPanels().add(new LayersPanel(this, mEntityGroupUid));

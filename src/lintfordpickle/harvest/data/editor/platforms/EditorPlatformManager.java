@@ -1,42 +1,50 @@
-package lintfordpickle.harvest.data.scene.ships;
+package lintfordpickle.harvest.data.editor.platforms;
 
 import java.util.ArrayList;
 import java.util.List;
 
-import lintfordpickle.harvest.data.scene.BaseInstanceManager;
+import lintfordpickle.harvest.data.editor.BaseEditorInstanceManager;
+import lintfordpickle.harvest.data.editor.EditorSceneData;
+import lintfordpickle.harvest.data.scene.platforms.Platform;
 import lintfordpickle.harvest.data.scene.savedefinitions.SceneSaveDefinition;
 
-public class ShipManager extends BaseInstanceManager {
+public class EditorPlatformManager extends BaseEditorInstanceManager {
 
 	// ---------------------------------------------
 	// Variables
 	// ---------------------------------------------
 
-	private final List<Ship> mShips = new ArrayList<>();
+	private final List<Platform> mPlatforms = new ArrayList<>();
 
 	// ---------------------------------------------
 	// Properties
 	// ---------------------------------------------
 
-	public List<Ship> ships() {
-		return mShips;
-	}
-
-	public Ship playerShip() {
-		return mShips.get(0);
+	public List<Platform> platforms() {
+		return mPlatforms;
 	}
 
 	// ---------------------------------------------
 	// Constructor
 	// ---------------------------------------------
 
-	public ShipManager() {
+	public EditorPlatformManager() {
 
 	}
 
 	// ---------------------------------------------
 	// Methods
 	// ---------------------------------------------
+
+	public void addPlatform(Platform platform) {
+		if (mPlatforms.contains(platform) == false)
+			mPlatforms.add(platform);
+	}
+
+	public void removePlatform(Platform platform) {
+		if (mPlatforms.contains(platform))
+			mPlatforms.remove(platform);
+	}
 
 	@Override
 	public void initializeManager() {
@@ -57,9 +65,9 @@ public class ShipManager extends BaseInstanceManager {
 	}
 
 	@Override
-	public void finalizeAfterLoading() {
+	public void finalizeAfterLoading(EditorSceneData editorSceneInstance) {
 		// TODO Auto-generated method stub
-
+		
 	}
 
 }

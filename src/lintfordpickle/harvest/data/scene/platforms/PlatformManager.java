@@ -4,7 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import lintfordpickle.harvest.data.scene.BaseInstanceManager;
-import lintfordpickle.harvest.data.scene.SceneSaveDefinition;
+import lintfordpickle.harvest.data.scene.savedefinitions.SceneSaveDefinition;
 
 public class PlatformManager extends BaseInstanceManager {
 
