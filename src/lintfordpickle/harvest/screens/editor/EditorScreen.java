@@ -14,6 +14,7 @@ import lintfordpickle.harvest.renderers.editor.EditorPhysicsRenderer;
 import lintfordpickle.harvest.renderers.editor.EditorSceneRenderer;
 import net.lintfordLib.editor.ConstantsEditor;
 import net.lintfordLib.editor.controllers.EditorBrushController;
+import net.lintfordLib.editor.controllers.EditorCameraMovementController;
 import net.lintfordLib.editor.controllers.EditorFileController;
 import net.lintfordLib.editor.controllers.EditorHashGridController;
 import net.lintfordLib.editor.controllers.IEditorFileControllerListener;
@@ -24,7 +25,6 @@ import net.lintfordLib.editor.renderers.EditorBrushRenderer;
 import net.lintfordLib.editor.renderers.EditorHashGridRenderer;
 import net.lintfordLib.editor.renderers.UiDockedWindow;
 import net.lintfordlib.controllers.camera.CameraBoundsController;
-import net.lintfordlib.controllers.camera.CameraMovementController;
 import net.lintfordlib.controllers.camera.CameraZoomController;
 import net.lintfordlib.controllers.core.ControllerManager;
 import net.lintfordlib.controllers.geometry.SpatialHashGridController;
@@ -50,7 +50,7 @@ public class EditorScreen extends BaseGameScreen implements IEditorFileControlle
 
 	// Controllers
 	private CameraZoomController mCameraZoomController;
-	private CameraMovementController mCameraMoveController;
+	private EditorCameraMovementController mCameraMoveController;
 	private CameraBoundsController mCameraBoundsController;
 	private SpatialHashGridController mSpatialHashGridController;
 	private EditorSceneController mEditorSceneController;
@@ -158,7 +158,7 @@ public class EditorScreen extends BaseGameScreen implements IEditorFileControlle
 
 	@Override
 	protected void createControllers(ControllerManager controllerManager) {
-		mCameraMoveController = new CameraMovementController(controllerManager, mGameCamera, ConstantsEditor.EDITOR_RESOURCE_GROUP_ID);
+		mCameraMoveController = new EditorCameraMovementController(controllerManager, mGameCamera, ConstantsEditor.EDITOR_RESOURCE_GROUP_ID);
 		mCameraZoomController = new CameraZoomController(controllerManager, mGameCamera, ConstantsEditor.EDITOR_RESOURCE_GROUP_ID);
 		mCameraBoundsController = new CameraBoundsController(controllerManager, mGameCamera, ConstantsEditor.EDITOR_RESOURCE_GROUP_ID);
 
