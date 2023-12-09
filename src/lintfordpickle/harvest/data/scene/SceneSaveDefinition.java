@@ -1,11 +1,14 @@
-package lintfordpickle.harvest.data.scene.savedefinitions;
+package lintfordpickle.harvest.data.scene;
 
 import java.io.Serializable;
 
 import com.google.gson.annotations.SerializedName;
 
-import lintfordpickle.harvest.data.scene.collisions.definitions.HashGridDefinition;
 import lintfordpickle.harvest.data.scene.layers.savedefinitions.LayersManagerSaveDefinition;
+import lintfordpickle.harvest.data.scene.savedefinitions.HashGridSaveManager;
+import lintfordpickle.harvest.data.scene.savedefinitions.ScenePhysicsObjectsSaveManager;
+import lintfordpickle.harvest.data.scene.savedefinitions.ScenePhysicsSettingsSaveManager;
+import lintfordpickle.harvest.data.scene.savedefinitions.SceneSettingsSaveDefinition;
 
 public class SceneSaveDefinition implements Serializable {
 
@@ -19,46 +22,39 @@ public class SceneSaveDefinition implements Serializable {
 	// Variables
 	// --------------------------------------
 
-	@SerializedName(value = "SceneWidth")
-	private int mSceneWidthInPx;
-
-	@SerializedName(value = "SceneHeight")
-	private int mSceneHeightInPx;
+	@SerializedName(value = "SceneSettings")
+	private final SceneSettingsSaveDefinition mSceneSettingsSaveDefinition = new SceneSettingsSaveDefinition();
 
 	@SerializedName(value = "HashGrid")
-	private final HashGridDefinition mGridSettings = new HashGridDefinition();
+	private final HashGridSaveManager mGridSettings = new HashGridSaveManager();
 
 	@SerializedName(value = "Layers")
 	private final LayersManagerSaveDefinition mLayerSaveManager = new LayersManagerSaveDefinition();
 
+	@SerializedName(value = "PhysicsSettings")
+	private final ScenePhysicsSettingsSaveManager mScenePhysicsSettingsSaveManager = new ScenePhysicsSettingsSaveManager();
+
+	@SerializedName(value = "PhysicsObjects")
 	private final ScenePhysicsObjectsSaveManager mPhysicsObjectsSaveManager = new ScenePhysicsObjectsSaveManager();
 
 	// --------------------------------------
 	// Properties
 	// --------------------------------------
 
-	public int widthInPixels() {
-		return mSceneWidthInPx;
+	public SceneSettingsSaveDefinition sceneSettingsSaveDefinition() {
+		return mSceneSettingsSaveDefinition;
 	}
 
-	public void widthInPixels(int width) {
-		mSceneWidthInPx = width;
-	}
-
-	public int heightInPixels() {
-		return mSceneHeightInPx;
-	}
-
-	public void heightInPixels(int height) {
-		mSceneHeightInPx = height;
-	}
-
-	public HashGridDefinition gridSettings() {
+	public HashGridSaveManager gridSettings() {
 		return mGridSettings;
 	}
 
 	public LayersManagerSaveDefinition layers() {
 		return mLayerSaveManager;
+	}
+
+	public ScenePhysicsSettingsSaveManager physicsSettings() {
+		return mScenePhysicsSettingsSaveManager;
 	}
 
 	public ScenePhysicsObjectsSaveManager physicsObjects() {

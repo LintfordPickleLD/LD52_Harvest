@@ -5,8 +5,10 @@ import lintfordpickle.harvest.data.editor.platforms.EditorPlatformManager;
 import lintfordpickle.harvest.data.game.GameState;
 import lintfordpickle.harvest.data.game.GameState.GameMode;
 import lintfordpickle.harvest.data.scene.HashGridManager;
+import lintfordpickle.harvest.data.scene.SceneSaveDefinition;
+import lintfordpickle.harvest.data.scene.SceneSettingsManager;
 import lintfordpickle.harvest.data.scene.layers.LayersManager;
-import lintfordpickle.harvest.data.scene.savedefinitions.SceneSaveDefinition;
+import lintfordpickle.harvest.data.scene.physics.PhysicsSettingsManager;
 import lintfordpickle.harvest.data.scene.ships.ShipManager;
 
 public class EditorSceneData {
@@ -15,48 +17,33 @@ public class EditorSceneData {
 	// Variables
 	// --------------------------------------
 
-	private int mSceneWidthInPx = 2048;
-	private int mSceneHeightInPx = 2048;
-
-	// TODO: Player setup (num players etc.) - in GameState?
-
-	private HashGridManager mHashGridManager;
-	private EditorPhysicsObjectsManager mPhysicsManager;
+	private SceneSettingsManager mSceneSettingsManager;
 	private GameState mGameState;
+	private HashGridManager mHashGridManager;
 	private LayersManager mLayersManager;
 	private EditorPlatformManager mPlatformManager;
 	private ShipManager mShipManager;
+	private PhysicsSettingsManager mPhysicsSettingsManager;
+	private EditorPhysicsObjectsManager mPhysicsManager;
 
 	// --------------------------------------
 	// Properties
 	// --------------------------------------
 
-	public float sceneWidthInPx() {
-		return mSceneWidthInPx;
-	}
-
-	public void sceneWidthInPx(int v) {
-		mSceneWidthInPx = v;
-	}
-
-	public float sceneHeightInPx() {
-		return mSceneHeightInPx;
-	}
-
-	public void sceneHeightInPx(int v) {
-		mSceneHeightInPx = v;
-	}
-
-	public EditorPhysicsObjectsManager physicsObjectsManager() {
-		return mPhysicsManager;
-	}
-
-	public LayersManager layersManager() {
-		return mLayersManager;
+	public SceneSettingsManager sceneSettingsManager() {
+		return mSceneSettingsManager;
 	}
 
 	public GameState gameState() {
 		return mGameState;
+	}
+
+	public HashGridManager hashGridManager() {
+		return mHashGridManager;
+	}
+
+	public LayersManager layersManager() {
+		return mLayersManager;
 	}
 
 	public EditorPlatformManager platformManager() {
@@ -67,8 +54,12 @@ public class EditorSceneData {
 		return mShipManager;
 	}
 
-	public HashGridManager hashGridManager() {
-		return mHashGridManager;
+	public PhysicsSettingsManager physicsSettingsManager() {
+		return mPhysicsSettingsManager;
+	}
+
+	public EditorPhysicsObjectsManager physicsObjectsManager() {
+		return mPhysicsManager;
 	}
 
 	// --------------------------------------
@@ -79,50 +70,57 @@ public class EditorSceneData {
 		mGameState = new GameState();
 		mGameState.startNewGame(GameMode.TimeTrial);
 
-		mLayersManager = new LayersManager();
-		mShipManager = new ShipManager();
-		mPlatformManager = new EditorPlatformManager();
-		mPhysicsManager = new EditorPhysicsObjectsManager();
+		mSceneSettingsManager = new SceneSettingsManager();
 		mHashGridManager = new HashGridManager();
+		mLayersManager = new LayersManager();
+		mPlatformManager = new EditorPlatformManager();
+		mShipManager = new ShipManager();
+		mPhysicsSettingsManager = new PhysicsSettingsManager();
+		mPhysicsManager = new EditorPhysicsObjectsManager();
 	}
 
 	// --------------------------------------
 	// Methods
 	// --------------------------------------
 
-	// SAVE
 	public SceneSaveDefinition getSceneDefinitionToSave() {
 		final var lSceneSaveDefinition = new SceneSaveDefinition();
 
-		lSceneSaveDefinition.widthInPixels(mSceneWidthInPx);
-		lSceneSaveDefinition.heightInPixels(mSceneHeightInPx);
-
+		mSceneSettingsManager.storeInTrackDefinition(lSceneSaveDefinition);
 		mGameState.storeInTrackDefinition(lSceneSaveDefinition);
+		mHashGridManager.storeInTrackDefinition(lSceneSaveDefinition);
 		mLayersManager.storeInTrackDefinition(lSceneSaveDefinition);
 		mPlatformManager.storeInTrackDefinition(lSceneSaveDefinition);
 		mShipManager.storeInTrackDefinition(lSceneSaveDefinition);
+		mPhysicsSettingsManager.storeInTrackDefinition(lSceneSaveDefinition);
 		mPhysicsManager.storeInTrackDefinition(lSceneSaveDefinition);
-		mHashGridManager.storeInTrackDefinition(lSceneSaveDefinition);
 
 		return lSceneSaveDefinition;
 	}
 
 	public void createSceneFromSaveDefinition(SceneSaveDefinition sceneSaveDefinition) {
+		mSceneSettingsManager.loadFromTrackDefinition(sceneSaveDefinition);
 		mGameState.loadFromTrackDefinition(sceneSaveDefinition);
+		mHashGridManager.loadFromTrackDefinition(sceneSaveDefinition);
 		mLayersManager.loadFromTrackDefinition(sceneSaveDefinition);
 		mPlatformManager.loadFromTrackDefinition(sceneSaveDefinition);
 		mShipManager.loadFromTrackDefinition(sceneSaveDefinition);
+		mPhysicsSettingsManager.loadFromTrackDefinition(sceneSaveDefinition);
 		mPhysicsManager.loadFromTrackDefinition(sceneSaveDefinition);
-		mHashGridManager.loadFromTrackDefinition(sceneSaveDefinition);
 	}
 
 	public void finalizeAfterLoading() {
-		mGameState.finalizeAfterLoading();
-		mLayersManager.finalizeAfterLoading();
+
+		// TODO: This certainly needs more work
+
+		mSceneSettingsManager.finalizeAfterLoading(null);
+		mGameState.finalizeAfterLoading(null);
+		mHashGridManager.finalizeAfterLoading(null);
+		mLayersManager.finalizeAfterLoading(null);
 		mPlatformManager.finalizeAfterLoading(this);
-		mShipManager.finalizeAfterLoading();
+		mShipManager.finalizeAfterLoading(null);
+		mPhysicsSettingsManager.finalizeAfterLoading(null);
 		mPhysicsManager.finalizeAfterLoading(this);
-		mHashGridManager.finalizeAfterLoading();
 	}
 
 }

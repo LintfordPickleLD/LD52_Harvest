@@ -161,7 +161,11 @@ public class TimeTrialLandingScreen extends MenuScreen {
 
 			// TODO: Select a valid SceneHeader / pick a level
 			final var lGameSceneSettings = new GameSceneSettings(mScreenManager.core().appResources());
-			final var lSceneHeader = new SceneHeader("wan", lGameSceneSettings);
+			final var lSceneHeader = new SceneHeader("level1", lGameSceneSettings);
+			
+			lSceneHeader.baseSceneDirectory("level1");
+			final var h = lSceneHeader.sceneHeaderFilepath();
+			final var d = lSceneHeader.sceneDataFilepath();
 
 			final var lLoadingScreen = new LoadingScreen(screenManager(), true, new TimeTrialGameScreen(screenManager(), lSceneHeader, lPlayerManager));
 			screenManager().createLoadingScreen(new LoadingScreen(screenManager(), true, lLoadingScreen));

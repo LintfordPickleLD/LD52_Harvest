@@ -13,7 +13,7 @@ import net.lintfordlib.renderers.windows.components.UiButton;
 import net.lintfordlib.renderers.windows.components.UiButtonToggle;
 import net.lintfordlib.renderers.windows.components.UiLabelledInt;
 
-public class LayerPhysicsPanel extends UiPanel {
+public class LayerPhysicsObjects extends UiPanel {
 
 	// --------------------------------------
 	// Constants
@@ -54,8 +54,8 @@ public class LayerPhysicsPanel extends UiPanel {
 	// Constructor
 	// --------------------------------------
 
-	public LayerPhysicsPanel(UiWindow parentWindow, int entityGroupUid) {
-		super(parentWindow, "Physics Layer", entityGroupUid);
+	public LayerPhysicsObjects(UiWindow parentWindow, int entityGroupUid) {
+		super(parentWindow, "Physics Scene", entityGroupUid);
 
 		mShowActiveLayerButton = true;
 		mShowShowLayerButton = true;
@@ -144,7 +144,7 @@ public class LayerPhysicsPanel extends UiPanel {
 
 		switch (entryUid) {
 		case BUTTON_PLACE_FLOOR: {
-			if (lIsLayerActive && mEditorBrushController.setAction(EditorPhysicsController.ACTION_FLOORS_CREATE, "Creating Physics Object", lPhysicsObjectsHashCode)) {
+			if (lIsLayerActive && mEditorBrushController.setAction(EditorPhysicsController.ACTION_OBJECT_CREATE, "Creating Physics Object", lPhysicsObjectsHashCode)) {
 				mEditorPhysicsRenderer.startPhysicsObjectCreation();
 
 			}
@@ -155,12 +155,16 @@ public class LayerPhysicsPanel extends UiPanel {
 			final var lSelectedPhysicsObject = mEditorPhysicsController.selectedPhysicsObject();
 			mEditorPhysicsController.deletePhysicsObjectInstance(lSelectedPhysicsObject);
 			mEditorPhysicsRenderer.clearSelectedRegion();
+			return;
 
 		}
-			return;
 
 		case BUTTON_DELETE_ALL:
 			mEditorPhysicsController.deleteAllPolygons();
+			return;
+
+		case BUTTON_SET_OBJECT_CENTER_TO_CURSOR:
+			mEditorPhysicsController.setSelectedObjectCenterToCursor();
 			return;
 
 		case BUTTON_SHOW_LAYER:

@@ -5,8 +5,8 @@ import java.util.List;
 
 import lintfordpickle.harvest.data.editor.BaseEditorInstanceManager;
 import lintfordpickle.harvest.data.editor.EditorSceneData;
+import lintfordpickle.harvest.data.scene.SceneSaveDefinition;
 import lintfordpickle.harvest.data.scene.platforms.Platform;
-import lintfordpickle.harvest.data.scene.savedefinitions.SceneSaveDefinition;
 
 public class EditorPlatformManager extends BaseEditorInstanceManager {
 

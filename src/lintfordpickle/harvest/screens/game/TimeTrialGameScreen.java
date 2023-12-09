@@ -20,7 +20,7 @@ import lintfordpickle.harvest.controllers.camera.CameraShipChaseController;
 import lintfordpickle.harvest.data.CollisionHandler;
 import lintfordpickle.harvest.data.players.PlayerManager;
 import lintfordpickle.harvest.data.scene.SceneData;
-import lintfordpickle.harvest.data.scene.savedefinitions.SceneSaveDefinition;
+import lintfordpickle.harvest.data.scene.SceneSaveDefinition;
 import lintfordpickle.harvest.renderers.PlatformsRenderer;
 import lintfordpickle.harvest.renderers.ShipRenderer;
 import lintfordpickle.harvest.renderers.hud.MinimapRenderer;
@@ -39,7 +39,6 @@ import net.lintfordlib.core.ResourceManager;
 import net.lintfordlib.core.debug.Debug;
 import net.lintfordlib.core.graphics.rendertarget.RenderTarget;
 import net.lintfordlib.core.particles.ParticleFrameworkData;
-import net.lintfordlib.core.physics.PhysicsSettings;
 import net.lintfordlib.core.physics.PhysicsWorld;
 import net.lintfordlib.core.physics.resolvers.CollisionResolverRotationAndFriction;
 import net.lintfordlib.core.storage.FileUtils;
@@ -50,7 +49,7 @@ import net.lintfordlib.screenmanager.ScreenManager;
 import net.lintfordlib.screenmanager.screens.BaseGameScreen;
 import net.lintfordlib.screenmanager.screens.LoadingScreen;
 
-public class TimeTrialGameScreen extends BaseGameScreen {
+public class TimeTrialGameScreen extends BaseGameScreen implements IPhysicsControllerCallback {
 
 	// ---------------------------------------------
 	// Variables
@@ -199,15 +198,14 @@ public class TimeTrialGameScreen extends BaseGameScreen {
 		mParticleFrameworkData.loadFromMetaFiles();
 		mCollisionHandler = new CollisionHandler();
 
-		mGameCamera.setPosition(ConstantsPhysics.toPixels(-1.2f), ConstantsPhysics.toPixels(13.1f));
+		mGameCamera.setPosition(ConstantsPhysics.toPixels(0.f), ConstantsPhysics.toPixels(0.f));
 
 		mSceneData = new SceneData(); // We fill *the components* of the SceneData, by deserilizing objects using the SceneHeader.
 
 		if (mSceneHeader != null && mSceneHeader.isSceneValid()) {
-			loadTrackDefinitionFromFile(mSceneHeader.sceneHeaderFilepath());
-		} else {
-			createNewScene();
-		}
+			loadTrackDefinitionFromFile(mSceneHeader.sceneDataFilepath());
+		} else
+			throw new RuntimeException("Couldn't deserialize level file."); // TODO: don't just flake out
 	}
 
 	public void createNewScene() {
@@ -240,35 +238,13 @@ public class TimeTrialGameScreen extends BaseGameScreen {
 
 	@Override
 	protected void createControllers(ControllerManager controllerManager) {
-		final float lToUnits = ConstantsPhysics.PixelsToUnits();
-
-		var lPhysicsCallback = new IPhysicsControllerCallback() {
-			@Override
-			public PhysicsWorld createPhysicsWorld() {
-				final var lPhysicsWorldSettings = new PhysicsSettings();
-				lPhysicsWorldSettings.hashGridWidthInUnits = (int) (2048.f * lToUnits);
-				lPhysicsWorldSettings.hashGridHeightInUnits = (int) (2048.f * lToUnits);
-				lPhysicsWorldSettings.hashGridCellsWide = 5;
-				lPhysicsWorldSettings.hashGridCellsHigh = 5;
-
-				final var lPhysicsWorld = new PhysicsWorld(lPhysicsWorldSettings);
-
-				lPhysicsWorld.initialize();
-				lPhysicsWorld.setGravity(0.f, 5.87f);
-
-				lPhysicsWorld.setContactResolver(new CollisionResolverRotationAndFriction());
-				lPhysicsWorld.addCollisionCallback(mCollisionHandler);
-				return lPhysicsWorld;
-			}
-		};
-
 		mAudioController = new AudioController(controllerManager, screenManager().core().resources().audioManager(), entityGroupUid());
 		mGameActionEventController = new GameActionEventController(controllerManager, mPlayerManager, inputCounter(), entityGroupUid());
-		mPhysicsController = new PhysicsController(controllerManager, lPhysicsCallback, entityGroupUid());
+		mPhysicsController = new PhysicsController(controllerManager, this, entityGroupUid());
 		mLevelController = new LevelController(controllerManager, entityGroupUid());
 		mCameraShipChaseController = new CameraShipChaseController(controllerManager, mGameCamera, null, entityGroupUid());
 		mSceneController = new SceneController(controllerManager, mSceneHeader, mSceneData, entityGroupUid());
-		mGameStateController = new TimeTrialGameStateController(controllerManager, mPlayerManager, entityGroupUid());
+		mGameStateController = new TimeTrialGameStateController(controllerManager, mSceneData, mPlayerManager, entityGroupUid());
 		mCargoController = new CargoController(controllerManager, entityGroupUid());
 		mShipController = new ShipController(controllerManager, mPlayerManager, entityGroupUid());
 		mPlatformsController = new PlatformController(controllerManager, entityGroupUid());
@@ -293,7 +269,7 @@ public class TimeTrialGameScreen extends BaseGameScreen {
 		mEnvironmentController.initialize(core);
 		mPhysicsWorldDebugWatcher.initialize(core);
 		mPhysicsWorldDebugWatcher.physicsWorld(mPhysicsController.world());
-
+		
 	}
 
 	// RENDERERS -----------------------------------
@@ -353,6 +329,25 @@ public class TimeTrialGameScreen extends BaseGameScreen {
 		super.exitScreen();
 
 		mGameActionEventController.finalizeInputFile();
+	}
+
+	// RENDERERS -----------------------------------
+
+	@Override
+	public PhysicsWorld createPhysicsWorld() {
+
+		final var lPhysicsSettingsManager = mSceneData.physicsSettingsManager();
+		final var lPhysicsWorld = new PhysicsWorld(lPhysicsSettingsManager.physicsSettings());
+
+		lPhysicsWorld.initialize();
+		lPhysicsWorld.setGravity(0.f, 0.f);
+
+		lPhysicsWorld.setContactResolver(new CollisionResolverRotationAndFriction());
+		lPhysicsWorld.addCollisionCallback(mCollisionHandler);
+
+		mSceneData.physicsWorld(lPhysicsWorld);
+
+		return lPhysicsWorld;
 	}
 
 }

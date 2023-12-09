@@ -1,7 +1,5 @@
 package lintfordpickle.harvest.data.scene;
 
-import lintfordpickle.harvest.data.scene.savedefinitions.SceneSaveDefinition;
-
 // TODO: This belongs in the lib
 public abstract class BaseInstanceManager {
 
@@ -23,6 +21,6 @@ public abstract class BaseInstanceManager {
 
 	public abstract void loadFromTrackDefinition(SceneSaveDefinition sceneSaveDefinition);
 
-	public abstract void finalizeAfterLoading();
+	public abstract void finalizeAfterLoading(SceneData sceneData);
 
 }

@@ -99,6 +99,12 @@ public class ScenePanel extends UiPanel {
 		mEditorBrushRenderer = (EditorBrushRenderer) lRendererManager.getRendererRequired(EditorBrushRenderer.RENDERER_NAME);
 		mEditorBrushRenderer.renderBrush(isLayerVisible());
 
+		final var lSceneSettings = mSceneController.sceneData().sceneSettingsManager();
+		if (lSceneSettings != null) {
+			mSceneWidth.inputString(String.valueOf(lSceneSettings.sceneWidthInPx()));
+			mSceneHeight.inputString(String.valueOf(lSceneSettings.sceneHeightInPx()));
+		}
+
 	}
 
 	// --------------------------------------

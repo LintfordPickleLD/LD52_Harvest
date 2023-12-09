@@ -146,10 +146,10 @@ public class ShipController extends BaseController {
 			lShip.isPlayerControlled = lPlayerSession.isPlayerControlled();
 			lShip.isGhostShip = lPlayerSession.isGhostMode();
 
-			final float lShipPositionX = -1.2f;
-			final float lShipPositionY = 13.1f;
+			final float lShipPositionInUnitsX = ConstantsPhysics.toUnits(0.f);
+			final float lShipPositioninUnitsY = ConstantsPhysics.toUnits(0.f);
 
-			lShip.body().moveTo(lShipPositionX, lShipPositionY);
+			lShip.body().moveTo(lShipPositionInUnitsX, lShipPositioninUnitsY);
 
 			mShipManager.ships().add(lShip);
 

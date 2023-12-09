@@ -1,6 +1,6 @@
 package lintfordpickle.harvest.data.editor;
 
-import lintfordpickle.harvest.data.scene.savedefinitions.SceneSaveDefinition;
+import lintfordpickle.harvest.data.scene.SceneSaveDefinition;
 
 public abstract class BaseEditorInstanceManager {
 

@@ -1,14 +1,11 @@
-package lintfordpickle.harvest.data.scene.collisions.definitions;
+package lintfordpickle.harvest.data.scene.savedefinitions;
 
 import java.io.Serializable;
 
 import com.google.gson.annotations.SerializedName;
 
-import net.lintfordlib.core.geometry.partitioning.GridEntity;
-import net.lintfordlib.core.geometry.partitioning.SpatialHashGrid;
-
 // TODO: This is a generic class for all games -> move it to the lib
-public class HashGridDefinition implements Serializable {
+public class HashGridSaveManager implements Serializable {
 
 	// ---------------------------------------------
 	// Constants
@@ -39,18 +36,6 @@ public class HashGridDefinition implements Serializable {
 	public boolean isInitialized() {
 		final var lValuesNotPresent = hashGridWidth == 0 || hashGridHeight == 0 || hashGridTilesWide == 0 || hashGridTilesHigh == 0;
 		return !lValuesNotPresent;
-	}
-
-	// ---------------------------------------------
-	// Methods
-	// ---------------------------------------------
-
-	public void updateSettings(SpatialHashGrid<GridEntity> hashgrid) {
-		hashGridWidth = hashgrid.boundaryWidth();
-		hashGridHeight = hashgrid.boundaryHeight();
-
-		hashGridTilesWide = hashgrid.numTilesWide();
-		hashGridTilesHigh = hashgrid.numTilesHigh();
 	}
 
 }

@@ -1,6 +1,5 @@
 package lintfordpickle.harvest.data.scene;
 
-import lintfordpickle.harvest.data.scene.savedefinitions.SceneSaveDefinition;
 import net.lintfordlib.core.debug.Debug;
 import net.lintfordlib.core.geometry.partitioning.GridEntity;
 import net.lintfordlib.core.geometry.partitioning.SpatialHashGrid;
@@ -48,7 +47,12 @@ public class HashGridManager extends BaseInstanceManager {
 
 	@Override
 	public void storeInTrackDefinition(SceneSaveDefinition sceneSaveDefinition) {
-		sceneSaveDefinition.gridSettings().updateSettings(mHashGrid);
+		final var lHashGridSettings = sceneSaveDefinition.gridSettings();
+
+		lHashGridSettings.hashGridWidth = mHashGrid.boundaryWidth();
+		lHashGridSettings.hashGridHeight = mHashGrid.boundaryHeight();
+		lHashGridSettings.hashGridTilesWide = mHashGrid.numTilesWide();
+		lHashGridSettings.hashGridTilesHigh = mHashGrid.numTilesHigh();
 
 	}
 
@@ -70,8 +74,10 @@ public class HashGridManager extends BaseInstanceManager {
 	}
 
 	@Override
-	public void finalizeAfterLoading() {
-
+	public void finalizeAfterLoading(SceneData scene) {
+		if (mHashGrid == null) {
+			createNewHashGrid(1000, 1000, 5, 5);
+		}
 	}
 
 }

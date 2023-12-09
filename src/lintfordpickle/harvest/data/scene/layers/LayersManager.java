@@ -4,7 +4,11 @@ import java.util.ArrayList;
 import java.util.List;
 
 import lintfordpickle.harvest.data.scene.BaseInstanceManager;
-import lintfordpickle.harvest.data.scene.savedefinitions.SceneSaveDefinition;
+import lintfordpickle.harvest.data.scene.SceneData;
+import lintfordpickle.harvest.data.scene.SceneSaveDefinition;
+import lintfordpickle.harvest.data.scene.layers.savedefinitions.SceneAnimationLayerSaveDefinition;
+import lintfordpickle.harvest.data.scene.layers.savedefinitions.SceneNoiseLayerSaveDefinition;
+import lintfordpickle.harvest.data.scene.layers.savedefinitions.SceneTextureLayerSaveDefinition;
 
 public class LayersManager extends BaseInstanceManager {
 
@@ -58,9 +62,18 @@ public class LayersManager extends BaseInstanceManager {
 		final int lNumLayers = mLayers.size();
 		for (int i = 0; i < lNumLayers; i++) {
 			final var lSceneLayerToSerialize = mLayers.get(i);
+			final var lLayerSaveDefinition = lSceneLayerToSerialize.getSaveDefinition();
 
-			sceneSaveDefinition.layers().addLayer(lSceneLayerToSerialize.getSaveDefinition());
+			if (lLayerSaveDefinition instanceof SceneTextureLayerSaveDefinition) {
+				sceneSaveDefinition.layers().textureLayers.add((SceneTextureLayerSaveDefinition) lLayerSaveDefinition);
 
+			} else if (lLayerSaveDefinition instanceof SceneAnimationLayerSaveDefinition) {
+				sceneSaveDefinition.layers().animationLayers.add((SceneAnimationLayerSaveDefinition) lLayerSaveDefinition);
+
+			} else if (lLayerSaveDefinition instanceof SceneNoiseLayerSaveDefinition) {
+				sceneSaveDefinition.layers().noiseLayers.add((SceneNoiseLayerSaveDefinition) lLayerSaveDefinition);
+
+			}
 		}
 	}
 
@@ -88,18 +101,10 @@ public class LayersManager extends BaseInstanceManager {
 			final var lLayerToImport = lNoiseLayers.get(i);
 			layers().add(lLayerToImport.getSceneLayer());
 		}
-
-		final var lPhysicsLayers = lLayerSaveManager.physicsLayers;
-		final var lNumphysicsLayers = lPhysicsLayers.size();
-		for (int i = 0; i < lNumphysicsLayers; i++) {
-			final var lLayerToImport = lPhysicsLayers.get(i);
-			layers().add(lLayerToImport.getSceneLayer());
-		}
-
 	}
 
 	@Override
-	public void finalizeAfterLoading() {
+	public void finalizeAfterLoading(SceneData scene) {
 
 	}
 

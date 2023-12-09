@@ -64,11 +64,11 @@ public class EditorSceneController extends BaseController {
 	// ---------------------------------------------
 
 	public void setSceneWidth(int widthInPixels) {
-		mEditorSceneData.sceneWidthInPx(widthInPixels);
+		mEditorSceneData.sceneSettingsManager().sceneWidthInPx(widthInPixels);
 	}
 
 	public void setSceneHeight(int heightInPixels) {
-		mEditorSceneData.sceneHeightInPx(heightInPixels);
+		mEditorSceneData.sceneSettingsManager().sceneHeightInPx(heightInPixels);
 	}
 
 	public void setSceneBoundary(int widthInPixels, int heightInPixels) {

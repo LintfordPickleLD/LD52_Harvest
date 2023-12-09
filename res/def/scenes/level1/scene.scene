@@ -1,11 +1,13 @@
 {
-  "SceneWidth": 2048,
-  "SceneHeight": 2048,
+  "SceneSettings": {
+    "sceneWidth": 2048,
+    "sceneHeight": 2048
+  },
   "HashGrid": {
-    "Width": 2000,
-    "Height": 2000,
-    "TilesWide": 8,
-    "TilesHigh": 8
+    "Width": 2048,
+    "Height": 2048,
+    "TilesWide": 6,
+    "TilesHigh": 6
   },
   "Layers": {
     "textureLayers": [
@@ -48,11 +50,20 @@
         "scaleX": 0.0,
         "scaleY": 0.0
       }
-    ],
-    "physicsLayers": []
+    ]
   },
-  "mPhysicsObjectsSaveManager": {
-    "PhysicsObjects": [
+  "PhysicsSettings": {
+    "Gravity": {
+      "x": 0.0,
+      "y": -9.8
+    },
+    "GridWidthUnits": 64.0,
+    "GridHeightUnits": 64.0,
+    "GridCellsWide": 6,
+    "GridCellsHigh": 6
+  },
+  "PhysicsObjects": {
+    "ObjectInstances": [
       {
         "worldCenterX": 0.0,
         "worldCenterY": 0.0,
@@ -77,25 +88,163 @@
         ]
       },
       {
-        "worldCenterX": -8.0,
-        "worldCenterY": 6.42218,
+        "worldCenterX": 845.6262,
+        "worldCenterY": -798.7077,
         "rotation": 0.0,
         "localPoints": [
           {
-            "x": 468.41864,
-            "y": -1023.963
+            "x": -382.20758,
+            "y": -223.56659
           },
           {
-            "x": 481.00806,
-            "y": -742.9558
+            "x": -369.61816,
+            "y": 57.440613
           },
           {
-            "x": 1026.9308,
-            "y": -763.6752
+            "x": 176.30457,
+            "y": 36.721252
           },
           {
-            "x": 1030.3643,
-            "y": -1031.7327
+            "x": 179.73804,
+            "y": -231.33624
+          }
+        ]
+      },
+      {
+        "worldCenterX": -371.64178,
+        "worldCenterY": -265.67157,
+        "rotation": 0.0,
+        "localPoints": [
+          {
+            "x": -227.5398,
+            "y": -520.64954
+          },
+          {
+            "x": -318.58453,
+            "y": -443.0376
+          },
+          {
+            "x": -346.94275,
+            "y": -526.61975
+          },
+          {
+            "x": -302.16663,
+            "y": -589.3063
+          }
+        ]
+      },
+      {
+        "worldCenterX": 563.6262,
+        "worldCenterY": -519.43805,
+        "rotation": 0.0,
+        "localPoints": [
+          {
+            "x": 244.5,
+            "y": 531.7166
+          },
+          {
+            "x": 105.0,
+            "y": 526.9831
+          },
+          {
+            "x": 106.5,
+            "y": 102.55658
+          },
+          {
+            "x": 249.0,
+            "y": 112.023315
+          }
+        ]
+      },
+      {
+        "worldCenterX": 563.6262,
+        "worldCenterY": -519.43805,
+        "rotation": 0.0,
+        "localPoints": [
+          {
+            "x": -94.48218,
+            "y": 423.74713
+          },
+          {
+            "x": -228.69275,
+            "y": 424.78516
+          },
+          {
+            "x": -227.70581,
+            "y": 566.9942
+          },
+          {
+            "x": -98.429565,
+            "y": 566.9942
+          }
+        ]
+      },
+      {
+        "worldCenterX": 563.6262,
+        "worldCenterY": -519.43805,
+        "rotation": 0.0,
+        "localPoints": [
+          {
+            "x": -307.64014,
+            "y": 572.1844
+          },
+          {
+            "x": -307.64014,
+            "y": 257.66357
+          },
+          {
+            "x": -436.91638,
+            "y": 257.66357
+          },
+          {
+            "x": -431.98218,
+            "y": 569.0703
+          }
+        ]
+      },
+      {
+        "worldCenterX": 563.6262,
+        "worldCenterY": -519.43805,
+        "rotation": 0.0,
+        "localPoints": [
+          {
+            "x": -231.6532,
+            "y": 569.0703
+          },
+          {
+            "x": -231.6532,
+            "y": 544.15784
+          },
+          {
+            "x": -303.69275,
+            "y": 545.1958
+          },
+          {
+            "x": -303.69275,
+            "y": 571.14636
+          }
+        ]
+      },
+      {
+        "worldCenterX": 563.6262,
+        "worldCenterY": -519.43805,
+        "rotation": 0.0,
+        "localPoints": [
+          {
+            "x": -402.37695,
+            "y": 256.62555
+          },
+          {
+            "x": -274.0874,
+            "y": 253.51154
+          },
+          {
+            "x": -274.0874,
+            "y": 34.48877
+          },
+          {
+            "x": -406.32434,
+            "y": 42.793
           }
         ]
       }

@@ -2,7 +2,8 @@ package lintfordpickle.harvest.screens.editor;
 
 import lintfordpickle.harvest.screens.editor.panels.LayerAnimationPanel;
 import lintfordpickle.harvest.screens.editor.panels.LayerNoisePanel;
-import lintfordpickle.harvest.screens.editor.panels.LayerPhysicsPanel;
+import lintfordpickle.harvest.screens.editor.panels.LayerPhysicsObjects;
+import lintfordpickle.harvest.screens.editor.panels.LayerPhysicsScene;
 import lintfordpickle.harvest.screens.editor.panels.LayerTexturePanel;
 import lintfordpickle.harvest.screens.editor.panels.LayersPanel;
 import lintfordpickle.harvest.screens.editor.panels.ScenePanel;
@@ -78,7 +79,8 @@ public class EditorGui extends UiDockedWindow {
 		editorPanels().add(new LayerTexturePanel(this, mEntityGroupUid));
 		editorPanels().add(new LayerAnimationPanel(this, mEntityGroupUid));
 		editorPanels().add(new LayerNoisePanel(this, mEntityGroupUid));
-		editorPanels().add(new LayerPhysicsPanel(this, mEntityGroupUid));
+		editorPanels().add(new LayerPhysicsScene(this, mEntityGroupUid));
+		editorPanels().add(new LayerPhysicsObjects(this, mEntityGroupUid));
 	}
 
 }

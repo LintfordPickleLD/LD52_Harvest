@@ -24,10 +24,10 @@ public class EditorPhysicsController extends BaseController implements IGridCont
 
 	public static final String CONTROLLER_NAME = "Editor Physics Controller";
 
-	public static final int ACTION_FLOORS_CREATE = 0;
-	public static final int ACTION_FLOORS_TRANSLATE_SELECTED_REGION = 1;
-	public static final int ACTION_FLOORS_TRANSLATE_SELECTED_POINTS = 3;
-	public static final int ACTION_FLOORS_ROTATE_REGION_SELECTED = 2;
+	public static final int ACTION_OBJECT_CREATE = 0;
+	public static final int ACTION_OBJECT_TRANSLATE_SELECTED_REGION = 1;
+	public static final int ACTION_OBJECT_TRANSLATE_SELECTED_POINTS = 3;
+	public static final int ACTION_OBJECT_ROTATE_REGION_SELECTED = 2;
 
 	// --------------------------------------
 	// Variables
@@ -53,7 +53,7 @@ public class EditorPhysicsController extends BaseController implements IGridCont
 		return mPhysicsObjectsManager;
 	}
 
-	public List<GridEntity> floorsEntitiesNearby() {
+	public List<GridEntity> phyiscsObjectEntitiesNearby() {
 		return mPolygonsEntitiesNearby;
 	}
 
@@ -152,11 +152,11 @@ public class EditorPhysicsController extends BaseController implements IGridCont
 		mDirtyRegions.clear();
 	}
 
-	public void clearFloorEntitiesNearby() {
+	public void clearPhysicsObjectInstancesNearby() {
 		mPolygonsEntitiesNearby.clear();
 	}
 
-	public void updateFloorEntitiesNearby(float mouseX, float mouseY) {
+	public void updatePhysicsObjectInstanceNearby(float mouseX, float mouseY) {
 		mPolygonsEntitiesNearby = mEditorHashGridController.hashGrid().findNearbyEntities(mouseX, mouseY, 2.0f, GridEntityType.GRID_ENTITY_TYPE_PHYSICS_OBJECTS);
 	}
 
@@ -184,10 +184,10 @@ public class EditorPhysicsController extends BaseController implements IGridCont
 		mSelectedPoints.clear();
 		mSelectedRegion = null;
 
-		final var lAllFloors = mPhysicsObjectsManager.physicsObjects();
-		final var lNumFloors = lAllFloors.size();
-		for (int i = 0; i < lNumFloors; i++) {
-			final var lRegion = lAllFloors.get(i);
+		final var lAllPhysicsObjectInstances = mPhysicsObjectsManager.physicsObjects();
+		final var lNumPhysicsObjectInstances = lAllPhysicsObjectInstances.size();
+		for (int i = 0; i < lNumPhysicsObjectInstances; i++) {
+			final var lRegion = lAllPhysicsObjectInstances.get(i);
 
 			mEditorHashGridController.hashGrid().removeEntity(lRegion);
 		}
@@ -217,7 +217,7 @@ public class EditorPhysicsController extends BaseController implements IGridCont
 		}
 	}
 
-	public void setSelectedRegionCenterToCursor() {
+	public void setSelectedObjectCenterToCursor() {
 		if (mSelectedRegion == null)
 			return;
 

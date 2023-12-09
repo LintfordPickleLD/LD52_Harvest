@@ -43,16 +43,16 @@ public class ConstantsGame {
 	// Debug
 	// ---------------------------------------------
 
-	public static final boolean IS_DEBUG_MODE = false;
-	public static final boolean CAMERA_DEBUG_MODE = false;
-	public static final boolean PHYICS_DEBUG_MODE = false;
-	public static final boolean SHIP_DEBUG_MODE = false;
+	public static final boolean IS_DEBUG_MODE = true;
+	public static final boolean CAMERA_DEBUG_MODE = true;
+	public static final boolean PHYICS_DEBUG_MODE = true;
+	public static final boolean SHIP_DEBUG_MODE = true;
 
 	// produces a lot of log data
 	public static final boolean DEBUG_OUTPUT_ACTIONEVENT_LOGS = false;
 
 	public static final boolean WRAP_OBJECTS_AROUND_SCREEN_EDGE = false;
-	public static final boolean QUICK_LAUNCH_EDITOR = true; // takes precedence over QUICK_LAUNCH_GAME
+	public static final boolean QUICK_LAUNCH_EDITOR = false; // takes precedence over QUICK_LAUNCH_GAME
 	public static final boolean QUICK_LAUNCH_GAME = false;
 	public static final boolean ESCAPE_RESTART_MAIN_SCENE = false;
 }

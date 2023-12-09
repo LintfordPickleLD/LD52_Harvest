@@ -9,13 +9,16 @@ import lintfordpickle.harvest.controllers.editor.EditorPhysicsController;
 import lintfordpickle.harvest.controllers.editor.EditorSceneController;
 import lintfordpickle.harvest.data.assets.SceneAssetsManager;
 import lintfordpickle.harvest.data.editor.EditorSceneData;
-import lintfordpickle.harvest.data.scene.savedefinitions.SceneSaveDefinition;
+import lintfordpickle.harvest.data.scene.SceneSaveDefinition;
 import lintfordpickle.harvest.renderers.editor.EditorPhysicsRenderer;
+import lintfordpickle.harvest.renderers.editor.EditorPhysicsSettingsRenderer;
 import lintfordpickle.harvest.renderers.editor.EditorSceneRenderer;
 import net.lintfordLib.editor.ConstantsEditor;
 import net.lintfordLib.editor.controllers.EditorBrushController;
+import net.lintfordLib.editor.controllers.EditorCameraMovementController;
 import net.lintfordLib.editor.controllers.EditorFileController;
 import net.lintfordLib.editor.controllers.EditorHashGridController;
+import net.lintfordLib.editor.controllers.EditorPhysicsSettingsController;
 import net.lintfordLib.editor.controllers.IEditorFileControllerListener;
 import net.lintfordLib.editor.data.BaseSceneSettings;
 import net.lintfordLib.editor.data.EditorLayerBrush;
@@ -24,7 +27,6 @@ import net.lintfordLib.editor.renderers.EditorBrushRenderer;
 import net.lintfordLib.editor.renderers.EditorHashGridRenderer;
 import net.lintfordLib.editor.renderers.UiDockedWindow;
 import net.lintfordlib.controllers.camera.CameraBoundsController;
-import net.lintfordlib.controllers.camera.CameraMovementController;
 import net.lintfordlib.controllers.camera.CameraZoomController;
 import net.lintfordlib.controllers.core.ControllerManager;
 import net.lintfordlib.controllers.geometry.SpatialHashGridController;
@@ -44,16 +46,17 @@ public class EditorScreen extends BaseGameScreen implements IEditorFileControlle
 
 	// Data
 	private EditorLayerBrush mEditorBrush;
-	private EditorSceneData mSceneData;
+	private EditorSceneData mEditorSceneData;
 	private SceneAssetsManager mSceneAssetManager; // TODO: make this generic
 	private SceneHeader mSceneHeader;
 
 	// Controllers
 	private CameraZoomController mCameraZoomController;
-	private CameraMovementController mCameraMoveController;
+	private EditorCameraMovementController mCameraMoveController;
 	private CameraBoundsController mCameraBoundsController;
 	private SpatialHashGridController mSpatialHashGridController;
 	private EditorSceneController mEditorSceneController;
+	private EditorPhysicsSettingsController mEditorPhysicsSettingsController;
 	private EditorAssetsController mEditorAssetsController;
 	private EditorPhysicsController mEditorPhysicsController;
 	private EditorHashGridController mHashGridController;
@@ -65,6 +68,7 @@ public class EditorScreen extends BaseGameScreen implements IEditorFileControlle
 	private UiDockedWindow mEditorGui;
 	private EditorBrushRenderer mEditorBrushRenderer;
 	private EditorHashGridRenderer mEditorHashGridRenderer;
+	private EditorPhysicsSettingsRenderer mEditorPhysicsSettingsRenderer;
 	private EditorSceneRenderer mSceneRenderer;
 	private EditorPhysicsRenderer mEditorPhysicsRenderer;
 	private DebugCameraBoundsDrawer mDebugCameraBoundsDrawer;
@@ -114,22 +118,16 @@ public class EditorScreen extends BaseGameScreen implements IEditorFileControlle
 
 	@Override
 	protected void createData(LintfordCore core) {
-		mSceneData = new EditorSceneData();
+		// This creates an empty scene
+		mEditorSceneData = new EditorSceneData();
 
 		if (mSceneHeader != null && mSceneHeader.isSceneValid()) {
 			loadTrackDefinitionFromFile(mSceneHeader.sceneDataFilepath());
-			mSceneData.finalizeAfterLoading();
-		} else {
-			createNewScene();
 		}
+		mEditorSceneData.finalizeAfterLoading();
 
 		mEditorBrush = new EditorLayerBrush();
-
 		mSceneAssetManager = new SceneAssetsManager();
-	}
-
-	public void createNewScene() {
-
 	}
 
 	public void loadTrackDefinitionFromFile(String filename) {
@@ -151,19 +149,19 @@ public class EditorScreen extends BaseGameScreen implements IEditorFileControlle
 			return;
 		}
 
-		mSceneData.createSceneFromSaveDefinition(lSceneSaveDefinition);
+		mEditorSceneData.createSceneFromSaveDefinition(lSceneSaveDefinition);
 	}
 
 	// ---------------------------------------------
 
 	@Override
 	protected void createControllers(ControllerManager controllerManager) {
-		mCameraMoveController = new CameraMovementController(controllerManager, mGameCamera, ConstantsEditor.EDITOR_RESOURCE_GROUP_ID);
+		mCameraMoveController = new EditorCameraMovementController(controllerManager, mGameCamera, ConstantsEditor.EDITOR_RESOURCE_GROUP_ID);
 		mCameraZoomController = new CameraZoomController(controllerManager, mGameCamera, ConstantsEditor.EDITOR_RESOURCE_GROUP_ID);
 		mCameraBoundsController = new CameraBoundsController(controllerManager, mGameCamera, ConstantsEditor.EDITOR_RESOURCE_GROUP_ID);
-
-		mSpatialHashGridController = new SpatialHashGridController(controllerManager, mSceneData.hashGridManager().hashGrid(), ConstantsEditor.EDITOR_RESOURCE_GROUP_ID);
-		mEditorSceneController = new EditorSceneController(controllerManager, mSceneHeader, mSceneData, ConstantsEditor.EDITOR_RESOURCE_GROUP_ID);
+		mEditorPhysicsSettingsController = new EditorPhysicsSettingsController(controllerManager, mEditorSceneData.physicsSettingsManager().physicsSettings(), ConstantsEditor.EDITOR_RESOURCE_GROUP_ID);
+		mSpatialHashGridController = new SpatialHashGridController(controllerManager, mEditorSceneData.hashGridManager().hashGrid(), ConstantsEditor.EDITOR_RESOURCE_GROUP_ID);
+		mEditorSceneController = new EditorSceneController(controllerManager, mSceneHeader, mEditorSceneData, ConstantsEditor.EDITOR_RESOURCE_GROUP_ID);
 		mEditorPhysicsController = new EditorPhysicsController(controllerManager, ConstantsEditor.EDITOR_RESOURCE_GROUP_ID);
 		mEditorBrushController = new EditorBrushController(controllerManager, mEditorBrush, ConstantsEditor.EDITOR_RESOURCE_GROUP_ID);
 		mHashGridController = new EditorHashGridController(controllerManager, ConstantsEditor.EDITOR_RESOURCE_GROUP_ID);
@@ -181,6 +179,7 @@ public class EditorScreen extends BaseGameScreen implements IEditorFileControlle
 		mCameraZoomController.initialize(core);
 		mCameraBoundsController.initialize(core);
 		mHashGridController.initialize(core);
+		mEditorPhysicsSettingsController.initialize(core);
 		mSpatialHashGridController.initialize(core);
 		mEditorBrushController.initialize(core);
 		mEditorFileController.initialize(core);
@@ -198,6 +197,7 @@ public class EditorScreen extends BaseGameScreen implements IEditorFileControlle
 		mEditorGui = new EditorGui(mRendererManager, ConstantsEditor.EDITOR_RESOURCE_GROUP_ID);
 		mEditorBrushRenderer = new EditorBrushRenderer(mRendererManager, ConstantsEditor.EDITOR_RESOURCE_GROUP_ID);
 		mEditorHashGridRenderer = new EditorHashGridRenderer(mRendererManager, ConstantsEditor.EDITOR_RESOURCE_GROUP_ID);
+		mEditorPhysicsSettingsRenderer = new EditorPhysicsSettingsRenderer(mRendererManager, ConstantsEditor.EDITOR_RESOURCE_GROUP_ID);
 		mEditorPhysicsRenderer = new EditorPhysicsRenderer(mRendererManager, ConstantsEditor.EDITOR_RESOURCE_GROUP_ID);
 		mDebugCameraBoundsDrawer = new DebugCameraBoundsDrawer(mRendererManager, ConstantsEditor.EDITOR_RESOURCE_GROUP_ID);
 	}
@@ -209,6 +209,7 @@ public class EditorScreen extends BaseGameScreen implements IEditorFileControlle
 		mEditorBrushRenderer.initialize(core);
 		mEditorHashGridRenderer.initialize(core);
 		mDebugCameraBoundsDrawer.initialize(core);
+		mEditorPhysicsSettingsRenderer.initialize(core);
 		mEditorPhysicsRenderer.initialize(core);
 	}
 
@@ -218,6 +219,7 @@ public class EditorScreen extends BaseGameScreen implements IEditorFileControlle
 		mEditorGui.loadResources(resourceManager);
 		mEditorBrushRenderer.loadResources(resourceManager);
 		mEditorHashGridRenderer.loadResources(resourceManager);
+		mEditorPhysicsSettingsRenderer.loadResources(resourceManager);
 		mEditorPhysicsRenderer.loadResources(resourceManager);
 		mDebugCameraBoundsDrawer.loadResources(resourceManager);
 	}

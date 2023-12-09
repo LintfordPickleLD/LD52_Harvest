@@ -104,7 +104,7 @@ public class LayerTexturePanel extends LayerPanel<SceneTextureLayer> implements 
 		mTranslationSpeedModX.label("Mod X");
 		mTranslationSpeedModX.setMinMax(-20.f, 20.f);
 		mTranslationSpeedModX.stepSize(.1f);
-		
+
 		mTranslationSpeedModY = new UiInputFloat(parentWindow);
 		mTranslationSpeedModY.setUiWidgetListener(this, SLIDER_TRANSLATION_SPEED_Y);
 		mTranslationSpeedModY.label("Mod Y");
@@ -171,11 +171,11 @@ public class LayerTexturePanel extends LayerPanel<SceneTextureLayer> implements 
 		if (selectedLayer.textureFilepath() != null)
 			mTexturePath.inputString(selectedLayer.textureFilepath());
 
-		mTranslationSpeedModX.inputString(String.valueOf(selectedLayer.translationSpeedModX));
-		mTranslationSpeedModY.inputString(String.valueOf(selectedLayer.translationSpeedModY));
+		mTranslationSpeedModX.inputString(selectedLayer.translationSpeedModX);
+		mTranslationSpeedModY.inputString(selectedLayer.translationSpeedModY);
 
-		mScaleX.inputString(String.valueOf(selectedLayer.scaleX));
-		mScaleY.inputString(String.valueOf(selectedLayer.scaleY));
+		mScaleX.inputString(selectedLayer.scaleX);
+		mScaleY.inputString(selectedLayer.scaleY);
 
 		// TODO:
 //		mCenterX.currentValue(selectedLayer.centerX);
@@ -232,28 +232,28 @@ public class LayerTexturePanel extends LayerPanel<SceneTextureLayer> implements 
 
 			mSelectedLayer.scaleX = mScaleX.currentValue();
 			break;
-			
+
 		case SLIDER_SCALE_Y:
 			if (mSelectedLayer == null)
 				return;
 
 			mSelectedLayer.scaleY = mScaleY.currentValue();
 			break;
-			
+
 		case SLIDER_CENTER_X:
 			if (mSelectedLayer == null)
 				return;
 
 			mSelectedLayer.centerX = mCenterXInput.currentValue();
 			break;
-			
+
 		case SLIDER_CENTER_Y:
 			if (mSelectedLayer == null)
 				return;
 
 			mSelectedLayer.centerY = mCenterYInput.currentValue();
 			break;
-			
+
 		case SLIDER_TRANSLATION_SPEED_X:
 			if (mSelectedLayer == null)
 				return;

@@ -120,7 +120,7 @@ public class EditorPhysicsRenderer extends BaseRenderer {
 			if (core.input().keyboard().isKeyDownTimed(GLFW.GLFW_KEY_G, this)) {
 				mIsNewLeftClick = false;
 				if (lPointsSelected) {
-					mEditorBrushController.setAction(EditorPhysicsController.ACTION_FLOORS_TRANSLATE_SELECTED_POINTS, "Translate Points", hashCode());
+					mEditorBrushController.setAction(EditorPhysicsController.ACTION_OBJECT_TRANSLATE_SELECTED_POINTS, "Translate Points", hashCode());
 
 					final int lNumSelectedPoints = mPhysicsController.selectedPoints().size();
 					for (int i = 0; i < lNumSelectedPoints; i++) {
@@ -133,7 +133,7 @@ public class EditorPhysicsRenderer extends BaseRenderer {
 					mMouseDownY = mMouseY;
 
 				} else if (lRegionSelected) {
-					mEditorBrushController.setAction(EditorPhysicsController.ACTION_FLOORS_TRANSLATE_SELECTED_REGION, "Translate Region", hashCode());
+					mEditorBrushController.setAction(EditorPhysicsController.ACTION_OBJECT_TRANSLATE_SELECTED_REGION, "Translate Region", hashCode());
 					mPhysicsController.addDirtyRegion(mPhysicsController.selectedPhysicsObject());
 
 					mMouseDownX = mMouseX;
@@ -147,7 +147,7 @@ public class EditorPhysicsRenderer extends BaseRenderer {
 
 					mMouseDownV = mPhysicsController.selectedPhysicsObject().angle;
 
-					mEditorBrushController.setAction(EditorPhysicsController.ACTION_FLOORS_ROTATE_REGION_SELECTED, "Rotate Region", hashCode());
+					mEditorBrushController.setAction(EditorPhysicsController.ACTION_OBJECT_ROTATE_REGION_SELECTED, "Rotate Region", hashCode());
 					mPhysicsController.addDirtyRegion(mPhysicsController.selectedPhysicsObject());
 				}
 			}
@@ -156,8 +156,8 @@ public class EditorPhysicsRenderer extends BaseRenderer {
 		final int lCurrentBrushAction = mEditorBrushController.brush().brushActionUid();
 		// --- END ACTIONS
 
-		mPhysicsController.updateFloorEntitiesNearby(mMouseX, mMouseY);
-		final int lNumFoundEntities = mPhysicsController.floorsEntitiesNearby().size();
+		mPhysicsController.updatePhysicsObjectInstanceNearby(mMouseX, mMouseY);
+		final int lNumFoundEntities = mPhysicsController.phyiscsObjectEntitiesNearby().size();
 
 		if (leftMouseDown && !mMouseDownLastFrame) {
 			mIsNewLeftClick = true;
@@ -170,7 +170,7 @@ public class EditorPhysicsRenderer extends BaseRenderer {
 
 				// do something with mouse
 				switch (lCurrentBrushAction) {
-				case EditorPhysicsController.ACTION_FLOORS_TRANSLATE_SELECTED_POINTS:
+				case EditorPhysicsController.ACTION_OBJECT_TRANSLATE_SELECTED_POINTS:
 					final int lNumSelectedPoints = mPhysicsController.selectedPoints().size();
 					for (int i = 0; i < lNumSelectedPoints; i++) {
 						final var lSelectedPoint = mPhysicsController.selectedPoints().get(i);
@@ -187,12 +187,12 @@ public class EditorPhysicsRenderer extends BaseRenderer {
 							lSelectedPoint.worldPosition.add(lTranslationAmtX, lTranslationAmtY);
 
 							lSelectedPoint.parent.recalculateBounds();
-							// mHashGridController.hashGrid().updateEntity(lSelectedPoint.parent);
+							mHashGridController.hashGrid().updateEntity(lSelectedPoint.parent);
 
 						}
 					}
 					break;
-				case EditorPhysicsController.ACTION_FLOORS_TRANSLATE_SELECTED_REGION:
+				case EditorPhysicsController.ACTION_OBJECT_TRANSLATE_SELECTED_REGION:
 					final var lTranslationAmtX = mMouseX - mMouseDownX;
 					final var lTranslationAmtY = mMouseY - mMouseDownY;
 
@@ -209,11 +209,11 @@ public class EditorPhysicsRenderer extends BaseRenderer {
 
 					lSelectedRegion.recalculateBounds();
 
-					// mHashGridController.hashGrid().updateEntity(lSelectedRegion);
+					mHashGridController.hashGrid().updateEntity(lSelectedRegion);
 
 					break;
 
-				case EditorPhysicsController.ACTION_FLOORS_ROTATE_REGION_SELECTED:
+				case EditorPhysicsController.ACTION_OBJECT_ROTATE_REGION_SELECTED:
 					final var lRotAmtInRads = mMouseDownV - (mMouseDownX - mMouseX) * 0.01f;
 					mMouseDownX = mMouseX;
 
@@ -227,7 +227,7 @@ public class EditorPhysicsRenderer extends BaseRenderer {
 
 					lSelectedRegion.recalculateBounds();
 
-					// mHashGridController.hashGrid().updateEntity(lSelectedRegion);
+					mHashGridController.hashGrid().updateEntity(lSelectedRegion);
 
 					break;
 				}
@@ -246,9 +246,8 @@ public class EditorPhysicsRenderer extends BaseRenderer {
 
 				final var lSelectedPoints = mPhysicsController.selectedPoints();
 				if (lSelectedPoints.size() == 0) {
-					// if no points selected, then find selected regions
 					for (int i = 0; i < lNumFoundEntities; i++) {
-						final var lGridEntity = mPhysicsController.floorsEntitiesNearby().get(i);
+						final var lGridEntity = mPhysicsController.phyiscsObjectEntitiesNearby().get(i);
 						if (!(lGridEntity instanceof EditorPhysicsObjectInstance))
 							continue;
 
@@ -329,7 +328,7 @@ public class EditorPhysicsRenderer extends BaseRenderer {
 				}
 
 				final var lIsSelected = lFloorRegion == mPhysicsController.selectedPhysicsObject();
-				final var lIsInRegion = mPhysicsController.floorsEntitiesNearby().contains(lFloorRegion);
+				final var lIsInRegion = mPhysicsController.phyiscsObjectEntitiesNearby().contains(lFloorRegion);
 
 				final var lR = lIsSelected ? 0.2f : lIsInRegion ? .9f : .2f;
 				final var lG = lIsSelected ? 0.95f : .2f;
@@ -521,7 +520,7 @@ public class EditorPhysicsRenderer extends BaseRenderer {
 	private void checkForHoverPoints(LintfordCore core) {
 		final var leftMouseDown = core.input().mouse().tryAcquireMouseLeftClick(hashCode());
 
-		final var lFloorEntitiesNearby = mPhysicsController.floorsEntitiesNearby();
+		final var lFloorEntitiesNearby = mPhysicsController.phyiscsObjectEntitiesNearby();
 		final var lNumFoundEntities = lFloorEntitiesNearby.size();
 
 		final var lSnapRadiusInPixels = 5.f;
@@ -567,7 +566,7 @@ public class EditorPhysicsRenderer extends BaseRenderer {
 	}
 
 	private void checkSelectedPoints(LintfordCore core) {
-		final var lFloorEntitiesNearby = mPhysicsController.floorsEntitiesNearby();
+		final var lFloorEntitiesNearby = mPhysicsController.phyiscsObjectEntitiesNearby();
 		final var lNumFoundEntities = lFloorEntitiesNearby.size();
 
 		final var lSnapDistInPixels = 5.f;

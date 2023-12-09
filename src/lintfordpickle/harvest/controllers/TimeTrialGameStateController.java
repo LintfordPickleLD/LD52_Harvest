@@ -1,6 +1,7 @@
 package lintfordpickle.harvest.controllers;
 
 import lintfordpickle.harvest.data.players.PlayerManager;
+import lintfordpickle.harvest.data.scene.SceneData;
 import net.lintfordlib.controllers.core.ControllerManager;
 import net.lintfordlib.core.LintfordCore;
 
@@ -16,8 +17,8 @@ public class TimeTrialGameStateController extends GameStateController {
 	// Constructor
 	// ---------------------------------------------
 
-	public TimeTrialGameStateController(ControllerManager controllerManager, PlayerManager playerManager, int entityGroupUid) {
-		super(controllerManager, playerManager, entityGroupUid);
+	public TimeTrialGameStateController(ControllerManager controllerManager, SceneData sceneData, PlayerManager playerManager, int entityGroupUid) {
+		super(controllerManager, sceneData, playerManager, entityGroupUid);
 	}
 
 	// ---------------------------------------------

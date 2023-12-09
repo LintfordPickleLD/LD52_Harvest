@@ -11,7 +11,6 @@ import com.google.gson.GsonBuilder;
 import lintfordpickle.harvest.data.scene.SceneData;
 import net.lintfordLib.editor.data.scene.SceneHeader;
 import net.lintfordlib.controllers.BaseController;
-import net.lintfordlib.controllers.camera.CameraBoundsController;
 import net.lintfordlib.controllers.core.ControllerManager;
 import net.lintfordlib.core.LintfordCore;
 import net.lintfordlib.core.debug.Debug;
@@ -29,8 +28,6 @@ public class SceneController extends BaseController {
 	// ---------------------------------------------
 	// Variables
 	// ---------------------------------------------
-
-	private CameraBoundsController mCameraBoundsController;
 
 	private final SceneHeader mSceneHeader;
 	private final SceneData mSceneData;
@@ -71,29 +68,13 @@ public class SceneController extends BaseController {
 	public void initialize(LintfordCore core) {
 		super.initialize(core);
 
-		final var lControllerManager = core.controllerManager();
-		mCameraBoundsController = (CameraBoundsController) lControllerManager.getControllerByNameRequired(CameraBoundsController.CONTROLLER_NAME, mEntityGroupUid);
+		mSceneData.finalizeAfterLoading();
 
 	}
 
 	// ---------------------------------------------
 	// Methods
 	// ---------------------------------------------
-
-	public void setSceneWidth(int widthInPixels) {
-		mSceneData.sceneWidthInPx(widthInPixels);
-		mCameraBoundsController.widthBoundInPx(mSceneData.sceneWidthInPx());
-	}
-
-	public void setSceneHeight(int heightInPixels) {
-		mSceneData.sceneHeightInPx(heightInPixels);
-		mCameraBoundsController.heightBoundInPx(mSceneData.sceneHeightInPx());
-	}
-
-	public void setSceneBoundary(int widthInPixels, int heightInPixels) {
-		setSceneWidth(widthInPixels);
-		setSceneHeight(heightInPixels);
-	}
 
 	public void saveToFile(String filename) {
 		if (filename == null || filename.length() == 0) {

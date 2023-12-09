@@ -161,17 +161,18 @@ public class CameraShipChaseController extends BaseController {
 
 			final var lCamWidth = mGameCamera.getWidth();
 			final var lCamHeight = mGameCamera.getHeight();
+			final var lSceneSettings = lSceneManager.sceneSettingsManager();
 
 			// ensure camera doesn't go beyond scene extents
-			if (mPosition.x - lCamWidth * .5f < -lSceneManager.sceneWidthInPx() * 0.5f)
-				mPosition.x = -lSceneManager.sceneWidthInPx() * 0.5f + lCamWidth * .5f;
-			if (mPosition.y - lCamHeight * .5f < -lSceneManager.sceneHeightInPx() * 0.5f)
-				mPosition.y = -lSceneManager.sceneHeightInPx() * 0.5f + lCamHeight * .5f;
+			if (mPosition.x - lCamWidth * .5f < -lSceneSettings.sceneWidthInPx() * 0.5f)
+				mPosition.x = -lSceneSettings.sceneWidthInPx() * 0.5f + lCamWidth * .5f;
+			if (mPosition.y - lCamHeight * .5f < -lSceneSettings.sceneHeightInPx() * 0.5f)
+				mPosition.y = -lSceneSettings.sceneHeightInPx() * 0.5f + lCamHeight * .5f;
 
-			if (mPosition.x + lCamWidth * .5f > lSceneManager.sceneWidthInPx() * 0.5f)
-				mPosition.x = lSceneManager.sceneWidthInPx() * 0.5f - lCamWidth * .5f;
-			if (mPosition.y + lCamHeight * .5f > lSceneManager.sceneHeightInPx() * 0.5f)
-				mPosition.y = lSceneManager.sceneHeightInPx() * 0.5f - lCamHeight * .5f;
+			if (mPosition.x + lCamWidth * .5f > lSceneSettings.sceneWidthInPx() * 0.5f)
+				mPosition.x = lSceneSettings.sceneWidthInPx() * 0.5f - lCamWidth * .5f;
+			if (mPosition.y + lCamHeight * .5f > lSceneSettings.sceneHeightInPx() * 0.5f)
+				mPosition.y = lSceneSettings.sceneHeightInPx() * 0.5f - lCamHeight * .5f;
 
 			mGameCamera.setPosition(mPosition.x, mPosition.y);
 		}

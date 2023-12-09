@@ -1,28 +1,24 @@
 package lintfordpickle.harvest.data.scene.physics;
 
 import lintfordpickle.harvest.data.GridCollisionTypes;
+import lintfordpickle.harvest.data.scene.collisions.GridEntityType;
 import net.lintfordlib.ConstantsPhysics;
 import net.lintfordlib.core.maths.Vector2f;
 import net.lintfordlib.core.physics.dynamics.RigidBody;
 import net.lintfordlib.core.physics.dynamics.RigidBodyEntity;
 import net.lintfordlib.core.physics.shapes.PolygonShape;
 
-public class ScenePhysicsobjectInstance extends RigidBodyEntity {
+public class ScenePhysicsObjectInstance extends RigidBodyEntity {
 
 	// --------------------------------------
 	// Variables
 	// --------------------------------------
 
-	public final Vector2f a = new Vector2f();
-	public final Vector2f b = new Vector2f();
-	public final Vector2f c = new Vector2f();
-	public final Vector2f d = new Vector2f();
-
 	// --------------------------------------
 	// Constructor
 	// --------------------------------------
 
-	public ScenePhysicsobjectInstance(int uid) {
+	public ScenePhysicsObjectInstance(int uid) {
 		super(uid, GridCollisionTypes.COLLISION_TYPE_CARGO);
 	}
 
@@ -46,12 +42,18 @@ public class ScenePhysicsobjectInstance extends RigidBodyEntity {
 
 		body.userData("floor");
 
-//		body.categoryBits(GridEntityType.GRID_ENTITY_TYPE_FLOOR);
-//		body.maskBits(GridEntityType.GRID_ENTITY_TYPE_NONE);
+		body.categoryBits(GridEntityType.GRID_ENTITY_TYPE_PHYSICS_OBJECTS);
+		body.maskBits(GridEntityType.GRID_ENTITY_TYPE_NONE);
 
 	}
 
 	// --------------------------------------
 	// Methods
 	// --------------------------------------
+
+	public void setPolygonVertices(Vector2f newA, Vector2f newB, Vector2f newC, Vector2f newD) {
+		body.shape().setLocalVertices(newA, newB, newC, newD);
+
+	}
+
 }
