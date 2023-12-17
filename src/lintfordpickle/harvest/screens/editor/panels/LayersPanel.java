@@ -1,10 +1,14 @@
 package lintfordpickle.harvest.screens.editor.panels;
 
+import java.util.ArrayList;
 import java.util.Collections;
+import java.util.List;
 
 import lintfordpickle.harvest.controllers.editor.EditorLayerController;
+import lintfordpickle.harvest.data.editor.EditorLayersData;
 import lintfordpickle.harvest.data.editor.LayerListBoxItem;
 import lintfordpickle.harvest.data.scene.layers.SceneBaseLayer;
+import lintfordpickle.harvest.renderers.editor.EditorSceneRenderer;
 import net.lintfordLib.editor.renderers.UiPanel;
 import net.lintfordlib.core.LintfordCore;
 import net.lintfordlib.core.debug.Debug;
@@ -46,6 +50,9 @@ public class LayersPanel extends UiPanel implements IUiListBoxListener {
 	private UiButton mMoveDown;
 
 	private EditorLayerController mEditorLayerController;
+	private EditorSceneRenderer mEditorSceneRenderer;
+
+	private final List<SceneBaseLayer> mTempOrderedSceneList = new ArrayList<>();
 
 	// --------------------------------------
 	// Properties
@@ -53,7 +60,7 @@ public class LayersPanel extends UiPanel implements IUiListBoxListener {
 
 	@Override
 	public int layerOwnerHashCode() {
-		return hashCode();
+		return mEditorSceneRenderer.hashCode();
 	}
 
 	// --------------------------------------
@@ -63,11 +70,13 @@ public class LayersPanel extends UiPanel implements IUiListBoxListener {
 	public LayersPanel(UiWindow parentWindow, int entityGroupUid) {
 		super(parentWindow, "Layers Panel", entityGroupUid);
 
-		mShowActiveLayerButton = false;
-		mShowShowLayerButton = false;
+		mShowActiveLayerButton = true;
+		mShowShowLayerButton = true;
 
 		mRenderPanelTitle = true;
 		mPanelTitle = "Layers";
+
+		mEditorActiveLayerUid = EditorLayersData.Layers;
 
 		mLayerListWidget = new UiVerticalTextListBox(parentWindow, entityGroupUid);
 		mLayerListWidget.addCallbackListener(this);
@@ -114,6 +123,9 @@ public class LayersPanel extends UiPanel implements IUiListBoxListener {
 		mEditorLayerController = (EditorLayerController) lControllerManager.getControllerByNameRequired(EditorLayerController.CONTROLLER_NAME, mEntityGroupUid);
 
 		addLoadedLayersToListBox();
+
+		final var lRendererManager = mParentWindow.rendererManager();
+		mEditorSceneRenderer = (EditorSceneRenderer) lRendererManager.getRenderer(EditorSceneRenderer.RENDERER_NAME);
 	}
 
 	private void addLoadedLayersToListBox() {
@@ -147,6 +159,13 @@ public class LayersPanel extends UiPanel implements IUiListBoxListener {
 			break;
 		}
 
+		case BUTTON_EXPANDED: {
+			if (mIsPanelOpen == false) {
+				mEditorLayerController.selectedLayer(null);
+			}
+			break;
+		}
+
 		case BUTTON_ADD_TEX_LAYER: {
 			final var lNewLayer = mEditorLayerController.addNewTextureLayer();
 			addLayerToUiList(lNewLayer);
@@ -164,6 +183,13 @@ public class LayersPanel extends UiPanel implements IUiListBoxListener {
 			addLayerToUiList(lNewLayer);
 			break;
 		}
+
+		case BUTTON_SHOW_LAYER:
+			mEditorSceneRenderer.renderLayers(isLayerVisible());
+			if (isLayerVisible() == false) {
+				mEditorLayerController.selectedLayer(null);
+			}
+			return;
 
 		case BUTTON_MOVE_LAYER_UP: {
 			final var lSelectedListBoxItem = mLayerListWidget.getSelectedItem();
@@ -218,16 +244,22 @@ public class LayersPanel extends UiPanel implements IUiListBoxListener {
 	}
 
 	public void refreshLayerItems() {
-		final var lLayers = mLayerListWidget.items();
-		final var lNumLayers = lLayers.size();
+		final var lLayerListItems = mLayerListWidget.items();
+		final var lNumLayerItems = lLayerListItems.size();
 
-		for (int i = 0; i < lNumLayers; i++) {
-			final var lLayer = (LayerListBoxItem) mLayerListWidget.items().get(i);
-			lLayer.displayName = lLayer.layer().name;
-			lLayer.layer().zDepth = i;
+		mTempOrderedSceneList.clear();
+
+		for (int i = 0; i < lNumLayerItems; i++) {
+			final var lListBoxLayerItem = (LayerListBoxItem) mLayerListWidget.items().get(i);
+			final var lSceneLayer = lListBoxLayerItem.layer();
+
+			lListBoxLayerItem.displayName = lSceneLayer.name;
+			lSceneLayer.zDepth = i;
+
+			mTempOrderedSceneList.add(lSceneLayer);
 		}
 
-		Collections.sort(lLayers);
+		mEditorLayerController.reorderLayersPerZDepth(mTempOrderedSceneList);
 	}
 
 	private void removeLayerFromUiList(SceneBaseLayer layer) {
@@ -257,17 +289,20 @@ public class LayersPanel extends UiPanel implements IUiListBoxListener {
 
 		final var lLayerUid = selectedItem.itemUid;
 		mEditorLayerController.setSelectedLayer(lLayerUid);
+
+		final var lBackingSceneLayer = mEditorLayerController.selectedLayer();
+		if (lBackingSceneLayer != null) {
+
+		}
 	}
 
 	@Override
 	public void onItemAdded(UiListBoxItem newItem) {
-		// TODO Auto-generated method stub
 
 	}
 
 	@Override
 	public void onItemRemoved(UiListBoxItem oldItem) {
-		// TODO Auto-generated method stub
 
 	}
 }

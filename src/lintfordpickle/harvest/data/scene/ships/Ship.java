@@ -7,6 +7,7 @@ import lintfordpickle.harvest.data.GridCollisionTypes;
 import lintfordpickle.harvest.data.input.ShipInput;
 import lintfordpickle.harvest.data.scene.cargo.Cargo;
 import lintfordpickle.harvest.data.scene.cargo.CargoType;
+import lintfordpickle.harvest.data.scene.collisions.GridEntityType;
 import lintfordpickle.harvest.data.scene.physics.ShipPhysicsData;
 import lintfordpickle.harvest.renderers.trails.TrailRendererComponent;
 import net.lintfordlib.ConstantsPhysics;
@@ -316,6 +317,9 @@ public class Ship extends RigidBodyEntity {
 		body = new RigidBody(false);
 		body.addShape(PolygonShape.createBoxShape(width, height, 0.f, lDensity, restitution, staticFriction, dynamicFriction));
 		body.userData(new ShipPhysicsData(entityUid));
+
+		body.categoryBits(GridEntityType.GRID_ENTITY_TYPE_SHIP);
+		body.maskBits(GridEntityType.GRID_ENTITY_TYPE_PHYSICS_OBJECTS);
 
 		health = maxHealth;
 	}

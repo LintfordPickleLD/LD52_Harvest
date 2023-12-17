@@ -6,5 +6,6 @@ public class EditorLayersData {
 
 	public static final int Nothing = EditorLayerBrush.NO_LAYER_UID;
 	public static final int Physics = 10;
+	public static final int Layers = 11;
 
 }

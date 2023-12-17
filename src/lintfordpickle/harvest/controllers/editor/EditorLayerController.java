@@ -1,6 +1,7 @@
 package lintfordpickle.harvest.controllers.editor;
 
-import lintfordpickle.harvest.controllers.SceneController;
+import java.util.List;
+
 import lintfordpickle.harvest.data.scene.layers.LayersManager;
 import lintfordpickle.harvest.data.scene.layers.SceneAnimationLayer;
 import lintfordpickle.harvest.data.scene.layers.SceneBaseLayer;
@@ -9,6 +10,7 @@ import lintfordpickle.harvest.data.scene.layers.SceneTextureLayer;
 import net.lintfordlib.controllers.BaseController;
 import net.lintfordlib.controllers.core.ControllerManager;
 import net.lintfordlib.core.LintfordCore;
+import net.lintfordlib.core.debug.Debug;
 
 public class EditorLayerController extends BaseController {
 
@@ -18,20 +20,25 @@ public class EditorLayerController extends BaseController {
 
 	public static final String CONTROLLER_NAME = "Editor Layer Controller";
 
+	public static final int ACTION_OBJECT_TRANSLATE_SELECTED_LAYER = 1;
+	public static final int ACTION_OBJECT_SCALE_SELECTED_LAYER_X = 2;
+	public static final int ACTION_OBJECT_SCALE_SELECTED_LAYER_Y = 3;
+
 	// --------------------------------------
 	// Variables
 	// --------------------------------------
 
 	private LayersManager mLayersManager;
-
-	// TODO: when loading, make sure this is set to highest index + 1;
+	private SceneBaseLayer mSelectedLayer;
 	private int mLayerIndexCounter;
+
+	// --------------------------------------
+	// Properties
+	// --------------------------------------
 
 	public int getNewLayerUid() {
 		return mLayerIndexCounter++;
 	}
-
-	private SceneBaseLayer mSelectedLayer;
 
 	public SceneBaseLayer getLayerByUid(int layerUid) {
 		final var lLayers = mLayersManager.layers();
@@ -42,10 +49,6 @@ public class EditorLayerController extends BaseController {
 		}
 		return null;
 	}
-
-	// --------------------------------------
-	// Properties
-	// --------------------------------------
 
 	public SceneBaseLayer selectedLayer() {
 		return mSelectedLayer;
@@ -146,4 +149,18 @@ public class EditorLayerController extends BaseController {
 		mSelectedLayer = getLayerByUid(selectedLayerUid);
 	}
 
+	public void reorderLayersPerZDepth(List<SceneBaseLayer> layersOrdered) {
+		if (layersOrdered.size() != mLayersManager.layers().size()) {
+			Debug.debugManager().logger().e(getClass().getSimpleName(), "Cannot recorder the scene layers - count mismatch!");
+			return;
+		}
+
+		final var lLayersList = mLayersManager.layers();
+		lLayersList.clear();
+
+		final var lNumOrderedList = layersOrdered.size();
+		for (int i = 0; i < lNumOrderedList; i++) {
+			lLayersList.add(layersOrdered.get(i));
+		}
+	}
 }

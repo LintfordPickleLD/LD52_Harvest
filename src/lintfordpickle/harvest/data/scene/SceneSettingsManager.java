@@ -69,7 +69,7 @@ public class SceneSettingsManager extends BaseInstanceManager {
 	}
 
 	@Override
-	public void finalizeAfterLoading(SceneData scene) {
+	public void finalizeAfterLoading() {
 
 	}
 

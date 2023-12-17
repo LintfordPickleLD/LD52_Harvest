@@ -133,16 +133,16 @@ public class SceneData {
 	}
 
 	public void finalizeAfterLoading() {
-		mSceneSettingsManager.finalizeAfterLoading(this);
-		mGameState.finalizeAfterLoading(this);
-		mHashGridManager.finalizeAfterLoading(this);
-		mLayersManager.finalizeAfterLoading(this);
-		mPlatformManager.finalizeAfterLoading(this);
-		mShipManager.finalizeAfterLoading(this);
-		mPhysicsSettingsManager.finalizeAfterLoading(this);
-		mPhysicsObjectsManager.finalizeAfterLoading(this);
+		mSceneSettingsManager.finalizeAfterLoading();
+		mGameState.finalizeAfterLoading();
+		mHashGridManager.finalizeAfterLoading();
+		mLayersManager.finalizeAfterLoading();
+		mPlatformManager.finalizeAfterLoading();
+		mShipManager.finalizeAfterLoading();
+		mPhysicsSettingsManager.finalizeAfterLoading();
+		mPhysicsObjectsManager.finalizeAfterLoading();
 
-		mCargoManager.finalizeAfterLoading(this);
+		mCargoManager.finalizeAfterLoading();
 	}
 
 }

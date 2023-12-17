@@ -58,8 +58,7 @@ public class ShipManager extends BaseInstanceManager {
 	}
 
 	@Override
-	public void finalizeAfterLoading(SceneData scene) {
-		// TODO Auto-generated method stub
+	public void finalizeAfterLoading() {
 
 	}
 

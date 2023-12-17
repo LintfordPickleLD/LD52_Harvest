@@ -18,6 +18,8 @@ public class SceneTextureLayer extends SceneBaseLayer {
 	private String mTextureName;
 	private String mTexturePath;
 
+	private boolean mIsScreenSpace;
+
 	// 0 unloaded, 1 = loaded, 2 = faild to load
 	public int textureStatus;
 
@@ -31,6 +33,14 @@ public class SceneTextureLayer extends SceneBaseLayer {
 
 	public String textureFilepath() {
 		return mTexturePath;
+	}
+
+	public boolean isScreenSpace() {
+		return mIsScreenSpace;
+	}
+
+	public void isScreenSpace(boolean isScreenSpace) {
+		mIsScreenSpace = isScreenSpace;
 	}
 
 	// --------------------------------------
@@ -82,8 +92,8 @@ public class SceneTextureLayer extends SceneBaseLayer {
 		lSaveDefinition.centerX = centerX;
 		lSaveDefinition.centerY = centerY;
 
-		lSaveDefinition.scaleX = scaleX;
-		lSaveDefinition.scaleY = scaleY;
+		lSaveDefinition.scaleX = width;
+		lSaveDefinition.scaleY = height;
 
 		return lSaveDefinition;
 	}

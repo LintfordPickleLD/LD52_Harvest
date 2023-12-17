@@ -406,6 +406,9 @@ public class EditorPhysicsRenderer extends BaseRenderer {
 	}
 
 	private void drawSelectedPoints(LintfordCore core, LineBatch lineBatch, FontUnit font) {
+
+		// TODO: These needs to be changed - Debug points are only drawn when debug mode is on (which is not in the game)
+
 		final int lNumSelectedPoints = mPhysicsController.selectedPoints().size();
 		if (lNumSelectedPoints == 0)
 			return;

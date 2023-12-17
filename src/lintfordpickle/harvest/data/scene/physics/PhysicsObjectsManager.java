@@ -4,7 +4,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 import lintfordpickle.harvest.data.scene.BaseInstanceManager;
-import lintfordpickle.harvest.data.scene.SceneData;
 import lintfordpickle.harvest.data.scene.SceneSaveDefinition;
 import net.lintfordlib.ConstantsPhysics;
 import net.lintfordlib.core.geometry.partitioning.GridEntity;
@@ -15,7 +14,15 @@ public class PhysicsObjectsManager extends BaseInstanceManager {
 	// Variables
 	// --------------------------------------
 
-	private List<ScenePhysicsObjectInstance> worldSceneBodies = new ArrayList<>();
+	private List<ScenePhysicsObjectInstance> mWorldSceneBodies = new ArrayList<>();
+
+	// --------------------------------------
+	// Properties
+	// --------------------------------------
+
+	public List<ScenePhysicsObjectInstance> worldSceneBodies() {
+		return mWorldSceneBodies;
+	}
 
 	// --------------------------------------
 	// Constructor
@@ -62,22 +69,13 @@ public class PhysicsObjectsManager extends BaseInstanceManager {
 					lFloorSaveDefinition.localPoints.get(2).mul(lToUnits), 
 					lFloorSaveDefinition.localPoints.get(3).mul(lToUnits));
 
-			worldSceneBodies.add(lNewPhyiscsObjectInstance);
+			mWorldSceneBodies.add(lNewPhyiscsObjectInstance);
 		}
 
 	}
 
 	@Override
-	public void finalizeAfterLoading(SceneData scene) {
-		final var lPhysicsWorld = scene.physicsWorld();
-		final var lHashGrid = scene.hashGridManager().hashGrid();
-		
-		final var lNumPhysicsObjects = worldSceneBodies.size();
-		for(int i = 0; i < lNumPhysicsObjects; i++) {
-			final var lObject = worldSceneBodies.get(i);
-			
-			lPhysicsWorld.addBody(lObject.body());
-			lHashGrid.addEntity(lObject);
-		}
+	public void finalizeAfterLoading() {
+		// finalized in SceneController
 	}
 }

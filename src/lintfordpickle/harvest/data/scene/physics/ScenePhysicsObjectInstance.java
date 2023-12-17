@@ -1,7 +1,7 @@
 package lintfordpickle.harvest.data.scene.physics;
 
+import lintfordpickle.harvest.ConstantsGame;
 import lintfordpickle.harvest.data.GridCollisionTypes;
-import lintfordpickle.harvest.data.scene.collisions.GridEntityType;
 import net.lintfordlib.ConstantsPhysics;
 import net.lintfordlib.core.maths.Vector2f;
 import net.lintfordlib.core.physics.dynamics.RigidBody;
@@ -42,8 +42,8 @@ public class ScenePhysicsObjectInstance extends RigidBodyEntity {
 
 		body.userData("floor");
 
-		body.categoryBits(GridEntityType.GRID_ENTITY_TYPE_PHYSICS_OBJECTS);
-		body.maskBits(GridEntityType.GRID_ENTITY_TYPE_NONE);
+		body.categoryBits(ConstantsGame.PHYSICS_WORLD_MASK_WALL);
+		body.maskBits(ConstantsGame.PHYSICS_WORLD_MASK_SHIP);
 
 	}
 

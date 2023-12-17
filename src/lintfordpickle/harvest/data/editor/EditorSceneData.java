@@ -110,16 +110,13 @@ public class EditorSceneData {
 	}
 
 	public void finalizeAfterLoading() {
-
-		// TODO: This certainly needs more work
-
-		mSceneSettingsManager.finalizeAfterLoading(null);
-		mGameState.finalizeAfterLoading(null);
-		mHashGridManager.finalizeAfterLoading(null);
-		mLayersManager.finalizeAfterLoading(null);
+		mSceneSettingsManager.finalizeAfterLoading();
+		mGameState.finalizeAfterLoading();
+		mHashGridManager.finalizeAfterLoading();
+		mLayersManager.finalizeAfterLoading();
 		mPlatformManager.finalizeAfterLoading(this);
-		mShipManager.finalizeAfterLoading(null);
-		mPhysicsSettingsManager.finalizeAfterLoading(null);
+		mShipManager.finalizeAfterLoading();
+		mPhysicsSettingsManager.finalizeAfterLoading();
 		mPhysicsManager.finalizeAfterLoading(this);
 	}
 

@@ -32,6 +32,7 @@ public class LayerPhysicsObjects extends UiPanel {
 	// --------------------------------------
 
 	private UiButton mAddNewPolygon;
+	private UiButton mDeletePolygon;
 	private UiButton mSetFloorCenterToCursor;
 	private UiButtonToggle mToggleStatic;
 	private UiLabelledInt mNumFloorRegions;
@@ -72,6 +73,10 @@ public class LayerPhysicsObjects extends UiPanel {
 		mAddNewPolygon.setUiWidgetListener(this, BUTTON_PLACE_FLOOR);
 		mAddNewPolygon.buttonLabel("Add Polygon");
 
+		mDeletePolygon = new UiButton(parentWindow);
+		mDeletePolygon.setUiWidgetListener(this, BUTTON_DELETE_SELECTED);
+		mDeletePolygon.buttonLabel("Delete");
+
 		mSetFloorCenterToCursor = new UiButton(parentWindow);
 		mSetFloorCenterToCursor.setUiWidgetListener(this, BUTTON_SET_OBJECT_CENTER_TO_CURSOR);
 		mSetFloorCenterToCursor.buttonLabel("Center");
@@ -83,6 +88,7 @@ public class LayerPhysicsObjects extends UiPanel {
 		addWidget(mNumFloorRegions);
 
 		addWidget(mAddNewPolygon);
+		addWidget(mDeletePolygon);
 
 		addWidget(mToggleStatic);
 		addWidget(mSetFloorCenterToCursor);
@@ -156,7 +162,6 @@ public class LayerPhysicsObjects extends UiPanel {
 			mEditorPhysicsController.deletePhysicsObjectInstance(lSelectedPhysicsObject);
 			mEditorPhysicsRenderer.clearSelectedRegion();
 			return;
-
 		}
 
 		case BUTTON_DELETE_ALL:

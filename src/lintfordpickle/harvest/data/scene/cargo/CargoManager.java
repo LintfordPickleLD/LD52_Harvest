@@ -4,7 +4,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 import lintfordpickle.harvest.data.scene.BaseInstanceManager;
-import lintfordpickle.harvest.data.scene.SceneData;
 import lintfordpickle.harvest.data.scene.SceneSaveDefinition;
 
 public class CargoManager extends BaseInstanceManager {
@@ -70,7 +69,7 @@ public class CargoManager extends BaseInstanceManager {
 	}
 
 	@Override
-	public void finalizeAfterLoading(SceneData scene) {
+	public void finalizeAfterLoading() {
 		// TODO Auto-generated method stub
 
 	}

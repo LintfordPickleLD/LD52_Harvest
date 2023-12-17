@@ -21,6 +21,6 @@ public abstract class BaseInstanceManager {
 
 	public abstract void loadFromTrackDefinition(SceneSaveDefinition sceneSaveDefinition);
 
-	public abstract void finalizeAfterLoading(SceneData sceneData);
+	public abstract void finalizeAfterLoading();
 
 }

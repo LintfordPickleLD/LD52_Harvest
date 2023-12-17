@@ -70,11 +70,28 @@ public class SceneController extends BaseController {
 
 		mSceneData.finalizeAfterLoading();
 
+		addSceneComponentsToPhysicsWorld(core);
 	}
 
 	// ---------------------------------------------
 	// Methods
 	// ---------------------------------------------
+
+	private void addSceneComponentsToPhysicsWorld(LintfordCore core) {
+
+		final var lPhysicsWorld = mSceneData.physicsWorld();
+		final var lHashGrid = mSceneData.hashGridManager().hashGrid();
+		final var lPhysicsObjectsManager = mSceneData.physicsObjectsManager();
+
+		final var lPhysicsObjects = lPhysicsObjectsManager.worldSceneBodies();
+		final var lNumPhysicsObjects = lPhysicsObjects.size();
+		for (int i = 0; i < lNumPhysicsObjects; i++) {
+			final var lObject = lPhysicsObjects.get(i);
+
+			lPhysicsWorld.addBody(lObject.body());
+			lHashGrid.addEntity(lObject);
+		}
+	}
 
 	public void saveToFile(String filename) {
 		if (filename == null || filename.length() == 0) {

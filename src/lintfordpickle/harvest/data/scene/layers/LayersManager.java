@@ -4,7 +4,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 import lintfordpickle.harvest.data.scene.BaseInstanceManager;
-import lintfordpickle.harvest.data.scene.SceneData;
 import lintfordpickle.harvest.data.scene.SceneSaveDefinition;
 import lintfordpickle.harvest.data.scene.layers.savedefinitions.SceneAnimationLayerSaveDefinition;
 import lintfordpickle.harvest.data.scene.layers.savedefinitions.SceneNoiseLayerSaveDefinition;
@@ -49,6 +48,8 @@ public class LayersManager extends BaseInstanceManager {
 			mLayers.remove(layerToDelete);
 		}
 	}
+
+	// ---------------------------------------------
 
 	@Override
 	public void initializeManager() {
@@ -104,7 +105,7 @@ public class LayersManager extends BaseInstanceManager {
 	}
 
 	@Override
-	public void finalizeAfterLoading(SceneData scene) {
+	public void finalizeAfterLoading() {
 
 	}
 

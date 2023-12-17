@@ -6,6 +6,7 @@ import lintfordpickle.harvest.data.scene.layers.SceneNoiseLayer;
 import lintfordpickle.harvest.data.scene.layers.SceneTextureLayer;
 import net.lintfordlib.core.LintfordCore;
 import net.lintfordlib.core.ResourceManager;
+import net.lintfordlib.core.graphics.ColorConstants;
 import net.lintfordlib.renderers.BaseRenderer;
 import net.lintfordlib.renderers.RendererManager;
 
@@ -60,11 +61,27 @@ public class SceneRenderer extends BaseRenderer {
 		final var lLayers = lLayersManager.layers();
 		final var lNumLayers = lLayers.size();
 		for (int i = 0; i < lNumLayers; i++) {
+			final var lSceneLayer = lLayers.get(i);
+
+			if (lSceneLayer instanceof SceneTextureLayer) {
+				final var layer = (SceneTextureLayer) lSceneLayer;
+				if (layer.textureStatus == SceneTextureLayer.TEXTURE_UNLOADED) {
+					layer.texture = resourceManager.textureManager().loadTexture(layer.textureName(), layer.textureFilepath(), entityGroupID());
+					if (resourceManager.textureManager().textureNotFound().equals(layer.texture)) {
+						layer.texture = null;
+
+						return;
+					}
+
+					if (layer.texture == null) {
+						layer.textureStatus = SceneTextureLayer.TEXTURE_FAILED;
+					}
+				}
+			}
+
+			// TODO: animated textures
 
 		}
-
-		// TODO: Load the resources used by the scene
-
 	}
 
 	@Override
@@ -125,11 +142,31 @@ public class SceneRenderer extends BaseRenderer {
 	protected void drawTextureLayer(LintfordCore core, SceneTextureLayer layer) {
 		final var lSpriteBatch = mRendererManager.uiSpriteBatch();
 
-		lSpriteBatch.begin(core.gameCamera());
+		final var aabb_c = core.gameCamera().boundingRectangle();
+		final var cameraPositionX = aabb_c.centerX();
+		final var cameraPositionY = aabb_c.centerY();
 
-		// draw texture scene layer
+		if (layer.texture != null) {
+			final var lCamOffsetX = -layer.centerX - cameraPositionX * layer.translationSpeedModX;
+			final var lCamOffsetY = -layer.centerY - cameraPositionY * layer.translationSpeedModY;
 
-		lSpriteBatch.end();
+			final var lSrcX = lCamOffsetX;
+			final var lSrcY = lCamOffsetY;
+			final var lSrcW = layer.texture.getTextureWidth();
+			final var lSrcH = layer.texture.getTextureHeight();
+
+			final var lDstX = layer.centerX - layer.width * .5f;
+			final var lDstY = layer.centerY - layer.height * .5f;
+			final var lDstWidth = layer.width;
+			final var lDstHeight = layer.height;
+
+			lSpriteBatch.begin(core.gameCamera());
+
+			lSpriteBatch.draw(layer.texture, lSrcX, lSrcY, lSrcW, lSrcH, lDstX, lDstY, lDstWidth, lDstHeight, -.01f, ColorConstants.WHITE);
+
+			lSpriteBatch.end();
+			return;
+		}
 	}
 
 	protected void drawAnimationLayer(LintfordCore core, SceneAnimationLayer layer) {

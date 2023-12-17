@@ -74,7 +74,7 @@ public class HashGridManager extends BaseInstanceManager {
 	}
 
 	@Override
-	public void finalizeAfterLoading(SceneData scene) {
+	public void finalizeAfterLoading() {
 		if (mHashGrid == null) {
 			createNewHashGrid(1000, 1000, 5, 5);
 		}

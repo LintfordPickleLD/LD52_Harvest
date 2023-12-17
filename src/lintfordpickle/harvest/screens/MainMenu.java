@@ -4,6 +4,7 @@ import lintfordpickle.harvest.ConstantsGame;
 import lintfordpickle.harvest.GameSceneSettings;
 import lintfordpickle.harvest.controllers.replays.ReplayController;
 import lintfordpickle.harvest.screens.editor.EditorSceneSelectionScreen;
+import lintfordpickle.harvest.screens.game.TimeTrialGameScreen;
 import lintfordpickle.harvest.screens.menu.MenuHelpScreen;
 import lintfordpickle.harvest.screens.menu.OptionsScreen;
 import lintfordpickle.harvest.screens.menu.TimeTrialLandingScreen;
@@ -18,6 +19,7 @@ import net.lintfordlib.screenmanager.ScreenManagerConstants.FILLTYPE;
 import net.lintfordlib.screenmanager.ScreenManagerConstants.LAYOUT_ALIGNMENT;
 import net.lintfordlib.screenmanager.ScreenManagerConstants.LAYOUT_WIDTH;
 import net.lintfordlib.screenmanager.layouts.ListLayout;
+import net.lintfordlib.screenmanager.screens.LoadingScreen;
 
 public class MainMenu extends MenuScreen {
 
@@ -155,7 +157,10 @@ public class MainMenu extends MenuScreen {
 				mScreenManager.removeScreen(lTopMostScreen);
 			}
 
-			screenManager().addScreen(new EditorSceneSelectionScreen(mScreenManager, new GameSceneSettings(mScreenManager.core().appResources()), true));
+			final var lEditorScreen = new EditorSceneSelectionScreen(mScreenManager, new GameSceneSettings(mScreenManager.core().appResources()), true);
+			final var lLoadingScreen = new LoadingScreen(screenManager(), true, lEditorScreen);
+			screenManager().createLoadingScreen(new LoadingScreen(screenManager(), true, lLoadingScreen));
+
 			break;
 		}
 

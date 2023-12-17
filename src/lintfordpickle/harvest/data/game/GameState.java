@@ -188,7 +188,7 @@ public class GameState extends BaseInstanceManager {
 	}
 
 	@Override
-	public void finalizeAfterLoading(SceneData scene) {
+	public void finalizeAfterLoading() {
 
 	}
 

@@ -2,6 +2,7 @@ package lintfordpickle.harvest.screens.editor.panels;
 
 import lintfordpickle.harvest.data.scene.layers.SceneBaseLayer;
 import lintfordpickle.harvest.data.scene.layers.SceneTextureLayer;
+import net.lintfordlib.core.LintfordCore;
 import net.lintfordlib.core.input.InputManager;
 import net.lintfordlib.core.input.keyboard.IUiInputKeyPressCallback;
 import net.lintfordlib.renderers.windows.UiWindow;
@@ -53,8 +54,8 @@ public class LayerTexturePanel extends LayerPanel<SceneTextureLayer> implements 
 	private UiInputFloat mTranslationSpeedModX;
 	private UiInputFloat mTranslationSpeedModY;
 
-	private UiInputFloat mScaleX;
-	private UiInputFloat mScaleY;
+	private UiInputFloat mWidth;
+	private UiInputFloat mHeight;
 
 	// --------------------------------------
 	// Properties
@@ -111,16 +112,16 @@ public class LayerTexturePanel extends LayerPanel<SceneTextureLayer> implements 
 		mTranslationSpeedModY.setMinMax(0.f, 10.f);
 		mTranslationSpeedModY.stepSize(.1f);
 
-		mScaleX = new UiInputFloat(parentWindow);
-		mScaleX.setUiWidgetListener(this, SLIDER_SCALE_X);
-		mScaleX.label("Scale X");
-		mScaleX.setMinMax(0.f, 10.f);
-		mScaleX.stepSize(.1f);
-		mScaleY = new UiInputFloat(parentWindow);
-		mScaleY.setUiWidgetListener(this, SLIDER_SCALE_Y);
-		mScaleY.label("Scale Y");
-		mScaleY.setMinMax(0.f, 10.f);
-		mScaleY.stepSize(.1f);
+		mWidth = new UiInputFloat(parentWindow);
+		mWidth.setUiWidgetListener(this, SLIDER_SCALE_X);
+		mWidth.label("Width");
+		mWidth.setMinMax(0.f, 10.f);
+		mWidth.stepSize(.1f);
+		mHeight = new UiInputFloat(parentWindow);
+		mHeight.setUiWidgetListener(this, SLIDER_SCALE_Y);
+		mHeight.label("Height");
+		mHeight.setMinMax(0.f, 10.f);
+		mHeight.stepSize(.1f);
 
 		final var lHorizontalGroup0 = new UiHorizontalEntryGroup(parentWindow);
 		lHorizontalGroup0.widgets().add(mCenterXInput);
@@ -131,8 +132,8 @@ public class LayerTexturePanel extends LayerPanel<SceneTextureLayer> implements 
 		lHorizontalGroup1.widgets().add(mTranslationSpeedModY);
 
 		final var lHorizontalGroup2 = new UiHorizontalEntryGroup(parentWindow);
-		lHorizontalGroup2.widgets().add(mScaleX);
-		lHorizontalGroup2.widgets().add(mScaleY);
+		lHorizontalGroup2.widgets().add(mWidth);
+		lHorizontalGroup2.widgets().add(mHeight);
 
 		addWidget(mLayerNameLabel);
 		addWidget(mLayerName);
@@ -152,6 +153,32 @@ public class LayerTexturePanel extends LayerPanel<SceneTextureLayer> implements 
 	// --------------------------------------
 	// Core-Methods
 	// --------------------------------------
+
+	@Override
+	public void update(LintfordCore core) {
+		super.update(core);
+
+		final var lSelectedLayer = mEditorLayerController.selectedLayer();
+
+		if (lSelectedLayer != null) {
+
+			if (mCenterXInput.currentValue() != lSelectedLayer.centerX) {
+				mCenterXInput.inputString((int) lSelectedLayer.centerX);
+			}
+
+			if (mCenterYInput.currentValue() != lSelectedLayer.centerY) {
+				mCenterYInput.inputString((int) lSelectedLayer.centerY);
+			}
+
+			if (mWidth.hasFocus() == false && mWidth.currentValue() != lSelectedLayer.width) {
+				mWidth.inputString(lSelectedLayer.width);
+			}
+
+			if (mHeight.hasFocus() == false && mHeight.currentValue() != lSelectedLayer.height) {
+				mHeight.inputString(lSelectedLayer.height);
+			}
+		}
+	}
 
 	protected void newLayerSelected(SceneBaseLayer selectedLayer) {
 		if (selectedLayer instanceof SceneTextureLayer) {
@@ -174,12 +201,9 @@ public class LayerTexturePanel extends LayerPanel<SceneTextureLayer> implements 
 		mTranslationSpeedModX.inputString(selectedLayer.translationSpeedModX);
 		mTranslationSpeedModY.inputString(selectedLayer.translationSpeedModY);
 
-		mScaleX.inputString(selectedLayer.scaleX);
-		mScaleY.inputString(selectedLayer.scaleY);
+		mWidth.inputString(selectedLayer.width);
+		mHeight.inputString(selectedLayer.height);
 
-		// TODO:
-//		mCenterX.currentValue(selectedLayer.centerX);
-//		mCenterY.currentValue(selectedLayer.centerY);
 	}
 
 	// --------------------------------------
@@ -230,14 +254,14 @@ public class LayerTexturePanel extends LayerPanel<SceneTextureLayer> implements 
 			if (mSelectedLayer == null)
 				return;
 
-			mSelectedLayer.scaleX = mScaleX.currentValue();
+			mSelectedLayer.width = mWidth.currentValue();
 			break;
 
 		case SLIDER_SCALE_Y:
 			if (mSelectedLayer == null)
 				return;
 
-			mSelectedLayer.scaleY = mScaleY.currentValue();
+			mSelectedLayer.height = mHeight.currentValue();
 			break;
 
 		case SLIDER_CENTER_X:

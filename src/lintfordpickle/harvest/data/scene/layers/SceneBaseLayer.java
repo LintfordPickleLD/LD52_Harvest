@@ -14,10 +14,12 @@ public abstract class SceneBaseLayer {
 	public String name;
 	public float translationSpeedModX;
 	public float translationSpeedModY;
+
 	public float centerX;
 	public float centerY;
-	public float scaleX;
-	public float scaleY;
+
+	public float width;
+	public float height;
 
 	// --------------------------------------
 	// Constructor
@@ -26,8 +28,8 @@ public abstract class SceneBaseLayer {
 	public SceneBaseLayer(int uid) {
 		layerUid = uid;
 
-		scaleX = 1.f;
-		scaleY = 1.f;
+		width = 1.f;
+		height = 1.f;
 	}
 
 	// --------------------------------------

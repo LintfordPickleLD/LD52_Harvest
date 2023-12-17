@@ -269,7 +269,7 @@ public class TimeTrialGameScreen extends BaseGameScreen implements IPhysicsContr
 		mEnvironmentController.initialize(core);
 		mPhysicsWorldDebugWatcher.initialize(core);
 		mPhysicsWorldDebugWatcher.physicsWorld(mPhysicsController.world());
-		
+
 	}
 
 	// RENDERERS -----------------------------------
@@ -337,10 +337,11 @@ public class TimeTrialGameScreen extends BaseGameScreen implements IPhysicsContr
 	public PhysicsWorld createPhysicsWorld() {
 
 		final var lPhysicsSettingsManager = mSceneData.physicsSettingsManager();
-		final var lPhysicsWorld = new PhysicsWorld(lPhysicsSettingsManager.physicsSettings());
+		final var lPhysicsSettings = lPhysicsSettingsManager.physicsSettings();
+		final var lPhysicsWorld = new PhysicsWorld(lPhysicsSettings);
 
 		lPhysicsWorld.initialize();
-		lPhysicsWorld.setGravity(0.f, 0.f);
+		lPhysicsWorld.setGravity(lPhysicsSettings.gravityX, lPhysicsSettings.gravityY);
 
 		lPhysicsWorld.setContactResolver(new CollisionResolverRotationAndFriction());
 		lPhysicsWorld.addCollisionCallback(mCollisionHandler);
