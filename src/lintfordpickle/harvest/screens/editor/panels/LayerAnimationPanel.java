@@ -54,6 +54,9 @@ public class LayerAnimationPanel extends LayerPanel<SceneAnimationLayer> impleme
 	public LayerAnimationPanel(UiWindow parentWindow, int entityGroupUid) {
 		super(parentWindow, "Animation Layer", entityGroupUid);
 
+		mShowShowLayerButton = true;
+		mShowActiveLayerButton = false;
+
 		mNameLabel = new UiLabel(parentWindow, "Name");
 		mLayerName = new UiInputText(parentWindow);
 		mLayerName.setKeyUpdateListener(this, INPUT_NAME_KEY_UID);
@@ -93,11 +96,11 @@ public class LayerAnimationPanel extends LayerPanel<SceneAnimationLayer> impleme
 
 	private void loadAssets(LintfordCore core) {
 		final var lAssetDefinitionManager = mEditorAssetsController.sceneAssetsManager().definitionManager();
-		final var lPropDefinitions = lAssetDefinitionManager.definitions();
-		final var lPropCollectionIterator = lPropDefinitions.iterator();
+		final var lAssetDefinitionList = lAssetDefinitionManager.definitions();
+		final var lListCollectionIterator = lAssetDefinitionList.iterator();
 
-		while (lPropCollectionIterator.hasNext()) {
-			final var lAssetDefinition = lPropCollectionIterator.next();
+		while (lListCollectionIterator.hasNext()) {
+			final var lAssetDefinition = lListCollectionIterator.next();
 
 			if (lAssetDefinition == null)
 				continue;

@@ -1,6 +1,7 @@
 {
 	"rootDirectory" : "res/def/assets/",
 	"itemFileLocations" : [
+		"asset_aircond",
 		"asset_flyingcars",
 		"asset_soccer"
 	]

@@ -29,6 +29,22 @@ public class SceneNoiseLayerSaveDefinition extends BaseSceneLayerSaveDefinition 
 		lNoiseLayer.zDepth = layerZDepth;
 		lNoiseLayer.name = layerName;
 
+		lNoiseLayer.translationSpeedModX = translationSpeedModX;
+		lNoiseLayer.translationSpeedModY = translationSpeedModY;
+
+		lNoiseLayer.centerX = centerX;
+		lNoiseLayer.centerY = centerY;
+
+		lNoiseLayer.width = width;
+		lNoiseLayer.height = height;
+
+		// ensure some sane defaults:
+		if (lNoiseLayer.width <= 0.f)
+			lNoiseLayer.width = 32.f;
+
+		if (lNoiseLayer.height <= 0.f)
+			lNoiseLayer.height = 32.f;
+
 		return lNoiseLayer;
 	}
 }

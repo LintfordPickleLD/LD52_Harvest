@@ -10,12 +10,14 @@ import lintfordpickle.harvest.data.scene.layers.SceneAnimationLayer;
 import lintfordpickle.harvest.data.scene.layers.SceneBaseLayer;
 import lintfordpickle.harvest.data.scene.layers.SceneNoiseLayer;
 import lintfordpickle.harvest.data.scene.layers.SceneTextureLayer;
+import lintfordpickle.harvest.renderers.scene.NoiseLayerShader;
 import net.lintfordLib.editor.controllers.EditorBrushController;
 import net.lintfordLib.editor.data.EditorLayerBrush;
 import net.lintfordlib.core.LintfordCore;
 import net.lintfordlib.core.ResourceManager;
 import net.lintfordlib.core.debug.Debug;
 import net.lintfordlib.core.graphics.ColorConstants;
+import net.lintfordlib.core.graphics.geometry.FullScreenTexturedQuad;
 import net.lintfordlib.renderers.BaseRenderer;
 import net.lintfordlib.renderers.RendererManager;
 
@@ -36,6 +38,9 @@ public class EditorSceneRenderer extends BaseRenderer {
 
 	private EditorLayerController mEditorLayerController;
 	private EditorBrushController mEditorBrushController;
+
+	private FullScreenTexturedQuad mTexturedQuad;
+	private NoiseLayerShader mNoiseLayerShader;
 
 	private float mMouseX;
 	private float mMouseY;
@@ -71,6 +76,9 @@ public class EditorSceneRenderer extends BaseRenderer {
 
 	public EditorSceneRenderer(RendererManager rendererManager, int entityGroupID) {
 		super(rendererManager, RENDERER_NAME, entityGroupID);
+
+		mTexturedQuad = new FullScreenTexturedQuad();
+		mNoiseLayerShader = new NoiseLayerShader();
 	}
 
 	// ---------------------------------------------
@@ -91,6 +99,8 @@ public class EditorSceneRenderer extends BaseRenderer {
 		super.loadResources(resourceManager);
 
 		mResourceManager = resourceManager;
+		mNoiseLayerShader.loadResources(resourceManager);
+		mTexturedQuad.loadResources(resourceManager);
 
 	}
 
@@ -99,6 +109,8 @@ public class EditorSceneRenderer extends BaseRenderer {
 		super.unloadResources();
 
 		mResourceManager = null;
+		mNoiseLayerShader.unbind();
+		mTexturedQuad.unloadResources();
 	}
 
 	@Override
@@ -237,12 +249,12 @@ public class EditorSceneRenderer extends BaseRenderer {
 					if (lAsset.spriteInstance == null) {
 						if (lAsset.spriteStatus < 2) {
 							final var lAssetDef = lAsset.definition;
-							final var lSpritesheetDef = core.resources().spriteSheetManager().getSpriteSheet(lAssetDef.spritesheetDefinitionName, mEntityGroupUid);
-							if (lSpritesheetDef != null) {
-								lAsset.spriteInstance = lSpritesheetDef.getSpriteInstance(lAssetDef.spriteName);
-							} else {
-								lAsset.spriteStatus = SceneAssetInstance.TEXTURE_FAILED;
-							}
+//							final var lSpritesheetDef = core.resources().spriteSheetManager().getSpriteSheet(lAssetDef.spritesheetDefinitionName, mEntityGroupUid);
+//							if (lSpritesheetDef != null) {
+//								lAsset.spriteInstance = lSpritesheetDef.getSpriteInstance(lAssetDef.spriteName);
+//							} else {
+//								lAsset.spriteStatus = SceneAssetInstance.TEXTURE_FAILED;
+//							}
 						}
 
 						continue;
@@ -306,9 +318,6 @@ public class EditorSceneRenderer extends BaseRenderer {
 
 			if (layer.texture == null) {
 				layer.textureStatus = SceneTextureLayer.TEXTURE_FAILED;
-			} else {
-				layer.width = layer.texture.getTextureWidth();
-				layer.height = layer.texture.getTextureHeight();
 			}
 		}
 
@@ -352,6 +361,34 @@ public class EditorSceneRenderer extends BaseRenderer {
 
 	protected void drawNoiseLayer(LintfordCore core, SceneNoiseLayer layer) {
 
+		// TODO: Camera offset scrolling ?
+
+		final var lDstX = layer.centerX;
+		final var lDstY = layer.centerY;
+		final var lDstWidth = layer.width;
+		final var lDstHeight = layer.height;
+
+		if (core.input().keyboard().isKeyDownTimed(GLFW.GLFW_KEY_R, this)) {
+			mNoiseLayerShader.recompile();
+		}
+
+		// TODO: Only needs updating when dirty
+		layer.worldMatrix.setIdentity();
+		layer.worldMatrix.translate(lDstX, lDstY, .0f);
+		layer.worldMatrix.scale(lDstWidth, lDstHeight, 1.f);
+
+		mNoiseLayerShader.modelMatrix(layer.worldMatrix);
+		mNoiseLayerShader.viewMatrix(core.gameCamera().view());
+		mNoiseLayerShader.projectionMatrix(core.gameCamera().projection());
+		mNoiseLayerShader.bind();
+
+		mNoiseLayerShader.update(core);
+
+		mTexturedQuad.draw(core);
+
+		mNoiseLayerShader.unbind();
+
+		return;
 	}
 
 	private void drawSelectedLayerDebug(LintfordCore core, SceneBaseLayer layer) {

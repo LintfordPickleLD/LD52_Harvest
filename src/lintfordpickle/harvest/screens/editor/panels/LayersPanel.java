@@ -71,7 +71,7 @@ public class LayersPanel extends UiPanel implements IUiListBoxListener {
 		super(parentWindow, "Layers Panel", entityGroupUid);
 
 		mShowActiveLayerButton = true;
-		mShowShowLayerButton = true;
+		mShowShowLayerButton = false;
 
 		mRenderPanelTitle = true;
 		mPanelTitle = "Layers";

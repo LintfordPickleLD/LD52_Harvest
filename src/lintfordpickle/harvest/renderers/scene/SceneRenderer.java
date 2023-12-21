@@ -1,5 +1,7 @@
 package lintfordpickle.harvest.renderers.scene;
 
+import org.lwjgl.glfw.GLFW;
+
 import lintfordpickle.harvest.controllers.SceneController;
 import lintfordpickle.harvest.data.scene.layers.SceneAnimationLayer;
 import lintfordpickle.harvest.data.scene.layers.SceneNoiseLayer;
@@ -7,6 +9,7 @@ import lintfordpickle.harvest.data.scene.layers.SceneTextureLayer;
 import net.lintfordlib.core.LintfordCore;
 import net.lintfordlib.core.ResourceManager;
 import net.lintfordlib.core.graphics.ColorConstants;
+import net.lintfordlib.core.graphics.geometry.FullScreenTexturedQuad;
 import net.lintfordlib.renderers.BaseRenderer;
 import net.lintfordlib.renderers.RendererManager;
 
@@ -25,6 +28,9 @@ public class SceneRenderer extends BaseRenderer {
 	// ---------------------------------------------
 
 	protected SceneController mSceneController;
+	
+	private FullScreenTexturedQuad mTexturedQuad;
+	private NoiseLayerShader mNoiseLayerShader;
 
 	// ---------------------------------------------
 	// Properties
@@ -42,6 +48,9 @@ public class SceneRenderer extends BaseRenderer {
 
 	public SceneRenderer(RendererManager rendererManager, int entityGroupID) {
 		super(rendererManager, RENDERER_NAME, entityGroupID);
+		
+		mTexturedQuad = new FullScreenTexturedQuad();
+		mNoiseLayerShader = new NoiseLayerShader();
 	}
 
 	// ---------------------------------------------
@@ -80,6 +89,9 @@ public class SceneRenderer extends BaseRenderer {
 			}
 
 			// TODO: animated textures
+			
+			mNoiseLayerShader.loadResources(resourceManager);
+			mTexturedQuad.loadResources(resourceManager);
 
 		}
 	}
@@ -90,6 +102,8 @@ public class SceneRenderer extends BaseRenderer {
 
 		// TODO: Unload the resources used by the scene
 
+		mNoiseLayerShader.unbind();
+		mTexturedQuad.unloadResources();
 	}
 
 	@Override
@@ -187,6 +201,31 @@ public class SceneRenderer extends BaseRenderer {
 
 	protected void drawNoiseLayer(LintfordCore core, SceneNoiseLayer layer) {
 
+		final var lDstX = layer.centerX;
+		final var lDstY = layer.centerY;
+		final var lDstWidth = layer.width;
+		final var lDstHeight = layer.height;
+
+		if (core.input().keyboard().isKeyDownTimed(GLFW.GLFW_KEY_R, this)) {
+			mNoiseLayerShader.recompile();
+		}
+
+		// TODO: Only needs updating when dirty
+		layer.worldMatrix.setIdentity();
+		layer.worldMatrix.translate(lDstX, lDstY, .0f);
+		layer.worldMatrix.scale(lDstWidth, lDstHeight, 1.f);
+
+		mNoiseLayerShader.modelMatrix(layer.worldMatrix);
+		mNoiseLayerShader.viewMatrix(core.gameCamera().view());
+		mNoiseLayerShader.projectionMatrix(core.gameCamera().projection());
+		mNoiseLayerShader.bind();
+
+		mNoiseLayerShader.update(core);
+
+		mTexturedQuad.draw(core);
+
+		mNoiseLayerShader.unbind();
+		
 	}
 
 }

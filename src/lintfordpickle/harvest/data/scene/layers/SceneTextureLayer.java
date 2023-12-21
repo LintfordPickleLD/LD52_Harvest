@@ -92,8 +92,8 @@ public class SceneTextureLayer extends SceneBaseLayer {
 		lSaveDefinition.centerX = centerX;
 		lSaveDefinition.centerY = centerY;
 
-		lSaveDefinition.scaleX = width;
-		lSaveDefinition.scaleY = height;
+		lSaveDefinition.width = width;
+		lSaveDefinition.height = height;
 
 		return lSaveDefinition;
 	}

@@ -2,6 +2,7 @@ package lintfordpickle.harvest.data.scene.layers;
 
 import lintfordpickle.harvest.data.scene.layers.savedefinitions.BaseSceneLayerSaveDefinition;
 import lintfordpickle.harvest.data.scene.layers.savedefinitions.SceneNoiseLayerSaveDefinition;
+import net.lintfordlib.core.maths.Matrix4f;
 
 public class SceneNoiseLayer extends SceneBaseLayer {
 
@@ -12,6 +13,8 @@ public class SceneNoiseLayer extends SceneBaseLayer {
 	// --------------------------------------
 	// Variables
 	// --------------------------------------
+
+	public final Matrix4f worldMatrix = new Matrix4f();
 
 	// --------------------------------------
 	// Properties
@@ -26,10 +29,6 @@ public class SceneNoiseLayer extends SceneBaseLayer {
 	}
 
 	// --------------------------------------
-	// Core-Methods
-	// --------------------------------------
-
-	// --------------------------------------
 	// Methods
 	// --------------------------------------
 
@@ -39,7 +38,16 @@ public class SceneNoiseLayer extends SceneBaseLayer {
 
 		fillBaseSceneLayerInfo(lSaveDefinition);
 
-		// TODO Auto-generated method stub
+		// TODO: noise input parameters
+
+		lSaveDefinition.translationSpeedModX = translationSpeedModX;
+		lSaveDefinition.translationSpeedModY = translationSpeedModY;
+
+		lSaveDefinition.centerX = centerX;
+		lSaveDefinition.centerY = centerY;
+
+		lSaveDefinition.width = width;
+		lSaveDefinition.height = height;
 
 		return lSaveDefinition;
 	}

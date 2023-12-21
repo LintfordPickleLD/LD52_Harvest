@@ -17,12 +17,12 @@
         "layerUid": 7,
         "layerZDepth": 0,
         "layerName": "Sky",
-        "translationSpeedModX": 1.5,
+        "translationSpeedModX": 0.3,
         "translationSpeedModY": 0.004,
         "centerX": 0.0,
         "centerY": 0.0,
-        "scaleX": 2048.0,
-        "scaleY": 2048.0
+        "width": 2048.0,
+        "height": 2048.0
       },
       {
         "textureName": "TEXTURE_FARGROUND",
@@ -34,8 +34,8 @@
         "translationSpeedModY": 0.004,
         "centerX": 0.0,
         "centerY": 0.0,
-        "scaleX": 2048.0,
-        "scaleY": 2048.0
+        "width": 2048.0,
+        "height": 2048.0
       },
       {
         "textureName": "TEXTURE_MIDGROUND",
@@ -47,25 +47,60 @@
         "translationSpeedModY": 0.02,
         "centerX": 0.0,
         "centerY": 0.0,
-        "scaleX": 2048.0,
-        "scaleY": 2048.0
+        "width": 2048.0,
+        "height": 2048.0
       },
       {
         "textureName": "TEXTURE_COLLIDABLES",
         "texturePath": "res/textures/scene/textureSceneCollidables.png",
         "layerUid": 0,
-        "layerZDepth": 3,
+        "layerZDepth": 4,
         "layerName": "Foreground",
         "translationSpeedModX": 0.0,
         "translationSpeedModY": 0.0,
         "centerX": 0.0,
         "centerY": 0.0,
-        "scaleX": 2048.0,
-        "scaleY": 2048.0
+        "width": 2048.0,
+        "height": 2048.0
       }
     ],
-    "animationLayers": [],
-    "noiseLayers": []
+    "animationLayers": [
+      {
+        "layerUid": 9,
+        "layerZDepth": 6,
+        "layerName": "Animations",
+        "translationSpeedModX": 0.0,
+        "translationSpeedModY": 0.0,
+        "centerX": 0.0,
+        "centerY": 0.0,
+        "width": 0.0,
+        "height": 0.0
+      }
+    ],
+    "noiseLayers": [
+      {
+        "layerUid": 10,
+        "layerZDepth": 3,
+        "layerName": "Noise Layer 10",
+        "translationSpeedModX": 0.0,
+        "translationSpeedModY": 0.0,
+        "centerX": 297.90945,
+        "centerY": -42.51082,
+        "width": 214.22595,
+        "height": 167.55493
+      },
+      {
+        "layerUid": 8,
+        "layerZDepth": 5,
+        "layerName": "Sewer Clouds",
+        "translationSpeedModX": 0.0,
+        "translationSpeedModY": 0.0,
+        "centerX": -4.4979553,
+        "centerY": 741.77185,
+        "width": 2122.9817,
+        "height": 604.30676
+      }
+    ]
   },
   "PhysicsSettings": {
     "Gravity": {

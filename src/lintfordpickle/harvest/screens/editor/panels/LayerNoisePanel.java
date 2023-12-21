@@ -5,6 +5,9 @@ import lintfordpickle.harvest.data.scene.layers.SceneNoiseLayer;
 import net.lintfordlib.core.input.InputManager;
 import net.lintfordlib.core.input.keyboard.IUiInputKeyPressCallback;
 import net.lintfordlib.renderers.windows.UiWindow;
+import net.lintfordlib.renderers.windows.components.UiHorizontalEntryGroup;
+import net.lintfordlib.renderers.windows.components.UiInputFloat;
+import net.lintfordlib.renderers.windows.components.UiInputInteger;
 import net.lintfordlib.renderers.windows.components.UiInputText;
 import net.lintfordlib.renderers.windows.components.UiLabel;
 
@@ -16,12 +19,30 @@ public class LayerNoisePanel extends LayerPanel<SceneNoiseLayer> implements IUiI
 
 	private static final int INPUT_NAME_KEY_UID = 100;
 
+	private final static int SLIDER_TRANSLATION_SPEED_X = 15;
+	private final static int SLIDER_TRANSLATION_SPEED_Y = 16;
+
+	private final static int SLIDER_CENTER_X = 17;
+	private final static int SLIDER_CENTER_Y = 18;
+
+	private final static int SLIDER_SCALE_X = 19;
+	private final static int SLIDER_SCALE_Y = 20;
+
 	// --------------------------------------
 	// Variables
 	// --------------------------------------
 
 	private UiLabel mNameLabel;
 	private UiInputText mLayerName;
+
+	private UiInputInteger mCenterXInput;
+	private UiInputInteger mCenterYInput;
+
+	private UiInputFloat mTranslationSpeedModX;
+	private UiInputFloat mTranslationSpeedModY;
+
+	private UiInputFloat mWidth;
+	private UiInputFloat mHeight;
 
 	// --------------------------------------
 	// Properties
@@ -43,8 +64,57 @@ public class LayerNoisePanel extends LayerPanel<SceneNoiseLayer> implements IUiI
 		mLayerName = new UiInputText(parentWindow);
 		mLayerName.setKeyUpdateListener(this, INPUT_NAME_KEY_UID);
 
+		mCenterXInput = new UiInputInteger(parentWindow);
+		mCenterXInput.setUiWidgetListener(this, SLIDER_CENTER_X);
+		mCenterXInput.label("CenterX");
+		mCenterXInput.setMinMax(0, 0);
+
+		mCenterYInput = new UiInputInteger(parentWindow);
+		mCenterYInput.setUiWidgetListener(this, SLIDER_CENTER_Y);
+		mCenterYInput.label("CenterY");
+		mCenterYInput.setMinMax(0, 0);
+
+		mTranslationSpeedModX = new UiInputFloat(parentWindow);
+		mTranslationSpeedModX.setUiWidgetListener(this, SLIDER_TRANSLATION_SPEED_X);
+		mTranslationSpeedModX.label("Mod X");
+		mTranslationSpeedModX.setMinMax(-20.f, 20.f);
+		mTranslationSpeedModX.stepSize(.1f);
+
+		mTranslationSpeedModY = new UiInputFloat(parentWindow);
+		mTranslationSpeedModY.setUiWidgetListener(this, SLIDER_TRANSLATION_SPEED_Y);
+		mTranslationSpeedModY.label("Mod Y");
+		mTranslationSpeedModY.setMinMax(0.f, 10.f);
+		mTranslationSpeedModY.stepSize(.1f);
+
+		mWidth = new UiInputFloat(parentWindow);
+		mWidth.setUiWidgetListener(this, SLIDER_SCALE_X);
+		mWidth.label("Width");
+		mWidth.setMinMax(0.f, 10.f);
+		mWidth.stepSize(.1f);
+		mHeight = new UiInputFloat(parentWindow);
+		mHeight.setUiWidgetListener(this, SLIDER_SCALE_Y);
+		mHeight.label("Height");
+		mHeight.setMinMax(0.f, 10.f);
+		mHeight.stepSize(.1f);
+
+		final var lHorizontalGroup0 = new UiHorizontalEntryGroup(parentWindow);
+		lHorizontalGroup0.widgets().add(mCenterXInput);
+		lHorizontalGroup0.widgets().add(mCenterYInput);
+
+		final var lHorizontalGroup1 = new UiHorizontalEntryGroup(parentWindow);
+		lHorizontalGroup1.widgets().add(mTranslationSpeedModX);
+		lHorizontalGroup1.widgets().add(mTranslationSpeedModY);
+
+		final var lHorizontalGroup2 = new UiHorizontalEntryGroup(parentWindow);
+		lHorizontalGroup2.widgets().add(mWidth);
+		lHorizontalGroup2.widgets().add(mHeight);
+
 		addWidget(mNameLabel);
 		addWidget(mLayerName);
+
+		addWidget(lHorizontalGroup0);
+		addWidget(lHorizontalGroup1);
+		addWidget(lHorizontalGroup2);
 
 	}
 
@@ -70,14 +140,61 @@ public class LayerNoisePanel extends LayerPanel<SceneNoiseLayer> implements IUiI
 
 	@Override
 	public void widgetOnClick(InputManager inputManager, int entryUid) {
-		switch (entryUid) {
-
-		}
 	}
 
 	@Override
 	public void widgetOnDataChanged(InputManager inputManager, int entryUid) {
+		switch (entryUid) {
+		case INPUT_NAME_KEY_UID:
+			if (mSelectedLayer == null)
+				return;
 
+			mSelectedLayer.name = mLayerName.inputString().toString();
+			break;
+
+		case SLIDER_SCALE_X:
+			if (mSelectedLayer == null)
+				return;
+
+			mSelectedLayer.width = mWidth.currentValue();
+			break;
+
+		case SLIDER_SCALE_Y:
+			if (mSelectedLayer == null)
+				return;
+
+			mSelectedLayer.height = mHeight.currentValue();
+			break;
+
+		case SLIDER_CENTER_X:
+			if (mSelectedLayer == null)
+				return;
+
+			mSelectedLayer.centerX = mCenterXInput.currentValue();
+			break;
+
+		case SLIDER_CENTER_Y:
+			if (mSelectedLayer == null)
+				return;
+
+			mSelectedLayer.centerY = mCenterYInput.currentValue();
+			break;
+
+		case SLIDER_TRANSLATION_SPEED_X:
+			if (mSelectedLayer == null)
+				return;
+
+			mSelectedLayer.translationSpeedModX = mTranslationSpeedModX.currentValue();
+
+			break;
+		case SLIDER_TRANSLATION_SPEED_Y:
+			if (mSelectedLayer == null)
+				return;
+
+			mSelectedLayer.translationSpeedModY = mTranslationSpeedModY.currentValue();
+
+			break;
+		}
 	}
 
 	@Override

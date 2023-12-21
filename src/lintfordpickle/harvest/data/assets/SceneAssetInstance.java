@@ -1,6 +1,7 @@
 package lintfordpickle.harvest.data.assets;
 
 import net.lintfordlib.core.entities.Entity;
+import net.lintfordlib.core.geometry.Rectangle;
 import net.lintfordlib.core.graphics.sprites.SpriteInstance;
 
 public class SceneAssetInstance extends Entity {
@@ -20,6 +21,8 @@ public class SceneAssetInstance extends Entity {
 	public String definitionName;
 	public transient SceneAssetDefinition definition;
 	public SpriteInstance spriteInstance;
+
+	public final Rectangle destRect = new Rectangle();
 
 	// TODO: This is used in a few places, make a texturestatus enum and cache object (loaded, unloaded, failed)
 	public int spriteStatus;

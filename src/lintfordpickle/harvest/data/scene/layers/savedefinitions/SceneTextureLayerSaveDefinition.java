@@ -46,15 +46,15 @@ public class SceneTextureLayerSaveDefinition extends BaseSceneLayerSaveDefinitio
 		lTextureLayer.centerX = centerX;
 		lTextureLayer.centerY = centerY;
 
-		lTextureLayer.width = scaleX;
-		lTextureLayer.height = scaleY;
+		lTextureLayer.width = width;
+		lTextureLayer.height = height;
 
 		// ensure some sane defaults:
 		if (lTextureLayer.width <= 0.f)
-			lTextureLayer.width = 1.f;
+			lTextureLayer.width = 32.f;
 
 		if (lTextureLayer.height <= 0.f)
-			lTextureLayer.height = 1.f;
+			lTextureLayer.height = 32.f;
 
 		return lTextureLayer;
 	}

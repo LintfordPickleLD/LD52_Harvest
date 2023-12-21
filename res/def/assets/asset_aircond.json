@@ -1,0 +1,8 @@
+{
+    "name": "ASSET_AIRCOND",
+    "displayName": "Aircon",
+        
+    "spritesheetDefinitionName": "SPRITESHEET_PROPS",
+    "spritesheetDefinitionFilename": "res/spritesheets/spritesheetProps.json",
+    "spriteName": "aircond" 
+}
