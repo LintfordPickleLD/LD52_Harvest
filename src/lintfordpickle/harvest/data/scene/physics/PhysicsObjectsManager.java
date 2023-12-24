@@ -6,7 +6,6 @@ import java.util.List;
 import lintfordpickle.harvest.data.scene.BaseInstanceManager;
 import lintfordpickle.harvest.data.scene.SceneSaveDefinition;
 import net.lintfordlib.ConstantsPhysics;
-import net.lintfordlib.core.geometry.partitioning.GridEntity;
 
 public class PhysicsObjectsManager extends BaseInstanceManager {
 
@@ -22,6 +21,11 @@ public class PhysicsObjectsManager extends BaseInstanceManager {
 
 	public List<ScenePhysicsObjectInstance> worldSceneBodies() {
 		return mWorldSceneBodies;
+	}
+
+	@Override
+	public void initializeInstanceCounter() {
+
 	}
 
 	// --------------------------------------
@@ -55,7 +59,7 @@ public class PhysicsObjectsManager extends BaseInstanceManager {
 
 		for (int i = 0; i < lNumFloorDefinitions; i++) {
 			final var lFloorSaveDefinition = lFloorDefinitions.get(i);
-			final var lNewPhyiscsObjectInstance = new ScenePhysicsObjectInstance(GridEntity.getNewEntityUid());
+			final var lNewPhyiscsObjectInstance = new ScenePhysicsObjectInstance(getNewInstanceUid());
 
 			// @formatter:off
 			lNewPhyiscsObjectInstance.initialize(

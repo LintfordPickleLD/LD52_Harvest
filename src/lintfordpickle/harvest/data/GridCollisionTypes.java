@@ -1,5 +1,7 @@
 package lintfordpickle.harvest.data;
 
+// TODO: revisit these - this is just for filtering on the grid right ??
+
 public class GridCollisionTypes {
 
 	// ---------------------------------------------

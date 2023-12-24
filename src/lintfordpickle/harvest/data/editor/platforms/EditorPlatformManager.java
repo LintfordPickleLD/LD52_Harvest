@@ -6,7 +6,7 @@ import java.util.List;
 import lintfordpickle.harvest.data.editor.BaseEditorInstanceManager;
 import lintfordpickle.harvest.data.editor.EditorSceneData;
 import lintfordpickle.harvest.data.scene.SceneSaveDefinition;
-import lintfordpickle.harvest.data.scene.platforms.Platform;
+import lintfordpickle.harvest.data.scene.platforms.PlatformInstance;
 
 public class EditorPlatformManager extends BaseEditorInstanceManager {
 
@@ -14,13 +14,13 @@ public class EditorPlatformManager extends BaseEditorInstanceManager {
 	// Variables
 	// ---------------------------------------------
 
-	private final List<Platform> mPlatforms = new ArrayList<>();
+	private final List<PlatformInstance> mPlatforms = new ArrayList<>();
 
 	// ---------------------------------------------
 	// Properties
 	// ---------------------------------------------
 
-	public List<Platform> platforms() {
+	public List<PlatformInstance> platforms() {
 		return mPlatforms;
 	}
 
@@ -36,12 +36,12 @@ public class EditorPlatformManager extends BaseEditorInstanceManager {
 	// Methods
 	// ---------------------------------------------
 
-	public void addPlatform(Platform platform) {
+	public void addPlatform(PlatformInstance platform) {
 		if (mPlatforms.contains(platform) == false)
 			mPlatforms.add(platform);
 	}
 
-	public void removePlatform(Platform platform) {
+	public void removePlatform(PlatformInstance platform) {
 		if (mPlatforms.contains(platform))
 			mPlatforms.remove(platform);
 	}

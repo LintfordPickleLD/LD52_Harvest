@@ -27,6 +27,12 @@ public class ShipManager extends BaseInstanceManager {
 		return mShips.get(0);
 	}
 
+	@Override
+	public void initializeInstanceCounter() {
+		// TODO Auto-generated method stub
+		
+	}
+	
 	// ---------------------------------------------
 	// Constructor
 	// ---------------------------------------------

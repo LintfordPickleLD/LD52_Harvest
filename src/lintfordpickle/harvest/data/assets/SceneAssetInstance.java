@@ -1,10 +1,12 @@
 package lintfordpickle.harvest.data.assets;
 
-import net.lintfordlib.core.entities.Entity;
+import lintfordpickle.harvest.data.GridCollisionTypes;
 import net.lintfordlib.core.geometry.Rectangle;
+import net.lintfordlib.core.geometry.partitioning.GridEntity;
+import net.lintfordlib.core.geometry.partitioning.SpatialHashGrid;
 import net.lintfordlib.core.graphics.sprites.SpriteInstance;
 
-public class SceneAssetInstance extends Entity {
+public class SceneAssetInstance extends GridEntity {
 
 	// --------------------------------------
 	// Constants
@@ -20,7 +22,7 @@ public class SceneAssetInstance extends Entity {
 
 	public String definitionName;
 	public transient SceneAssetDefinition definition;
-	public SpriteInstance spriteInstance;
+	public transient SpriteInstance spriteInstance;
 
 	public final Rectangle destRect = new Rectangle();
 
@@ -32,14 +34,14 @@ public class SceneAssetInstance extends Entity {
 	// --------------------------------------
 
 	public SceneAssetInstance(int entityUid) {
-		super(entityUid);
+		super(entityUid, GridCollisionTypes.COLLISION_TYPE_NONE);
 	}
 
 	// --------------------------------------
 	// Core-Methods
 	// --------------------------------------
 
-	public void initialize(SceneAssetDefinition assetDefinition, float x, float y, float rotation, float width, float height, float radius) {
+	public void initialize(SceneAssetDefinition assetDefinition, float x, float y, float width, float height, float rotation, float radius) {
 		if (assetDefinition == null) {
 			definitionName = null;
 			definition = null;
@@ -48,5 +50,33 @@ public class SceneAssetInstance extends Entity {
 
 		definitionName = assetDefinition.definitionName();
 		definition = assetDefinition;
+
+		// TODO : Dimensions should come from frame size
+		destRect.setPosition(x, y);
+		destRect.setDimensions(width, height);
+
+	}
+
+	@Override
+	public void fillEntityBounds(SpatialHashGrid<?> grid) {
+		minX = grid.getCellIndexX((int) destRect.left());
+		minY = grid.getCellIndexY((int) destRect.top());
+
+		maxX = grid.getCellIndexX((int) destRect.right());
+		maxY = grid.getCellIndexY((int) destRect.bottom());
+	}
+
+	@Override
+	public boolean isGridCacheOld(SpatialHashGrid<?> grid) {
+		final float newMinX = grid.getCellIndexX((int) destRect.left());
+		final float newMinY = grid.getCellIndexY((int) destRect.top());
+
+		final float newMaxX = grid.getCellIndexX((int) destRect.right());
+		final float newMaxY = grid.getCellIndexY((int) destRect.bottom());
+
+		if (newMinX == minX && newMinY == minY && newMaxX == maxX && newMaxY == maxY)
+			return false; // early out
+
+		return true;
 	}
 }

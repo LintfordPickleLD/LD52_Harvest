@@ -9,18 +9,8 @@ import lintfordpickle.harvest.data.scene.SceneSaveDefinition;
 public class CargoManager extends BaseInstanceManager {
 
 	// ---------------------------------------------
-	// Variables
-	// ---------------------------------------------
-
-	private int mCargoUidCounter;
-
-	// ---------------------------------------------
 	// Properties
 	// ---------------------------------------------
-
-	public int getNewCaregoUid() {
-		return mCargoUidCounter;
-	}
 
 	private final List<Cargo> mCargo = new ArrayList<>();
 
@@ -38,12 +28,16 @@ public class CargoManager extends BaseInstanceManager {
 		return null;
 	}
 
+	@Override
+	public void initializeInstanceCounter() {
+		mInstanceUidCounter = 0;
+	}
+
 	// ---------------------------------------------
 	// Constructor
 	// ---------------------------------------------
 
 	public CargoManager() {
-		mCargoUidCounter = 0;
 	}
 
 	// ---------------------------------------------
@@ -52,25 +46,16 @@ public class CargoManager extends BaseInstanceManager {
 
 	@Override
 	public void initializeManager() {
-		// TODO Auto-generated method stub
 
 	}
 
 	@Override
 	public void storeInTrackDefinition(SceneSaveDefinition sceneSaveDefinition) {
-		// TODO Auto-generated method stub
-
-	}
-
-	@Override
-	public void loadFromTrackDefinition(SceneSaveDefinition sceneSaveDefinition) {
-		// TODO Auto-generated method stub
 
 	}
 
 	@Override
 	public void finalizeAfterLoading() {
-		// TODO Auto-generated method stub
 
 	}
 

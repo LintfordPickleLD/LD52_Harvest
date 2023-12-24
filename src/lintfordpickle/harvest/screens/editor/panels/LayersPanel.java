@@ -5,10 +5,8 @@ import java.util.Collections;
 import java.util.List;
 
 import lintfordpickle.harvest.controllers.editor.EditorLayerController;
-import lintfordpickle.harvest.data.editor.EditorLayersData;
 import lintfordpickle.harvest.data.editor.LayerListBoxItem;
 import lintfordpickle.harvest.data.scene.layers.SceneBaseLayer;
-import lintfordpickle.harvest.renderers.editor.EditorSceneRenderer;
 import net.lintfordLib.editor.renderers.UiPanel;
 import net.lintfordlib.core.LintfordCore;
 import net.lintfordlib.core.debug.Debug;
@@ -50,7 +48,6 @@ public class LayersPanel extends UiPanel implements IUiListBoxListener {
 	private UiButton mMoveDown;
 
 	private EditorLayerController mEditorLayerController;
-	private EditorSceneRenderer mEditorSceneRenderer;
 
 	private final List<SceneBaseLayer> mTempOrderedSceneList = new ArrayList<>();
 
@@ -60,7 +57,7 @@ public class LayersPanel extends UiPanel implements IUiListBoxListener {
 
 	@Override
 	public int layerOwnerHashCode() {
-		return mEditorSceneRenderer.hashCode();
+		return hashCode();
 	}
 
 	// --------------------------------------
@@ -70,13 +67,11 @@ public class LayersPanel extends UiPanel implements IUiListBoxListener {
 	public LayersPanel(UiWindow parentWindow, int entityGroupUid) {
 		super(parentWindow, "Layers Panel", entityGroupUid);
 
-		mShowActiveLayerButton = true;
+		mShowActiveLayerButton = false;
 		mShowShowLayerButton = false;
 
 		mRenderPanelTitle = true;
 		mPanelTitle = "Layers";
-
-		mEditorActiveLayerUid = EditorLayersData.Layers;
 
 		mLayerListWidget = new UiVerticalTextListBox(parentWindow, entityGroupUid);
 		mLayerListWidget.addCallbackListener(this);
@@ -123,9 +118,6 @@ public class LayersPanel extends UiPanel implements IUiListBoxListener {
 		mEditorLayerController = (EditorLayerController) lControllerManager.getControllerByNameRequired(EditorLayerController.CONTROLLER_NAME, mEntityGroupUid);
 
 		addLoadedLayersToListBox();
-
-		final var lRendererManager = mParentWindow.rendererManager();
-		mEditorSceneRenderer = (EditorSceneRenderer) lRendererManager.getRenderer(EditorSceneRenderer.RENDERER_NAME);
 	}
 
 	private void addLoadedLayersToListBox() {
@@ -185,7 +177,6 @@ public class LayersPanel extends UiPanel implements IUiListBoxListener {
 		}
 
 		case BUTTON_SHOW_LAYER:
-			mEditorSceneRenderer.renderLayers(isLayerVisible());
 			if (isLayerVisible() == false) {
 				mEditorLayerController.selectedLayer(null);
 			}

@@ -1,7 +1,6 @@
 package lintfordpickle.harvest.data.scene.physics;
 
 import lintfordpickle.harvest.data.scene.BaseInstanceManager;
-import lintfordpickle.harvest.data.scene.SceneData;
 import lintfordpickle.harvest.data.scene.SceneSaveDefinition;
 import net.lintfordlib.ConstantsPhysics;
 import net.lintfordlib.core.maths.MathHelper;
@@ -34,6 +33,11 @@ public class PhysicsSettingsManager extends BaseInstanceManager {
 
 	public PhysicsSettings physicsSettings() {
 		return mPhysicsSettings;
+	}
+
+	@Override
+	public void initializeInstanceCounter() {
+		// ignored
 	}
 
 	// --------------------------------------

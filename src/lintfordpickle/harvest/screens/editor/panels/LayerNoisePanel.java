@@ -1,7 +1,10 @@
 package lintfordpickle.harvest.screens.editor.panels;
 
+import lintfordpickle.harvest.data.editor.EditorLayersData;
 import lintfordpickle.harvest.data.scene.layers.SceneBaseLayer;
 import lintfordpickle.harvest.data.scene.layers.SceneNoiseLayer;
+import lintfordpickle.harvest.renderers.editor.EditorNoiseLayerRenderer;
+import net.lintfordlib.core.LintfordCore;
 import net.lintfordlib.core.input.InputManager;
 import net.lintfordlib.core.input.keyboard.IUiInputKeyPressCallback;
 import net.lintfordlib.renderers.windows.UiWindow;
@@ -44,13 +47,15 @@ public class LayerNoisePanel extends LayerPanel<SceneNoiseLayer> implements IUiI
 	private UiInputFloat mWidth;
 	private UiInputFloat mHeight;
 
+	private EditorNoiseLayerRenderer mEditorNoiseLayerRenderer;
+
 	// --------------------------------------
 	// Properties
 	// --------------------------------------
 
 	@Override
 	public int layerOwnerHashCode() {
-		return hashCode();
+		return mEditorNoiseLayerRenderer.hashCode();
 	}
 
 	// --------------------------------------
@@ -59,6 +64,13 @@ public class LayerNoisePanel extends LayerPanel<SceneNoiseLayer> implements IUiI
 
 	public LayerNoisePanel(UiWindow parentWindow, int entityGroupUid) {
 		super(parentWindow, "Noise Layer", entityGroupUid);
+
+		mEditorActiveLayerUid = EditorLayersData.Layer_Noise;
+
+		mShowShowLayerButton = true;
+		mShowActiveLayerButton = true;
+		mIsExpandable = false;
+		mIsPanelOpen = false;
 
 		mNameLabel = new UiLabel(parentWindow, "Name");
 		mLayerName = new UiInputText(parentWindow);
@@ -121,6 +133,13 @@ public class LayerNoisePanel extends LayerPanel<SceneNoiseLayer> implements IUiI
 	// --------------------------------------
 	// Core-Methods
 	// --------------------------------------
+
+	@Override
+	public void initialize(LintfordCore core) {
+		super.initialize(core);
+
+		mEditorNoiseLayerRenderer = (EditorNoiseLayerRenderer) mParentWindow.rendererManager().getRenderer(EditorNoiseLayerRenderer.RENDERER_NAME);
+	}
 
 	protected void newLayerSelected(SceneBaseLayer selectedLayer) {
 		if (selectedLayer instanceof SceneNoiseLayer) {

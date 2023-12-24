@@ -6,6 +6,12 @@ import net.lintfordlib.core.graphics.sprites.SpriteContainer;
 public class SceneAssetDefinition extends BaseDefinition {
 
 	// --------------------------------------
+	// Constants
+	// --------------------------------------
+
+	private static final long serialVersionUID = -1093633752600449126L;
+
+	// --------------------------------------
 	// Variables
 	// --------------------------------------
 

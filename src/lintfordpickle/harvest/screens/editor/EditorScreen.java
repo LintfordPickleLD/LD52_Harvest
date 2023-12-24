@@ -7,12 +7,18 @@ import lintfordpickle.harvest.controllers.editor.EditorAssetsController;
 import lintfordpickle.harvest.controllers.editor.EditorLayerController;
 import lintfordpickle.harvest.controllers.editor.EditorPhysicsController;
 import lintfordpickle.harvest.controllers.editor.EditorSceneController;
+import lintfordpickle.harvest.controllers.layers.EditorAnimationLayerController;
+import lintfordpickle.harvest.controllers.layers.EditorNoiseLayerController;
+import lintfordpickle.harvest.controllers.layers.EditorParticleLayerController;
+import lintfordpickle.harvest.controllers.layers.EditorTextureLayerController;
 import lintfordpickle.harvest.data.assets.SceneAssetsManager;
 import lintfordpickle.harvest.data.editor.EditorSceneData;
 import lintfordpickle.harvest.data.scene.SceneSaveDefinition;
+import lintfordpickle.harvest.renderers.editor.EditorAnimationLayerRenderer;
+import lintfordpickle.harvest.renderers.editor.EditorNoiseLayerRenderer;
 import lintfordpickle.harvest.renderers.editor.EditorPhysicsRenderer;
 import lintfordpickle.harvest.renderers.editor.EditorPhysicsSettingsRenderer;
-import lintfordpickle.harvest.renderers.editor.EditorSceneRenderer;
+import lintfordpickle.harvest.renderers.editor.EditorTextureLayerRenderer;
 import net.lintfordLib.editor.ConstantsEditor;
 import net.lintfordLib.editor.controllers.EditorBrushController;
 import net.lintfordLib.editor.controllers.EditorCameraMovementController;
@@ -62,16 +68,24 @@ public class EditorScreen extends BaseGameScreen implements IEditorFileControlle
 	private EditorHashGridController mHashGridController;
 	private EditorBrushController mEditorBrushController;
 	private EditorFileController mEditorFileController;
+
 	private EditorLayerController mEditorLayerController;
+	private EditorTextureLayerController mEditorTextureLayerController;
+	private EditorNoiseLayerController mEditorNoiseLayerController;
+	private EditorParticleLayerController mEditorParticleLayerController;
+	private EditorAnimationLayerController mEditorAnimationLayerController;
 
 	// Renderers
 	private UiDockedWindow mEditorGui;
 	private EditorBrushRenderer mEditorBrushRenderer;
 	private EditorHashGridRenderer mEditorHashGridRenderer;
 	private EditorPhysicsSettingsRenderer mEditorPhysicsSettingsRenderer;
-	private EditorSceneRenderer mSceneRenderer;
 	private EditorPhysicsRenderer mEditorPhysicsRenderer;
 	private DebugCameraBoundsDrawer mDebugCameraBoundsDrawer;
+
+	private EditorTextureLayerRenderer mEditorTextureLayerRenderer;
+	private EditorNoiseLayerRenderer mEditorNoiseLayerRenderer;
+	private EditorAnimationLayerRenderer mEditorAnimationLayerRenderer;
 
 	// ---------------------------------------------
 	// Constructor
@@ -167,6 +181,11 @@ public class EditorScreen extends BaseGameScreen implements IEditorFileControlle
 		mHashGridController = new EditorHashGridController(controllerManager, ConstantsEditor.EDITOR_RESOURCE_GROUP_ID);
 		mEditorFileController = new EditorFileController(controllerManager, mSceneHeader, ConstantsEditor.EDITOR_RESOURCE_GROUP_ID);
 		mEditorLayerController = new EditorLayerController(controllerManager, ConstantsEditor.EDITOR_RESOURCE_GROUP_ID);
+		mEditorTextureLayerController = new EditorTextureLayerController(controllerManager, ConstantsEditor.EDITOR_RESOURCE_GROUP_ID);
+		mEditorNoiseLayerController = new EditorNoiseLayerController(controllerManager, ConstantsEditor.EDITOR_RESOURCE_GROUP_ID);
+		mEditorParticleLayerController = new EditorParticleLayerController(controllerManager, ConstantsEditor.EDITOR_RESOURCE_GROUP_ID);
+		mEditorAnimationLayerController = new EditorAnimationLayerController(controllerManager, ConstantsEditor.EDITOR_RESOURCE_GROUP_ID);
+
 		mEditorAssetsController = new EditorAssetsController(controllerManager, mSceneAssetManager, ConstantsEditor.EDITOR_RESOURCE_GROUP_ID);
 
 		mEditorFileController.setCallbackListener(this);
@@ -184,6 +203,10 @@ public class EditorScreen extends BaseGameScreen implements IEditorFileControlle
 		mEditorBrushController.initialize(core);
 		mEditorFileController.initialize(core);
 		mEditorLayerController.initialize(core);
+		mEditorTextureLayerController.initialize(core);
+		mEditorNoiseLayerController.initialize(core);
+		mEditorParticleLayerController.initialize(core);
+		mEditorAnimationLayerController.initialize(core);
 		mEditorAssetsController.initialize(core);
 		mEditorPhysicsController.initialize(core);
 	}
@@ -192,7 +215,9 @@ public class EditorScreen extends BaseGameScreen implements IEditorFileControlle
 
 	@Override
 	protected void createRenderers(LintfordCore core) {
-		mSceneRenderer = new EditorSceneRenderer(mRendererManager, ConstantsEditor.EDITOR_RESOURCE_GROUP_ID);
+		mEditorTextureLayerRenderer = new EditorTextureLayerRenderer(mRendererManager, ConstantsEditor.EDITOR_RESOURCE_GROUP_ID);
+		mEditorNoiseLayerRenderer = new EditorNoiseLayerRenderer(mRendererManager, ConstantsEditor.EDITOR_RESOURCE_GROUP_ID);
+		mEditorAnimationLayerRenderer = new EditorAnimationLayerRenderer(mRendererManager, ConstantsEditor.EDITOR_RESOURCE_GROUP_ID);
 
 		mEditorGui = new EditorGui(mRendererManager, ConstantsEditor.EDITOR_RESOURCE_GROUP_ID);
 		mEditorBrushRenderer = new EditorBrushRenderer(mRendererManager, ConstantsEditor.EDITOR_RESOURCE_GROUP_ID);
@@ -204,7 +229,10 @@ public class EditorScreen extends BaseGameScreen implements IEditorFileControlle
 
 	@Override
 	protected void initializeRenderers(LintfordCore core) {
-		mSceneRenderer.initialize(core);
+		mEditorTextureLayerRenderer.initialize(core);
+		mEditorNoiseLayerRenderer.initialize(core);
+		mEditorAnimationLayerRenderer.initialize(core);
+
 		mEditorGui.initialize(core);
 		mEditorBrushRenderer.initialize(core);
 		mEditorHashGridRenderer.initialize(core);
@@ -215,7 +243,10 @@ public class EditorScreen extends BaseGameScreen implements IEditorFileControlle
 
 	@Override
 	protected void loadRendererResources(ResourceManager resourceManager) {
-		mSceneRenderer.loadResources(resourceManager);
+		mEditorTextureLayerRenderer.loadResources(resourceManager);
+		mEditorNoiseLayerRenderer.loadResources(resourceManager);
+		mEditorAnimationLayerRenderer.loadResources(resourceManager);
+
 		mEditorGui.loadResources(resourceManager);
 		mEditorBrushRenderer.loadResources(resourceManager);
 		mEditorHashGridRenderer.loadResources(resourceManager);

@@ -25,6 +25,12 @@ public class LayersManager extends BaseInstanceManager {
 		return mLayers;
 	}
 
+	@Override
+	public void initializeInstanceCounter() {
+		// TODO Auto-generated method stub
+
+	}
+
 	// ---------------------------------------------
 	// Constructor
 	// ---------------------------------------------
@@ -36,6 +42,14 @@ public class LayersManager extends BaseInstanceManager {
 	// ---------------------------------------------
 	// Methods
 	// ---------------------------------------------
+
+	private void setLayerUidCounter() {
+		final var lNumLayers = mLayers.size();
+		for (int i = 0; i < lNumLayers; i++) {
+			if (mLayers.get(i).layerUid >= mInstanceUidCounter)
+				mInstanceUidCounter = mLayers.get(i).layerUid + 1;
+		}
+	}
 
 	public void addLayer(SceneBaseLayer layerToAd) {
 		if (mLayers.contains(layerToAd) == false) {
@@ -102,6 +116,8 @@ public class LayersManager extends BaseInstanceManager {
 			final var lLayerToImport = lNoiseLayers.get(i);
 			layers().add(lLayerToImport.getSceneLayer());
 		}
+
+		setLayerUidCounter();
 	}
 
 	@Override

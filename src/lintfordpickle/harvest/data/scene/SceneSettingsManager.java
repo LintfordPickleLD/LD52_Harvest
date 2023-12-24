@@ -29,6 +29,11 @@ public class SceneSettingsManager extends BaseInstanceManager {
 		mSceneHeightInPx = v;
 	}
 
+	@Override
+	public void initializeInstanceCounter() {
+		// ignored
+	}
+
 	// --------------------------------------
 	// Constructor
 	// --------------------------------------

@@ -2,7 +2,7 @@ package lintfordpickle.harvest.controllers;
 
 import lintfordpickle.harvest.data.game.GameState.GameMode;
 import lintfordpickle.harvest.data.scene.cargo.CargoType;
-import lintfordpickle.harvest.data.scene.platforms.Platform;
+import lintfordpickle.harvest.data.scene.platforms.PlatformInstance;
 import lintfordpickle.harvest.data.scene.platforms.PlatformManager;
 import lintfordpickle.harvest.data.scene.ships.Ship;
 import net.lintfordlib.ConstantsPhysics;
@@ -100,7 +100,7 @@ public class PlatformController extends BaseController {
 		return mShipController.shipManager().playerShip();
 	}
 
-	private boolean isFarmAvailableToWater(LintfordCore core, Platform platform) {
+	private boolean isFarmAvailableToWater(LintfordCore core, PlatformInstance platform) {
 		final var lGameState = mGameStateController.gameState();
 		if (lGameState.gameMode() == GameMode.Survival)
 			return true;
@@ -108,7 +108,7 @@ public class PlatformController extends BaseController {
 		return platform.isWatered == false;
 	}
 
-	private boolean isFarmAvailableToHarvest(LintfordCore core, Platform platform) {
+	private boolean isFarmAvailableToHarvest(LintfordCore core, PlatformInstance platform) {
 		final var lGameState = mGameStateController.gameState();
 		if (lGameState.gameMode() == GameMode.Survival)
 			return true;
@@ -116,7 +116,7 @@ public class PlatformController extends BaseController {
 		return platform.isHarvested == false;
 	}
 
-	private boolean isPlayerShipAtPlatform(LintfordCore core, Platform platform, Ship ship) {
+	private boolean isPlayerShipAtPlatform(LintfordCore core, PlatformInstance platform, Ship ship) {
 		// TODO: Cache this in the ship class
 		final var lUnitsToPx = ConstantsPhysics.UnitsToPixels();
 		final var lAABB = ship.body().aabb();
@@ -137,7 +137,7 @@ public class PlatformController extends BaseController {
 
 	// ---------------------------------------------
 
-	private void updateWaterPlatform(LintfordCore core, Platform platform) {
+	private void updateWaterPlatform(LintfordCore core, PlatformInstance platform) {
 		final var lShip = getPlayerShip();
 		final var lIsPlayerAtPlatform = isPlayerShipAtPlatform(core, platform, lShip);
 
@@ -178,7 +178,7 @@ public class PlatformController extends BaseController {
 		}
 	}
 
-	private void updateFarmPlatform(LintfordCore core, Platform platform) {
+	private void updateFarmPlatform(LintfordCore core, PlatformInstance platform) {
 		final var lShip = getPlayerShip();
 		final var lIsPlayerAtPlatform = isPlayerShipAtPlatform(core, platform, lShip);
 		final var lIsPlatformAvailableToWater = isFarmAvailableToWater(core, platform);
@@ -273,7 +273,7 @@ public class PlatformController extends BaseController {
 		}
 	}
 
-	private void updateWarehousePlatform(LintfordCore core, Platform platform) {
+	private void updateWarehousePlatform(LintfordCore core, PlatformInstance platform) {
 		final var lShip = getPlayerShip();
 		final var lIsPlayerAtPlatform = isPlayerShipAtPlatform(core, platform, lShip);
 

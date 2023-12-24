@@ -12,14 +12,19 @@ public class PlatformManager extends BaseInstanceManager {
 	// Variables
 	// ---------------------------------------------
 
-	private final List<Platform> mPlatforms = new ArrayList<>();
+	private final List<PlatformInstance> mPlatforms = new ArrayList<>();
 
 	// ---------------------------------------------
 	// Properties
 	// ---------------------------------------------
 
-	public List<Platform> platforms() {
+	public List<PlatformInstance> platforms() {
 		return mPlatforms;
+	}
+
+	@Override
+	public void initializeInstanceCounter() {
+
 	}
 
 	// ---------------------------------------------
@@ -34,12 +39,16 @@ public class PlatformManager extends BaseInstanceManager {
 	// Methods
 	// ---------------------------------------------
 
-	public void addPlatform(Platform platform) {
+	public PlatformInstance createPlatform() {
+		return new PlatformInstance(getNewInstanceUid());
+	}
+
+	public void addPlatform(PlatformInstance platform) {
 		if (mPlatforms.contains(platform) == false)
 			mPlatforms.add(platform);
 	}
 
-	public void removePlatform(Platform platform) {
+	public void removePlatform(PlatformInstance platform) {
 		if (mPlatforms.contains(platform))
 			mPlatforms.remove(platform);
 	}

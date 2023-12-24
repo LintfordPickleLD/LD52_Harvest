@@ -56,7 +56,7 @@ public class CargoController extends BaseController {
 	// ---------------------------------------------
 
 	public Cargo createNewCargo(int parentPlatformUid, CargoType cargoType) {
-		final var lNewCargo = new Cargo(mCargoManager.getNewCaregoUid(), parentPlatformUid, cargoType);
+		final var lNewCargo = new Cargo(mCargoManager.getNewInstanceUid(), parentPlatformUid, cargoType);
 		mCargoManager.cargo().add(lNewCargo);
 		return lNewCargo;
 	}

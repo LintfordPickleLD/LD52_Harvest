@@ -2,7 +2,7 @@ package lintfordpickle.harvest.renderers;
 
 import lintfordpickle.harvest.ConstantsGame;
 import lintfordpickle.harvest.controllers.PlatformController;
-import lintfordpickle.harvest.data.scene.platforms.Platform;
+import lintfordpickle.harvest.data.scene.platforms.PlatformInstance;
 import net.lintfordlib.core.LintfordCore;
 import net.lintfordlib.core.ResourceManager;
 import net.lintfordlib.core.graphics.ColorConstants;
@@ -94,7 +94,7 @@ public class PlatformsRenderer extends BaseRenderer {
 	// Methods
 	// ---------------------------------------------
 
-	private void drawPlatform(LintfordCore core, Platform platform) {
+	private void drawPlatform(LintfordCore core, PlatformInstance platform) {
 		if (platform == null)
 			return;
 
@@ -129,7 +129,7 @@ public class PlatformsRenderer extends BaseRenderer {
 		lSpriteBatch.end();
 	}
 
-	private SpriteInstance getPlatformSpriteFrame(Platform platform) {
+	private SpriteInstance getPlatformSpriteFrame(PlatformInstance platform) {
 		final String FARM_FULL_NAME = "textureWheatFull";
 		final String FARM_HALF_NAME = "TEXTUREWHEATHALF";
 		final String FARM_EMPTY_NAME = "TEXTUREWHEATEMPTY";

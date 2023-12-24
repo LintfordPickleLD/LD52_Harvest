@@ -20,6 +20,11 @@ public class HashGridManager extends BaseInstanceManager {
 		return mHashGrid;
 	}
 
+	@Override
+	public void initializeInstanceCounter() {
+		// ignored - hashgrid is singular
+	}
+
 	// ---------------------------------------------
 	// Constructors
 	// ---------------------------------------------

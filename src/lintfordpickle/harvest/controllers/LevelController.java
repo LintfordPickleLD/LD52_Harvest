@@ -1,7 +1,7 @@
 package lintfordpickle.harvest.controllers;
 
 import lintfordpickle.harvest.ConstantsGame;
-import lintfordpickle.harvest.data.scene.platforms.Platform;
+import lintfordpickle.harvest.data.scene.platforms.PlatformInstance;
 import lintfordpickle.harvest.data.scene.platforms.PlatformManager;
 import lintfordpickle.harvest.data.scene.platforms.PlatformType;
 import net.lintfordlib.ConstantsPhysics;
@@ -77,7 +77,7 @@ public class LevelController extends BaseController {
 		final float worldXOffset = -1024;
 		final float worldYOffset = -1024;
 
-		final var lNewPlatform = new Platform(platformUid);
+		final var lNewPlatform = new PlatformInstance(platformUid);
 		lNewPlatform.set(worldXOffset + x, worldYOffset + y, w, h);
 		lNewPlatform.platformType = type;
 

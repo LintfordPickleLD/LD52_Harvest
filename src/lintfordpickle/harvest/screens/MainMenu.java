@@ -4,10 +4,10 @@ import lintfordpickle.harvest.ConstantsGame;
 import lintfordpickle.harvest.GameSceneSettings;
 import lintfordpickle.harvest.controllers.replays.ReplayController;
 import lintfordpickle.harvest.screens.editor.EditorSceneSelectionScreen;
-import lintfordpickle.harvest.screens.game.TimeTrialGameScreen;
 import lintfordpickle.harvest.screens.menu.MenuHelpScreen;
 import lintfordpickle.harvest.screens.menu.OptionsScreen;
 import lintfordpickle.harvest.screens.menu.TimeTrialLandingScreen;
+import net.lintfordLib.editor.ConstantsEditor;
 import net.lintfordlib.core.LintfordCore;
 import net.lintfordlib.core.ResourceManager;
 import net.lintfordlib.core.graphics.ColorConstants;
@@ -152,6 +152,8 @@ public class MainMenu extends MenuScreen {
 		}
 
 		case SCREEN_BUTTON_EDITOR: {
+			ConstantsEditor.EDITOR_RESOURCE_GROUP_ID = ConstantsGame.GAME_RESOURCE_GROUP_ID;
+
 			final var lTopMostScreen = mScreenManager.getTopScreen();
 			if (!(lTopMostScreen instanceof MainMenu)) {
 				mScreenManager.removeScreen(lTopMostScreen);

@@ -13,7 +13,8 @@ public class SceneAnimationLayer extends SceneBaseLayer {
 	// Variables
 	// --------------------------------------
 
-	private List<SceneAssetInstance> mSprites = new ArrayList<>();
+	private List<Integer> mLayerAssetUids = new ArrayList<>();
+	private transient List<SceneAssetInstance> mSprites = new ArrayList<>();
 
 	// --------------------------------------
 	// Properties
@@ -32,19 +33,27 @@ public class SceneAnimationLayer extends SceneBaseLayer {
 	}
 
 	// --------------------------------------
-	// Core-Methods
-	// --------------------------------------
-
-	// --------------------------------------
 	// Methods
 	// --------------------------------------
 
-	public void addSprite(SceneAssetInstance assetInstance) {
+	public void addAssetToLayer(SceneAssetInstance assetInstance) {
+		if (assetInstance == null)
+			return;
+
+		final var lAssetUid = assetInstance.uid;
+		if (mLayerAssetUids.contains(lAssetUid))
+			return;
+
+		mLayerAssetUids.add(lAssetUid);
+		mSprites.add(assetInstance);
 
 	}
 
 	public void removeAssetInstance(SceneAssetInstance assetInstance) {
+		final var lAssetUid = assetInstance.uid;
 
+		mLayerAssetUids.remove(lAssetUid);
+		mSprites.remove(assetInstance);
 	}
 
 	@Override

@@ -1,7 +1,9 @@
 package lintfordpickle.harvest.screens.editor.panels;
 
+import lintfordpickle.harvest.data.editor.EditorLayersData;
 import lintfordpickle.harvest.data.scene.layers.SceneBaseLayer;
 import lintfordpickle.harvest.data.scene.layers.SceneTextureLayer;
+import lintfordpickle.harvest.renderers.editor.EditorTextureLayerRenderer;
 import net.lintfordlib.core.LintfordCore;
 import net.lintfordlib.core.input.InputManager;
 import net.lintfordlib.core.input.keyboard.IUiInputKeyPressCallback;
@@ -57,13 +59,15 @@ public class LayerTexturePanel extends LayerPanel<SceneTextureLayer> implements 
 	private UiInputFloat mWidth;
 	private UiInputFloat mHeight;
 
+	private EditorTextureLayerRenderer mEditorTextureLayerRenderer;
+
 	// --------------------------------------
 	// Properties
 	// --------------------------------------
 
 	@Override
 	public int layerOwnerHashCode() {
-		return hashCode();
+		return mEditorTextureLayerRenderer.hashCode();
 	}
 
 	// --------------------------------------
@@ -72,6 +76,13 @@ public class LayerTexturePanel extends LayerPanel<SceneTextureLayer> implements 
 
 	public LayerTexturePanel(UiWindow parentWindow, int entityGroupUid) {
 		super(parentWindow, "Texture Layer", entityGroupUid);
+
+		mEditorActiveLayerUid = EditorLayersData.Layer_Texture;
+
+		mShowShowLayerButton = true;
+		mShowActiveLayerButton = true;
+		mIsExpandable = false;
+		mIsPanelOpen = false;
 
 		mLayerNameLabel = new UiLabel(parentWindow, "Layer Name");
 		mLayerName = new UiInputText(parentWindow);
@@ -153,6 +164,13 @@ public class LayerTexturePanel extends LayerPanel<SceneTextureLayer> implements 
 	// --------------------------------------
 	// Core-Methods
 	// --------------------------------------
+
+	@Override
+	public void initialize(LintfordCore core) {
+		super.initialize(core);
+
+		mEditorTextureLayerRenderer = (EditorTextureLayerRenderer) mParentWindow.rendererManager().getRenderer(EditorTextureLayerRenderer.RENDERER_NAME);
+	}
 
 	@Override
 	public void update(LintfordCore core) {
